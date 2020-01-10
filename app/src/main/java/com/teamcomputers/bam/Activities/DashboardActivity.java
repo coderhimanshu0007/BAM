@@ -237,7 +237,7 @@ public class DashboardActivity extends BaseActivity {
 
     public void setToolBarTitle(String title) {
         tvToolBarTitle.setText(title);
-        if (title.equals("KOCKPIT")) {
+        if (title.equals("KOCKPIT") || title.equals("Feedback")) {
             tv_date.setVisibility(View.GONE);
         } else {
             tv_date.setVisibility(View.VISIBLE);

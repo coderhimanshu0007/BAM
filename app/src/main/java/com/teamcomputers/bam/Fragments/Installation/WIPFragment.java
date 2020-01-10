@@ -82,8 +82,9 @@ public class WIPFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new InstallationWIPRequester());
+        showToast(ToastTexts.WORK_PROGRESS);
+        //showProgress(ProgressDialogTexts.LOADING);
+        //BackgroundExecutor.getInstance().execute(new InstallationWIPRequester());
     }
 
     @Override

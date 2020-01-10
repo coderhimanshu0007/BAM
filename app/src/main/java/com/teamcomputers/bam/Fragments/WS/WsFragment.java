@@ -54,7 +54,7 @@ public class WsFragment extends BaseFragment {
         dashboardActivityContext = (DashboardActivity) context;
         toolbarTitle = "WS";
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
-        reloadNavigationDrawer();
+        //reloadNavigationDrawer();
         return rootView;
     }
 
