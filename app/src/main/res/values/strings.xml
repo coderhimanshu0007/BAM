@@ -1,0 +1,126 @@
+<resources>
+    <string name="app_name">BAM</string>
+
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">SPLASH\nSCREEN</string>
+    <string-array name="team_work_managers">
+        <item>com.teamcomputers.teamworks.database.SQLiteDBManager</item>
+    </string-array>
+
+    <string-array name="labtabtables">
+        <item>com.teamcomputers.teamworks.database.tables.UserLeaveCountTable</item>
+        <item>com.teamcomputers.teamworks.database.tables.UserLeaveRequisitionTable</item>
+        <item>com.teamcomputers.teamworks.database.tables.UserProfileTable</item>
+    </string-array>
+    <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">KoCKPIT</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="logout">Logout</string>
+
+    <string name="Rs">\u20B9</string>
+
+    <string name="InTransit">InTransit</string>
+
+    <string name="OrderProcessing">OrderProcessing</string>
+    <string name="OP1">-Finance Approval</string>
+    <string name="OP2">-SO Authorization</string>
+    <string name="OP3">-SPC Submission</string>
+    <string name="OP4">-Low Margin</string>
+
+    <string name="FAPending">Pending</string>
+    <string name="FAPending4hrs">Pending > 4Hrs</string>
+    <string name="FAAAToday">Auto Approved Today</string>
+    <string name="FARejected">Rejected</string>
+
+    <string name="Purchanse">Purchase</string>
+    <string name="Purchanse1">-Sales Order</string>
+    <string name="Purchanse2">-Billing</string>
+    <string name="Purchanse3">-Stock</string>
+    <string name="Purchanse4">-EDD</string>
+
+    <string name="PurchaseTotalSO">Total SOs</string>
+    <string name="PurchaseServiceSO">Service SOs</string>
+    <string name="PurchaseLinkedSO">Linked SOs(Product)</string>
+    <string name="PurchaseCompletedSO">Complete Sales SO\nNot Linked</string>
+    <string name="PurchaseIncompletedSO">Incomplete Sales SO</string>
+    <string name="PurchaseNotDueSalesSO">Not Due Sales SO</string>
+
+    <string name="PurchaseEBCW">Expected billing\nCurrent Week</string>
+    <string name="PurchaseEBNW">Expected billing\nNext Week</string>
+    <string name="PurchaseEBUCM">Expected billing\nUpto Current Month</string>
+    <string name="PurchaseEBNM">Expected billing\nNext Month</string>
+    <string name="PurchaseEBSM">Expected billing\nSubsequent Month</string>
+
+    <string name="PurchaseTotalStock">Total Stock</string>
+    <string name="PurchaseStock0to15Days">Stock 0-15 Days</string>
+    <string name="PurchaseStock16to30Days">Stock 16-30 Days</string>
+    <string name="PurchaseStock31to60Days">Stock 31-60 Days</string>
+    <string name="PurchaseStock61to90Days">Stock 61-90 Days</string>
+    <string name="PurchaseStockgreater90Days">Stock >90 Days</string>
+
+    <string name="Logistics">Logistics</string>
+    <string name="Logistics1">-Dispatch</string>
+    <string name="Logistics2">-InTransit</string>
+    <string name="Logistics3">-HoldDelivery</string>
+    <string name="Logistics4">-Acknowledgment</string>
+
+    <string name="Installation">Installation</string>
+    <string name="Installation1">-Open Cells</string>
+    <string name="Installation2">-WIP</string>
+    <string name="Installation3">-DOA&amp;IR</string>
+    <string name="Installation4">-Hold</string>
+
+    <string name="Collection">Collection</string>
+    <string name="Collection1">-Outstanding</string>
+    <string name="TotalOutstanding">Total Outstanding</string>
+    <string name="CollectableOutstanding">Collectable Outstanding</string>
+    <string name="CollectableOutstandingCurrentMonth">Collectable Outstanding\nCurrent Month</string>
+    <string name="CollectableOutstandingSubsequentMonth">Collectable Outstanding in\nSubsequent Month</string>
+    <string name="Collection2">-Collection</string>
+    <string name="ExpectedCollectionthisWeek">Expected Collection this Week</string>
+    <string name="ExpectedCollectionthisMonth">Expected Collection this Month</string>
+    <string name="PaymentCollectionthisWeek">Payment Collection this Week</string>
+    <string name="PaymentCollectionthisMonth">Payment Collection this Month</string>
+    <string name="Collection3">-OS Ageing</string>
+    <string name="upto30Days">0-30 Days</string>
+    <string name="upto60Days">31-60 Days</string>
+    <string name="upto90Days">61-90 Days</string>
+    <string name="upto120Days">91-120 Days</string>
+    <string name="moreThan120Days">&lt;120 Days</string>
+    <string name="Collection4">-Delivery/Installation</string>
+
+    <string name="Others">Others</string>
+    <string name="Others1">-Dispatch</string>
+    <string name="Others2">-InTransit</string>
+    <string name="Others3">-HoldDelivery</string>
+    <string name="Others4">-Acknowledgment</string>
+
+    <string name="WS">WS</string>
+    <string name="WS1">-WS</string>
+
+    <string name="user_name">User Name</string>
+    <string name="user_email">user@teamcomputers.com</string>
+
+    <!--<string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>-->
+
+</resources>
