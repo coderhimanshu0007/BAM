@@ -3,7 +3,7 @@ package com.inlacou.library.calendar.irisratingbar
 import org.w3c.dom.Text
 
 /**
- * Created by Inlacou on 31/01/2018.
+ * Created by Sarvesh on 2020/01/09 :)
  */
 class IrisRatingBarMdl(
 		var icons: List<RatingBarItem>,

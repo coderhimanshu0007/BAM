@@ -54,7 +54,7 @@ public class OrderProcessingFragment extends BaseFragment {
         dashboardActivityContext = (DashboardActivity) context;
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
-        toolbarTitle = "Order Processing";
+        toolbarTitle = getString(R.string.Heading_OrderProcessing);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
 
         TabLayout tabLayout = rootView.findViewById(R.id.tab_layout);

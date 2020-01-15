@@ -2,6 +2,8 @@ package com.teamcomputers.bam.Fragments.Collection;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -59,7 +61,7 @@ public class CollectionFragment extends BaseFragment {
         dashboardActivityContext = (DashboardActivity) context;
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
-        toolbarTitle = "Logistics";
+        toolbarTitle = getString(R.string.Heading_Logistics);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
 
         TabLayout tabLayout = rootView.findViewById(R.id.tab_layout);
@@ -117,6 +119,12 @@ public class CollectionFragment extends BaseFragment {
         SharedPreferencesController.getInstance(dashboardActivityContext).setCollectionPageNo(0);
 
         return rootView;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_refresh);
+        item.setVisible(true);
     }
 
     @Override

@@ -177,6 +177,14 @@ public class SharedPreferencesController implements BAMConstant {
         putInt(Keys.COLLECTION_PAGENO.getLabel(), pageNo);
     }
 
+    public int getSalesReceivablePageNo() {
+        return getInt(Keys.SALES_PAGENO.getLabel(), 0);
+    }
+
+    public void setSalesReceivablePageNo(Integer pageNo) {
+        putInt(Keys.SALES_PAGENO.getLabel(), pageNo);
+    }
+
     private enum Keys {
         USER_PROFILE("USER_PROFILE"),
         LOGGED_IN("LOGGED_IN"),
@@ -184,7 +192,8 @@ public class SharedPreferencesController implements BAMConstant {
         PURCHASE_PAGENO("PURCHASE_PAGENO"),
         LOGISTICS_PAGENO("LOGISTICS_PAGENO"),
         INSTALLATION_PAGENO("INSTALLATION_PAGENO"),
-        COLLECTION_PAGENO("COLLECTION_PAGENO");
+        COLLECTION_PAGENO("COLLECTION_PAGENO"),
+        SALES_PAGENO("SALES_PAGENO");
         private String label;
 
         Keys(String label) {

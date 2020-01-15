@@ -33,6 +33,16 @@
 
     <string name="InTransit">InTransit</string>
 
+    <string name="Heading_Home">KOCKPIT</string>
+    <string name="Heading_OrderProcessing">Order Processing</string>
+    <string name="Heading_Purchase">Purchase</string>
+    <string name="Heading_Logistics">Logistics</string>
+    <string name="Heading_Installation">Installation</string>
+    <string name="Heading_Collection">Collection</string>
+    <string name="Heading_Sales_Receivable">Sales/Receivable</string>
+    <string name="Heading_Feedback">Feedback</string>
+    <string name="Heading_Edit_Profile">Edit Profile</string>
+
     <string name="OrderProcessing">OrderProcessing</string>
     <string name="OP1">-Finance Approval</string>
     <string name="OP2">-SO Authorization</string>
@@ -107,11 +117,14 @@
     <string name="Others3">-HoldDelivery</string>
     <string name="Others4">-Acknowledgment</string>
 
-    <string name="WS">WS</string>
-    <string name="WS1">-WS</string>
+    <string name="SalesReceivable">Sales/Receivable</string>
+    <string name="SalsReceivable1">-Sales</string>
+    <string name="SalsReceivable2">-Receivable</string>
 
     <string name="user_name">User Name</string>
     <string name="user_email">user@teamcomputers.com</string>
+
+    <string name="screen_shot">Screen shot</string>
 
     <!--<string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>

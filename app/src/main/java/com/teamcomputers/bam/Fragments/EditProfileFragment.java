@@ -31,11 +31,13 @@ public class EditProfileFragment extends BaseFragment {
     private Unbinder unbinder;
     private DashboardActivity dashboardActivityContext;
     private HomeViewModel homeViewModel;
-    String userId = "";
+
     @BindView(R.id.txtUserName)
     EditText txtUserName;
     @BindView(R.id.txtPhoneNumber)
     EditText txtPhoneNumber;
+
+    String toolbarTitle = "";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -44,8 +46,8 @@ public class EditProfileFragment extends BaseFragment {
         rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         dashboardActivityContext = (DashboardActivity) context;
-        userId = "Edit Profile";
-        dashboardActivityContext.setToolBarTitle(userId);
+        toolbarTitle = getString(R.string.Heading_Edit_Profile);
+        dashboardActivityContext.setToolBarTitle(toolbarTitle);
         //final TextView text_hello = rootView.findViewById(R.id.text_hello);
         //final TextView text_name = rootView.findViewById(R.id.text_name);
         homeViewModel.getText().observe(this, new Observer<LoginModel>() {

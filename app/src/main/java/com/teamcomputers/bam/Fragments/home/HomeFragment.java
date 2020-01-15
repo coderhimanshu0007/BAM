@@ -42,7 +42,7 @@ public class HomeFragment extends BaseFragment {
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         dashboardActivityContext = (DashboardActivity) context;
-        toolbarTitle = "KOCKPIT";
+        toolbarTitle = getString(R.string.Heading_Home);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
         final TextView text_hello = rootView.findViewById(R.id.text_hello);
         final TextView text_name = rootView.findViewById(R.id.text_name);

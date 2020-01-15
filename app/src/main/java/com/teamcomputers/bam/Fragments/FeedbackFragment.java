@@ -46,7 +46,7 @@ public class FeedbackFragment extends BaseFragment {
         rootView = inflater.inflate(R.layout.fragment_feedback, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         dashboardActivityContext = (DashboardActivity) context;
-        toolbarTitle = "Feedback";
+        toolbarTitle = getString(R.string.Heading_Feedback);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
 
         ratingbar_faces.setValueSetListener(new Function1<Integer, Unit>() {
@@ -76,7 +76,7 @@ public class FeedbackFragment extends BaseFragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_refresh);
-        item.setVisible(false);
+        item.setVisible(true);
     }
 
     @Override

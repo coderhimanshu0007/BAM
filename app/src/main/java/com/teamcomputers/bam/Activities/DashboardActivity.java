@@ -3,10 +3,15 @@ package com.teamcomputers.bam.Activities;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.SpannableStringBuilder;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -32,12 +37,11 @@ import com.teamcomputers.bam.ExpandableRecyclerview.expandables.NavigationExpand
 import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItem;
 import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItemParentModel;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Fragments.EditProfileFragment;
 import com.teamcomputers.bam.Fragments.FeedbackFragment;
 import com.teamcomputers.bam.Fragments.Installation.InstallationFragment;
 import com.teamcomputers.bam.Fragments.Logistics.LogisticsFragment;
 import com.teamcomputers.bam.Fragments.OrderProcessing.OrderProcessingFragment;
-import com.teamcomputers.bam.Fragments.WS.WsFragment;
+import com.teamcomputers.bam.Fragments.SalesReceivable.SalesReceivableFragment;
 import com.teamcomputers.bam.Fragments.home.HomeFragment;
 import com.teamcomputers.bam.Models.LoginModel;
 import com.teamcomputers.bam.Models.common.EventObject;
@@ -48,6 +52,9 @@ import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -114,7 +121,7 @@ public class DashboardActivity extends BaseActivity {
                         replaceFragment(Fragments.COLLECTION_FRAGMENTS, new Bundle());
                         break;
                     case Events.WS:
-                        replaceFragment(Fragments.WS_FRAGMENTS, new Bundle());
+                        replaceFragment(Fragments.SR_FRAGMENTS, new Bundle());
                         break;
                     case Events.OTHERS:
                         replaceFragment(Fragments.OTHERS_FRAGMENTS, new Bundle());
@@ -200,9 +207,21 @@ public class DashboardActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.dashboard, menu);
-        //MenuItem action_refresh = menu.findItem(R.id.action_refresh);
+        MenuItem action_refresh = menu.findItem(R.id.action_refresh);
+        action_refresh.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                getScreen();
+                return false;
+            }
+        });
         return true;
     }
+
+    /*@OnClick(R.id.action_refresh)
+    public void refresh(){
+        getScreen();
+    }*/
 
     @OnClick(R.id.ll_home)
     public void home() {
@@ -237,7 +256,7 @@ public class DashboardActivity extends BaseActivity {
 
     public void setToolBarTitle(String title) {
         tvToolBarTitle.setText(title);
-        if (title.equals("KOCKPIT") || title.equals("Feedback")) {
+        if (title.equals(getString(R.string.Heading_Home)) || title.equals(getString(R.string.Heading_Feedback)) || title.equals(getString(R.string.Heading_Sales_Receivable))) {
             tv_date.setVisibility(View.GONE);
         } else {
             tv_date.setVisibility(View.VISIBLE);
@@ -288,8 +307,9 @@ public class DashboardActivity extends BaseActivity {
         //navigationOthers.add(new NavigationItem(new SpannableStringBuilder(getString(R.string.Others3)), Fragments.OTHERS_FRAGMENTS));
         //navigationOthers.add(new NavigationItem(new SpannableStringBuilder(getString(R.string.Others4)), Fragments.OTHERS_FRAGMENTS));
 
-        List<NavigationItem> navigationWS = new ArrayList<>();
-        navigationWS.add(new NavigationItem(new SpannableStringBuilder("-" + getString(R.string.WS1)), Fragments.WS_FRAGMENTS));
+        List<NavigationItem> navigationSR = new ArrayList<>();
+        navigationSR.add(new NavigationItem(new SpannableStringBuilder(getString(R.string.SalsReceivable1)), Fragments.SR_FRAGMENTS1));
+        navigationSR.add(new NavigationItem(new SpannableStringBuilder(getString(R.string.SalsReceivable2)), Fragments.SR_FRAGMENTS2));
 
         NavigationItemParentModel navigationOrderProcessingParent = new NavigationItemParentModel();
         navigationOrderProcessingParent.setNavImageParent(R.drawable.ic_menu_order_processing);
@@ -323,8 +343,8 @@ public class DashboardActivity extends BaseActivity {
 
         NavigationItemParentModel navigationWSParent = new NavigationItemParentModel();
         navigationWSParent.setNavImageParent(R.drawable.ic_menu_others);
-        navigationWSParent.setNavTitleParent(getString(R.string.WS));
-        navigationWSParent.setNavigationItems(navigationWS);
+        navigationWSParent.setNavTitleParent(getString(R.string.SalesReceivable));
+        navigationWSParent.setNavigationItems(navigationSR);
 
         /*if (SharedPreferencesController.getInstance(TeamWorksApplication.getInstance()).getUserProfile().getIsHead().equals("1")) {
             navigationItemParentModels.add(navigationItemParentMyTeam);
@@ -554,9 +574,16 @@ public class DashboardActivity extends BaseActivity {
                     case Fragments.OTHERS_FRAGMENTS:
                         showToast(ToastTexts.WORK_PROGRESS);
                         break;
-                    case Fragments.WS_FRAGMENTS:
-                        fragment = new WsFragment();
-                        showToast(ToastTexts.WORK_PROGRESS);
+                    case Fragments.SR_FRAGMENTS:
+                        fragment = new SalesReceivableFragment();
+                        break;
+                    case Fragments.SR_FRAGMENTS1:
+                        SharedPreferencesController.getInstance(dashboardActivityContext).setSalesReceivablePageNo(0);
+                        fragment = new SalesReceivableFragment();
+                        break;
+                    case Fragments.SR_FRAGMENTS2:
+                        SharedPreferencesController.getInstance(dashboardActivityContext).setSalesReceivablePageNo(1);
+                        fragment = new SalesReceivableFragment();
                         break;
                     case Fragments.FEEDBACK_FRAGMENTS:
                         fragment = new FeedbackFragment();
@@ -609,5 +636,34 @@ public class DashboardActivity extends BaseActivity {
         } else if (fragment.getFragmentName().equals("HomeFragment")) {
             finish();
         }*/
+    }
+
+    private void getScreen() {
+        View v = findViewById(android.R.id.content).getRootView();
+        //View v = view.getRootView();
+        v.setDrawingCacheEnabled(true);
+        Bitmap b = v.getDrawingCache();
+        String extr = Environment.getExternalStorageDirectory().toString();
+        File myPath = new File(extr, getString(R.string.screen_shot) + ".jpg");
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(myPath);
+            b.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+            MediaStore.Images.Media.insertImage(getContentResolver(), b, "Screen", "screen");
+            openScreenshot(myPath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void openScreenshot(File imageFile) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        Uri uri = Uri.fromFile(imageFile);
+        intent.setDataAndType(uri, "image/*");
+        startActivity(intent);
     }
 }

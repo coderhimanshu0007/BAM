@@ -11,7 +11,7 @@ import android.widget.TextView
 import com.teamcomputers.bam.R
 
 /**
- * Created by Inlacou on 31/01/2018.
+ * Created by Sarvesh on 2020/01/14 :)
  */
 open class IrisRatingBar @JvmOverloads constructor(context: Context, model: IrisRatingBarMdl? = null, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : FrameLayout(context, attrs, defStyleAttr) {

@@ -1,70 +1,84 @@
-package com.teamcomputers.bam.Fragments.Installation;
+package com.teamcomputers.bam.Fragments.SalesReceivable;
 
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.CustomView.CustomViewPager;
+import com.teamcomputers.bam.ExpandableRecyclerview.WSModels.NavigationItemParent1Model;
+import com.teamcomputers.bam.ExpandableRecyclerview.WSModels.NavigationItemParent2Model;
+import com.teamcomputers.bam.ExpandableRecyclerview.WSModels.NavigationItemParent3Model;
+import com.teamcomputers.bam.ExpandableRecyclerview.expandables.NavigationExpandable;
+import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItem;
+import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItemParentModel;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Fragments.Logistics.AcknowledgementFragment;
-import com.teamcomputers.bam.Fragments.Logistics.DispatchFragment;
-import com.teamcomputers.bam.Fragments.Logistics.HoldDeliveryFragment;
-import com.teamcomputers.bam.Fragments.Logistics.InTransitFragment;
+import com.teamcomputers.bam.Fragments.Installation.DOAIRFragment;
+import com.teamcomputers.bam.Fragments.Installation.HoldFragment;
+import com.teamcomputers.bam.Fragments.Installation.InstallationFragment;
+import com.teamcomputers.bam.Fragments.Installation.OpenCallsFragment;
+import com.teamcomputers.bam.Fragments.Installation.WIPFragment;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Installation.InstallationRefreshRequester;
-import com.teamcomputers.bam.Requesters.Logistics.LogisticsRefreshRequester;
+import com.teamcomputers.bam.Requesters.SalesReceivable.SalesReceivableRefreshRequester;
+import com.teamcomputers.bam.TreeView.bean.Dir;
+import com.teamcomputers.bam.TreeView.bean.File;
+import com.teamcomputers.bam.TreeView.viewbinder.DirectoryNodeBinder;
+import com.teamcomputers.bam.TreeView.viewbinder.FileNodeBinder;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.Utils.WrapContentLinearLayoutManager;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
+import com.teamcomputers.bam.recyclertreeview_lib.TreeNode;
+import com.teamcomputers.bam.recyclertreeview_lib.TreeViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class InstallationFragment extends BaseFragment {
+public class SalesReceivableFragment extends BaseFragment {
     private View rootView;
     private Unbinder unbinder;
     private DashboardActivity dashboardActivityContext;
-
     private String[] navLabels = {
-            "Open Calls",
-            "WIP",
-            "DOA & IR",
-            "Hold"
+            "Sales",
+            "Outstanding"
     };
-
     String toolbarTitle = "";
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_logistics, container, false);
-        dashboardActivityContext = (DashboardActivity) context;
-        EventBus.getDefault().register(this);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_sr, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-        toolbarTitle = getString(R.string.Heading_Installation);
+        dashboardActivityContext = (DashboardActivity) context;
+        toolbarTitle = getString(R.string.Heading_Sales_Receivable);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
-
         TabLayout tabLayout = rootView.findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab());
-        tabLayout.addTab(tabLayout.newTab());
         tabLayout.addTab(tabLayout.newTab());
         tabLayout.addTab(tabLayout.newTab());
 
@@ -85,7 +99,7 @@ public class InstallationFragment extends BaseFragment {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         final CustomViewPager viewPager = (CustomViewPager) rootView.findViewById(R.id.view_pager);
         viewPager.setPagingEnabled(false);
-        TabsAdapter tabsAdapter = new TabsAdapter(getChildFragmentManager(), tabLayout.getTabCount());
+        SalesReceivableFragment.TabsAdapter tabsAdapter = new SalesReceivableFragment.TabsAdapter(getChildFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(tabsAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
@@ -111,51 +125,19 @@ public class InstallationFragment extends BaseFragment {
             }
         });
 
-        showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new InstallationRefreshRequester());
-        int position = SharedPreferencesController.getInstance(dashboardActivityContext).getInstallationPageNo();
+        //showProgress(ProgressDialogTexts.LOADING);
+        //BackgroundExecutor.getInstance().execute(new SalesReceivableRefreshRequester());
+        int position = SharedPreferencesController.getInstance(dashboardActivityContext).getSalesReceivablePageNo();
         tabLayout.getTabAt(position).select();
-        SharedPreferencesController.getInstance(dashboardActivityContext).setInstallationPageNo(0);
+        SharedPreferencesController.getInstance(dashboardActivityContext).setSalesReceivablePageNo(0);
 
         return rootView;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public String getFragmentName() {
-        return InstallationFragment.class.getSimpleName();
-    }
-
-    @Subscribe
-    public void onEvent(final EventObject eventObject) {
-        dashboardActivityContext.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                switch (eventObject.getId()) {
-                    case Events.NO_INTERNET_CONNECTION:
-                        dismissProgress();
-                        showToast(ToastTexts.NO_INTERNET_CONNECTION);
-                        break;
-                    case Events.GET_INSTALLATION_REFRESH_SUCCESSFULL:
-                        dashboardActivityContext.updateDate(eventObject.getObject().toString());
-                        dismissProgress();
-                        break;
-                    case Events.GET_INSTALLATION_REFRESH_UNSUCCESSFULL:
-                        dismissProgress();
-                        showToast(ToastTexts.OOPS_MESSAGE);
-                        break;
-                }
-            }
-        });
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -194,21 +176,54 @@ public class InstallationFragment extends BaseFragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    OpenCallsFragment openCallsFragment = new OpenCallsFragment();
-                    return openCallsFragment;
+                    SalesFragment salesFragment = new SalesFragment();
+                    return salesFragment;
                 case 1:
-                    WIPFragment wipFragment = new WIPFragment();
-                    return wipFragment;
-                case 2:
-                    DOAIRFragment doairFragment = new DOAIRFragment();
-                    return doairFragment;
-                case 3:
-                    HoldFragment holdFragment = new HoldFragment();
-                    return holdFragment;
+                    OutstandingFragment outstandingFragment = new OutstandingFragment();
+                    return outstandingFragment;
                 default:
                     return null;
             }
         }
+    }
+
+    @Subscribe
+    public void onEvent(final EventObject eventObject) {
+        dashboardActivityContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (eventObject.getId()) {
+                    case Events.NO_INTERNET_CONNECTION:
+                        dismissProgress();
+                        showToast(ToastTexts.NO_INTERNET_CONNECTION);
+                        break;
+                    case Events.GET_SALES_RECEIVABLE_REFRESH_SUCCESSFULL:
+                        dashboardActivityContext.updateDate(eventObject.getObject().toString());
+                        dismissProgress();
+                        break;
+                    case Events.GET_SALES_RECEIVABLE_REFRESH_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_refresh);
+        item.setVisible(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public String getFragmentName() {
+        return SalesReceivableFragment.class.getSimpleName();
     }
 
 }

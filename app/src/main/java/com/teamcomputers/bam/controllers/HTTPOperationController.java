@@ -106,6 +106,17 @@ public class HTTPOperationController implements BAMConstant {
         return ConnectionUtil.execute(getApiInterface().collectionDeliveryInstallation());
     }
 
+    // Collection
+    public static ApiResponse salesReceivableRefresh() {
+        return ConnectionUtil.execute(getApiInterface().salesReceivableRefresh());
+    }
+    public static ApiResponse salesReceivableSales() {
+        return ConnectionUtil.execute(getApiInterface().salesReceivableSales());
+    }
+    public static ApiResponse salesReceivableOutstanding() {
+        return ConnectionUtil.execute(getApiInterface().salesReceivableOutstanding());
+    }
+
     /*private static ApiInterface getApiInterface() {
         return TeamWorksApplication.getInstance().getApiInterface();
     }

@@ -54,7 +54,7 @@ public class LogisticsFragment extends BaseFragment {
         dashboardActivityContext = (DashboardActivity) context;
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
-        toolbarTitle = "Logistics";
+        toolbarTitle = getString(R.string.Heading_Logistics);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
 
         TabLayout tabLayout = rootView.findViewById(R.id.tab_layout);

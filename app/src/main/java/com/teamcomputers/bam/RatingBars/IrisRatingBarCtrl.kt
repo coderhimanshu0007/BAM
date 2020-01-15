@@ -3,7 +3,7 @@ package com.inlacou.library.calendar.irisratingbar
 import android.os.Build
 
 /**
- * Created by Inlacou on 31/01/2018.
+ * Created by Sarvesh on 2020/01/09 :)
  */
 class IrisRatingBarCtrl(val view: IrisRatingBar, val model: IrisRatingBarMdl) {
 	

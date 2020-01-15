@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Helper for {@link ExpandableRecyclerAdapter}.
  * <p>
- * Created by Ryan Brooks on 6/11/15.
+ * Created by Sarvesh on 2020/01/14 :)
  */
 public class ExpandableRecyclerAdapterHelper {
 

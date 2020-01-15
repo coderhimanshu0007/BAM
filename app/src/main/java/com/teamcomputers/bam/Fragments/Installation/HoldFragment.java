@@ -83,9 +83,8 @@ public class HoldFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        showToast(ToastTexts.WORK_PROGRESS);
-        //showProgress(ProgressDialogTexts.LOADING);
-        //BackgroundExecutor.getInstance().execute(new InstallationHoldRequester());
+        showProgress(ProgressDialogTexts.LOADING);
+        BackgroundExecutor.getInstance().execute(new InstallationHoldRequester());
     }
 
     @Override
