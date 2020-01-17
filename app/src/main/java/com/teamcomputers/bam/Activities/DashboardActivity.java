@@ -207,8 +207,8 @@ public class DashboardActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.dashboard, menu);
-        MenuItem action_refresh = menu.findItem(R.id.action_refresh);
-        action_refresh.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        MenuItem action_screen_share = menu.findItem(R.id.action_screen_share);
+        action_screen_share.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 getScreen();
@@ -217,11 +217,6 @@ public class DashboardActivity extends BaseActivity {
         });
         return true;
     }
-
-    /*@OnClick(R.id.action_refresh)
-    public void refresh(){
-        getScreen();
-    }*/
 
     @OnClick(R.id.ll_home)
     public void home() {
@@ -639,12 +634,16 @@ public class DashboardActivity extends BaseActivity {
     }
 
     private void getScreen() {
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
         View v = findViewById(android.R.id.content).getRootView();
-        //View v = view.getRootView();
         v.setDrawingCacheEnabled(true);
         Bitmap b = v.getDrawingCache();
-        String extr = Environment.getExternalStorageDirectory().toString();
-        File myPath = new File(extr, getString(R.string.screen_shot) + ".jpg");
+        //String extr = Environment.getExternalStorageDirectory().toString();
+        String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+
+        //File myPath = new File(extr, getString(R.string.screen_shot) + ".jpg");
+        File myPath = new File(mPath);
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(myPath);
@@ -653,6 +652,7 @@ public class DashboardActivity extends BaseActivity {
             fos.close();
             MediaStore.Images.Media.insertImage(getContentResolver(), b, "Screen", "screen");
             openScreenshot(myPath);
+            //shareIt(myPath);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -665,5 +665,17 @@ public class DashboardActivity extends BaseActivity {
         Uri uri = Uri.fromFile(imageFile);
         intent.setDataAndType(uri, "image/*");
         startActivity(intent);
+    }
+
+    private void shareIt(File imagePath) {
+        Uri uri = Uri.fromFile(imagePath);
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("image/*");
+        //String shareBody = "In Tweecher, My highest score with screen shot";
+        //sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "My Tweecher score");
+        //sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
+
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 }

@@ -123,7 +123,7 @@ public class CollectionFragment extends BaseFragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.action_refresh);
+        MenuItem item = menu.findItem(R.id.action_screen_share);
         item.setVisible(true);
     }
 

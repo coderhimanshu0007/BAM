@@ -22,6 +22,9 @@ public class SRResponseModel {
     @SerializedName("MTD")
     @Expose
     private String mTD;
+    @SerializedName("SO")
+    @Expose
+    private String sO;
     @SerializedName("linkedTreeMap")
     @Expose
     private ArrayList<LinkedTreeMap> linkedTreeMap;
@@ -29,26 +32,28 @@ public class SRResponseModel {
     public SRResponseModel() {
     }
 
-    public SRResponseModel(String name, String tmc, String mtd, String ytd) {
+    public SRResponseModel(String name, String mtd, String ytd, String sO) {
         this.name = name;
-        this.tMC = tmc;
         this.yTD = ytd;
         this.mTD = mtd;
+        this.sO = sO;
     }
 
-    public SRResponseModel(String name, String productName, String tMC, String yTD, String mTD) {
+    public SRResponseModel(String name, String productName, String tMC, String yTD, String sO, String mTD) {
         this.name = name;
         this.productName = productName;
         this.tMC = tMC;
         this.yTD = yTD;
         this.mTD = mTD;
+        this.sO = sO;
     }
 
-    public SRResponseModel(String name, String tMC, String yTD, String mTD, ArrayList<LinkedTreeMap> linkedTreeMap) {
+    public SRResponseModel(String name, String tMC, String yTD, String mTD, String sO, ArrayList<LinkedTreeMap> linkedTreeMap) {
         this.name = name;
         this.tMC = tMC;
         this.yTD = yTD;
         this.mTD = mTD;
+        this.sO = sO;
         this.linkedTreeMap = linkedTreeMap;
     }
 
@@ -90,6 +95,14 @@ public class SRResponseModel {
 
     public void setMTD(String mTD) {
         this.mTD = mTD;
+    }
+
+    public String getsO() {
+        return sO;
+    }
+
+    public void setsO(String sO) {
+        this.sO = sO;
     }
 
     public ArrayList<LinkedTreeMap> getLinkedTreeMap() {

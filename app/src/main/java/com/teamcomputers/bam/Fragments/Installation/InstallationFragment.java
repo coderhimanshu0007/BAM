@@ -2,6 +2,8 @@ package com.teamcomputers.bam.Fragments.Installation;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -118,6 +120,12 @@ public class InstallationFragment extends BaseFragment {
         SharedPreferencesController.getInstance(dashboardActivityContext).setInstallationPageNo(0);
 
         return rootView;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_screen_share);
+        item.setVisible(true);
     }
 
     @Override

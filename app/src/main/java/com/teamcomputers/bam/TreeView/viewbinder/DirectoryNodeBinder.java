@@ -30,6 +30,7 @@ public class DirectoryNodeBinder extends TreeViewBinder<DirectoryNodeBinder.View
         holder.tvName.setText(dirNode.dirName);
         holder.tvMtd.setText(dirNode.dirMtd);
         holder.tvYtd.setText(dirNode.dirYtd);
+        holder.tvSO.setText(dirNode.dirSO);
         if (node.isLeaf())
             holder.ivArrow.setVisibility(View.INVISIBLE);
         else holder.ivArrow.setVisibility(View.VISIBLE);
@@ -42,7 +43,7 @@ public class DirectoryNodeBinder extends TreeViewBinder<DirectoryNodeBinder.View
 
     public static class ViewHolder extends TreeViewBinder.ViewHolder {
         private ImageView ivArrow;
-        private TextView tvName, tvMtd, tvYtd;
+        private TextView tvName, tvMtd, tvYtd, tvSO;
 
         public ViewHolder(View rootView) {
             super(rootView);
@@ -50,6 +51,7 @@ public class DirectoryNodeBinder extends TreeViewBinder<DirectoryNodeBinder.View
             this.tvName = (TextView) rootView.findViewById(R.id.tv_name);
             this.tvMtd = (TextView) rootView.findViewById(R.id.tv_mtd);
             this.tvYtd = (TextView) rootView.findViewById(R.id.tv_ytd);
+            this.tvSO = (TextView) rootView.findViewById(R.id.tv_so);
         }
 
         public ImageView getIvArrow() {
@@ -66,6 +68,10 @@ public class DirectoryNodeBinder extends TreeViewBinder<DirectoryNodeBinder.View
 
         public TextView getTvYtd() {
             return tvYtd;
+        }
+
+        public TextView getTvSo() {
+            return tvSO;
         }
     }
 }

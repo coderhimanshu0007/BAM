@@ -75,8 +75,8 @@ public class FeedbackFragment extends BaseFragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.action_refresh);
-        item.setVisible(true);
+        MenuItem item = menu.findItem(R.id.action_screen_share);
+        item.setVisible(false);
     }
 
     @Override
