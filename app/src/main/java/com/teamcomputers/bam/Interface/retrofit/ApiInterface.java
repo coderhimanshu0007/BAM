@@ -109,7 +109,7 @@ public interface ApiInterface {
     Call<Object> collectionDeliveryInstallation();
 
     // Sales Receivable Refresh
-    @POST("LastRefreshedOrderProcessing")
+    @POST("LastRefreshedAccountReceiveables")
     Call<Object> salesReceivableRefresh();
     // Sales Receivable Sales
     @POST("Sales")

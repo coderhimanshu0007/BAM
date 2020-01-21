@@ -19,6 +19,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
@@ -251,7 +252,7 @@ public class DashboardActivity extends BaseActivity {
 
     public void setToolBarTitle(String title) {
         tvToolBarTitle.setText(title);
-        if (title.equals(getString(R.string.Heading_Home)) || title.equals(getString(R.string.Heading_Feedback)) || title.equals(getString(R.string.Heading_Sales_Receivable))) {
+        if (title.equals(getString(R.string.Heading_Home)) || title.equals(getString(R.string.Heading_Feedback))) {
             tv_date.setVisibility(View.GONE);
         } else {
             tv_date.setVisibility(View.VISIBLE);
@@ -635,14 +636,12 @@ public class DashboardActivity extends BaseActivity {
 
     private void getScreen() {
         Date now = new Date();
-        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss", Locale.getDefault());
+        String refreshDate = sdf.format(now);
         View v = findViewById(android.R.id.content).getRootView();
         v.setDrawingCacheEnabled(true);
         Bitmap b = v.getDrawingCache();
-        //String extr = Environment.getExternalStorageDirectory().toString();
-        String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
-
-        //File myPath = new File(extr, getString(R.string.screen_shot) + ".jpg");
+        String mPath = Environment.getExternalStorageDirectory().toString() + "/" + refreshDate + ".jpeg";
         File myPath = new File(mPath);
         FileOutputStream fos = null;
         try {
@@ -651,31 +650,21 @@ public class DashboardActivity extends BaseActivity {
             fos.flush();
             fos.close();
             MediaStore.Images.Media.insertImage(getContentResolver(), b, "Screen", "screen");
-            openScreenshot(myPath);
-            //shareIt(myPath);
+            shareIt(myPath);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    private void openScreenshot(File imageFile) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        Uri uri = Uri.fromFile(imageFile);
-        intent.setDataAndType(uri, "image/*");
-        startActivity(intent);
-    }
 
     private void shareIt(File imagePath) {
-        Uri uri = Uri.fromFile(imagePath);
-        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sharingIntent.setType("image/*");
-        //String shareBody = "In Tweecher, My highest score with screen shot";
-        //sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "My Tweecher score");
-        //sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-        sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
-
-        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+        Uri fileUri = FileProvider.getUriForFile(dashboardActivityContext, "com.teamcomputers.bam.provider",
+                imagePath);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_STREAM, fileUri);
+        startActivity(Intent.createChooser(intent, "Share via"));
     }
 }

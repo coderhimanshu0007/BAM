@@ -166,8 +166,8 @@ public class InTransitFragment extends BaseFragment {
         viIntraState.setVisibility(View.INVISIBLE);
         viODA.setVisibility(View.INVISIBLE);
         viState.setVisibility(View.VISIBLE);
-        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Amount")));
+        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Invoices")));
+        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Amount")));
         mAdapter = new InTransitAdapter(dashboardActivityContext, intransitArrayList1);
         rviData.setAdapter(mAdapter);
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
@@ -181,8 +181,8 @@ public class InTransitFragment extends BaseFragment {
         viIntraState.setVisibility(View.VISIBLE);
         viODA.setVisibility(View.INVISIBLE);
         viState.setVisibility(View.VISIBLE);
-        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Amount")));
+        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Invoices")));
+        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Amount")));
         mAdapter = new InTransitAdapter(dashboardActivityContext, intransitArrayList1);
         rviData.setAdapter(mAdapter);
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
@@ -196,8 +196,8 @@ public class InTransitFragment extends BaseFragment {
         viIntraState.setVisibility(View.INVISIBLE);
         viODA.setVisibility(View.VISIBLE);
         viState.setVisibility(View.VISIBLE);
-        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Amount")));
+        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(4)).get("Invoices")));
+        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(4)).get("Amount")));
         mAdapter = new InTransitAdapter(dashboardActivityContext, intransitArrayList1);
         rviData.setAdapter(mAdapter);
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));

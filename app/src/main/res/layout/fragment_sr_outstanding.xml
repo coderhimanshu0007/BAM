@@ -34,12 +34,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="AR Till Date"
+                        android:text="@string/TotalOutstanding"
                         android:textSize="12sp"
                         app:fontFamily="@font/source_sans_pro" />
 
                     <TextView
-                        android:id="@+id/tviARTD"
+                        android:id="@+id/tviTOS"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/logistics_amount"
@@ -59,12 +59,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="AR Previous Month"
+                        android:text="DSO"
                         android:textSize="12sp"
                         app:fontFamily="@font/source_sans_pro" />
 
                     <TextView
-                        android:id="@+id/tviARPM"
+                        android:id="@+id/tviDSO"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/logistics_amount"
@@ -91,7 +91,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
-                        android:scrollbars="vertical" />
+                        android:scrollbars="none" />
                 </LinearLayout>
             </HorizontalScrollView>
         </LinearLayout>

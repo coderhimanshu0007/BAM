@@ -19,8 +19,6 @@ public class SalesReceivableRefreshRequester implements BaseRequester {
         ApiResponse<Object> apiResponse = HTTPOperationController.salesReceivableRefresh();
         if (apiResponse != null) {
             if (apiResponse.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                // Log.e("Customer url",""+apiResponse.getResponseCode());
-                //ArrayList<LogisticDispatchModel> dispatchModel = (ArrayList<LogisticDispatchModel>) apiResponse.getResponse();
                 if (apiResponse.getResponse() != null) {
                     EventBus.getDefault().post(new EventObject(Events.GET_SALES_RECEIVABLE_REFRESH_SUCCESSFULL, apiResponse.getResponse()));
                 } else {

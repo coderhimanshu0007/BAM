@@ -1,63 +1,33 @@
 package com.teamcomputers.bam.Fragments.SalesReceivable;
 
 import android.os.Bundle;
-import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.CustomView.CustomViewPager;
-import com.teamcomputers.bam.ExpandableRecyclerview.WSModels.NavigationItemParent1Model;
-import com.teamcomputers.bam.ExpandableRecyclerview.WSModels.NavigationItemParent2Model;
-import com.teamcomputers.bam.ExpandableRecyclerview.WSModels.NavigationItemParent3Model;
-import com.teamcomputers.bam.ExpandableRecyclerview.expandables.NavigationExpandable;
-import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItem;
-import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItemParentModel;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Fragments.Installation.DOAIRFragment;
-import com.teamcomputers.bam.Fragments.Installation.HoldFragment;
-import com.teamcomputers.bam.Fragments.Installation.InstallationFragment;
-import com.teamcomputers.bam.Fragments.Installation.OpenCallsFragment;
-import com.teamcomputers.bam.Fragments.Installation.WIPFragment;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.Installation.InstallationRefreshRequester;
 import com.teamcomputers.bam.Requesters.SalesReceivable.SalesReceivableRefreshRequester;
-import com.teamcomputers.bam.TreeView.bean.Dir;
-import com.teamcomputers.bam.TreeView.bean.File;
-import com.teamcomputers.bam.TreeView.viewbinder.DirectoryNodeBinder;
-import com.teamcomputers.bam.TreeView.viewbinder.FileNodeBinder;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
-import com.teamcomputers.bam.Utils.WrapContentLinearLayoutManager;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
-import com.teamcomputers.bam.recyclertreeview_lib.TreeNode;
-import com.teamcomputers.bam.recyclertreeview_lib.TreeViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -71,10 +41,11 @@ public class SalesReceivableFragment extends BaseFragment {
     };
     String toolbarTitle = "";
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
+    public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_sr, container, false);
         unbinder = ButterKnife.bind(this, rootView);
+        EventBus.getDefault().register(this);
         dashboardActivityContext = (DashboardActivity) context;
         toolbarTitle = getString(R.string.Heading_Sales_Receivable);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
@@ -99,7 +70,7 @@ public class SalesReceivableFragment extends BaseFragment {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         final CustomViewPager viewPager = (CustomViewPager) rootView.findViewById(R.id.view_pager);
         viewPager.setPagingEnabled(false);
-        SalesReceivableFragment.TabsAdapter tabsAdapter = new SalesReceivableFragment.TabsAdapter(getChildFragmentManager(), tabLayout.getTabCount());
+        TabsAdapter tabsAdapter = new TabsAdapter(getChildFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(tabsAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
@@ -125,13 +96,57 @@ public class SalesReceivableFragment extends BaseFragment {
             }
         });
 
-        //showProgress(ProgressDialogTexts.LOADING);
-        //BackgroundExecutor.getInstance().execute(new SalesReceivableRefreshRequester());
+        showProgress(ProgressDialogTexts.LOADING);
+        BackgroundExecutor.getInstance().execute(new SalesReceivableRefreshRequester());
         int position = SharedPreferencesController.getInstance(dashboardActivityContext).getSalesReceivablePageNo();
         tabLayout.getTabAt(position).select();
         SharedPreferencesController.getInstance(dashboardActivityContext).setSalesReceivablePageNo(0);
 
         return rootView;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_screen_share);
+        item.setVisible(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public String getFragmentName() {
+        return SalesReceivableFragment.class.getSimpleName();
+    }
+
+    @Subscribe
+    public void onEvent(final EventObject eventObject) {
+        dashboardActivityContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (eventObject.getId()) {
+                    case Events.NO_INTERNET_CONNECTION:
+                        dismissProgress();
+                        showToast(ToastTexts.NO_INTERNET_CONNECTION);
+                        break;
+                    case Events.GET_SALES_RECEIVABLE_REFRESH_SUCCESSFULL:
+                        dashboardActivityContext.updateDate(eventObject.getObject().toString());
+                        dismissProgress();
+                        break;
+                    case Events.GET_SALES_RECEIVABLE_REFRESH_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -185,45 +200,6 @@ public class SalesReceivableFragment extends BaseFragment {
                     return null;
             }
         }
-    }
-
-    @Subscribe
-    public void onEvent(final EventObject eventObject) {
-        dashboardActivityContext.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                switch (eventObject.getId()) {
-                    case Events.NO_INTERNET_CONNECTION:
-                        dismissProgress();
-                        showToast(ToastTexts.NO_INTERNET_CONNECTION);
-                        break;
-                    case Events.GET_SALES_RECEIVABLE_REFRESH_SUCCESSFULL:
-                        dashboardActivityContext.updateDate(eventObject.getObject().toString());
-                        dismissProgress();
-                        break;
-                    case Events.GET_SALES_RECEIVABLE_REFRESH_UNSUCCESSFULL:
-                        dismissProgress();
-                        showToast(ToastTexts.OOPS_MESSAGE);
-                        break;
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.action_screen_share);
-        item.setVisible(true);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public String getFragmentName() {
-        return SalesReceivableFragment.class.getSimpleName();
     }
 
 }

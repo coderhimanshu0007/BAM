@@ -87,7 +87,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_below="@+id/ll_home"
-                            android:scrollbars="vertical" />
+                            android:scrollbars="none" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>

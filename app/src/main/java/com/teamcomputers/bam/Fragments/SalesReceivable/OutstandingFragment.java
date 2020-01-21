@@ -48,10 +48,10 @@ public class OutstandingFragment extends BaseFragment {
     RecyclerView rviOutstanding;
     private TreeViewAdapter adapter;
 
-    @BindView(R.id.tviARTD)
-    TextView tviARTD;
-    @BindView(R.id.tviARPM)
-    TextView tviARPM;
+    @BindView(R.id.tviTOS)
+    TextView tviTOS;
+    @BindView(R.id.tviDSO)
+    TextView tviDSO;
 
 
     @Override
@@ -73,8 +73,8 @@ public class OutstandingFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        //showProgress(ProgressDialogTexts.LOADING);
-        //BackgroundExecutor.getInstance().execute(new SalesReceivableOutstandingRequester());
+        showProgress(ProgressDialogTexts.LOADING);
+        BackgroundExecutor.getInstance().execute(new SalesReceivableOutstandingRequester());
     }
 
     @Override
@@ -118,21 +118,22 @@ public class OutstandingFragment extends BaseFragment {
     }
 
     private void initData(EventObject eventObject) {
-        Double arpm = 0.0;
-        Double artd = 0.0;
+        Double dso = 0.0;
+        Double tos = 0.0;
+        dso = (Double) ((LinkedTreeMap) eventObject.getObject()).get("DSO");
         List<TreeNode> nodes = new ArrayList<>();
-        for (int i = 0; i < ((ArrayList) eventObject.getObject()).size(); i++) {
-            //arpm = arpm + (Double) ((LinkedTreeMap) ((ArrayList) eventObject.getObject()).get(i)).get("MTD");
-            artd = artd + (Double) ((LinkedTreeMap) ((ArrayList) eventObject.getObject()).get(i)).get("Amount");
-            SRResponseModel srResponse = getSRData((LinkedTreeMap) ((ArrayList) eventObject.getObject()).get(i),"RSM");
+        ArrayList<LinkedTreeMap> buArrayList = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) eventObject.getObject()).get("BU");
+        for (int i = 0; i < buArrayList.size(); i++) {
+            tos = tos + (Double) buArrayList.get(i).get("Amount");
+            SRResponseModel srResponse = getSRData(buArrayList.get(i), "RSM");
             TreeNode<Dir> app = new TreeNode<>(new Dir(srResponse.getName(), srResponse.getYTD(), srResponse.getMTD(), srResponse.getsO()));
             if (null != srResponse.getLinkedTreeMap()) {
                 for (int r = 0; r < srResponse.getLinkedTreeMap().size(); r++) {
-                    SRResponseModel srResponseRSM = getSRData(srResponse.getLinkedTreeMap().get(r),"Account");
+                    SRResponseModel srResponseRSM = getSRData(srResponse.getLinkedTreeMap().get(r), "Account");
                     TreeNode<Dir> rsm = new TreeNode<>(new Dir(srResponseRSM.getName(), srResponseRSM.getYTD(), srResponseRSM.getMTD(), srResponseRSM.getsO()));
                     if (null != srResponseRSM.getLinkedTreeMap()) {
                         for (int acct = 0; acct < srResponseRSM.getLinkedTreeMap().size(); acct++) {
-                            SRResponseModel srResponseAccount = getSRData(srResponseRSM.getLinkedTreeMap().get(acct),"Sales");
+                            SRResponseModel srResponseAccount = getSRData(srResponseRSM.getLinkedTreeMap().get(acct), "Sales");
                             TreeNode<Dir> account = new TreeNode<>(new Dir(srResponseAccount.getName(), srResponseAccount.getYTD(), srResponseAccount.getMTD(), srResponseAccount.getsO()));
                             if (null != srResponseAccount.getLinkedTreeMap()) {
                                 for (int s = 0; s < srResponseAccount.getLinkedTreeMap().size(); s++) {
@@ -140,7 +141,7 @@ public class OutstandingFragment extends BaseFragment {
                                     TreeNode<Dir> sales = new TreeNode<>(new Dir(srResponseSales.getName(), srResponseSales.getYTD(), srResponseSales.getMTD(), srResponseSales.getsO()));
                                     if (null != srResponseSales.getLinkedTreeMap()) {
                                         for (int cust = 0; cust < srResponseSales.getLinkedTreeMap().size(); cust++) {
-                                            SRResponseModel srResponseCustomer = getSRData(srResponseSales.getLinkedTreeMap().get(cust),"");
+                                            SRResponseModel srResponseCustomer = getSRData(srResponseSales.getLinkedTreeMap().get(cust), "");
                                             TreeNode<Dir> customer = new TreeNode<>(new Dir(srResponseCustomer.getName(), srResponseCustomer.getYTD(), srResponseCustomer.getMTD(), srResponseCustomer.getsO()));
                                             sales.addChild(customer);
                                         }
@@ -157,8 +158,8 @@ public class OutstandingFragment extends BaseFragment {
             nodes.add(app);
         }
 
-        tviARPM.setText(BAMUtil.getRoundOffValue(arpm));
-        tviARTD.setText(BAMUtil.getRoundOffValue(artd));
+        tviDSO.setText("" + (int) Math.round(dso));
+        tviTOS.setText(BAMUtil.getRoundOffValue(tos));
         rviOutstanding.setLayoutManager(new LinearLayoutManager(dashboardActivityContext));
         adapter = new TreeViewAdapter(nodes, Arrays.asList(new FileNodeBinder(), new DirectoryNodeBinder()));
         // whether collapse child nodes when their parent node was close.
@@ -191,64 +192,22 @@ public class OutstandingFragment extends BaseFragment {
     private SRResponseModel getSRData(LinkedTreeMap linkedTreeMap, String treeName) {
         SRResponseModel srResponseModel = new SRResponseModel();
         String name = (String) linkedTreeMap.get("Name");
-        String so = "0.0";
-        String mtd = "0";//BAMUtil.getRoundOffValue((Double) linkedTreeMap.get("MTD"));
+        String dso = "";
+        String mtd = "";//BAMUtil.getRoundOffValue((Double) linkedTreeMap.get("MTD"));
         String ytd = BAMUtil.getRoundOffValue((Double) linkedTreeMap.get("Amount"));
 
-        if(treeName.equals("")) {
+        if (treeName.equals("")) {
             String tmc = (String) linkedTreeMap.get("Code");
             String productName = (String) linkedTreeMap.get("ProductName");
-            srResponseModel = new SRResponseModel(name, productName, tmc, ytd, mtd, so);
+            srResponseModel = new SRResponseModel(name, productName, tmc, ytd, dso, mtd);
         } else {
             String tmc = (String) linkedTreeMap.get("TMC");
+            //dso = BAMUtil.getRoundOffValue((Double) linkedTreeMap.get("DSO"));
+            dso = String.valueOf(Math.round((Double) linkedTreeMap.get("DSO")));
             ArrayList<LinkedTreeMap> linkedTreeData = (ArrayList<LinkedTreeMap>) linkedTreeMap.get(treeName);
-            srResponseModel = new SRResponseModel(name, tmc, ytd, mtd, so, linkedTreeData);
+            srResponseModel = new SRResponseModel(name, tmc, ytd, mtd, dso, linkedTreeData);
         }
         return srResponseModel;
     }
 
-    private SRResponseModel getRSM(LinkedTreeMap linkedTreeMap) {
-        String name = (String) linkedTreeMap.get("Name");
-        String tmc = (String) linkedTreeMap.get("TMC");
-        String so = "0.0";
-        String mtd = "0";//BAMUtil.getRoundOffValue((Double) linkedTreeMap.get("MTD"));
-        String ytd = BAMUtil.getRoundOffValue((Double) linkedTreeMap.get("Amount"));
-        ArrayList<LinkedTreeMap> linkedTreeData = (ArrayList<LinkedTreeMap>) linkedTreeMap.get("Account");
-        SRResponseModel srResponseModel = new SRResponseModel(name, tmc, ytd, mtd, so, linkedTreeData);
-        return srResponseModel;
-    }
-
-    private SRResponseModel getAccount(LinkedTreeMap linkedTreeMap) {
-        String name = (String) linkedTreeMap.get("Name");
-        String tmc = (String) linkedTreeMap.get("TMC");
-        String so = "0.0";
-        String mtd = "0";//BAMUtil.getRoundOffValue((Double) linkedTreeMap.get("MTD"));
-        String ytd = BAMUtil.getRoundOffValue((Double) linkedTreeMap.get("Amount"));
-        ArrayList<LinkedTreeMap> linkedTreeData = (ArrayList<LinkedTreeMap>) linkedTreeMap.get("Sales");
-        SRResponseModel srResponseModel = new SRResponseModel(name, tmc, ytd, mtd, so, linkedTreeData);
-        return srResponseModel;
-    }
-
-    private SRResponseModel getSales(LinkedTreeMap linkedTreeMap) {
-        String name = (String) linkedTreeMap.get("Name");
-        String tmc = (String) linkedTreeMap.get("TMC");
-        String so = "0.0";
-        String mtd = "0";//BAMUtil.getRoundOffValue((Double) linkedTreeMap.get("MTD"));
-        String ytd = BAMUtil.getRoundOffValue((Double) linkedTreeMap.get("Amount"));
-        ArrayList<LinkedTreeMap> linkedTreeData = (ArrayList<LinkedTreeMap>) linkedTreeMap.get("Customer");
-        SRResponseModel srResponseModel = new SRResponseModel(name, tmc, ytd, mtd, so, linkedTreeData);
-        return srResponseModel;
-    }
-
-    private SRResponseModel getCustomer(LinkedTreeMap linkedTreeMap) {
-        String name = (String) linkedTreeMap.get("Name");
-        String productName = (String) linkedTreeMap.get("ProductName");
-        String tmc = (String) linkedTreeMap.get("Code");
-        String so = "0.0";
-        String mtd = "0";//BAMUtil.getRoundOffValue((Double) linkedTreeMap.get("MTD"));
-        String ytd = BAMUtil.getRoundOffValue((Double) linkedTreeMap.get("Amount"));
-        //ArrayList<LinkedTreeMap> linkedTreeData = (ArrayList<LinkedTreeMap>) linkedTreeMap.get("Customer");
-        SRResponseModel srResponseModel = new SRResponseModel(name, productName, tmc, ytd, mtd, so);
-        return srResponseModel;
-    }
 }
