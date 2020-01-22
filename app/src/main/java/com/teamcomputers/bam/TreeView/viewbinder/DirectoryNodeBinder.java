@@ -2,6 +2,7 @@ package com.teamcomputers.bam.TreeView.viewbinder;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.teamcomputers.bam.R;
@@ -42,16 +43,22 @@ public class DirectoryNodeBinder extends TreeViewBinder<DirectoryNodeBinder.View
     }
 
     public static class ViewHolder extends TreeViewBinder.ViewHolder {
+        private LinearLayout llDir;
         private ImageView ivArrow;
         private TextView tvName, tvMtd, tvYtd, tvSO;
 
         public ViewHolder(View rootView) {
             super(rootView);
+            this.llDir = (LinearLayout) rootView.findViewById(R.id.llDir);
             this.ivArrow = (ImageView) rootView.findViewById(R.id.iv_arrow);
             this.tvName = (TextView) rootView.findViewById(R.id.tv_name);
             this.tvMtd = (TextView) rootView.findViewById(R.id.tv_mtd);
             this.tvYtd = (TextView) rootView.findViewById(R.id.tv_ytd);
             this.tvSO = (TextView) rootView.findViewById(R.id.tv_so);
+        }
+
+        public LinearLayout getllDir() {
+            return llDir;
         }
 
         public ImageView getIvArrow() {

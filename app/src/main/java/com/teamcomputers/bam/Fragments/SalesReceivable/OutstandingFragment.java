@@ -5,22 +5,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.Installation.DOAIRAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.SRResponseModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.SalesReceivable.SalesReceivableOutstandingRequester;
+import com.teamcomputers.bam.Requesters.SalesReceivable.ReceivableRefreshRequester;
 import com.teamcomputers.bam.TreeView.bean.Dir;
-import com.teamcomputers.bam.TreeView.bean.File;
 import com.teamcomputers.bam.TreeView.viewbinder.DirectoryNodeBinder;
 import com.teamcomputers.bam.TreeView.viewbinder.FileNodeBinder;
 import com.teamcomputers.bam.Utils.BAMUtil;
@@ -179,10 +180,16 @@ public class OutstandingFragment extends BaseFragment {
             @Override
             public void onToggle(boolean isExpand, RecyclerView.ViewHolder holder) {
                 DirectoryNodeBinder.ViewHolder dirViewHolder = (DirectoryNodeBinder.ViewHolder) holder;
+                final LinearLayout llDir = dirViewHolder.getllDir();
                 final ImageView ivArrow = dirViewHolder.getIvArrow();
                 int rotateDegree = isExpand ? 90 : -90;
                 ivArrow.animate().rotationBy(rotateDegree)
                         .start();
+                if (isExpand) {
+                    llDir.setBackgroundColor(ContextCompat.getColor(dashboardActivityContext, R.color.colorTabNonSelected));
+                } else {
+                    llDir.setBackgroundColor(ContextCompat.getColor(dashboardActivityContext, R.color.login_bg));
+                }
             }
         });
         rviOutstanding.setAdapter(adapter);

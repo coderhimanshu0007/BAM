@@ -9,20 +9,20 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.net.HttpURLConnection;
 
-public class SalesReceivableRefreshRequester implements BaseRequester {
+public class SalesRefreshRequester implements BaseRequester {
 
-    public SalesReceivableRefreshRequester() {
+    public SalesRefreshRequester() {
     }
 
     @Override
     public void run() {
-        ApiResponse<Object> apiResponse = HTTPOperationController.salesReceivableRefresh();
+        ApiResponse<Object> apiResponse = HTTPOperationController.salesRefresh();
         if (apiResponse != null) {
             if (apiResponse.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 if (apiResponse.getResponse() != null) {
-                    EventBus.getDefault().post(new EventObject(Events.GET_SALES_RECEIVABLE_REFRESH_SUCCESSFULL, apiResponse.getResponse()));
+                    EventBus.getDefault().post(new EventObject(Events.GET_SALES_REFRESH_SUCCESSFULL, apiResponse.getResponse()));
                 } else {
-                    EventBus.getDefault().post(new EventObject(Events.GET_SALES_RECEIVABLE_REFRESH_UNSUCCESSFULL, null));
+                    EventBus.getDefault().post(new EventObject(Events.GET_SALES_REFRESH_UNSUCCESSFULL, null));
                 }
             } else {
                 EventBus.getDefault().post(new EventObject(Events.NO_INTERNET_CONNECTION, null));

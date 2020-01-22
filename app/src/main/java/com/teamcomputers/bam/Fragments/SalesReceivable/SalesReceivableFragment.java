@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -21,7 +20,8 @@ import com.teamcomputers.bam.CustomView.CustomViewPager;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.SalesReceivable.SalesReceivableRefreshRequester;
+import com.teamcomputers.bam.Requesters.SalesReceivable.ReceivableRefreshRequester;
+import com.teamcomputers.bam.Requesters.SalesReceivable.SalesRefreshRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
@@ -81,6 +81,13 @@ public class SalesReceivableFragment extends BaseFragment {
                 View tabView = tab.getCustomView();
                 TextView tab_label = tabView.findViewById(R.id.nav_label);
                 tab_label.setTextColor(getResources().getColor(R.color.colorTabSelected));
+                if(tab.getPosition()==0){
+                    showProgress(ProgressDialogTexts.LOADING);
+                    BackgroundExecutor.getInstance().execute(new SalesRefreshRequester());
+                } else if(tab.getPosition()==1){
+                    showProgress(ProgressDialogTexts.LOADING);
+                    BackgroundExecutor.getInstance().execute(new ReceivableRefreshRequester());
+                }
             }
 
             @Override
@@ -96,11 +103,16 @@ public class SalesReceivableFragment extends BaseFragment {
             }
         });
 
-        showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new SalesReceivableRefreshRequester());
         int position = SharedPreferencesController.getInstance(dashboardActivityContext).getSalesReceivablePageNo();
         tabLayout.getTabAt(position).select();
         SharedPreferencesController.getInstance(dashboardActivityContext).setSalesReceivablePageNo(0);
+        if(position==0){
+            showProgress(ProgressDialogTexts.LOADING);
+            BackgroundExecutor.getInstance().execute(new SalesRefreshRequester());
+        } else if(position==1){
+            showProgress(ProgressDialogTexts.LOADING);
+            BackgroundExecutor.getInstance().execute(new ReceivableRefreshRequester());
+        }
 
         return rootView;
     }
@@ -136,11 +148,19 @@ public class SalesReceivableFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.NO_INTERNET_CONNECTION);
                         break;
-                    case Events.GET_SALES_RECEIVABLE_REFRESH_SUCCESSFULL:
+                    case Events.GET_SALES_REFRESH_SUCCESSFULL:
                         dashboardActivityContext.updateDate(eventObject.getObject().toString());
                         dismissProgress();
                         break;
-                    case Events.GET_SALES_RECEIVABLE_REFRESH_UNSUCCESSFULL:
+                    case Events.GET_RECEIVABLE_REFRESH_SUCCESSFULL:
+                        dashboardActivityContext.updateDate(eventObject.getObject().toString());
+                        dismissProgress();
+                        break;
+                    case Events.GET_RECEIVABLE_REFRESH_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                    case Events.GET_SALES_REFRESH_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;

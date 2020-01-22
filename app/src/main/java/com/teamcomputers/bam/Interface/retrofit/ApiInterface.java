@@ -108,13 +108,16 @@ public interface ApiInterface {
     @POST("OrderProcessingSPCSubmission")
     Call<Object> collectionDeliveryInstallation();
 
-    // Sales Receivable Refresh
+    // Sales Refresh
+    @POST("LastRefreshedSales")
+    Call<Object> salesRefresh();
+    // Receivable Refresh
     @POST("LastRefreshedAccountReceiveables")
-    Call<Object> salesReceivableRefresh();
-    // Sales Receivable Sales
+    Call<Object> receivableRefresh();
+    // Sales Sales
     @POST("Sales")
     Call<Object> salesReceivableSales();
-    // Sales Receivable Outstanding
+    // Receivable Outstanding
     @POST("AccountReceiveables")
     Call<Object> salesReceivableOutstanding();
 }
