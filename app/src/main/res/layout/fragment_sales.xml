@@ -111,6 +111,75 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/color_heading" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_heading_bg"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="10dp"
+                            android:ems="17"
+                            android:text=""
+                            android:textColor="@color/color_heading"
+                            android:textSize="13sp"
+                            app:fontFamily="@font/roboto_medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="10dp"
+                            android:ems="5"
+                            android:text="YTD"
+                            android:textColor="@color/color_heading"
+                            android:textSize="13sp"
+                            app:fontFamily="@font/roboto_medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="10dp"
+                            android:ems="4"
+                            android:text="MTD"
+                            android:textColor="@color/color_heading"
+                            android:textSize="13sp"
+                            app:fontFamily="@font/roboto_medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:ems="4"
+                            android:text="Open SO"
+                            android:textColor="@color/color_heading"
+                            android:textSize="13sp"
+                            app:fontFamily="@font/roboto_medium" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/color_heading" />
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rviSales"
                         android:layout_width="match_parent"

@@ -99,8 +99,8 @@ public class OutstandingFragment extends BaseFragment {
                         showToast(ToastTexts.NO_INTERNET_CONNECTION);
                         break;
                     case Events.GET_SALES_RECEIVABLE_OUTSTANDING_SUCCESSFULL:
-                        dismissProgress();
                         initData(eventObject);
+                        dismissProgress();
                         break;
                     case Events.GET_SALES_RECEIVABLE_OUTSTANDING_UNSUCCESSFULL:
                         dismissProgress();
@@ -127,23 +127,23 @@ public class OutstandingFragment extends BaseFragment {
         for (int i = 0; i < buArrayList.size(); i++) {
             tos = tos + (Double) buArrayList.get(i).get("Amount");
             SRResponseModel srResponse = getSRData(buArrayList.get(i), "RSM");
-            TreeNode<Dir> app = new TreeNode<>(new Dir(srResponse.getName(), srResponse.getYTD(), srResponse.getMTD(), srResponse.getsO()));
+            TreeNode<Dir> app = new TreeNode<>(new Dir(srResponse.getName(), srResponse.getYTD(), srResponse.getMTD(), srResponse.getsO(),"1"));
             if (null != srResponse.getLinkedTreeMap()) {
                 for (int r = 0; r < srResponse.getLinkedTreeMap().size(); r++) {
                     SRResponseModel srResponseRSM = getSRData(srResponse.getLinkedTreeMap().get(r), "Account");
-                    TreeNode<Dir> rsm = new TreeNode<>(new Dir(srResponseRSM.getName(), srResponseRSM.getYTD(), srResponseRSM.getMTD(), srResponseRSM.getsO()));
+                    TreeNode<Dir> rsm = new TreeNode<>(new Dir(srResponseRSM.getName(), srResponseRSM.getYTD(), srResponseRSM.getMTD(), srResponseRSM.getsO(),"2"));
                     if (null != srResponseRSM.getLinkedTreeMap()) {
                         for (int acct = 0; acct < srResponseRSM.getLinkedTreeMap().size(); acct++) {
                             SRResponseModel srResponseAccount = getSRData(srResponseRSM.getLinkedTreeMap().get(acct), "Sales");
-                            TreeNode<Dir> account = new TreeNode<>(new Dir(srResponseAccount.getName(), srResponseAccount.getYTD(), srResponseAccount.getMTD(), srResponseAccount.getsO()));
+                            TreeNode<Dir> account = new TreeNode<>(new Dir(srResponseAccount.getName(), srResponseAccount.getYTD(), srResponseAccount.getMTD(), srResponseAccount.getsO(),"3"));
                             if (null != srResponseAccount.getLinkedTreeMap()) {
                                 for (int s = 0; s < srResponseAccount.getLinkedTreeMap().size(); s++) {
                                     SRResponseModel srResponseSales = getSRData(srResponseAccount.getLinkedTreeMap().get(s), "Customer");
-                                    TreeNode<Dir> sales = new TreeNode<>(new Dir(srResponseSales.getName(), srResponseSales.getYTD(), srResponseSales.getMTD(), srResponseSales.getsO()));
+                                    TreeNode<Dir> sales = new TreeNode<>(new Dir(srResponseSales.getName(), srResponseSales.getYTD(), srResponseSales.getMTD(), srResponseSales.getsO(),"4"));
                                     if (null != srResponseSales.getLinkedTreeMap()) {
                                         for (int cust = 0; cust < srResponseSales.getLinkedTreeMap().size(); cust++) {
                                             SRResponseModel srResponseCustomer = getSRData(srResponseSales.getLinkedTreeMap().get(cust), "");
-                                            TreeNode<Dir> customer = new TreeNode<>(new Dir(srResponseCustomer.getName(), srResponseCustomer.getYTD(), srResponseCustomer.getMTD(), srResponseCustomer.getsO()));
+                                            TreeNode<Dir> customer = new TreeNode<>(new Dir(srResponseCustomer.getName(), srResponseCustomer.getYTD(), srResponseCustomer.getMTD(), srResponseCustomer.getsO(),"5"));
                                             sales.addChild(customer);
                                         }
                                     }

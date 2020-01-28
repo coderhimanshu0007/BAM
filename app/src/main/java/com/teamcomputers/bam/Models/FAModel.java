@@ -3,107 +3,149 @@ package com.teamcomputers.bam.Models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class FAModel {
-    @SerializedName("customerName")
+    @SerializedName("Type")
     @Expose
-    private String customerName;
-    @SerializedName("bu")
+    private String type;
+    @SerializedName("Invoices")
     @Expose
-    private String bu;
-    @SerializedName("count")
+    private Integer invoices;
+    @SerializedName("Amount")
     @Expose
-    private String count;
-    @SerializedName("value")
+    private Double amount;
+    @SerializedName("Table")
     @Expose
-    private String value;
-    @SerializedName("projectNo")
-    @Expose
-    private String projectNo;
-    @SerializedName("hrsDays")
-    @Expose
-    private String hrsDays;
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("financeDelay")
-    @Expose
-    private String financeDelay;
+    private List<Table> table = null;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Integer getInvoices() {
+        return invoices;
+    }
+
+    public void setInvoices(Integer invoices) {
+        this.invoices = invoices;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public List<Table> getTable() {
+        return table;
+    }
+
+    public void setTable(List<Table> table) {
+        this.table = table;
+    }
 
     public FAModel() {
     }
 
-    public FAModel(String customerName, String bu, String count, String value, String projectNo, String hrsDays, String name, String financeDelay) {
-        this.customerName = customerName;
-        this.bu = bu;
-        this.count = count;
-        this.value = value;
-        this.projectNo = projectNo;
-        this.hrsDays = hrsDays;
-        this.name = name;
-        this.financeDelay = financeDelay;
-    }
 
-    public String getCustomerName() {
-        return customerName;
-    }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
 
-    public String getBu() {
-        return bu;
-    }
+    private class Table {
 
-    public void setBu(String bu) {
-        this.bu = bu;
-    }
+        @SerializedName("CustomerName")
+        @Expose
+        private String customerName;
+        @SerializedName("BU")
+        @Expose
+        private String bU;
+        @SerializedName("Count")
+        @Expose
+        private Integer count;
+        @SerializedName("Value")
+        @Expose
+        private Double value;
+        @SerializedName("ProjectNo")
+        @Expose
+        private String projectNo;
+        @SerializedName("HoursDays")
+        @Expose
+        private String hoursDays;
+        @SerializedName("Name")
+        @Expose
+        private String name;
+        @SerializedName("FinanceDelay")
+        @Expose
+        private String financeDelay;
 
-    public String getCount() {
-        return count;
-    }
+        public String getCustomerName() {
+            return customerName;
+        }
 
-    public void setCount(String count) {
-        this.count = count;
-    }
+        public void setCustomerName(String customerName) {
+            this.customerName = customerName;
+        }
 
-    public String getValue() {
-        return value;
-    }
+        public String getBU() {
+            return bU;
+        }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+        public void setBU(String bU) {
+            this.bU = bU;
+        }
 
-    public String getProjectNo() {
-        return projectNo;
-    }
+        public Integer getCount() {
+            return count;
+        }
 
-    public void setProjectNo(String projectNo) {
-        this.projectNo = projectNo;
-    }
+        public void setCount(Integer count) {
+            this.count = count;
+        }
 
-    public String getHrsDays() {
-        return hrsDays;
-    }
+        public Double getValue() {
+            return value;
+        }
 
-    public void setHrsDays(String hrsDays) {
-        this.hrsDays = hrsDays;
-    }
+        public void setValue(Double value) {
+            this.value = value;
+        }
 
-    public String getName() {
-        return name;
-    }
+        public String getProjectNo() {
+            return projectNo;
+        }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+        public void setProjectNo(String projectNo) {
+            this.projectNo = projectNo;
+        }
 
-    public String getFinanceDelay() {
-        return financeDelay;
-    }
+        public String getHoursDays() {
+            return hoursDays;
+        }
 
-    public void setFinanceDelay(String financeDelay) {
-        this.financeDelay = financeDelay;
+        public void setHoursDays(String hoursDays) {
+            this.hoursDays = hoursDays;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getFinanceDelay() {
+            return financeDelay;
+        }
+
+        public void setFinanceDelay(String financeDelay) {
+            this.financeDelay = financeDelay;
+        }
     }
 }

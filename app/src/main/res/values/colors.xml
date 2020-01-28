@@ -7,6 +7,8 @@
     <color name="black_overlay">#66000000</color>
     <color name="login_bg">#F8FCFF</color>
     <color name="start_header_color_bg">#7045FD</color>
+    <color name="end_header_color_bg">#00ACED</color>
+    <color name="start_home_color_bg">#684CFC</color>
     <color name="start_color_bg">#3696D7</color>
     <color name="end_color_bg">#3CB6F9</color>
     <color name="login_btn_color">#02AAED</color>
@@ -17,6 +19,8 @@
     <color name="color_white">#FFFFFF</color>
     <color name="color_user_hint">#919191</color>
     <color name="color_user_name">#101010</color>
+
+    <color name="text_color">#4B4B4B</color>
 
     <color name="colorTabSelected">#DBE4EB</color>
     <color name="colorTabNonSelected">#87DBE4EB</color>

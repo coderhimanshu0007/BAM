@@ -9,13 +9,14 @@ import com.teamcomputers.bam.recyclertreeview_lib.LayoutItemType;
  */
 
 public class Dir implements LayoutItemType {
-    public String dirName, dirYtd, dirMtd, dirSO;
+    public String dirName, dirYtd, dirMtd, dirSO, pos;
 
-    public Dir(String dirName, String dirYtd, String dirMtd, String dirSO) {
+    public Dir(String dirName, String dirYtd, String dirMtd, String dirSO, String pos) {
         this.dirName = dirName;
         this.dirYtd = dirYtd;
         this.dirMtd = dirMtd;
         this.dirSO = dirSO;
+        this.pos = pos;
     }
 
     @Override

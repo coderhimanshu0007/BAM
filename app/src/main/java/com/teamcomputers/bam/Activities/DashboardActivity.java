@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -14,11 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -69,6 +73,10 @@ import static com.teamcomputers.bam.Activities.MainActivity.IS_EXTRA_FRAGMENT_NE
 
 public class DashboardActivity extends BaseActivity {
 
+    @BindView(R.id.claMain)
+    CoordinatorLayout claMain;
+    @BindView(R.id.iviToolbarLogo)
+    ImageView iviToolbarLogo;
     @BindView(R.id.toolbar_title)
     TextView tvToolBarTitle;
     @BindView(R.id.tv_date)
@@ -252,6 +260,19 @@ public class DashboardActivity extends BaseActivity {
 
     public void setToolBarTitle(String title) {
         tvToolBarTitle.setText(title);
+        if (title.equals(getString(R.string.Heading_Home))) {
+            iviToolbarLogo.setVisibility(View.VISIBLE);
+            tvToolBarTitle.setVisibility(View.GONE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                claMain.setBackground(getResources().getDrawable(R.drawable.gradient_drawable));
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                claMain.setBackground(getResources().getDrawable(R.drawable.gradient_login_bg));
+            }
+            iviToolbarLogo.setVisibility(View.GONE);
+            tvToolBarTitle.setVisibility(View.VISIBLE);
+        }
         if (title.equals(getString(R.string.Heading_Home)) || title.equals(getString(R.string.Heading_Feedback))) {
             tv_date.setVisibility(View.GONE);
         } else {
@@ -455,6 +476,7 @@ public class DashboardActivity extends BaseActivity {
                 toggleToolBarVisibility(true);
 //                    dashBoardActivityContext.toggleToolBarVisibility(true);
                 switch (fragmentToBePut) {
+                    //appBarLayout.setBackgroundResource(R.drawable.gradient_login_bg);
                     case Fragments.EDIT_PROFILE_FRAGMENTS:
                         //fragment = new EditProfileFragment();
                         showToast(ToastTexts.WORK_PROGRESS);
@@ -591,6 +613,7 @@ public class DashboardActivity extends BaseActivity {
                 fragment.setArguments(bundle);
                 try {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setCustomAnimations(R.anim.left_to_right, R.anim.right_to_left);
                     fragmentTransaction.replace(R.id.dash_board_content, fragment, fragment.getFragmentName());
                     int backStackEntryCount = fragmentManager.getBackStackEntryCount();
                     if (bundle.getBoolean(IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED)) {
@@ -623,7 +646,12 @@ public class DashboardActivity extends BaseActivity {
         super.onBackPressed();
         if (fragment.getFragmentName().equals("HomeFragment")) {
             finish();
-        } /*else if (fragment.getFragmentName().equals("OrderProcessingFragment")) {
+        }
+        //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        //fragmentTransaction.setCustomAnimations(R.anim.left_to_right_order, R.anim.right_to_left_order);
+        //fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
+        //        R.anim.slide_out_right, R.anim.slide_in_right);
+        /*else if (fragment.getFragmentName().equals("OrderProcessingFragment")) {
             finish();
         } else if (fragment.getFragmentName().equals("LogisticsFragment")) {
             finish();
@@ -638,11 +666,14 @@ public class DashboardActivity extends BaseActivity {
         Date now = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss", Locale.getDefault());
         String refreshDate = sdf.format(now);
-        View v = findViewById(android.R.id.content).getRootView();
+        View v = fragment.getView();
+        //View v = dashboardActivityContext.getWindow().getCurrentFocus();
+        //View v = findViewById(android.R.id.content).getRootView();
         v.setDrawingCacheEnabled(true);
         Bitmap b = v.getDrawingCache();
         String mPath = Environment.getExternalStorageDirectory().toString() + "/" + refreshDate + ".jpeg";
-        File myPath = new File(mPath);
+        File myPath = null;
+        myPath = new File(mPath);
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(myPath);
@@ -651,6 +682,7 @@ public class DashboardActivity extends BaseActivity {
             fos.close();
             MediaStore.Images.Media.insertImage(getContentResolver(), b, "Screen", "screen");
             shareIt(myPath);
+            //openScreenshot(myPath);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -667,4 +699,13 @@ public class DashboardActivity extends BaseActivity {
         intent.putExtra(Intent.EXTRA_STREAM, fileUri);
         startActivity(Intent.createChooser(intent, "Share via"));
     }
+
+    private void openScreenshot(File imageFile) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        Uri uri = Uri.fromFile(imageFile);
+        intent.setDataAndType(uri, "image/*");
+        startActivity(intent);
+    }
+
 }

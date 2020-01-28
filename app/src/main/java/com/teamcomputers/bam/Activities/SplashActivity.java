@@ -53,6 +53,7 @@ public class SplashActivity extends BaseActivity {
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
                             startActivity(intent);
                         } else {
                             ActivityCompat.finishAffinity(SplashActivity.this);
@@ -62,6 +63,7 @@ public class SplashActivity extends BaseActivity {
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
                             startActivity(intent);
                         }
                         break;
@@ -105,6 +107,7 @@ public class SplashActivity extends BaseActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
                 startActivity(intent);
             }
         } catch (Exception ignored) {

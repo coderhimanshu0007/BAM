@@ -1,5 +1,6 @@
 package com.teamcomputers.bam.TreeView.viewbinder;
 
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +29,38 @@ public class DirectoryNodeBinder extends TreeViewBinder<DirectoryNodeBinder.View
         int rotateDegree = node.isExpand() ? 90 : 0;
         holder.ivArrow.setRotation(rotateDegree);
         Dir dirNode = (Dir) node.getContent();
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        if (dirNode.pos.equals("1")) {
+            holder.tvName.setEms(13);
+        } else if (dirNode.pos.equals("2")) {
+            holder.tvName.setEms(12);
+            params.setMargins(40, 0, 0, 0);
+            params.gravity = Gravity.CENTER_VERTICAL;
+            holder.tvYtd.setLayoutParams(params);
+        } else if (dirNode.pos.equals("3")) {
+            holder.tvName.setEms(11);
+            params.setMargins(50, 0, 0, 0);
+            params.gravity = Gravity.CENTER_VERTICAL;
+            holder.tvYtd.setLayoutParams(params);
+        } else if (dirNode.pos.equals("4")) {
+            holder.tvName.setEms(10);
+            params.setMargins(65, 0, 0, 0);
+            params.gravity = Gravity.CENTER_VERTICAL;
+            holder.tvYtd.setLayoutParams(params);
+        } else if (dirNode.pos.equals("5")) {
+            holder.tvName.setEms(9);
+            params.setMargins(80, 0, 0, 0);
+            params.gravity = Gravity.CENTER_VERTICAL;
+            holder.tvYtd.setLayoutParams(params);
+        } else if (dirNode.pos.equals("6")) {
+            holder.tvName.setEms(8);
+            params.setMargins(95, 0, 0, 0);
+            params.gravity = Gravity.CENTER_VERTICAL;
+            holder.tvYtd.setLayoutParams(params);
+        }
         holder.tvName.setText(dirNode.dirName);
         holder.tvMtd.setText(dirNode.dirMtd);
         holder.tvYtd.setText(dirNode.dirYtd);

@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.teamcomputers.bam.Interface.BAMConstant;
 import com.teamcomputers.bam.Models.LoginModel;
+import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.Utils.BAMUtil;
 
 //Controller for storing and retrieving data from Shared Preferences
@@ -120,6 +121,25 @@ public class SharedPreferencesController implements BAMConstant {
         }
     }
 
+    /*private String getEventObject(String key, String deafultValue) {
+        if (sharedPreferences != null) {
+            return sharedPreferences.getString(key, deafultValue);
+        }
+        return deafultValue;
+    }
+
+    private void putEventObject(String key, EventObject value) {
+        try {
+            if (sharedPreferences != null) {
+                Editor editor = sharedPreferences.edit();
+                editor.putString(key, String.valueOf(value));
+                editor.apply();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Unable Put Integer in Shared preference", e);
+        }
+    }*/
+
     public LoginModel getUserProfile() {
         String json = getString(Keys.USER_PROFILE.getLabel(), "");
         return (LoginModel) BAMUtil.fromJson(json, LoginModel.class);
@@ -143,6 +163,14 @@ public class SharedPreferencesController implements BAMConstant {
 
     public void setOPPageNo(Integer pageNo) {
         putInt(Keys.ORDERPROCESSING_PAGENO.getLabel(), pageNo);
+    }
+
+    public String getOPFAData() {
+        return getString(Keys.OPFA_DATA.getLabel(), "");
+    }
+
+    public void setOPFAData(String opfaData) {
+        putString(Keys.OPFA_DATA.getLabel(), opfaData);
     }
 
     public int getPurchasePageNo() {
@@ -189,6 +217,7 @@ public class SharedPreferencesController implements BAMConstant {
         USER_PROFILE("USER_PROFILE"),
         LOGGED_IN("LOGGED_IN"),
         ORDERPROCESSING_PAGENO("ORDERPROCESSING_PAGENO"),
+        OPFA_DATA("OPFA_DATA"),
         PURCHASE_PAGENO("PURCHASE_PAGENO"),
         LOGISTICS_PAGENO("LOGISTICS_PAGENO"),
         INSTALLATION_PAGENO("INSTALLATION_PAGENO"),

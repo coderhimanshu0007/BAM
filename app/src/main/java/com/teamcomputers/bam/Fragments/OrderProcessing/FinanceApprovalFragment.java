@@ -1,6 +1,7 @@
 package com.teamcomputers.bam.Fragments.OrderProcessing;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +15,17 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.OrderProcessing.FAAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.FAModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.OrderProcessing.OrderProcessingFinanceApprovalRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -109,6 +113,8 @@ public class FinanceApprovalFragment extends BaseFragment {
                     case Events.GET_ORDERPROCESING_FINANCE_APPROVAL_SUCCESSFULL:
                         dismissProgress();
                         eventObjects = eventObject;
+                        //FAModel faModel = BAMUtil.fromJson(eventObject.getObject(), FAModel.class);
+                        SharedPreferencesController.getInstance(dashboardActivityContext).setOPFAData(String.valueOf(eventObject.getObject()));
                         financeApprovalArrayList0.clear();
                         financeApprovalArrayList1.clear();
                         financeApprovalArrayList2.clear();
@@ -125,6 +131,28 @@ public class FinanceApprovalFragment extends BaseFragment {
                     case Events.GET_ORDERPROCESING_FINANCE_APPROVAL_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
+                        try {
+                            String data = SharedPreferencesController.getInstance(dashboardActivityContext).getOPFAData().replace("{", "{\"").replace("}","\"}").replace("=","\"=\"").replace(", ","\", \"").replace("}\", \"{","}, {").replace("=",": ").replace("\"[","[").replace("\\"," ").replace("[]\"","[]").replace("}]\"}","}]}");
+                            Object obj = data;
+                            //eventObjects = (EventObject) obj;
+
+                            FAModel faModel = (FAModel) BAMUtil.fromJson(data, FAModel.class);
+                            financeApprovalArrayList0.clear();
+                            financeApprovalArrayList1.clear();
+                            financeApprovalArrayList2.clear();
+                            financeApprovalArrayList3.clear();
+                            /*tviNoofProjects.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) obj).get(0)).get("Invoices")));
+                            tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) obj).get(0)).get("Amount")));
+                            financeApprovalArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) obj).get(0)).get("Table");
+                            financeApprovalArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) obj).get(1)).get("Table");
+                            financeApprovalArrayList2 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) obj).get(2)).get("Table");
+                            financeApprovalArrayList3 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) obj).get(3)).get("Table");
+                            mAdapter = new FAAdapter(dashboardActivityContext, financeApprovalArrayList0);
+                            rviData.setAdapter(mAdapter);*/
+
+                        } catch (Throwable t) {
+                            Log.e("My App", "Could not parse malformed JSON: ");
+                        }
                         break;
                 }
             }

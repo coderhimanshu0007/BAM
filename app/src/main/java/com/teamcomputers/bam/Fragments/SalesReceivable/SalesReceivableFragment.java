@@ -102,7 +102,6 @@ public class SalesReceivableFragment extends BaseFragment {
 
             }
         });
-
         int position = SharedPreferencesController.getInstance(dashboardActivityContext).getSalesReceivablePageNo();
         tabLayout.getTabAt(position).select();
         SharedPreferencesController.getInstance(dashboardActivityContext).setSalesReceivablePageNo(0);

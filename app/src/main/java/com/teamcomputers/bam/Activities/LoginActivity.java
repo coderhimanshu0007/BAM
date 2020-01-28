@@ -54,6 +54,7 @@ public class LoginActivity extends BaseActivity {
                         dashBoard.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         dashBoard.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         dashBoard.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
                         startActivity(dashBoard);
                         break;
                     case Events.WRONG_LOGIN_CREDENTIALS_USED:
