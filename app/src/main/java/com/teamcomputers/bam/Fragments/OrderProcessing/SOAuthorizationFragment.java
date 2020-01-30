@@ -14,14 +14,19 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.OrderProcessing.SOAuthorizationAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.FAModel;
+import com.teamcomputers.bam.Models.SOAModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.OrderProcessing.OrderProcessingSOAuthorizationRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -47,11 +52,8 @@ public class SOAuthorizationFragment extends BaseFragment {
     @BindView(R.id.rviData)
     RecyclerView rviData;
     private LinearLayoutManager layoutManager;
-    EventObject eventObjects;
 
     private SOAuthorizationAdapter mAdapter;
-    private ArrayList<LinkedTreeMap> soAuthorizationArrayList0 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> soAuthorizationArrayList1 = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,6 +77,13 @@ public class SOAuthorizationFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        SOAModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOPSOAData();
+        if (data!=null) {
+            tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
+            mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new OrderProcessingSOAuthorizationRequester());
     }
@@ -101,14 +110,18 @@ public class SOAuthorizationFragment extends BaseFragment {
                         break;
                     case Events.GET_ORDERPROCESING_SOAUTHORIZATION_SUCCESSFULL:
                         dismissProgress();
-                        eventObjects = eventObject;
-                        soAuthorizationArrayList0.clear();
-                        soAuthorizationArrayList1.clear();
-                        tviNoofSO.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-                        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-                        soAuthorizationArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Table");
-                        soAuthorizationArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Table");
-                        mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, soAuthorizationArrayList0);
+                        SOAModel[] data = new SOAModel[0];
+                        try {
+                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            data = (SOAModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), SOAModel[].class);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setOPSOAData(data);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+                        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
+                        mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
                         rviData.setAdapter(mAdapter);
                         break;
                     case Events.GET_ORDERPROCESING_SOAUTHORIZATION_UNSUCCESSFULL:
@@ -124,9 +137,10 @@ public class SOAuthorizationFragment extends BaseFragment {
     public void Pending() {
         viPending.setVisibility(View.VISIBLE);
         viPendingHrs.setVisibility(View.INVISIBLE);
-        tviNoofSO.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-        mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, soAuthorizationArrayList0);
+        SOAModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOPSOAData();
+        tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
+        mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofSO.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -136,9 +150,10 @@ public class SOAuthorizationFragment extends BaseFragment {
     public void PendingHrs() {
         viPending.setVisibility(View.INVISIBLE);
         viPendingHrs.setVisibility(View.VISIBLE);
-        tviNoofSO.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Amount")));
-        mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, soAuthorizationArrayList1);
+        SOAModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOPSOAData();
+        tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
+        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[1].getAmount()));
+        mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, data[1].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofSO.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));

@@ -137,6 +137,10 @@ public class BAMUtil implements BAMConstant {
         return df.format(amount);
     }
 
+    public static String replaceDataResponse(String response){
+        return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}");
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static boolean isConnected(@NonNull ConnectivityManager connMgr, int type) {
         Network[] networks = connMgr.getAllNetworks();

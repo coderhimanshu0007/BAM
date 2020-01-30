@@ -14,14 +14,18 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.OrderProcessing.SPCSubmissionAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.SPCSModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.OrderProcessing.OrderProcessingSPCSubmissionRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -82,6 +86,13 @@ public class SPCSubmissionFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        SPCSModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getSPCSData();
+        if (data != null) {
+            tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
+            mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new OrderProcessingSPCSubmissionRequester());
     }
@@ -108,19 +119,22 @@ public class SPCSubmissionFragment extends BaseFragment {
                         break;
                     case Events.GET_ORDERPROCESING_SPCSUBMISSION_SUCCESSFULL:
                         dismissProgress();
-                        eventObjects = eventObject;
-                        spcSubmissionArrayList0.clear();
-                        spcSubmissionArrayList1.clear();
-                        spcSubmissionArrayList2.clear();
-                        spcSubmissionArrayList3.clear();
-                        tviNoofProjects.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-                        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-                        spcSubmissionArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Table");
-                        spcSubmissionArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Table");
-                        spcSubmissionArrayList2 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Table");
-                        spcSubmissionArrayList3 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Table");
-                        mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, spcSubmissionArrayList0);
-                        rviData.setAdapter(mAdapter);
+                        SPCSModel[] data = new SPCSModel[0];
+                        try {
+                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            data = (SPCSModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), SPCSModel[].class);
+                            if (data != null) {
+                                SharedPreferencesController.getInstance(dashboardActivityContext).setSPCSData(data);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (data != null) {
+                            tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+                            tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
+                            mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, data[0].getTable());
+                            rviData.setAdapter(mAdapter);
+                        }
                         break;
                     case Events.GET_ORDERPROCESING_SPCSUBMISSION_UNSUCCESSFULL:
                         dismissProgress();
@@ -137,9 +151,10 @@ public class SPCSubmissionFragment extends BaseFragment {
         viPending.setVisibility(View.INVISIBLE);
         viPendingSPC.setVisibility(View.INVISIBLE);
         viSPCRejected.setVisibility(View.INVISIBLE);
-        tviNoofProjects.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-        mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, spcSubmissionArrayList0);
+        SPCSModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getSPCSData();
+        tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
+        mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, data[0].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -151,9 +166,10 @@ public class SPCSubmissionFragment extends BaseFragment {
         viPending.setVisibility(View.VISIBLE);
         viPendingSPC.setVisibility(View.INVISIBLE);
         viSPCRejected.setVisibility(View.INVISIBLE);
-        tviNoofProjects.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Amount")));
-        mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, spcSubmissionArrayList1);
+        SPCSModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getSPCSData();
+        tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
+        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[1].getAmount()));
+        mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, data[1].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -165,9 +181,10 @@ public class SPCSubmissionFragment extends BaseFragment {
         viPending.setVisibility(View.INVISIBLE);
         viPendingSPC.setVisibility(View.VISIBLE);
         viSPCRejected.setVisibility(View.INVISIBLE);
-        tviNoofProjects.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Amount")));
-        mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, spcSubmissionArrayList2);
+        SPCSModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getSPCSData();
+        tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[2].getInvoices())));
+        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[2].getAmount()));
+        mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, data[2].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
@@ -179,9 +196,10 @@ public class SPCSubmissionFragment extends BaseFragment {
         viPending.setVisibility(View.INVISIBLE);
         viPendingSPC.setVisibility(View.INVISIBLE);
         viSPCRejected.setVisibility(View.VISIBLE);
-        tviNoofProjects.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Amount")));
-        mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, spcSubmissionArrayList3);
+        SPCSModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getSPCSData();
+        tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[3].getInvoices())));
+        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[3].getAmount()));
+        mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, data[3].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));

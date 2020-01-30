@@ -10,21 +10,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Models.LowMarginModel;
 import com.teamcomputers.bam.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LowMarginAdapter extends RecyclerView.Adapter<LowMarginAdapter.ViewHolder> {
-    private ArrayList<LinkedTreeMap> dataList;
+    private List<LowMarginModel.Table> dataList;
     private int card_layout;
     Activity mActivity;
 
-    public LowMarginAdapter(DashboardActivity dashboardActivityContext, ArrayList<LinkedTreeMap> data) {
+    public LowMarginAdapter(DashboardActivity dashboardActivityContext, List<LowMarginModel.Table> data) {
         this.dataList = data;
         this.mActivity = dashboardActivityContext;
     }
 
-    public void setItems(ArrayList<LinkedTreeMap> data) {
+    public void setItems(List<LowMarginModel.Table> data) {
         this.dataList = data;
     }
 
@@ -54,14 +56,14 @@ public class LowMarginAdapter extends RecyclerView.Adapter<LowMarginAdapter.View
 
     @Override
     public void onBindViewHolder(LowMarginAdapter.ViewHolder holder, final int position) {
-        holder.tviCustomerName.setText(String.valueOf(dataList.get(position).get("CustomerName")));
-        holder.tviBu.setText(String.valueOf(dataList.get(position).get("BU")));
-        holder.tviCount.setText(String.valueOf(dataList.get(position).get("Count")));
-        holder.tviProjectNo.setText(String.valueOf(dataList.get(position).get("ProjectNo")));
-        holder.tviHrsDays.setText(String.valueOf(dataList.get(position).get("HoursDays")));
-        holder.tviAmount.setText(String.valueOf(dataList.get(position).get("Amount")));
+        holder.tviCustomerName.setText(dataList.get(position).getCustomerName());
+        holder.tviBu.setText(dataList.get(position).getBU());
+        holder.tviCount.setText(String.valueOf(dataList.get(position).getCount()));
+        holder.tviProjectNo.setText(dataList.get(position).getProjectNo());
+        holder.tviHrsDays.setText(dataList.get(position).getHoursDays());
+        holder.tviAmount.setText(String.valueOf(dataList.get(position).getAmount()));
         //holder.tviName.setText(String.valueOf(dataList.get(position).get("Name")));
-        holder.tviFinanceDelay.setText(String.valueOf(dataList.get(position).get("Margin")));
+        holder.tviFinanceDelay.setText(String.valueOf(dataList.get(position).getAmount()));
     }
 
     @Override

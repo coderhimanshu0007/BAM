@@ -1,7 +1,6 @@
 package com.teamcomputers.bam.Fragments.OrderProcessing;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +24,12 @@ import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,13 +58,8 @@ public class FinanceApprovalFragment extends BaseFragment {
 
     @BindView(R.id.rviData)
     RecyclerView rviData;
-    EventObject eventObjects;
 
     private FAAdapter mAdapter;
-    private ArrayList<LinkedTreeMap> financeApprovalArrayList0 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> financeApprovalArrayList1 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> financeApprovalArrayList2 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> financeApprovalArrayList3 = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,6 +83,13 @@ public class FinanceApprovalFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        FAModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOPFAData();
+        if (data != null) {
+            tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
+            mAdapter = new FAAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new OrderProcessingFinanceApprovalRequester());
     }
@@ -112,47 +116,25 @@ public class FinanceApprovalFragment extends BaseFragment {
                         break;
                     case Events.GET_ORDERPROCESING_FINANCE_APPROVAL_SUCCESSFULL:
                         dismissProgress();
-                        eventObjects = eventObject;
-                        //FAModel faModel = BAMUtil.fromJson(eventObject.getObject(), FAModel.class);
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setOPFAData(String.valueOf(eventObject.getObject()));
-                        financeApprovalArrayList0.clear();
-                        financeApprovalArrayList1.clear();
-                        financeApprovalArrayList2.clear();
-                        financeApprovalArrayList3.clear();
-                        tviNoofProjects.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-                        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-                        financeApprovalArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Table");
-                        financeApprovalArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Table");
-                        financeApprovalArrayList2 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Table");
-                        financeApprovalArrayList3 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Table");
-                        mAdapter = new FAAdapter(dashboardActivityContext, financeApprovalArrayList0);
-                        rviData.setAdapter(mAdapter);
+                        FAModel[] model = new FAModel[0];
+                        try {
+                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            model = (FAModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), FAModel[].class);
+                            if (model != null)
+                                SharedPreferencesController.getInstance(dashboardActivityContext).setOPFAData(model);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (model != null) {
+                            tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(model[0].getInvoices())));
+                            tviAmounts.setText(BAMUtil.getRoundOffValue((Double) model[0].getAmount()));
+                            mAdapter = new FAAdapter(dashboardActivityContext, model[0].getTable());
+                            rviData.setAdapter(mAdapter);
+                        }
                         break;
                     case Events.GET_ORDERPROCESING_FINANCE_APPROVAL_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
-                        try {
-                            String data = SharedPreferencesController.getInstance(dashboardActivityContext).getOPFAData().replace("{", "{\"").replace("}","\"}").replace("=","\"=\"").replace(", ","\", \"").replace("}\", \"{","}, {").replace("=",": ").replace("\"[","[").replace("\\"," ").replace("[]\"","[]").replace("}]\"}","}]}");
-                            Object obj = data;
-                            //eventObjects = (EventObject) obj;
-
-                            FAModel faModel = (FAModel) BAMUtil.fromJson(data, FAModel.class);
-                            financeApprovalArrayList0.clear();
-                            financeApprovalArrayList1.clear();
-                            financeApprovalArrayList2.clear();
-                            financeApprovalArrayList3.clear();
-                            /*tviNoofProjects.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) obj).get(0)).get("Invoices")));
-                            tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) obj).get(0)).get("Amount")));
-                            financeApprovalArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) obj).get(0)).get("Table");
-                            financeApprovalArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) obj).get(1)).get("Table");
-                            financeApprovalArrayList2 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) obj).get(2)).get("Table");
-                            financeApprovalArrayList3 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) obj).get(3)).get("Table");
-                            mAdapter = new FAAdapter(dashboardActivityContext, financeApprovalArrayList0);
-                            rviData.setAdapter(mAdapter);*/
-
-                        } catch (Throwable t) {
-                            Log.e("My App", "Could not parse malformed JSON: ");
-                        }
                         break;
                 }
             }
@@ -165,9 +147,10 @@ public class FinanceApprovalFragment extends BaseFragment {
         viPendingHrs.setVisibility(View.INVISIBLE);
         viAAToday.setVisibility(View.INVISIBLE);
         viRejected.setVisibility(View.INVISIBLE);
-        tviNoofProjects.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-        mAdapter = new FAAdapter(dashboardActivityContext, financeApprovalArrayList0);
+        FAModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOPFAData();
+        tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
+        mAdapter = new FAAdapter(dashboardActivityContext, data[0].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -179,9 +162,10 @@ public class FinanceApprovalFragment extends BaseFragment {
         viPendingHrs.setVisibility(View.VISIBLE);
         viAAToday.setVisibility(View.INVISIBLE);
         viRejected.setVisibility(View.INVISIBLE);
-        tviNoofProjects.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Amount")));
-        mAdapter = new FAAdapter(dashboardActivityContext, financeApprovalArrayList1);
+        FAModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOPFAData();
+        tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
+        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[1].getAmount()));
+        mAdapter = new FAAdapter(dashboardActivityContext, data[1].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
@@ -193,9 +177,10 @@ public class FinanceApprovalFragment extends BaseFragment {
         viPendingHrs.setVisibility(View.INVISIBLE);
         viAAToday.setVisibility(View.VISIBLE);
         viRejected.setVisibility(View.INVISIBLE);
-        tviNoofProjects.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Amount")));
-        mAdapter = new FAAdapter(dashboardActivityContext, financeApprovalArrayList2);
+        FAModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOPFAData();
+        tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[2].getInvoices())));
+        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[2].getAmount()));
+        mAdapter = new FAAdapter(dashboardActivityContext, data[2].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -207,9 +192,10 @@ public class FinanceApprovalFragment extends BaseFragment {
         viPendingHrs.setVisibility(View.INVISIBLE);
         viAAToday.setVisibility(View.INVISIBLE);
         viRejected.setVisibility(View.VISIBLE);
-        tviNoofProjects.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Amount")));
-        mAdapter = new FAAdapter(dashboardActivityContext, financeApprovalArrayList3);
+        FAModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOPFAData();
+        tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[3].getInvoices())));
+        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[3].getAmount()));
+        mAdapter = new FAAdapter(dashboardActivityContext, data[3].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));

@@ -10,21 +10,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Models.SPCSModel;
 import com.teamcomputers.bam.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SPCSubmissionAdapter extends RecyclerView.Adapter<SPCSubmissionAdapter.ViewHolder> {
-    private ArrayList<LinkedTreeMap> dataList;
+    private List<SPCSModel.Table> dataList;
     private int card_layout;
     Activity mActivity;
 
-    public SPCSubmissionAdapter(DashboardActivity dashboardActivityContext, ArrayList<LinkedTreeMap> data) {
+    public SPCSubmissionAdapter(DashboardActivity dashboardActivityContext, List<SPCSModel.Table> data) {
         this.dataList = data;
         this.mActivity = dashboardActivityContext;
     }
 
-    public void setItems(ArrayList<LinkedTreeMap> data) {
+    public void setItems(List<SPCSModel.Table> data) {
         this.dataList = data;
     }
 
@@ -52,12 +54,12 @@ public class SPCSubmissionAdapter extends RecyclerView.Adapter<SPCSubmissionAdap
 
     @Override
     public void onBindViewHolder(SPCSubmissionAdapter.ViewHolder holder, final int position) {
-        holder.tviCustomer.setText(String.valueOf(dataList.get(position).get("CustomerName")));
-        holder.tviProjectNo.setText(String.valueOf(dataList.get(position).get("ProjectNo")));
-        holder.tviCount.setText(String.valueOf(dataList.get(position).get("Count")));
-        holder.tviHrsDays.setText(String.valueOf(dataList.get(position).get("HoursDays")));
-        holder.tviHeadName.setText(String.valueOf(dataList.get(position).get("ProjectHeadName")));
-        holder.tviReason.setText(String.valueOf(dataList.get(position).get("Reasons")));
+        holder.tviCustomer.setText(dataList.get(position).getCustomerName());
+        holder.tviProjectNo.setText(dataList.get(position).getProjectNo());
+        holder.tviCount.setText(String.valueOf(dataList.get(position).getCount()));
+        holder.tviHrsDays.setText(dataList.get(position).getHoursDays());
+        holder.tviHeadName.setText(dataList.get(position).getProjectHeadName());
+        holder.tviReason.setText(dataList.get(position).getReasons());
 
 
         /*holder.itemView.setOnClickListener(new View.OnClickListener() {

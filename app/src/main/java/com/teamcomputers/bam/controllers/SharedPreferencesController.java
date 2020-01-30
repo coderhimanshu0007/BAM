@@ -6,7 +6,12 @@ import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 import com.teamcomputers.bam.Interface.BAMConstant;
+import com.teamcomputers.bam.Models.FAModel;
 import com.teamcomputers.bam.Models.LoginModel;
+import com.teamcomputers.bam.Models.LowMarginModel;
+import com.teamcomputers.bam.Models.SOAModel;
+import com.teamcomputers.bam.Models.SPCSModel;
+import com.teamcomputers.bam.Models.SalesDataModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.Utils.BAMUtil;
 
@@ -165,12 +170,49 @@ public class SharedPreferencesController implements BAMConstant {
         putInt(Keys.ORDERPROCESSING_PAGENO.getLabel(), pageNo);
     }
 
-    public String getOPFAData() {
-        return getString(Keys.OPFA_DATA.getLabel(), "");
+    public FAModel[] getOPFAData() {
+        String json = getString(Keys.OPFA_DATA.getLabel(), null);
+        return (FAModel[]) BAMUtil.fromJson(json, FAModel[].class);
     }
 
-    public void setOPFAData(String opfaData) {
-        putString(Keys.OPFA_DATA.getLabel(), opfaData);
+    public void setOPFAData(FAModel[] opfaData) {
+        putString(Keys.OPFA_DATA.getLabel(), BAMUtil.toJson(opfaData));
+    }
+
+    public SOAModel[] getOPSOAData() {
+        String json = getString(Keys.OPSOA_DATA.getLabel(), null);
+        return (SOAModel[]) BAMUtil.fromJson(json, SOAModel[].class);
+    }
+
+    public void setOPSOAData(SOAModel[] opfaData) {
+        putString(Keys.OPSOA_DATA.getLabel(), BAMUtil.toJson(opfaData));
+    }
+
+    public SPCSModel[] getSPCSData() {
+        String json = getString(Keys.SPCS_DATA.getLabel(), null);
+        return (SPCSModel[]) BAMUtil.fromJson(json, SPCSModel[].class);
+    }
+
+    public void setSPCSData(SPCSModel[] opfaData) {
+        putString(Keys.SPCS_DATA.getLabel(), BAMUtil.toJson(opfaData));
+    }
+
+    public LowMarginModel[] getLMData() {
+        String json = getString(Keys.LM_DATA.getLabel(), null);
+        return (LowMarginModel[]) BAMUtil.fromJson(json, LowMarginModel[].class);
+    }
+
+    public void setLMData(LowMarginModel[] opfaData) {
+        putString(Keys.LM_DATA.getLabel(), BAMUtil.toJson(opfaData));
+    }
+
+    public void setSalesData(SalesDataModel[] opfaData) {
+        putString(Keys.SALES_DATA.getLabel(), BAMUtil.toJson(opfaData));
+    }
+
+    public SalesDataModel[] getSalesData() {
+        String json = getString(Keys.SALES_DATA.getLabel(), null);
+        return (SalesDataModel[]) BAMUtil.fromJson(json, SalesDataModel[].class);
     }
 
     public int getPurchasePageNo() {
@@ -218,6 +260,10 @@ public class SharedPreferencesController implements BAMConstant {
         LOGGED_IN("LOGGED_IN"),
         ORDERPROCESSING_PAGENO("ORDERPROCESSING_PAGENO"),
         OPFA_DATA("OPFA_DATA"),
+        OPSOA_DATA("OPSOA_DATA"),
+        SPCS_DATA("SPCS_DATA"),
+        LM_DATA("LM_DATA"),
+        SALES_DATA("SALES_DATA"),
         PURCHASE_PAGENO("PURCHASE_PAGENO"),
         LOGISTICS_PAGENO("LOGISTICS_PAGENO"),
         INSTALLATION_PAGENO("INSTALLATION_PAGENO"),

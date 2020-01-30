@@ -10,21 +10,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Models.SOAModel;
 import com.teamcomputers.bam.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SOAuthorizationAdapter extends RecyclerView.Adapter<SOAuthorizationAdapter.ViewHolder> {
-    private ArrayList<LinkedTreeMap> dataList;
+    private List<SOAModel.Table> dataList;
     private int card_layout;
     Activity mActivity;
 
-    public SOAuthorizationAdapter(DashboardActivity dashboardActivityContext, ArrayList<LinkedTreeMap> data) {
+    public SOAuthorizationAdapter(DashboardActivity dashboardActivityContext, List<SOAModel.Table> data) {
         this.dataList = data;
         this.mActivity = dashboardActivityContext;
     }
 
-    public void setItems(ArrayList<LinkedTreeMap> data) {
+    public void setItems(List<SOAModel.Table> data) {
         this.dataList = data;
     }
 
@@ -51,11 +53,11 @@ public class SOAuthorizationAdapter extends RecyclerView.Adapter<SOAuthorization
 
     @Override
     public void onBindViewHolder(SOAuthorizationAdapter.ViewHolder holder, final int position) {
-        holder.tviNo.setText(String.valueOf(dataList.get(position).get("No")));
-        holder.tviCount.setText(String.valueOf(dataList.get(position).get("Count")));
-        holder.tviValue.setText(String.valueOf(dataList.get(position).get("Value")));
-        holder.tviHrsDays.setText(String.valueOf(dataList.get(position).get("HoursDays")));
-        holder.tviSalesCordinator.setText(String.valueOf(dataList.get(position).get("SalesCordinator")));
+        holder.tviNo.setText(dataList.get(position).getNo());
+        holder.tviCount.setText(String.valueOf(dataList.get(position).getCount()));
+        holder.tviValue.setText(String.valueOf(dataList.get(position).getValue()));
+        holder.tviHrsDays.setText(dataList.get(position).getHoursDays());
+        holder.tviSalesCordinator.setText(dataList.get(position).getSalesCordinator());
     }
 
     @Override

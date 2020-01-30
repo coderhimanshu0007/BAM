@@ -14,14 +14,19 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.OrderProcessing.LowMarginAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.LowMarginModel;
+import com.teamcomputers.bam.Models.SPCSModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.OrderProcessing.OrderProcessingLowMarginRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -76,6 +81,13 @@ public class LowMarginFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        LowMarginModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getLMData();
+        if (data != null) {
+            tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(Double.valueOf(data[0].getAmount())));
+            mAdapter = new LowMarginAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new OrderProcessingLowMarginRequester());
     }
@@ -102,14 +114,26 @@ public class LowMarginFragment extends BaseFragment {
                         break;
                     case Events.GET_ORDERPROCESING_LOWMARGIN_SUCCESSFULL:
                         dismissProgress();
+                        LowMarginModel[] data = new LowMarginModel[0];
+                        try {
+                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            data = (LowMarginModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), LowMarginModel[].class);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setLMData(data);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+                        tviAmounts.setText(BAMUtil.getRoundOffValue(Double.valueOf(data[0].getAmount())));
+                        /*mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, data[0].getTable());
+                        rviData.setAdapter(mAdapter);
                         eventObjects = eventObject;
                         lowMarginArrayList0.clear();
                         lowMarginArrayList1.clear();
                         tviNoofSO.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
                         tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
                         lowMarginArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Table");
-                        lowMarginArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Table");
-                        mAdapter = new LowMarginAdapter(dashboardActivityContext, lowMarginArrayList0);
+                        lowMarginArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Table");*/
+                        mAdapter = new LowMarginAdapter(dashboardActivityContext, data[0].getTable());
                         rviData.setAdapter(mAdapter);
                         break;
                     case Events.GET_ORDERPROCESING_LOWMARGIN_UNSUCCESSFULL:
@@ -125,9 +149,10 @@ public class LowMarginFragment extends BaseFragment {
     public void Pending() {
         viPending.setVisibility(View.VISIBLE);
         viPendingHrs.setVisibility(View.INVISIBLE);
-        tviNoofSO.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-        mAdapter = new LowMarginAdapter(dashboardActivityContext, lowMarginArrayList0);
+        LowMarginModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getLMData();
+        tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+        tviAmounts.setText(BAMUtil.getRoundOffValue(Double.valueOf(data[0].getAmount())));
+        mAdapter = new LowMarginAdapter(dashboardActivityContext, data[0].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofSO.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -137,9 +162,10 @@ public class LowMarginFragment extends BaseFragment {
     public void PendingHrs() {
         viPending.setVisibility(View.INVISIBLE);
         viPendingHrs.setVisibility(View.VISIBLE);
-        tviNoofSO.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Amount")));
-        mAdapter = new LowMarginAdapter(dashboardActivityContext, lowMarginArrayList1);
+        LowMarginModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getLMData();
+        tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
+        tviAmounts.setText(BAMUtil.getRoundOffValue(Double.valueOf(data[1].getAmount())));
+        mAdapter = new LowMarginAdapter(dashboardActivityContext, data[1].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofSO.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));

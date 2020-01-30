@@ -3,80 +3,36 @@ package com.teamcomputers.bam.Models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class LowMarginModel {
-    @SerializedName("customerName")
+    @SerializedName("Type")
     @Expose
-    private String customerName;
-    @SerializedName("bu")
+    private String type;
+    @SerializedName("Invoices")
     @Expose
-    private String bu;
-    @SerializedName("count")
-    @Expose
-    private String count;
-    @SerializedName("projectNo")
-    @Expose
-    private String projectNo;
-    @SerializedName("hrsDays")
-    @Expose
-    private String hrsDays;
+    private String invoices;
     @SerializedName("Amount")
     @Expose
     private String amount;
-    @SerializedName("Margin")
+    @SerializedName("Table")
     @Expose
-    private String margin;
+    private List<Table> table = null;
 
-    public LowMarginModel() {
+    public String getType() {
+        return type;
     }
 
-    public LowMarginModel(String customerName, String bu, String count, String projectNo, String hrsDays, String amount, String margin) {
-        this.customerName = customerName;
-        this.bu = bu;
-        this.count = count;
-        this.projectNo = projectNo;
-        this.hrsDays = hrsDays;
-        this.amount = amount;
-        this.margin = margin;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public String getInvoices() {
+        return invoices;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public String getBu() {
-        return bu;
-    }
-
-    public void setBu(String bu) {
-        this.bu = bu;
-    }
-
-    public String getCount() {
-        return count;
-    }
-
-    public void setCount(String count) {
-        this.count = count;
-    }
-
-    public String getProjectNo() {
-        return projectNo;
-    }
-
-    public void setProjectNo(String projectNo) {
-        this.projectNo = projectNo;
-    }
-
-    public String getHrsDays() {
-        return hrsDays;
-    }
-
-    public void setHrsDays(String hrsDays) {
-        this.hrsDays = hrsDays;
+    public void setInvoices(String invoices) {
+        this.invoices = invoices;
     }
 
     public String getAmount() {
@@ -87,11 +43,95 @@ public class LowMarginModel {
         this.amount = amount;
     }
 
-    public String getMargin() {
-        return margin;
+    public List<Table> getTable() {
+        return table;
     }
 
-    public void setMargin(String margin) {
-        this.margin = margin;
+    public void setTable(List<Table> table) {
+        this.table = table;
+    }
+
+    public LowMarginModel() {
+    }
+
+    public class Table {
+
+        @SerializedName("CustomerName")
+        @Expose
+        private String customerName;
+        @SerializedName("BU")
+        @Expose
+        private String bU;
+        @SerializedName("Count")
+        @Expose
+        private Integer count;
+        @SerializedName("Amount")
+        @Expose
+        private Double amount;
+        @SerializedName("ProjectNo")
+        @Expose
+        private String projectNo;
+        @SerializedName("HoursDays")
+        @Expose
+        private String hoursDays;
+        @SerializedName("Margin")
+        @Expose
+        private Double margin;
+
+        public String getCustomerName() {
+            return customerName;
+        }
+
+        public void setCustomerName(String customerName) {
+            this.customerName = customerName;
+        }
+
+        public String getBU() {
+            return bU;
+        }
+
+        public void setBU(String bU) {
+            this.bU = bU;
+        }
+
+        public Integer getCount() {
+            return count;
+        }
+
+        public void setCount(Integer count) {
+            this.count = count;
+        }
+
+        public Double getAmount() {
+            return amount;
+        }
+
+        public void setAmount(Double amount) {
+            this.amount = amount;
+        }
+
+        public String getProjectNo() {
+            return projectNo;
+        }
+
+        public void setProjectNo(String projectNo) {
+            this.projectNo = projectNo;
+        }
+
+        public String getHoursDays() {
+            return hoursDays;
+        }
+
+        public void setHoursDays(String hoursDays) {
+            this.hoursDays = hoursDays;
+        }
+
+        public Double getMargin() {
+            return margin;
+        }
+
+        public void setMargin(Double margin) {
+            this.margin = margin;
+        }
     }
 }

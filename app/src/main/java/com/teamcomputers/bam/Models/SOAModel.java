@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class FAModel {
+public class SOAModel {
     @SerializedName("Type")
     @Expose
     private String type;
@@ -51,53 +51,30 @@ public class FAModel {
         this.table = table;
     }
 
-    public FAModel() {
-    }
-
-
-
-
     public class Table {
 
-        @SerializedName("CustomerName")
+        @SerializedName("No")
         @Expose
-        private String customerName;
-        @SerializedName("BU")
-        @Expose
-        private String bU;
+        private String no;
         @SerializedName("Count")
         @Expose
         private Integer count;
         @SerializedName("Value")
         @Expose
         private Double value;
-        @SerializedName("ProjectNo")
-        @Expose
-        private String projectNo;
         @SerializedName("HoursDays")
         @Expose
         private String hoursDays;
-        @SerializedName("Name")
+        @SerializedName("SalesCordinator")
         @Expose
-        private String name;
-        @SerializedName("FinanceDelay")
-        @Expose
-        private String financeDelay;
+        private String salesCordinator;
 
-        public String getCustomerName() {
-            return customerName;
+        public String getNo() {
+            return no;
         }
 
-        public void setCustomerName(String customerName) {
-            this.customerName = customerName;
-        }
-
-        public String getBU() {
-            return bU;
-        }
-
-        public void setBU(String bU) {
-            this.bU = bU;
+        public void setNo(String no) {
+            this.no = no;
         }
 
         public Integer getCount() {
@@ -116,14 +93,6 @@ public class FAModel {
             this.value = value;
         }
 
-        public String getProjectNo() {
-            return projectNo;
-        }
-
-        public void setProjectNo(String projectNo) {
-            this.projectNo = projectNo;
-        }
-
         public String getHoursDays() {
             return hoursDays;
         }
@@ -132,20 +101,13 @@ public class FAModel {
             this.hoursDays = hoursDays;
         }
 
-        public String getName() {
-            return name;
+        public String getSalesCordinator() {
+            return salesCordinator;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setSalesCordinator(String salesCordinator) {
+            this.salesCordinator = salesCordinator;
         }
 
-        public String getFinanceDelay() {
-            return financeDelay;
-        }
-
-        public void setFinanceDelay(String financeDelay) {
-            this.financeDelay = financeDelay;
-        }
     }
 }

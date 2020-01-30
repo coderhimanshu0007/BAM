@@ -10,21 +10,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Models.FAModel;
 import com.teamcomputers.bam.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FAAdapter extends RecyclerView.Adapter<FAAdapter.ViewHolder> {
-    private ArrayList<LinkedTreeMap> dataList;
+    private List<FAModel.Table> dataList;
     private int card_layout;
     Activity mActivity;
 
-    public FAAdapter(DashboardActivity dashboardActivityContext, ArrayList<LinkedTreeMap> data) {
+    public FAAdapter(DashboardActivity dashboardActivityContext, List<FAModel.Table> data) {
         this.dataList = data;
         this.mActivity = dashboardActivityContext;
     }
 
-    public void setItems(ArrayList<LinkedTreeMap> data) {
+    public void setItems(List<FAModel.Table> data) {
         this.dataList = data;
     }
 
@@ -54,25 +56,14 @@ public class FAAdapter extends RecyclerView.Adapter<FAAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(FAAdapter.ViewHolder holder, final int position) {
-        holder.tviCustomerName.setText(String.valueOf(dataList.get(position).get("CustomerName")));
-        holder.tviBu.setText(String.valueOf(dataList.get(position).get("BU")));
-        holder.tviCount.setText(String.valueOf(dataList.get(position).get("Count")));
-        holder.tviValue.setText(String.valueOf(dataList.get(position).get("Value")));
-        holder.tviProjectNo.setText(String.valueOf(dataList.get(position).get("ProjectNo")));
-        holder.tviHrsDays.setText(String.valueOf(dataList.get(position).get("HoursDays")));
-        holder.tviName.setText(String.valueOf(dataList.get(position).get("Name")));
-        holder.tviFinanceDelay.setText(String.valueOf(dataList.get(position).get("FinanceDelay")));
-
-
-
-        /*holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferencesController.getInstance(mActivity).setFrom("2");
-                SharedPreferencesController.getInstance(mActivity).setLocation(dataList.get(position).getCustName());
-                EventBus.getDefault().post(new EventObject(ClickEvents.PENDING_TASK_CALLS, dataList.get(position)));
-            }
-        });*/
+        holder.tviCustomerName.setText(dataList.get(position).getCustomerName());
+        holder.tviBu.setText(dataList.get(position).getBU());
+        holder.tviCount.setText(String.valueOf(dataList.get(position).getCount()));
+        holder.tviValue.setText(String.valueOf(dataList.get(position).getValue()));
+        holder.tviProjectNo.setText(dataList.get(position).getProjectNo());
+        holder.tviHrsDays.setText(dataList.get(position).getHoursDays());
+        holder.tviName.setText(dataList.get(position).getName());
+        holder.tviFinanceDelay.setText(dataList.get(position).getFinanceDelay());
     }
 
     @Override

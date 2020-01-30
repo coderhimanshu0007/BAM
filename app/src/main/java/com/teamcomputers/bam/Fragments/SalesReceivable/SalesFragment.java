@@ -16,21 +16,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.AccountModel;
+import com.teamcomputers.bam.Models.CustomerModel;
+import com.teamcomputers.bam.Models.ProductModel;
+import com.teamcomputers.bam.Models.RSMModel;
 import com.teamcomputers.bam.Models.SRResponseModel;
+import com.teamcomputers.bam.Models.SalesDataModel;
+import com.teamcomputers.bam.Models.SalesModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.SalesReceivable.SalesReceivableSalesRequester;
-import com.teamcomputers.bam.Requesters.SalesReceivable.SalesRefreshRequester;
 import com.teamcomputers.bam.TreeView.bean.Dir;
 import com.teamcomputers.bam.TreeView.viewbinder.DirectoryNodeBinder;
 import com.teamcomputers.bam.TreeView.viewbinder.FileNodeBinder;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.controllers.SharedPreferencesController;
 import com.teamcomputers.bam.recyclertreeview_lib.TreeNode;
 import com.teamcomputers.bam.recyclertreeview_lib.TreeViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,6 +83,10 @@ public class SalesFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        /*SalesDataModel[] model = SharedPreferencesController.getInstance(dashboardActivityContext).getSalesData();
+        if (null != model) {
+            initTreeData(model);
+        }*/
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new SalesReceivableSalesRequester());
     }
@@ -100,6 +112,17 @@ public class SalesFragment extends BaseFragment {
                         showToast(ToastTexts.NO_INTERNET_CONNECTION);
                         break;
                     case Events.GET_SALES_RECEIVABLE_SALES_SUCCESSFULL:
+                        /*SalesDataModel[] model = new SalesDataModel[0];
+                        try {
+                            String data = BAMUtil.replaceDataResponse(eventObject.getObject().toString());
+                            String newData = data.replace("]\"}", "]}");
+                            JSONArray jsonArray = new JSONArray(newData);
+                            model = (SalesDataModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), SalesDataModel[].class);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSalesData(model);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        initTreeData(model);*/
                         initData(eventObject);
                         dismissProgress();
                         break;
@@ -119,6 +142,100 @@ public class SalesFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    private void initTreeData(SalesDataModel[] model) {
+        Double mtd = 0.0;
+        Double ytd = 0.0;
+        Double oso = 0.0;
+        List<TreeNode> nodes = new ArrayList<>();
+        for (int i = 0; i < model.length; i++) {
+            SalesDataModel salesDataModel = model[i];
+            mtd = mtd + salesDataModel.getMTD();
+            ytd = ytd + salesDataModel.getYTD();
+            oso = oso + salesDataModel.getSOAmount();
+            TreeNode<Dir> app = new TreeNode<>(new Dir(String.valueOf(salesDataModel.getName()), BAMUtil.getRoundOffValue(salesDataModel.getYTD()), BAMUtil.getRoundOffValue(salesDataModel.getMTD()), BAMUtil.getRoundOffValue(salesDataModel.getSOAmount()), "1"));
+            if (null != salesDataModel.getRSM()) {
+                List<RSMModel> rsmModelList = salesDataModel.getRSM();
+                for (int rsm = 0; rsm < rsmModelList.size(); rsm++) {
+                    RSMModel rsmModel = rsmModelList.get(rsm);
+                    TreeNode<Dir> rsmData = new TreeNode<>(new Dir(String.valueOf(rsmModel.getName()), BAMUtil.getRoundOffValue(rsmModel.getYTD()), BAMUtil.getRoundOffValue(rsmModel.getMTD()), BAMUtil.getRoundOffValue(rsmModel.getSOAmount()), "2"));
+                    if (null != rsmModel.getAccount()) {
+                        List<AccountModel> accountModelList = rsmModel.getAccount();
+                        for (int r = 0; r < accountModelList.size(); r++) {
+                            for (int acct = 0; acct < accountModelList.size(); acct++) {
+                                AccountModel accountModel = accountModelList.get(acct);
+                                TreeNode<Dir> acctData = new TreeNode<>(new Dir(String.valueOf(accountModel.getName()), BAMUtil.getRoundOffValue(accountModel.getYTD()), BAMUtil.getRoundOffValue(accountModel.getMTD()), BAMUtil.getRoundOffValue(accountModel.getSOAmount()), "3"));
+                                /*if (null != accountModel.getSales()) {
+                                    List<SalesModel> salesModelList = accountModel.getSales();
+                                    for (int sls = 0; sls < salesModelList.size(); sls++) {
+                                        SalesModel salesModel = salesModelList.get(sls);
+                                        TreeNode<Dir> salesData = new TreeNode<>(new Dir(String.valueOf(salesModel.getName()), BAMUtil.getRoundOffValue(salesModel.getYTD()), BAMUtil.getRoundOffValue(salesModel.getMTD()), BAMUtil.getRoundOffValue(salesModel.getSOAmount()), "4"));
+                                        if (null != salesModel.getCustomer()) {
+                                            List<CustomerModel> customerModelList = salesModel.getCustomer();
+                                            for (int cstmr = 0; cstmr < customerModelList.size(); cstmr++) {
+                                                CustomerModel customerModel = customerModelList.get(cstmr);
+                                                TreeNode<Dir> cstmrData = new TreeNode<>(new Dir(String.valueOf(customerModel.getName()), BAMUtil.getRoundOffValue(customerModel.getYTD()), BAMUtil.getRoundOffValue(customerModel.getMTD()), BAMUtil.getRoundOffValue(customerModel.getSOAmount()), "5"));
+                                                if (null != customerModel.getProducts()) {
+                                                    List<ProductModel> productModelList = customerModel.getProducts();
+                                                    for (int prdct = 0; prdct < productModelList.size(); prdct++) {
+                                                        ProductModel productModel = productModelList.get(prdct);
+                                                        TreeNode<Dir> product = new TreeNode<>(new Dir(String.valueOf(productModel.getName()), BAMUtil.getRoundOffValue(productModel.getYTD()), BAMUtil.getRoundOffValue(productModel.getMTD()), BAMUtil.getRoundOffValue(productModel.getSOAmount()), "6"));
+                                                        cstmrData.addChild(product);
+                                                    }
+                                                }
+                                                salesData.addChild(cstmrData);
+                                            }
+                                        }
+                                        acctData.addChild(salesData);
+                                    }
+                                }*/
+                                rsmData.addChild(acctData);
+                            }
+                        }
+                    }
+                    app.addChild(rsmData);
+                }
+            }
+            nodes.add(app);
+        }
+
+        tviMTD.setText(BAMUtil.getRoundOffValue(mtd));
+        tviYTD.setText(BAMUtil.getRoundOffValue(ytd));
+        tviOSO.setText(BAMUtil.getRoundOffValue(oso));
+        rviSales.setLayoutManager(new LinearLayoutManager(dashboardActivityContext));
+        adapter = new TreeViewAdapter(nodes, Arrays.asList(new FileNodeBinder(), new DirectoryNodeBinder()));
+        // whether collapse child nodes when their parent node was close.
+//        adapter.ifCollapseChildWhileCollapseParent(true);
+        adapter.setOnTreeNodeListener(new TreeViewAdapter.OnTreeNodeListener() {
+            @Override
+            public boolean onClick(TreeNode node, RecyclerView.ViewHolder holder) {
+                if (!node.isLeaf()) {
+                    //Update and toggle the node.
+                    onToggle(!node.isExpand(), holder);
+//                    if (!node.isExpand())
+//                        adapter.collapseBrotherNode(node);
+                }
+                return false;
+            }
+
+            @Override
+            public void onToggle(boolean isExpand, RecyclerView.ViewHolder holder) {
+                DirectoryNodeBinder.ViewHolder dirViewHolder = (DirectoryNodeBinder.ViewHolder) holder;
+                final LinearLayout llDir = dirViewHolder.getllDir();
+                final ImageView ivArrow = dirViewHolder.getIvArrow();
+                int rotateDegree = isExpand ? 90 : -90;
+                ivArrow.animate().rotationBy(rotateDegree)
+                        .start();
+                if (isExpand) {
+                    llDir.setBackgroundColor(ContextCompat.getColor(dashboardActivityContext, R.color.colorTabNonSelected));
+                } else {
+                    llDir.setBackgroundColor(ContextCompat.getColor(dashboardActivityContext, R.color.login_bg));
+                }
+            }
+        });
+        rviSales.setAdapter(adapter);
+
+    }
+
     private void initData(EventObject eventObject) {
         Double mtd = 0.0;
         Double ytd = 0.0;
@@ -129,27 +246,27 @@ public class SalesFragment extends BaseFragment {
             ytd = ytd + (Double) ((LinkedTreeMap) ((ArrayList) eventObject.getObject()).get(i)).get("YTD");
             oso = oso + (Double) ((LinkedTreeMap) ((ArrayList) eventObject.getObject()).get(i)).get("SOAmount");
             SRResponseModel srResponse = getSRData((LinkedTreeMap) ((ArrayList) eventObject.getObject()).get(i), "RSM");
-            TreeNode<Dir> app = new TreeNode<>(new Dir(srResponse.getName(), srResponse.getYTD(), srResponse.getMTD(), srResponse.getsO(),"1"));
+            TreeNode<Dir> app = new TreeNode<>(new Dir(srResponse.getName(), srResponse.getYTD(), srResponse.getMTD(), srResponse.getsO(), "1"));
             if (null != srResponse.getLinkedTreeMap()) {
                 for (int r = 0; r < srResponse.getLinkedTreeMap().size(); r++) {
                     SRResponseModel srResponseRSM = getSRData(srResponse.getLinkedTreeMap().get(r), "Account");
-                    TreeNode<Dir> rsm = new TreeNode<>(new Dir(srResponseRSM.getName(), srResponseRSM.getYTD(), srResponseRSM.getMTD(), srResponseRSM.getsO(),"2"));
+                    TreeNode<Dir> rsm = new TreeNode<>(new Dir(srResponseRSM.getName(), srResponseRSM.getYTD(), srResponseRSM.getMTD(), srResponseRSM.getsO(), "2"));
                     if (null != srResponseRSM.getLinkedTreeMap()) {
                         for (int acct = 0; acct < srResponseRSM.getLinkedTreeMap().size(); acct++) {
                             SRResponseModel srResponseAccount = getSRData(srResponseRSM.getLinkedTreeMap().get(acct), "Sales");
-                            TreeNode<Dir> account = new TreeNode<>(new Dir(srResponseAccount.getName(), srResponseAccount.getYTD(), srResponseAccount.getMTD(), srResponseAccount.getsO(),"3"));
+                            TreeNode<Dir> account = new TreeNode<>(new Dir(srResponseAccount.getName(), srResponseAccount.getYTD(), srResponseAccount.getMTD(), srResponseAccount.getsO(), "3"));
                             if (null != srResponseAccount.getLinkedTreeMap()) {
                                 for (int s = 0; s < srResponseAccount.getLinkedTreeMap().size(); s++) {
                                     SRResponseModel srResponseSales = getSRData(srResponseAccount.getLinkedTreeMap().get(s), "Customer");
-                                    TreeNode<Dir> sales = new TreeNode<>(new Dir(srResponseSales.getName(), srResponseSales.getYTD(), srResponseSales.getMTD(), srResponseSales.getsO(),"4"));
+                                    TreeNode<Dir> sales = new TreeNode<>(new Dir(srResponseSales.getName(), srResponseSales.getYTD(), srResponseSales.getMTD(), srResponseSales.getsO(), "4"));
                                     if (null != srResponseSales.getLinkedTreeMap()) {
                                         for (int cust = 0; cust < srResponseSales.getLinkedTreeMap().size(); cust++) {
                                             SRResponseModel srResponseCustomer = getSRData(srResponseSales.getLinkedTreeMap().get(cust), "Products");
-                                            TreeNode<Dir> customer = new TreeNode<>(new Dir(srResponseCustomer.getName(), srResponseCustomer.getYTD(), srResponseCustomer.getMTD(), srResponseCustomer.getsO(),"5"));
+                                            TreeNode<Dir> customer = new TreeNode<>(new Dir(srResponseCustomer.getName(), srResponseCustomer.getYTD(), srResponseCustomer.getMTD(), srResponseCustomer.getsO(), "5"));
                                             if (null != srResponseCustomer.getLinkedTreeMap()) {
                                                 for (int prdct = 0; prdct < srResponseCustomer.getLinkedTreeMap().size(); prdct++) {
                                                     SRResponseModel srResponseProduct = getSRData(srResponseCustomer.getLinkedTreeMap().get(prdct), "");
-                                                    TreeNode<Dir> product = new TreeNode<>(new Dir(srResponseProduct.getName(), srResponseProduct.getYTD(), srResponseProduct.getMTD(), srResponseProduct.getsO() ,"6"));
+                                                    TreeNode<Dir> product = new TreeNode<>(new Dir(srResponseProduct.getName(), srResponseProduct.getYTD(), srResponseProduct.getMTD(), srResponseProduct.getsO(), "6"));
                                                     customer.addChild(product);
                                                 }
                                             }
