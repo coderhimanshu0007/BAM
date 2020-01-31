@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class DispatchModel {
+public class HoldDeliveryModel {
     @SerializedName("Type")
     @Expose
     private String type;
@@ -51,6 +51,7 @@ public class DispatchModel {
         this.table = table;
     }
 
+
     public class Table {
 
         @SerializedName("InvoiceNo")
@@ -62,15 +63,21 @@ public class DispatchModel {
         @SerializedName("FromCity")
         @Expose
         private String fromCity;
-        @SerializedName("HoursDays")
+        @SerializedName("ToCity")
         @Expose
-        private String hoursDays;
-        @SerializedName("DispatchPending")
+        private String toCity;
+        @SerializedName("AccountManager")
         @Expose
-        private Integer dispatchPending;
-        @SerializedName("DispatchPendingValue")
+        private String accountManager;
+        @SerializedName("Days")
         @Expose
-        private Double dispatchPendingValue;
+        private Integer days;
+        @SerializedName("Reason")
+        @Expose
+        private String reason;
+        @SerializedName("Value")
+        @Expose
+        private Double value;
 
         public String getInvoiceNo() {
             return invoiceNo;
@@ -96,28 +103,44 @@ public class DispatchModel {
             this.fromCity = fromCity;
         }
 
-        public String getHoursDays() {
-            return hoursDays;
+        public String getToCity() {
+            return toCity;
         }
 
-        public void setHoursDays(String hoursDays) {
-            this.hoursDays = hoursDays;
+        public void setToCity(String toCity) {
+            this.toCity = toCity;
         }
 
-        public Integer getDispatchPending() {
-            return dispatchPending;
+        public String getAccountManager() {
+            return accountManager;
         }
 
-        public void setDispatchPending(Integer dispatchPending) {
-            this.dispatchPending = dispatchPending;
+        public void setAccountManager(String accountManager) {
+            this.accountManager = accountManager;
         }
 
-        public Double getDispatchPendingValue() {
-            return dispatchPendingValue;
+        public Integer getDays() {
+            return days;
         }
 
-        public void setDispatchPendingValue(Double dispatchPendingValue) {
-            this.dispatchPendingValue = dispatchPendingValue;
+        public void setDays(Integer days) {
+            this.days = days;
+        }
+
+        public String getReason() {
+            return reason;
+        }
+
+        public void setReason(String reason) {
+            this.reason = reason;
+        }
+
+        public Double getValue() {
+            return value;
+        }
+
+        public void setValue(Double value) {
+            this.value = value;
         }
     }
 }

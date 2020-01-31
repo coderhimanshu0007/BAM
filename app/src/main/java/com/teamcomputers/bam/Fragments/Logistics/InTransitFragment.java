@@ -14,14 +14,18 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.Logistics.InTransitAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.InTransitModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Logistics.LogisticsInTransitRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -40,11 +44,6 @@ public class InTransitFragment extends BaseFragment {
     RecyclerView rviData;
 
     private InTransitAdapter mAdapter;
-    private ArrayList<LinkedTreeMap> intransitArrayList0 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> intransitArrayList1 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> intransitArrayList2 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> intransitArrayList3 = new ArrayList<>();
-    EventObject eventObjects;
     @BindView(R.id.tviNoofSO)
     TextView tviNoofInvoice;
     @BindView(R.id.tviAmounts)
@@ -77,24 +76,19 @@ public class InTransitFragment extends BaseFragment {
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviData.setLayoutManager(layoutManager);
 
-        //setData();
-
-        //mAdapter = new DispatchAdapter(dashboardActivityContext, dispatchModelArrayList);
-        //rviData.setAdapter(mAdapter);
-
         return rootView;
     }
-
-    /*private void setData() {
-        for (int i = 0; i < 15; i++) {
-            DispatchModel dispatchModel = new DispatchModel("LIC of India", "New Delhi", "Samba", "20 Hrs", "- - - -", "2 Lakhs", "GST1920");
-            dispatchModelArrayList.add(dispatchModel);
-        }
-    }*/
 
     @Override
     public void onResume() {
         super.onResume();
+        InTransitModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getInTransitData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
+            mAdapter = new InTransitAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new LogisticsInTransitRequester());
     }
@@ -121,19 +115,21 @@ public class InTransitFragment extends BaseFragment {
                         break;
                     case Events.GET_LOGISTICS_INTRANSIT_SUCCESSFULL:
                         dismissProgress();
-                        eventObjects = eventObject;
-                        intransitArrayList0.clear();
-                        intransitArrayList1.clear();
-                        intransitArrayList2.clear();
-                        intransitArrayList3.clear();
-                        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-                        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-                        intransitArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Table");
-                        intransitArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Table");
-                        intransitArrayList2 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Table");
-                        intransitArrayList3 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Table");
-                        mAdapter = new InTransitAdapter(dashboardActivityContext, intransitArrayList0);
-                        rviData.setAdapter(mAdapter);
+                        InTransitModel[] model = new InTransitModel[0];
+                        try {
+                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            model = (InTransitModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), InTransitModel[].class);
+                            if (model != null)
+                                SharedPreferencesController.getInstance(dashboardActivityContext).setInTransitData(model);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (model != null) {
+                            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(model[0].getInvoices())));
+                            tviAmounts.setText(BAMUtil.getRoundOffValue((Double) model[0].getAmount()));
+                            mAdapter = new InTransitAdapter(dashboardActivityContext, model[0].getTable());
+                            rviData.setAdapter(mAdapter);
+                        }
                         break;
                     case Events.GET_LOGISTICS_INTRANSIT_UNSUCCESSFULL:
                         dismissProgress();
@@ -151,10 +147,13 @@ public class InTransitFragment extends BaseFragment {
         viIntraState.setVisibility(View.INVISIBLE);
         viODA.setVisibility(View.INVISIBLE);
         viState.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-        mAdapter = new InTransitAdapter(dashboardActivityContext, intransitArrayList0);
-        rviData.setAdapter(mAdapter);
+        InTransitModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getInTransitData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
+            mAdapter = new InTransitAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
     }
@@ -166,10 +165,13 @@ public class InTransitFragment extends BaseFragment {
         viIntraState.setVisibility(View.INVISIBLE);
         viODA.setVisibility(View.INVISIBLE);
         viState.setVisibility(View.VISIBLE);
-        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Amount")));
-        mAdapter = new InTransitAdapter(dashboardActivityContext, intransitArrayList1);
-        rviData.setAdapter(mAdapter);
+        InTransitModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getInTransitData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[1].getAmount()));
+            mAdapter = new InTransitAdapter(dashboardActivityContext, data[1].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
     }
@@ -181,10 +183,13 @@ public class InTransitFragment extends BaseFragment {
         viIntraState.setVisibility(View.VISIBLE);
         viODA.setVisibility(View.INVISIBLE);
         viState.setVisibility(View.VISIBLE);
-        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Amount")));
-        mAdapter = new InTransitAdapter(dashboardActivityContext, intransitArrayList1);
-        rviData.setAdapter(mAdapter);
+        InTransitModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getInTransitData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[2].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[2].getAmount()));
+            mAdapter = new InTransitAdapter(dashboardActivityContext, data[2].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
     }
@@ -196,10 +201,13 @@ public class InTransitFragment extends BaseFragment {
         viIntraState.setVisibility(View.INVISIBLE);
         viODA.setVisibility(View.VISIBLE);
         viState.setVisibility(View.VISIBLE);
-        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(4)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(4)).get("Amount")));
-        mAdapter = new InTransitAdapter(dashboardActivityContext, intransitArrayList1);
-        rviData.setAdapter(mAdapter);
+        InTransitModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getInTransitData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[3].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[3].getAmount()));
+            mAdapter = new InTransitAdapter(dashboardActivityContext, data[3].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
     }

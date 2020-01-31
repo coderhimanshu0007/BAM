@@ -3,131 +3,166 @@ package com.teamcomputers.bam.Models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class WIPModel {
-    @SerializedName("Invoice No_")
+    @SerializedName("Type")
     @Expose
-    private String invoiceNo;
-    @SerializedName("Customer Name")
+    private String type;
+    @SerializedName("Invoices")
     @Expose
-    private String customer_Name;
-    @SerializedName("Payment Status")
-    @Expose
-    private String payment_Status;
-    @SerializedName("Count")
-    @Expose
-    private String count;
+    private Integer invoices;
     @SerializedName("Amount")
     @Expose
-    private String amount;
-    @SerializedName("NOD")
+    private Double amount;
+    @SerializedName("Table")
     @Expose
-    private String nod;
-    @SerializedName("Remaining Amount")
-    @Expose
-    private String remaining_Amount;
-    @SerializedName("Reason")
-    @Expose
-    private String reason;
-    @SerializedName("Zone Name")
-    @Expose
-    private String zone_Name;
-    @SerializedName("City")
-    @Expose
-    private String city;
+    private List<Table> table = null;
 
-    public WIPModel() {
+    public String getType() {
+        return type;
     }
 
-    public WIPModel(String invoiceNo, String customer_Name, String payment_Status, String count, String amount, String nod, String remaining_Amount, String reason, String zone_Name, String city) {
-        this.invoiceNo = invoiceNo;
-        this.customer_Name = customer_Name;
-        this.payment_Status = payment_Status;
-        this.count = count;
-        this.amount = amount;
-        this.nod = nod;
-        this.remaining_Amount = remaining_Amount;
-        this.reason = reason;
-        this.zone_Name = zone_Name;
-        this.city = city;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getInvoiceNo() {
-        return invoiceNo;
+    public Integer getInvoices() {
+        return invoices;
     }
 
-    public void setInvoiceNo(String invoiceNo) {
-        this.invoiceNo = invoiceNo;
+    public void setInvoices(Integer invoices) {
+        this.invoices = invoices;
     }
 
-    public String getCustomer_Name() {
-        return customer_Name;
-    }
-
-    public void setCustomer_Name(String customer_Name) {
-        this.customer_Name = customer_Name;
-    }
-
-    public String getPayment_Status() {
-        return payment_Status;
-    }
-
-    public void setPayment_Status(String payment_Status) {
-        this.payment_Status = payment_Status;
-    }
-
-    public String getCount() {
-        return count;
-    }
-
-    public void setCount(String count) {
-        this.count = count;
-    }
-
-    public String getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
-    public String getNod() {
-        return nod;
+    public List<Table> getTable() {
+        return table;
     }
 
-    public void setNod(String nod) {
-        this.nod = nod;
+    public void setTable(List<Table> table) {
+        this.table = table;
     }
 
-    public String getRemaining_Amount() {
-        return remaining_Amount;
-    }
+    public class Table {
 
-    public void setRemaining_Amount(String remaining_Amount) {
-        this.remaining_Amount = remaining_Amount;
-    }
+        @SerializedName("InvoiceNo")
+        @Expose
+        private String invoiceNo;
+        @SerializedName("CustomerName")
+        @Expose
+        private String customerName;
+        @SerializedName("PaymentStatus")
+        @Expose
+        private String paymentStatus;
+        @SerializedName("Count")
+        @Expose
+        private Integer count;
+        @SerializedName("Amount")
+        @Expose
+        private Double amount;
+        @SerializedName("ZoneName")
+        @Expose
+        private String zoneName;
+        @SerializedName("NOD")
+        @Expose
+        private Integer nOD;
+        @SerializedName("RemainingAmount")
+        @Expose
+        private Double remainingAmount;
+        @SerializedName("Reason")
+        @Expose
+        private String reason;
+        @SerializedName("City")
+        @Expose
+        private String city;
 
-    public String getReason() {
-        return reason;
-    }
+        public String getInvoiceNo() {
+            return invoiceNo;
+        }
 
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
+        public void setInvoiceNo(String invoiceNo) {
+            this.invoiceNo = invoiceNo;
+        }
 
-    public String getZone_Name() {
-        return zone_Name;
-    }
+        public String getCustomerName() {
+            return customerName;
+        }
 
-    public void setZone_Name(String zone_Name) {
-        this.zone_Name = zone_Name;
-    }
+        public void setCustomerName(String customerName) {
+            this.customerName = customerName;
+        }
 
-    public String getCity() {
-        return city;
-    }
+        public String getPaymentStatus() {
+            return paymentStatus;
+        }
 
-    public void setCity(String city) {
-        this.city = city;
+        public void setPaymentStatus(String paymentStatus) {
+            this.paymentStatus = paymentStatus;
+        }
+
+        public Integer getCount() {
+            return count;
+        }
+
+        public void setCount(Integer count) {
+            this.count = count;
+        }
+
+        public Double getAmount() {
+            return amount;
+        }
+
+        public void setAmount(Double amount) {
+            this.amount = amount;
+        }
+
+        public String getZoneName() {
+            return zoneName;
+        }
+
+        public void setZoneName(String zoneName) {
+            this.zoneName = zoneName;
+        }
+
+        public Integer getNOD() {
+            return nOD;
+        }
+
+        public void setNOD(Integer nOD) {
+            this.nOD = nOD;
+        }
+
+        public Double getRemainingAmount() {
+            return remainingAmount;
+        }
+
+        public void setRemainingAmount(Double remainingAmount) {
+            this.remainingAmount = remainingAmount;
+        }
+
+        public String getReason() {
+            return reason;
+        }
+
+        public void setReason(String reason) {
+            this.reason = reason;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
+
     }
 }

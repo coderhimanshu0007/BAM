@@ -12,17 +12,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.Installation.DOAIRAdapter;
 import com.teamcomputers.bam.Adapters.Installation.HoldAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.HoldModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Installation.InstallationHoldRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -83,6 +86,13 @@ public class HoldFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        HoldModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getHoldData();
+        if (data != null) {
+            tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
+            mAdapter = new HoldAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new InstallationHoldRequester());
     }
@@ -109,19 +119,21 @@ public class HoldFragment extends BaseFragment {
                         break;
                     case Events.GET_INSTALLATION_HOLD_SUCCESSFULL:
                         dismissProgress();
-                        eventObjects = eventObject;
-                        holdArrayList0.clear();
-                        holdArrayList1.clear();
-                        holdArrayList2.clear();
-                        holdArrayList3.clear();
-                        tviNoofInvoices.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-                        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-                        holdArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Table");
-                        holdArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Table");
-                        holdArrayList2 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Table");
-                        holdArrayList3 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Table");
-                        mAdapter = new HoldAdapter(dashboardActivityContext, holdArrayList0);
-                        rviData.setAdapter(mAdapter);
+                        HoldModel[] data = new HoldModel[0];
+                        try {
+                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            data = (HoldModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), HoldModel[].class);
+                            if (data != null)
+                                SharedPreferencesController.getInstance(dashboardActivityContext).setHoldData(data);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (data != null) {
+                            tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+                            tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
+                            mAdapter = new HoldAdapter(dashboardActivityContext, data[0].getTable());
+                            rviData.setAdapter(mAdapter);
+                        }
                         break;
                     case Events.GET_INSTALLATION_HOLD_UNSUCCESSFULL:
                         dismissProgress();
@@ -138,10 +150,13 @@ public class HoldFragment extends BaseFragment {
         viPaymentInProces.setVisibility(View.INVISIBLE);
         viPaymentPending.setVisibility(View.INVISIBLE);
         viPaymentCollected.setVisibility(View.INVISIBLE);
-        tviNoofInvoices.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-        mAdapter = new HoldAdapter(dashboardActivityContext, holdArrayList0);
-        rviData.setAdapter(mAdapter);
+        HoldModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getHoldData();
+        if (data != null) {
+            tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
+            mAdapter = new HoldAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
     }
@@ -152,10 +167,13 @@ public class HoldFragment extends BaseFragment {
         viPaymentInProces.setVisibility(View.VISIBLE);
         viPaymentPending.setVisibility(View.INVISIBLE);
         viPaymentCollected.setVisibility(View.INVISIBLE);
-        tviNoofInvoices.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Amount")));
-        mAdapter = new HoldAdapter(dashboardActivityContext, holdArrayList1);
-        rviData.setAdapter(mAdapter);
+        HoldModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getHoldData();
+        if (data != null) {
+            tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[1].getAmount()));
+            mAdapter = new HoldAdapter(dashboardActivityContext, data[1].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
     }
@@ -166,10 +184,13 @@ public class HoldFragment extends BaseFragment {
         viPaymentInProces.setVisibility(View.INVISIBLE);
         viPaymentPending.setVisibility(View.VISIBLE);
         viPaymentCollected.setVisibility(View.INVISIBLE);
-        tviNoofInvoices.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Amount")));
-        mAdapter = new HoldAdapter(dashboardActivityContext, holdArrayList2);
-        rviData.setAdapter(mAdapter);
+        HoldModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getHoldData();
+        if (data != null) {
+            tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[2].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[2].getAmount()));
+            mAdapter = new HoldAdapter(dashboardActivityContext, data[2].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
     }
@@ -180,10 +201,13 @@ public class HoldFragment extends BaseFragment {
         viPaymentInProces.setVisibility(View.INVISIBLE);
         viPaymentPending.setVisibility(View.INVISIBLE);
         viPaymentCollected.setVisibility(View.VISIBLE);
-        tviNoofInvoices.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Amount")));
-        mAdapter = new HoldAdapter(dashboardActivityContext, holdArrayList3);
-        rviData.setAdapter(mAdapter);
+        HoldModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getHoldData();
+        if (data != null) {
+            tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[3].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[3].getAmount()));
+            mAdapter = new HoldAdapter(dashboardActivityContext, data[3].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
     }

@@ -8,23 +8,23 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Models.OpenCallsModel;
 import com.teamcomputers.bam.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class OpenCallsAdapter extends RecyclerView.Adapter<OpenCallsAdapter.ViewHolder> {
-    private ArrayList<LinkedTreeMap> dataList;
+    private List<OpenCallsModel.Table> dataList;
     private int card_layout;
     Activity mActivity;
 
-    public OpenCallsAdapter(DashboardActivity dashboardActivityContext, ArrayList<LinkedTreeMap> data) {
+    public OpenCallsAdapter(DashboardActivity dashboardActivityContext, List<OpenCallsModel.Table> data) {
         this.dataList = data;
         this.mActivity = dashboardActivityContext;
     }
 
-    public void setItems(ArrayList<LinkedTreeMap> data) {
+    public void setItems(List<OpenCallsModel.Table> data) {
         this.dataList = data;
     }
 
@@ -53,13 +53,13 @@ public class OpenCallsAdapter extends RecyclerView.Adapter<OpenCallsAdapter.View
 
     @Override
     public void onBindViewHolder(OpenCallsAdapter.ViewHolder holder, final int position) {
-        holder.tviInvoice.setText(String.valueOf(dataList.get(position).get("InvoiceNo")));
-        holder.tviCustomerName.setText(String.valueOf(dataList.get(position).get("CustomerName")));
-        holder.tviAmount.setText(String.valueOf(dataList.get(position).get("Amount")));
-        holder.tviZoneName.setText(String.valueOf(dataList.get(position).get("ZoneName")));
-        holder.tviNOD.setText(String.valueOf(dataList.get(position).get("NOD")));
-        holder.tviRemainingAmount.setText(String.valueOf(dataList.get(position).get("RemainingAmount")));
-        holder.tviReason.setText(String.valueOf(dataList.get(position).get("Reason")));
+        holder.tviInvoice.setText(dataList.get(position).getInvoiceNo());
+        holder.tviCustomerName.setText(dataList.get(position).getCustomerName());
+        holder.tviAmount.setText(String.valueOf(dataList.get(position).getAmount()));
+        holder.tviZoneName.setText(dataList.get(position).getZoneName());
+        holder.tviNOD.setText(String.valueOf(dataList.get(position).getNOD()));
+        holder.tviRemainingAmount.setText(String.valueOf(dataList.get(position).getRemainingAmount()));
+        holder.tviReason.setText(dataList.get(position).getReason());
     }
 
     @Override

@@ -8,22 +8,22 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Models.DOAIRModel;
 import com.teamcomputers.bam.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class DOAIRAdapter extends RecyclerView.Adapter<DOAIRAdapter.ViewHolder> {
-    private ArrayList<LinkedTreeMap> dataList;
+    private List<DOAIRModel.Table> dataList;
     Activity mActivity;
 
-    public DOAIRAdapter(DashboardActivity dashboardActivityContext, ArrayList<LinkedTreeMap> data) {
+    public DOAIRAdapter(DashboardActivity dashboardActivityContext, List<DOAIRModel.Table> data) {
         this.dataList = data;
         this.mActivity = dashboardActivityContext;
     }
 
-    public void setItems(ArrayList<LinkedTreeMap> data) {
+    public void setItems(List<DOAIRModel.Table> data) {
         this.dataList = data;
     }
 
@@ -52,13 +52,13 @@ public class DOAIRAdapter extends RecyclerView.Adapter<DOAIRAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(DOAIRAdapter.ViewHolder holder, final int position) {
-        holder.tviInvoice.setText(String.valueOf(dataList.get(position).get("InvoiceNo")));
-        holder.tviCustomerName.setText(String.valueOf(dataList.get(position).get("CustomerName")));
-        holder.tviPaymentStatus.setText(String.valueOf(dataList.get(position).get("PaymentStatus")));
-        holder.tviCount.setText(String.valueOf(dataList.get(position).get("Count")));
-        holder.tviZoneName.setText(String.valueOf(dataList.get(position).get("ZoneName")));
-        holder.tviReason.setText(String.valueOf(dataList.get(position).get("Reason")));
-        holder.tviCity.setText(String.valueOf(dataList.get(position).get("City")));
+        holder.tviInvoice.setText(dataList.get(position).getInvoiceNo());
+        holder.tviCustomerName.setText(dataList.get(position).getCustomerName());
+        holder.tviPaymentStatus.setText(dataList.get(position).getPaymentStatus());
+        holder.tviCount.setText(String.valueOf(dataList.get(position).getCount()));
+        holder.tviZoneName.setText(dataList.get(position).getZoneName());
+        holder.tviReason.setText(dataList.get(position).getReason());
+        holder.tviCity.setText(dataList.get(position).getCity());
     }
 
     @Override

@@ -14,14 +14,18 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.Logistics.HoldDeliveryAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.HoldDeliveryModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Logistics.LogisticsHoldDeliveryRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -40,9 +44,6 @@ public class HoldDeliveryFragment extends BaseFragment {
     RecyclerView rviData;
 
     private HoldDeliveryAdapter mAdapter;
-    private ArrayList<LinkedTreeMap> holdDeliveryArrayList0 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> holdDeliveryArrayList1 = new ArrayList<>();
-    EventObject eventObjects;
     @BindView(R.id.tviPending)
     TextView tviPending;
     @BindView(R.id.tviPendingHrs)
@@ -74,24 +75,19 @@ public class HoldDeliveryFragment extends BaseFragment {
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviData.setLayoutManager(layoutManager);
 
-        //setData();
-
-        //mAdapter = new DispatchAdapter(dashboardActivityContext, dispatchModelArrayList);
-        //rviData.setAdapter(mAdapter);
-
         return rootView;
     }
-
-    /*private void setData() {
-        for (int i = 0; i < 15; i++) {
-            DispatchModel dispatchModel = new DispatchModel("LIC of India", "New Delhi", "Samba", "20 Hrs", "- - - -", "2 Lakhs", "GST1920");
-            dispatchModelArrayList.add(dispatchModel);
-        }
-    }*/
 
     @Override
     public void onResume() {
         super.onResume();
+        HoldDeliveryModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getHoldDeliveryData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
+            mAdapter = new HoldDeliveryAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new LogisticsHoldDeliveryRequester());
     }
@@ -118,15 +114,21 @@ public class HoldDeliveryFragment extends BaseFragment {
                         break;
                     case Events.GET_LOGISTICS_HOLD_DELIVERY_SUCCESSFULL:
                         dismissProgress();
-                        eventObjects = eventObject;
-                        holdDeliveryArrayList0.clear();
-                        holdDeliveryArrayList1.clear();
-                        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-                        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-                        holdDeliveryArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Table");
-                        holdDeliveryArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Table");
-                        mAdapter = new HoldDeliveryAdapter(dashboardActivityContext, holdDeliveryArrayList0);
-                        rviData.setAdapter(mAdapter);
+                        HoldDeliveryModel[] model = new HoldDeliveryModel[0];
+                        try {
+                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            model = (HoldDeliveryModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), HoldDeliveryModel[].class);
+                            if (model != null)
+                                SharedPreferencesController.getInstance(dashboardActivityContext).setHoldDeliveryData(model);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (model != null) {
+                            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(model[0].getInvoices())));
+                            tviAmounts.setText(BAMUtil.getRoundOffValue((Double) model[0].getAmount()));
+                            mAdapter = new HoldDeliveryAdapter(dashboardActivityContext, model[0].getTable());
+                            rviData.setAdapter(mAdapter);
+                        }
                         break;
                     case Events.GET_LOGISTICS_HOLD_DELIVERY_UNSUCCESSFULL:
                         dismissProgress();
@@ -141,10 +143,13 @@ public class HoldDeliveryFragment extends BaseFragment {
     public void pending() {
         viPending.setVisibility(View.VISIBLE);
         viPendingHrs.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-        mAdapter = new HoldDeliveryAdapter(dashboardActivityContext, holdDeliveryArrayList0);
-        rviData.setAdapter(mAdapter);
+        HoldDeliveryModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getHoldDeliveryData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
+            mAdapter = new HoldDeliveryAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
     }
@@ -153,10 +158,13 @@ public class HoldDeliveryFragment extends BaseFragment {
     public void pendingHrs() {
         viPending.setVisibility(View.INVISIBLE);
         viPendingHrs.setVisibility(View.VISIBLE);
-        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Amount")));
-        mAdapter = new HoldDeliveryAdapter(dashboardActivityContext, holdDeliveryArrayList1);
-        rviData.setAdapter(mAdapter);
+        HoldDeliveryModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getHoldDeliveryData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[1].getAmount()));
+            mAdapter = new HoldDeliveryAdapter(dashboardActivityContext, data[1].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
     }

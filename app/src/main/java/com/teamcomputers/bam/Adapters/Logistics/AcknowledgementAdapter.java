@@ -8,28 +8,29 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Models.AcknowledgemantModel;
 import com.teamcomputers.bam.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class AcknowledgementAdapter extends RecyclerView.Adapter<AcknowledgementAdapter.ViewHolder> {
-    private ArrayList<LinkedTreeMap> dataList;
+    private List<AcknowledgemantModel.Table> dataList;
     private int card_layout;
     Activity mActivity;
 
-    public AcknowledgementAdapter(DashboardActivity dashboardActivityContext, ArrayList<LinkedTreeMap> data) {
+    public AcknowledgementAdapter(DashboardActivity dashboardActivityContext, List<AcknowledgemantModel.Table> data) {
         this.dataList = data;
         this.mActivity = dashboardActivityContext;
     }
 
-    public void setItems(ArrayList<LinkedTreeMap> data) {
+    public void setItems(List<AcknowledgemantModel.Table> data) {
         this.dataList = data;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tviInvoiceNo, tviCustomerName, tviFromCity, tviToCity, tviCourier, tviDays, tviReason, tviCount, tviValue;;
+        TextView tviInvoiceNo, tviCustomerName, tviFromCity, tviToCity, tviCourier, tviDays, tviReason, tviCount, tviValue;
+        ;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -55,15 +56,15 @@ public class AcknowledgementAdapter extends RecyclerView.Adapter<Acknowledgement
 
     @Override
     public void onBindViewHolder(AcknowledgementAdapter.ViewHolder holder, final int position) {
-        holder.tviInvoiceNo.setText(String.valueOf(dataList.get(position).get("InvoiceNo")));
-        holder.tviCustomerName.setText(String.valueOf(dataList.get(position).get("CustomerName")));
-        holder.tviFromCity.setText(String.valueOf(dataList.get(position).get("FromCity")));
-        holder.tviToCity.setText(String.valueOf(dataList.get(position).get("ToCity")));
-        holder.tviCourier.setText(String.valueOf(dataList.get(position).get("Courier")));
-        holder.tviDays.setText(String.valueOf(dataList.get(position).get("Days")));
-        holder.tviReason.setText(String.valueOf(dataList.get(position).get("Reason")));
+        holder.tviInvoiceNo.setText(dataList.get(position).getInvoiceNo());
+        holder.tviCustomerName.setText(dataList.get(position).getCustomerName());
+        holder.tviFromCity.setText(dataList.get(position).getFromCity());
+        holder.tviToCity.setText(dataList.get(position).getToCity());
+        holder.tviCourier.setText(dataList.get(position).getCourier());
+        holder.tviDays.setText(String.valueOf(dataList.get(position).getDays()));
+        holder.tviReason.setText(dataList.get(position).getReason());
         holder.tviCount.setVisibility(View.GONE);
-        holder.tviValue.setText(String.valueOf(dataList.get(position).get("Value")));
+        holder.tviValue.setText(String.valueOf(dataList.get(position).getValue()));
     }
 
     @Override

@@ -14,14 +14,18 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.Installation.OpenCallsAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.OpenCallsModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Installation.InstallationOpenCallsRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -40,11 +44,6 @@ public class OpenCallsFragment extends BaseFragment {
     RecyclerView rviData;
 
     private OpenCallsAdapter mAdapter;
-    private ArrayList<LinkedTreeMap> openCallsArrayList0 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> openCallsArrayList1 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> openCallsArrayList2 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> openCallsArrayList3 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> openCallsArrayList4 = new ArrayList<>();
 
     @BindView(R.id.tviNoofInvoices)
     TextView tviNoofInvoices;
@@ -61,8 +60,6 @@ public class OpenCallsFragment extends BaseFragment {
     View viUnassignedCalls;
     @BindView(R.id.viUnassignedCalls10Days)
     View viUnassignedCalls10Days;
-
-    EventObject eventObjects;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,6 +83,13 @@ public class OpenCallsFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        OpenCallsModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOpenCallsData();
+        if (data != null) {
+            tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
+            mAdapter = new OpenCallsAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new InstallationOpenCallsRequester());
     }
@@ -112,21 +116,21 @@ public class OpenCallsFragment extends BaseFragment {
                         break;
                     case Events.GET_INSTALLATION_OPEN_CALLS_SUCCESSFULL:
                         dismissProgress();
-                        eventObjects = eventObject;
-                        openCallsArrayList0.clear();
-                        openCallsArrayList1.clear();
-                        openCallsArrayList2.clear();
-                        openCallsArrayList3.clear();
-                        openCallsArrayList4.clear();
-                        tviNoofInvoices.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-                        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-                        openCallsArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Table");
-                        openCallsArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Table");
-                        openCallsArrayList2 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Table");
-                        openCallsArrayList3 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Table");
-                        openCallsArrayList4 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(4)).get("Table");
-                        mAdapter = new OpenCallsAdapter(dashboardActivityContext, openCallsArrayList0);
-                        rviData.setAdapter(mAdapter);
+                        OpenCallsModel[] model = new OpenCallsModel[0];
+                        try {
+                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            model = (OpenCallsModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), OpenCallsModel[].class);
+                            if (model != null)
+                                SharedPreferencesController.getInstance(dashboardActivityContext).setOpenCallsData(model);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (model != null) {
+                            tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(model[0].getInvoices())));
+                            tviAmounts.setText(BAMUtil.getRoundOffValue((Double) model[0].getAmount()));
+                            mAdapter = new OpenCallsAdapter(dashboardActivityContext, model[0].getTable());
+                            rviData.setAdapter(mAdapter);
+                        }
                         break;
                     case Events.GET_INSTALLATION_OPEN_CALLS_UNSUCCESSFULL:
                         dismissProgress();
@@ -144,10 +148,13 @@ public class OpenCallsFragment extends BaseFragment {
         viGovtPsu10Days.setVisibility(View.INVISIBLE);
         viUnassignedCalls.setVisibility(View.INVISIBLE);
         viUnassignedCalls10Days.setVisibility(View.INVISIBLE);
-        tviNoofInvoices.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-        mAdapter = new OpenCallsAdapter(dashboardActivityContext, openCallsArrayList0);
-        rviData.setAdapter(mAdapter);
+        OpenCallsModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOpenCallsData();
+        if (data != null) {
+            tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
+            mAdapter = new OpenCallsAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
     }
@@ -159,10 +166,13 @@ public class OpenCallsFragment extends BaseFragment {
         viGovtPsu10Days.setVisibility(View.INVISIBLE);
         viUnassignedCalls.setVisibility(View.INVISIBLE);
         viUnassignedCalls10Days.setVisibility(View.INVISIBLE);
-        tviNoofInvoices.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Amount")));
-        mAdapter = new OpenCallsAdapter(dashboardActivityContext, openCallsArrayList1);
-        rviData.setAdapter(mAdapter);
+        OpenCallsModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOpenCallsData();
+        if (data != null) {
+            tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[1].getAmount()));
+            mAdapter = new OpenCallsAdapter(dashboardActivityContext, data[1].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
     }
@@ -174,10 +184,13 @@ public class OpenCallsFragment extends BaseFragment {
         viGovtPsu10Days.setVisibility(View.VISIBLE);
         viUnassignedCalls.setVisibility(View.INVISIBLE);
         viUnassignedCalls10Days.setVisibility(View.INVISIBLE);
-        tviNoofInvoices.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(2)).get("Amount")));
-        mAdapter = new OpenCallsAdapter(dashboardActivityContext, openCallsArrayList2);
-        rviData.setAdapter(mAdapter);
+        OpenCallsModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOpenCallsData();
+        if (data != null) {
+            tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[2].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[2].getAmount()));
+            mAdapter = new OpenCallsAdapter(dashboardActivityContext, data[2].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
     }
@@ -189,10 +202,13 @@ public class OpenCallsFragment extends BaseFragment {
         viGovtPsu10Days.setVisibility(View.INVISIBLE);
         viUnassignedCalls.setVisibility(View.VISIBLE);
         viUnassignedCalls10Days.setVisibility(View.INVISIBLE);
-        tviNoofInvoices.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(3)).get("Amount")));
-        mAdapter = new OpenCallsAdapter(dashboardActivityContext, openCallsArrayList3);
-        rviData.setAdapter(mAdapter);
+        OpenCallsModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOpenCallsData();
+        if (data != null) {
+            tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[3].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[3].getAmount()));
+            mAdapter = new OpenCallsAdapter(dashboardActivityContext, data[3].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
     }
@@ -204,14 +220,16 @@ public class OpenCallsFragment extends BaseFragment {
         viGovtPsu10Days.setVisibility(View.INVISIBLE);
         viUnassignedCalls.setVisibility(View.INVISIBLE);
         viUnassignedCalls10Days.setVisibility(View.VISIBLE);
-        tviNoofInvoices.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(4)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(4)).get("Amount")));
-        mAdapter = new OpenCallsAdapter(dashboardActivityContext, openCallsArrayList4);
-        rviData.setAdapter(mAdapter);
+        OpenCallsModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOpenCallsData();
+        if (data != null) {
+            tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[4].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[4].getAmount()));
+            mAdapter = new OpenCallsAdapter(dashboardActivityContext, data[4].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
     }
-
 
 
     @Override

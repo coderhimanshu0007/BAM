@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Models.DispatchModel;
 import com.teamcomputers.bam.Models.ExpectedCollectionModel;
 import com.teamcomputers.bam.R;
 

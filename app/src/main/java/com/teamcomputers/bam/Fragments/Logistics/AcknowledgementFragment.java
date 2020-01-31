@@ -10,20 +10,21 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.Logistics.AcknowledgementAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.AcknowledgemantModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Logistics.LogisticsAcknowledgementRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,9 +41,6 @@ public class AcknowledgementFragment extends BaseFragment {
     RecyclerView rviData;
 
     private AcknowledgementAdapter mAdapter;
-    private ArrayList<LinkedTreeMap> acknowledgementArrayList0 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> acknowledgementArrayList1 = new ArrayList<>();
-    EventObject eventObjects;
     @BindView(R.id.tviPending)
     TextView tviPending;
     @BindView(R.id.tviPendingHrs)
@@ -79,6 +77,13 @@ public class AcknowledgementFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        AcknowledgemantModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getAcknowledgementData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
+            mAdapter = new AcknowledgementAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new LogisticsAcknowledgementRequester());
     }
@@ -105,15 +110,21 @@ public class AcknowledgementFragment extends BaseFragment {
                         break;
                     case Events.GET_LOGISTICS_ACKNOWLEDGEMENT_SUCCESSFULL:
                         dismissProgress();
-                        eventObjects = eventObject;
-                        acknowledgementArrayList0.clear();
-                        acknowledgementArrayList1.clear();
-                        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-                        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-                        acknowledgementArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Table");
-                        acknowledgementArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Table");
-                        mAdapter = new AcknowledgementAdapter(dashboardActivityContext, acknowledgementArrayList0);
-                        rviData.setAdapter(mAdapter);
+                        AcknowledgemantModel[] model = new AcknowledgemantModel[0];
+                        try {
+                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            model = (AcknowledgemantModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), AcknowledgemantModel[].class);
+                            if (model != null)
+                                SharedPreferencesController.getInstance(dashboardActivityContext).setAcknowledgementData(model);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (model != null) {
+                            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(model[0].getInvoices())));
+                            tviAmounts.setText(BAMUtil.getRoundOffValue((Double) model[0].getAmount()));
+                            mAdapter = new AcknowledgementAdapter(dashboardActivityContext, model[0].getTable());
+                            rviData.setAdapter(mAdapter);
+                        }
                         break;
                     case Events.GET_LOGISTICS_ACKNOWLEDGEMENT_UNSUCCESSFULL:
                         dismissProgress();
@@ -128,10 +139,13 @@ public class AcknowledgementFragment extends BaseFragment {
     public void pending() {
         viPending.setVisibility(View.VISIBLE);
         viPendingHrs.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-        mAdapter = new AcknowledgementAdapter(dashboardActivityContext, acknowledgementArrayList0);
-        rviData.setAdapter(mAdapter);
+        AcknowledgemantModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getAcknowledgementData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
+            mAdapter = new AcknowledgementAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
     }
@@ -140,10 +154,13 @@ public class AcknowledgementFragment extends BaseFragment {
     public void pendingHrs() {
         viPending.setVisibility(View.INVISIBLE);
         viPendingHrs.setVisibility(View.VISIBLE);
-        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Amount")));
-        mAdapter = new AcknowledgementAdapter(dashboardActivityContext, acknowledgementArrayList1);
-        rviData.setAdapter(mAdapter);
+        AcknowledgemantModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getAcknowledgementData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[1].getAmount()));
+            mAdapter = new AcknowledgementAdapter(dashboardActivityContext, data[1].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
     }

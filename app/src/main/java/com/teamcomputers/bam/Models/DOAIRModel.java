@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class DispatchModel {
+public class DOAIRModel {
     @SerializedName("Type")
     @Expose
     private String type;
@@ -51,6 +51,7 @@ public class DispatchModel {
         this.table = table;
     }
 
+
     public class Table {
 
         @SerializedName("InvoiceNo")
@@ -59,18 +60,21 @@ public class DispatchModel {
         @SerializedName("CustomerName")
         @Expose
         private String customerName;
-        @SerializedName("FromCity")
+        @SerializedName("PaymentStatus")
         @Expose
-        private String fromCity;
-        @SerializedName("HoursDays")
+        private String paymentStatus;
+        @SerializedName("Count")
         @Expose
-        private String hoursDays;
-        @SerializedName("DispatchPending")
+        private Integer count;
+        @SerializedName("ZoneName")
         @Expose
-        private Integer dispatchPending;
-        @SerializedName("DispatchPendingValue")
+        private String zoneName;
+        @SerializedName("Reason")
         @Expose
-        private Double dispatchPendingValue;
+        private String reason;
+        @SerializedName("City")
+        @Expose
+        private String city;
 
         public String getInvoiceNo() {
             return invoiceNo;
@@ -88,36 +92,45 @@ public class DispatchModel {
             this.customerName = customerName;
         }
 
-        public String getFromCity() {
-            return fromCity;
+        public String getPaymentStatus() {
+            return paymentStatus;
         }
 
-        public void setFromCity(String fromCity) {
-            this.fromCity = fromCity;
+        public void setPaymentStatus(String paymentStatus) {
+            this.paymentStatus = paymentStatus;
         }
 
-        public String getHoursDays() {
-            return hoursDays;
+        public Integer getCount() {
+            return count;
         }
 
-        public void setHoursDays(String hoursDays) {
-            this.hoursDays = hoursDays;
+        public void setCount(Integer count) {
+            this.count = count;
         }
 
-        public Integer getDispatchPending() {
-            return dispatchPending;
+        public String getZoneName() {
+            return zoneName;
         }
 
-        public void setDispatchPending(Integer dispatchPending) {
-            this.dispatchPending = dispatchPending;
+        public void setZoneName(String zoneName) {
+            this.zoneName = zoneName;
         }
 
-        public Double getDispatchPendingValue() {
-            return dispatchPendingValue;
+        public String getReason() {
+            return reason;
         }
 
-        public void setDispatchPendingValue(Double dispatchPendingValue) {
-            this.dispatchPendingValue = dispatchPendingValue;
+        public void setReason(String reason) {
+            this.reason = reason;
         }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
+
     }
 }

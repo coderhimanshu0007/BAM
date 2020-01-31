@@ -8,22 +8,22 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Models.HoldModel;
 import com.teamcomputers.bam.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class HoldAdapter extends RecyclerView.Adapter<HoldAdapter.ViewHolder> {
-    private ArrayList<LinkedTreeMap> dataList;
+    private List<HoldModel.Table> dataList;
     Activity mActivity;
 
-    public HoldAdapter(DashboardActivity dashboardActivityContext, ArrayList<LinkedTreeMap> data) {
+    public HoldAdapter(DashboardActivity dashboardActivityContext, List<HoldModel.Table> data) {
         this.dataList = data;
         this.mActivity = dashboardActivityContext;
     }
 
-    public void setItems(ArrayList<LinkedTreeMap> data) {
+    public void setItems(List<HoldModel.Table> data) {
         this.dataList = data;
     }
 
@@ -38,7 +38,7 @@ public class HoldAdapter extends RecyclerView.Adapter<HoldAdapter.ViewHolder> {
             this.tviZoneName = (TextView) itemView.findViewById(R.id.tviZoneName);
             this.tviNOD = (TextView) itemView.findViewById(R.id.tviNOD);
             this.tviPaymentStatus = (TextView) itemView.findViewById(R.id.tviPaymentStatus);
-            this.tviRemainingAmount = (TextView)itemView.findViewById(R.id.tviRemainingAmount);
+            this.tviRemainingAmount = (TextView) itemView.findViewById(R.id.tviRemainingAmount);
             this.tviReason = (TextView) itemView.findViewById(R.id.tviReason);
             this.tviCity = (TextView) itemView.findViewById(R.id.tviCity);
         }
@@ -54,15 +54,15 @@ public class HoldAdapter extends RecyclerView.Adapter<HoldAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(HoldAdapter.ViewHolder holder, final int position) {
-        holder.tviInvoiceNo.setText(String.valueOf(dataList.get(position).get("InvoiceNo")));
-        holder.tviCustomerName.setText(String.valueOf(dataList.get(position).get("CustomerName")));
-        holder.tviOnHoldAmount.setText(String.valueOf(dataList.get(position).get("OnHoldAmount")));
-        holder.tviZoneName.setText(String.valueOf(dataList.get(position).get("ZoneName")));
-        holder.tviNOD.setText(String.valueOf(dataList.get(position).get("NOD")));
-        holder.tviPaymentStatus.setText(String.valueOf(dataList.get(position).get("PaymentStatus")));
-        holder.tviRemainingAmount.setText(String.valueOf(dataList.get(position).get("RemainingAmount")));
-        holder.tviReason.setText(String.valueOf(dataList.get(position).get("Reason")));
-        holder.tviCity.setText(String.valueOf(dataList.get(position).get("City")));
+        holder.tviInvoiceNo.setText(dataList.get(position).getInvoiceNo());
+        holder.tviCustomerName.setText(dataList.get(position).getCustomerName());
+        holder.tviOnHoldAmount.setText(String.valueOf(dataList.get(position).getOnHoldAmount()));
+        holder.tviZoneName.setText(dataList.get(position).getZoneName());
+        holder.tviNOD.setText(String.valueOf(dataList.get(position).getNOD()));
+        holder.tviPaymentStatus.setText(dataList.get(position).getPaymentStatus());
+        holder.tviRemainingAmount.setText(String.valueOf(dataList.get(position).getRemainingAmount()));
+        holder.tviReason.setText(dataList.get(position).getReason());
+        holder.tviCity.setText(dataList.get(position).getCity());
 
         /*holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

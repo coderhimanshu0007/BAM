@@ -6,13 +6,20 @@ import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 import com.teamcomputers.bam.Interface.BAMConstant;
+import com.teamcomputers.bam.Models.AcknowledgemantModel;
+import com.teamcomputers.bam.Models.DOAIRModel;
+import com.teamcomputers.bam.Models.DispatchModel;
 import com.teamcomputers.bam.Models.FAModel;
+import com.teamcomputers.bam.Models.HoldDeliveryModel;
+import com.teamcomputers.bam.Models.HoldModel;
+import com.teamcomputers.bam.Models.InTransitModel;
 import com.teamcomputers.bam.Models.LoginModel;
 import com.teamcomputers.bam.Models.LowMarginModel;
+import com.teamcomputers.bam.Models.OpenCallsModel;
 import com.teamcomputers.bam.Models.SOAModel;
 import com.teamcomputers.bam.Models.SPCSModel;
 import com.teamcomputers.bam.Models.SalesDataModel;
-import com.teamcomputers.bam.Models.common.EventObject;
+import com.teamcomputers.bam.Models.WIPModel;
 import com.teamcomputers.bam.Utils.BAMUtil;
 
 //Controller for storing and retrieving data from Shared Preferences
@@ -175,8 +182,8 @@ public class SharedPreferencesController implements BAMConstant {
         return (FAModel[]) BAMUtil.fromJson(json, FAModel[].class);
     }
 
-    public void setOPFAData(FAModel[] opfaData) {
-        putString(Keys.OPFA_DATA.getLabel(), BAMUtil.toJson(opfaData));
+    public void setOPFAData(FAModel[] faData) {
+        putString(Keys.OPFA_DATA.getLabel(), BAMUtil.toJson(faData));
     }
 
     public SOAModel[] getOPSOAData() {
@@ -184,8 +191,8 @@ public class SharedPreferencesController implements BAMConstant {
         return (SOAModel[]) BAMUtil.fromJson(json, SOAModel[].class);
     }
 
-    public void setOPSOAData(SOAModel[] opfaData) {
-        putString(Keys.OPSOA_DATA.getLabel(), BAMUtil.toJson(opfaData));
+    public void setOPSOAData(SOAModel[] soaData) {
+        putString(Keys.OPSOA_DATA.getLabel(), BAMUtil.toJson(soaData));
     }
 
     public SPCSModel[] getSPCSData() {
@@ -193,8 +200,8 @@ public class SharedPreferencesController implements BAMConstant {
         return (SPCSModel[]) BAMUtil.fromJson(json, SPCSModel[].class);
     }
 
-    public void setSPCSData(SPCSModel[] opfaData) {
-        putString(Keys.SPCS_DATA.getLabel(), BAMUtil.toJson(opfaData));
+    public void setSPCSData(SPCSModel[] spcsData) {
+        putString(Keys.SPCS_DATA.getLabel(), BAMUtil.toJson(spcsData));
     }
 
     public LowMarginModel[] getLMData() {
@@ -206,13 +213,85 @@ public class SharedPreferencesController implements BAMConstant {
         putString(Keys.LM_DATA.getLabel(), BAMUtil.toJson(opfaData));
     }
 
-    public void setSalesData(SalesDataModel[] opfaData) {
-        putString(Keys.SALES_DATA.getLabel(), BAMUtil.toJson(opfaData));
+    public void setSalesData(SalesDataModel[] salesData) {
+        putString(Keys.SALES_DATA.getLabel(), BAMUtil.toJson(salesData));
     }
 
     public SalesDataModel[] getSalesData() {
         String json = getString(Keys.SALES_DATA.getLabel(), null);
         return (SalesDataModel[]) BAMUtil.fromJson(json, SalesDataModel[].class);
+    }
+
+    public void setDispatchData(DispatchModel[] dispatchData) {
+        putString(Keys.DISPATCH_DATA.getLabel(), BAMUtil.toJson(dispatchData));
+    }
+
+    public DispatchModel[] getDispatchData() {
+        String json = getString(Keys.DISPATCH_DATA.getLabel(), null);
+        return (DispatchModel[]) BAMUtil.fromJson(json, DispatchModel[].class);
+    }
+
+    public void setInTransitData(InTransitModel[] inTransitData) {
+        putString(Keys.INTRANSIT_DATA.getLabel(), BAMUtil.toJson(inTransitData));
+    }
+
+    public InTransitModel[] getInTransitData() {
+        String json = getString(Keys.INTRANSIT_DATA.getLabel(), null);
+        return (InTransitModel[]) BAMUtil.fromJson(json, InTransitModel[].class);
+    }
+
+    public void setHoldDeliveryData(HoldDeliveryModel[] holdDeliveryData) {
+        putString(Keys.HOLDDELIVERY_DATA.getLabel(), BAMUtil.toJson(holdDeliveryData));
+    }
+
+    public HoldDeliveryModel[] getHoldDeliveryData() {
+        String json = getString(Keys.HOLDDELIVERY_DATA.getLabel(), null);
+        return (HoldDeliveryModel[]) BAMUtil.fromJson(json, HoldDeliveryModel[].class);
+    }
+
+    public void setAcknowledgementData(AcknowledgemantModel[] ackData) {
+        putString(Keys.ACKNOWLEDGEMENT_DATA.getLabel(), BAMUtil.toJson(ackData));
+    }
+
+    public AcknowledgemantModel[] getAcknowledgementData() {
+        String json = getString(Keys.ACKNOWLEDGEMENT_DATA.getLabel(), null);
+        return (AcknowledgemantModel[]) BAMUtil.fromJson(json, AcknowledgemantModel[].class);
+    }
+
+    public void setOpenCallsData(OpenCallsModel[] openCallsData) {
+        putString(Keys.OPENCALL_DATA.getLabel(), BAMUtil.toJson(openCallsData));
+    }
+
+    public OpenCallsModel[] getOpenCallsData() {
+        String json = getString(Keys.OPENCALL_DATA.getLabel(), null);
+        return (OpenCallsModel[]) BAMUtil.fromJson(json, OpenCallsModel[].class);
+    }
+
+    public void setWIPData(WIPModel[] wipData) {
+        putString(Keys.WIP_DATA.getLabel(), BAMUtil.toJson(wipData));
+    }
+
+    public WIPModel[] getWIPData() {
+        String json = getString(Keys.WIP_DATA.getLabel(), null);
+        return (WIPModel[]) BAMUtil.fromJson(json, WIPModel[].class);
+    }
+
+    public void setDOAIRData(DOAIRModel[] doairData) {
+        putString(Keys.DOAIR_DATA.getLabel(), BAMUtil.toJson(doairData));
+    }
+
+    public DOAIRModel[] getDOAIRData() {
+        String json = getString(Keys.DOAIR_DATA.getLabel(), null);
+        return (DOAIRModel[]) BAMUtil.fromJson(json, DOAIRModel[].class);
+    }
+
+    public void setHoldData(HoldModel[] holdData) {
+        putString(Keys.HOLD_DATA.getLabel(), BAMUtil.toJson(holdData));
+    }
+
+    public HoldModel[] getHoldData() {
+        String json = getString(Keys.HOLD_DATA.getLabel(), null);
+        return (HoldModel[]) BAMUtil.fromJson(json, HoldModel[].class);
     }
 
     public int getPurchasePageNo() {
@@ -263,6 +342,14 @@ public class SharedPreferencesController implements BAMConstant {
         OPSOA_DATA("OPSOA_DATA"),
         SPCS_DATA("SPCS_DATA"),
         LM_DATA("LM_DATA"),
+        DISPATCH_DATA("DISPATCH_DATA"),
+        INTRANSIT_DATA("INTRANSIT_DATA"),
+        HOLDDELIVERY_DATA("HOLDDELIVERY_DATA"),
+        ACKNOWLEDGEMENT_DATA("ACKNOWLEDGEMENT_DATA"),
+        OPENCALL_DATA("OPENCALL_DATA"),
+        WIP_DATA("WIP_DATA"),
+        DOAIR_DATA("DOAIR_DATA"),
+        HOLD_DATA("HOLD_DATA"),
         SALES_DATA("SALES_DATA"),
         PURCHASE_PAGENO("PURCHASE_PAGENO"),
         LOGISTICS_PAGENO("LOGISTICS_PAGENO"),

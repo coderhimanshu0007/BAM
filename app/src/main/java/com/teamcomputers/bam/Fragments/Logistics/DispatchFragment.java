@@ -14,14 +14,18 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.Logistics.DispatchAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.DispatchModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Logistics.LogisticsDispatchRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -40,9 +44,6 @@ public class DispatchFragment extends BaseFragment {
     RecyclerView rviData;
 
     private DispatchAdapter mAdapter;
-    private ArrayList<LinkedTreeMap> dispatchTableModelArrayList0 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> dispatchTableModelArrayList1 = new ArrayList<>();
-    EventObject eventObjects;
     @BindView(R.id.tviPending)
     TextView tviPending;
     @BindView(R.id.tviPendingHrs)
@@ -80,6 +81,13 @@ public class DispatchFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        DispatchModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getDispatchData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
+            mAdapter = new DispatchAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new LogisticsDispatchRequester());
     }
@@ -106,15 +114,21 @@ public class DispatchFragment extends BaseFragment {
                         break;
                     case Events.GET_LOGISTICS_DISPATCH_SUCCESSFULL:
                         dismissProgress();
-                        eventObjects = eventObject;
-                        dispatchTableModelArrayList0.clear();
-                        dispatchTableModelArrayList1.clear();
-                        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-                        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-                        dispatchTableModelArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Table");
-                        dispatchTableModelArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Table");
-                        mAdapter = new DispatchAdapter(dashboardActivityContext, dispatchTableModelArrayList0);
-                        rviData.setAdapter(mAdapter);
+                        DispatchModel[] model = new DispatchModel[0];
+                        try {
+                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            model = (DispatchModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), DispatchModel[].class);
+                            if (model != null)
+                                SharedPreferencesController.getInstance(dashboardActivityContext).setDispatchData(model);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (model != null) {
+                            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(model[0].getInvoices())));
+                            tviAmounts.setText(BAMUtil.getRoundOffValue((Double) model[0].getAmount()));
+                            mAdapter = new DispatchAdapter(dashboardActivityContext, model[0].getTable());
+                            rviData.setAdapter(mAdapter);
+                        }
                         break;
                     case Events.GET_LOGISTICS_DISPATCH_UNSUCCESSFULL:
                         dismissProgress();
@@ -129,10 +143,13 @@ public class DispatchFragment extends BaseFragment {
     public void pending() {
         viPending.setVisibility(View.VISIBLE);
         viPendingHrs.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
-        mAdapter = new DispatchAdapter(dashboardActivityContext, dispatchTableModelArrayList0);
-        rviData.setAdapter(mAdapter);
+        DispatchModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getDispatchData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
+            mAdapter = new DispatchAdapter(dashboardActivityContext, data[0].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
     }
@@ -141,10 +158,13 @@ public class DispatchFragment extends BaseFragment {
     public void pendingHrs() {
         viPending.setVisibility(View.INVISIBLE);
         viPendingHrs.setVisibility(View.VISIBLE);
-        tviNoofInvoice.setText(BAMUtil.getStringInNoFormat((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Invoices")));
-        tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Amount")));
-        mAdapter = new DispatchAdapter(dashboardActivityContext, dispatchTableModelArrayList1);
-        rviData.setAdapter(mAdapter);
+        DispatchModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getDispatchData();
+        if (data != null) {
+            tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
+            tviAmounts.setText(BAMUtil.getRoundOffValue(data[1].getAmount()));
+            mAdapter = new DispatchAdapter(dashboardActivityContext, data[1].getTable());
+            rviData.setAdapter(mAdapter);
+        }
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
     }

@@ -8,23 +8,22 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Models.DispatchModel;
 import com.teamcomputers.bam.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class DispatchAdapter extends RecyclerView.Adapter<DispatchAdapter.ViewHolder> {
-    private ArrayList<LinkedTreeMap> dataList;
-    private int card_layout;
+    private List<DispatchModel.Table> dataList;
     Activity mActivity;
 
-    public DispatchAdapter(DashboardActivity dashboardActivityContext, ArrayList<LinkedTreeMap> data) {
+    public DispatchAdapter(DashboardActivity dashboardActivityContext, List<DispatchModel.Table> data) {
         this.dataList = data;
         this.mActivity = dashboardActivityContext;
     }
 
-    public void setItems(ArrayList<LinkedTreeMap> data) {
+    public void setItems(List<DispatchModel.Table> data) {
         this.dataList = data;
     }
 
@@ -53,12 +52,12 @@ public class DispatchAdapter extends RecyclerView.Adapter<DispatchAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(DispatchAdapter.ViewHolder holder, final int position) {
-        holder.tviCustomer.setText(String.valueOf(dataList.get(position).get("CustomerName")));
-        holder.tviFromCity.setText(String.valueOf(dataList.get(position).get("FromCity")));
-        holder.tviHrsDays.setText(String.valueOf(dataList.get(position).get("HoursDays")));
-        holder.tviDispatchPending.setText(String.valueOf(dataList.get(position).get("DispatchPending")));
-        holder.tviDispatchPendingValue.setText(String.valueOf(dataList.get(position).get("DispatchPendingValue")));
-        holder.tviInvoice.setText(String.valueOf(dataList.get(position).get("InvoiceNo")));
+        holder.tviCustomer.setText(dataList.get(position).getCustomerName());
+        holder.tviFromCity.setText(dataList.get(position).getFromCity());
+        holder.tviHrsDays.setText(dataList.get(position).getHoursDays());
+        holder.tviDispatchPending.setText(String.valueOf(dataList.get(position).getDispatchPending()));
+        holder.tviDispatchPendingValue.setText(String.valueOf(dataList.get(position).getDispatchPendingValue()));
+        holder.tviInvoice.setText(dataList.get(position).getInvoiceNo());
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class DispatchModel {
+public class HoldModel {
     @SerializedName("Type")
     @Expose
     private String type;
@@ -59,18 +59,27 @@ public class DispatchModel {
         @SerializedName("CustomerName")
         @Expose
         private String customerName;
-        @SerializedName("FromCity")
+        @SerializedName("PaymentStatus")
         @Expose
-        private String fromCity;
-        @SerializedName("HoursDays")
+        private String paymentStatus;
+        @SerializedName("OnHoldAmount")
         @Expose
-        private String hoursDays;
-        @SerializedName("DispatchPending")
+        private Double onHoldAmount;
+        @SerializedName("NOD")
         @Expose
-        private Integer dispatchPending;
-        @SerializedName("DispatchPendingValue")
+        private Integer nOD;
+        @SerializedName("RemainingAmount")
         @Expose
-        private Double dispatchPendingValue;
+        private Double remainingAmount;
+        @SerializedName("ZoneName")
+        @Expose
+        private String zoneName;
+        @SerializedName("Reason")
+        @Expose
+        private String reason;
+        @SerializedName("City")
+        @Expose
+        private String city;
 
         public String getInvoiceNo() {
             return invoiceNo;
@@ -88,36 +97,61 @@ public class DispatchModel {
             this.customerName = customerName;
         }
 
-        public String getFromCity() {
-            return fromCity;
+        public String getPaymentStatus() {
+            return paymentStatus;
         }
 
-        public void setFromCity(String fromCity) {
-            this.fromCity = fromCity;
+        public void setPaymentStatus(String paymentStatus) {
+            this.paymentStatus = paymentStatus;
         }
 
-        public String getHoursDays() {
-            return hoursDays;
+        public Double getOnHoldAmount() {
+            return onHoldAmount;
         }
 
-        public void setHoursDays(String hoursDays) {
-            this.hoursDays = hoursDays;
+        public void setOnHoldAmount(Double onHoldAmount) {
+            this.onHoldAmount = onHoldAmount;
         }
 
-        public Integer getDispatchPending() {
-            return dispatchPending;
+        public Integer getNOD() {
+            return nOD;
         }
 
-        public void setDispatchPending(Integer dispatchPending) {
-            this.dispatchPending = dispatchPending;
+        public void setNOD(Integer nOD) {
+            this.nOD = nOD;
         }
 
-        public Double getDispatchPendingValue() {
-            return dispatchPendingValue;
+        public Double getRemainingAmount() {
+            return remainingAmount;
         }
 
-        public void setDispatchPendingValue(Double dispatchPendingValue) {
-            this.dispatchPendingValue = dispatchPendingValue;
+        public void setRemainingAmount(Double remainingAmount) {
+            this.remainingAmount = remainingAmount;
         }
+
+        public String getZoneName() {
+            return zoneName;
+        }
+
+        public void setZoneName(String zoneName) {
+            this.zoneName = zoneName;
+        }
+
+        public String getReason() {
+            return reason;
+        }
+
+        public void setReason(String reason) {
+            this.reason = reason;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
+
     }
 }
