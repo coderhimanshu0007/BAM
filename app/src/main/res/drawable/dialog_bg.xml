@@ -3,11 +3,14 @@
 
     <gradient
         android:angle="0"
-        android:endColor="@color/end_header_color_bg"
-        android:startColor="@color/end_header_color_bg"
+        android:endColor="@color/login_bg"
+        android:startColor="@color/login_bg"
         android:type="linear" />
 
     <corners
         android:radius="5dp"/>
+
+    <stroke android:width="2dp"
+        android:color="@color/strock_color" />
 
 </shape>

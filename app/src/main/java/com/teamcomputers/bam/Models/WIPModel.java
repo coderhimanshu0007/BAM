@@ -11,10 +11,10 @@ public class WIPModel {
     private String type;
     @SerializedName("Invoices")
     @Expose
-    private Integer invoices;
+    private String invoices;
     @SerializedName("Amount")
     @Expose
-    private Double amount;
+    private String amount;
     @SerializedName("Table")
     @Expose
     private List<Table> table = null;
@@ -27,19 +27,19 @@ public class WIPModel {
         this.type = type;
     }
 
-    public Integer getInvoices() {
+    public String getInvoices() {
         return invoices;
     }
 
-    public void setInvoices(Integer invoices) {
+    public void setInvoices(String invoices) {
         this.invoices = invoices;
     }
 
-    public Double getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 
@@ -64,19 +64,19 @@ public class WIPModel {
         private String paymentStatus;
         @SerializedName("Count")
         @Expose
-        private Integer count;
+        private String count;
         @SerializedName("Amount")
         @Expose
-        private Double amount;
+        private String amount;
         @SerializedName("ZoneName")
         @Expose
         private String zoneName;
         @SerializedName("NOD")
         @Expose
-        private Integer nOD;
+        private String nOD;
         @SerializedName("RemainingAmount")
         @Expose
-        private Double remainingAmount;
+        private String remainingAmount;
         @SerializedName("Reason")
         @Expose
         private String reason;
@@ -108,19 +108,19 @@ public class WIPModel {
             this.paymentStatus = paymentStatus;
         }
 
-        public Integer getCount() {
+        public String getCount() {
             return count;
         }
 
-        public void setCount(Integer count) {
+        public void setCount(String count) {
             this.count = count;
         }
 
-        public Double getAmount() {
+        public String getAmount() {
             return amount;
         }
 
-        public void setAmount(Double amount) {
+        public void setAmount(String amount) {
             this.amount = amount;
         }
 
@@ -132,19 +132,19 @@ public class WIPModel {
             this.zoneName = zoneName;
         }
 
-        public Integer getNOD() {
+        public String getNOD() {
             return nOD;
         }
 
-        public void setNOD(Integer nOD) {
+        public void setNOD(String nOD) {
             this.nOD = nOD;
         }
 
-        public Double getRemainingAmount() {
+        public String getRemainingAmount() {
             return remainingAmount;
         }
 
-        public void setRemainingAmount(Double remainingAmount) {
+        public void setRemainingAmount(String remainingAmount) {
             this.remainingAmount = remainingAmount;
         }
 

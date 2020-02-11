@@ -24,6 +24,7 @@ public interface ApiInterface {
     @POST("Login")
     Call<LoginModel> loginUser(@Field("LoginId") String id,
                                @Field("Password") String password);
+
     // App Version Check
     @POST("GetAppVersion")
     Call<ArrayList<AppVersionResponse>> getCurrentAppVersion();
@@ -31,15 +32,19 @@ public interface ApiInterface {
     // Order Processing Refresh
     @POST("LastRefreshedOrderProcessing")
     Call<Object> orderProcessingRefresh();
+
     // Order Processing Finance Approval
     @POST("OrderProcessingFinanceApproval")
     Call<Object> orderProcessingFinanceApproval();
+
     // Order Processing Low Margin
     @POST("OrderProcessingLowMargin")
     Call<Object> orderProcessingLowMargin();
+
     // Order Processing SO Authorization
     @POST("OrderProcessingSOAuthorization")
     Call<Object> orderProcessingSOAuthorization();
+
     // Order Processing SPC Submission
     @POST("OrderProcessingSPCSubmission")
     Call<Object> orderProcessingSPCSubmission();
@@ -47,15 +52,19 @@ public interface ApiInterface {
     // Purchase Refresh
     @POST("LastRefreshedOrderProcessing")
     Call<Object> purchaseRefresh();
+
     // Purchase Sales Order
     @POST("OrderProcessingFinanceApproval")
     Call<Object> purchaseSalesOrder();
+
     // Purchase Billing
     @POST("OrderProcessingLowMargin")
     Call<Object> purchaseBilling();
+
     // Purchase Stock
     @POST("OrderProcessingSOAuthorization")
     Call<Object> purchaseStock();
+
     // Purchase EDD
     @POST("OrderProcessingSPCSubmission")
     Call<Object> purchaseEDD();
@@ -63,15 +72,19 @@ public interface ApiInterface {
     // Logistic Refresh
     @POST("LastRefreshedLogistics")
     Call<Object> logisticsRefresh();
+
     // Logistic Dispatch
     @POST("LogisticDispatch")
     Call<Object> logisticsDispatch();
+
     // Logistic In Transit
     @POST("LogisticInTransit")
     Call<Object> logisticsInTransit();
+
     // Logistic Hold Delivery
     @POST("LogisticHoldDelivery")
     Call<Object> logisticsHoldDelivery();
+
     // Logistic Acknowledgment
     @POST("LogisticAcknowledgment")
     Call<Object> logisticsAcknowledgement();
@@ -79,15 +92,19 @@ public interface ApiInterface {
     // installation Refresh
     @POST("LastRefreshedInstallation")
     Call<Object> installationRefresh();
-    // installation Open Cells
+
+    // installation Open Calls
     @POST("InstallationOpenCalls")
     Call<Object> installationOpenCalls();
+
     // installation WIP
     @POST("InstallationWIP")
     Call<Object> installationWIP();
+
     // installation DOAIR
     @POST("InstallationDOAIR")
     Call<Object> installationDOAIR();
+
     // Oinstallation Hold
     @POST("InstallationHold")
     Call<Object> installationHold();
@@ -95,15 +112,19 @@ public interface ApiInterface {
     // Collection Refresh
     @POST("LastRefreshedOrderProcessing")
     Call<Object> collectionRefresh();
+
     // Collection Outstanding
     @POST("OrderProcessingFinanceApproval")
     Call<Object> collectionOutstanding();
+
     // Collection Collection
     @POST("OrderProcessingLowMargin")
     Call<Object> collectionCollection();
+
     // Collection OS Ageing
     @POST("OrderProcessingSOAuthorization")
     Call<Object> collectionOSAgeing();
+
     // Collection Delivery/Installation
     @POST("OrderProcessingSPCSubmission")
     Call<Object> collectionDeliveryInstallation();
@@ -111,13 +132,33 @@ public interface ApiInterface {
     // Sales Refresh
     @POST("LastRefreshedSales")
     Call<Object> salesRefresh();
+
     // Receivable Refresh
     @POST("LastRefreshedAccountReceiveables")
     Call<Object> receivableRefresh();
+
     // Sales Sales
     @POST("Sales")
     Call<Object> salesReceivableSales();
+
     // Receivable Outstanding
     @POST("AccountReceiveables")
     Call<Object> salesReceivableOutstanding();
+
+    // Sales Receivable
+    @FormUrlEncoded
+    @POST("SalesReceiveables")
+    Call<Object> salesReceivable(@Field("UserId") String userId);
+
+    // Full Sales List
+    @FormUrlEncoded
+    @POST("FullSalesList")
+    Call<Object> fullSalesList(@Field("UserId") String userId,
+                               @Field("Level") String level,
+                               @Field("Type") String type);
+
+    // YTD QTD
+    @FormUrlEncoded
+    @POST("YTDQTD")
+    Call<Object> yTDQTD(@Field("UserId") String userId);
 }

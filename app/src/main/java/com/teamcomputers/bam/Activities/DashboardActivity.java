@@ -22,7 +22,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -46,6 +45,10 @@ import com.teamcomputers.bam.Fragments.FeedbackFragment;
 import com.teamcomputers.bam.Fragments.Installation.InstallationFragment;
 import com.teamcomputers.bam.Fragments.Logistics.LogisticsFragment;
 import com.teamcomputers.bam.Fragments.OrderProcessing.OrderProcessingFragment;
+import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
+import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
+import com.teamcomputers.bam.Fragments.SalesReceivable.ProductFragment;
+import com.teamcomputers.bam.Fragments.SalesReceivable.RSMFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.SalesReceivableFragment;
 import com.teamcomputers.bam.Fragments.home.HomeFragment;
 import com.teamcomputers.bam.Models.LoginModel;
@@ -69,10 +72,8 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.teamcomputers.bam.Activities.MainActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED;
-
 public class DashboardActivity extends BaseActivity {
-
+    public static final String IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED = "IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED";
     @BindView(R.id.claMain)
     CoordinatorLayout claMain;
     @BindView(R.id.iviToolbarLogo)
@@ -135,6 +136,9 @@ public class DashboardActivity extends BaseActivity {
                     case Events.OTHERS:
                         replaceFragment(Fragments.OTHERS_FRAGMENTS, new Bundle());
                         break;
+                    /*case Events.SALESANALYSIS:
+                        replaceFragment(Fragments.SALES_ANALYSIS_FRAGMENT, new Bundle());
+                        break;*/
                 }
             }
         });
@@ -230,6 +234,11 @@ public class DashboardActivity extends BaseActivity {
     @OnClick(R.id.ll_home)
     public void home() {
         replaceFragment(Fragments.HOME_FRAGMENTS, new Bundle());
+    }
+
+    @OnClick(R.id.ll_SR)
+    public void SR() {
+        replaceFragment(Fragments.SR_FRAGMENTS, new Bundle());
     }
 
     @OnClick(R.id.ll_favourits)
@@ -371,7 +380,7 @@ public class DashboardActivity extends BaseActivity {
         navigationItemParentModels.add(navigationLogisticsParent);
         navigationItemParentModels.add(navigationInstallationParent);
         navigationItemParentModels.add(navigationCollectionParent);
-        navigationItemParentModels.add(navigationWSParent);
+        //navigationItemParentModels.add(navigationWSParent);
     }
 
     @OnClick(R.id.iviEditProfile)
@@ -606,6 +615,18 @@ public class DashboardActivity extends BaseActivity {
                     case Fragments.FEEDBACK_FRAGMENTS:
                         fragment = new FeedbackFragment();
                         break;
+                    case Fragments.SALES_ANALYSIS_FRAGMENT:
+                        fragment = new RSMFragment();
+                        break;
+                    case Fragments.ACCOUNT_FRAGMENT:
+                        fragment = new AccountsFragment();
+                        break;
+                    case Fragments.CUSTOMER_FRAGMENT:
+                        fragment = new CustomerFragment();
+                        break;
+                    case Fragments.PRODUCT_FRAGMENT:
+                        fragment = new ProductFragment();
+                        break;
                     default:
                         fragment = new HomeFragment();
                         break;
@@ -617,7 +638,7 @@ public class DashboardActivity extends BaseActivity {
                     fragmentTransaction.replace(R.id.dash_board_content, fragment, fragment.getFragmentName());
                     int backStackEntryCount = fragmentManager.getBackStackEntryCount();
                     if (bundle.getBoolean(IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED)) {
-                        if (backStackEntryCount < 3) {
+                        if (backStackEntryCount < 6) {
                             fragmentTransaction.addToBackStack(fragment.getFragmentName());
                         }
                     } else {

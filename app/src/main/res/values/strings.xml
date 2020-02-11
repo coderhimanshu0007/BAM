@@ -87,7 +87,7 @@
     <string name="Logistics4">-Acknowledgment</string>
 
     <string name="Installation">Installation</string>
-    <string name="Installation1">-Open Cells</string>
+    <string name="Installation1">-Open Calls</string>
     <string name="Installation2">-WIP</string>
     <string name="Installation3">-DOA&amp;IR</string>
     <string name="Installation4">-Hold</string>
@@ -121,10 +121,16 @@
     <string name="SalsReceivable1">-Sales</string>
     <string name="SalsReceivable2">-Receivable</string>
 
+    <string name="Sales">Sales Person</string>
+    <string name="Customer">Customer</string>
+    <string name="Product">Product</string>
+
     <string name="user_name">User Name</string>
     <string name="user_email">user@teamcomputers.com</string>
 
     <string name="screen_shot">Screen shot</string>
+
+    <string name="Heading_RSM">RSM</string>
 
     <!--<string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>

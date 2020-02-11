@@ -6,10 +6,11 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="login_bg">#F8FCFF</color>
+    <color name="strock_color">#EBEBEB</color>
     <color name="start_header_color_bg">#7045FD</color>
+    <color name="start_header_color_bg_op">#287045FD</color>
     <color name="end_header_color_bg">#00ACED</color>
     <color name="start_home_color_bg">#684CFC</color>
-    <color name="start_color_bg">#3696D7</color>
     <color name="end_color_bg">#3CB6F9</color>
     <color name="login_btn_color">#02AAED</color>
 
@@ -33,6 +34,8 @@
     <color name="transparent_white">#96ffffff</color>
     <color name="material_cyan_100">#ffb2ebf2</color>
 
+    <color name="map_opacity_white">#52ffffff</color>
+
     <color name="colorheader1">#266ECD</color>
     <color name="colorheader2">#1A4D8F</color>
     <color name="colorPercentGreen">#16903C</color>
@@ -41,5 +44,13 @@
     <color name="color_heading_bg">#F7F7F7</color>
     <color name="color_heading">#96A3A8</color>
     <color name="color_value">#333333</color>
+
+    <color name="color_sr_start">#E5455D</color>
+    <color name="color_sr_end">#F6886F</color>
+
+    <color name="color_first_item_value">#FABE28</color>
+    <color name="color_second_item_value">#EDEDF4</color>
+    <color name="color_third_item_value">#CD7F32</color>
+    <color name="text">#287045FD</color>
 
 </resources>

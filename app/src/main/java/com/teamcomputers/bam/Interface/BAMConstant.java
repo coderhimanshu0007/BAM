@@ -44,7 +44,7 @@ public interface BAMConstant {
         String HH_MM = "hh:mm a";
         String ATTENDANCE_DATE_FORMAT = "MM/dd/yyyy kk:mm:s a";
         String ATTENDANCE_DATE_FORMAT_1 = "MM/dd/yyyy hh:mm:ss a";
-        String CONFERENCE_DATE_FORMAT="yyyy/MM/dd";
+        String CONFERENCE_DATE_FORMAT = "yyyy/MM/dd";
     }
 
     interface DashBoardFragments {
@@ -133,6 +133,13 @@ public interface BAMConstant {
         int GET_SALES_RECEIVABLE_SALES_UNSUCCESSFULL = 85;
         int GET_SALES_RECEIVABLE_OUTSTANDING_SUCCESSFULL = 86;
         int GET_SALES_RECEIVABLE_OUTSTANDING_UNSUCCESSFULL = 87;
+
+        int GET_SALES_RECEIVABLE_SUCCESSFULL = 88;
+        int GET_SALES_RECEIVABLE_UNSUCCESSFULL = 89;
+        int GET_FULL_SALES_LIST_SUCCESSFULL = 90;
+        int GET_FULL_SALES_LIST_UNSUCCESSFULL = 91;
+        int GET_YTDQTD_SUCCESSFULL = 92;
+        int GET_YTDQTD_UNSUCCESSFULL = 93;
     }
 
     interface ToastTexts {
@@ -185,5 +192,16 @@ public interface BAMConstant {
         int SR_FRAGMENTS = 112;
         int SR_FRAGMENTS1 = 1121;
         int SR_FRAGMENTS2 = 1122;
+
+        int SALES_ANALYSIS_FRAGMENT = 113;
+        int ACCOUNT_FRAGMENT = 114;
+        int CUSTOMER_FRAGMENT = 115;
+        int PRODUCT_FRAGMENT = 116;
+    }
+
+    interface ClickEvents {
+        int RSM_ITEM = 201;
+        int ACCOUNT_ITEM = 202;
+        int CUSTOMER_ITEM = 203;
     }
 }

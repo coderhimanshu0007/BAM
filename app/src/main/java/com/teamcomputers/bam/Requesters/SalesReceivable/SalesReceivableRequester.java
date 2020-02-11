@@ -1,4 +1,4 @@
-package com.teamcomputers.bam.Requesters.Installation;
+package com.teamcomputers.bam.Requesters.SalesReceivable;
 
 import com.teamcomputers.bam.Interface.BaseRequester;
 import com.teamcomputers.bam.Models.common.EventObject;
@@ -9,20 +9,22 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.net.HttpURLConnection;
 
-public class InstallationWIPRequester implements BaseRequester {
+public class SalesReceivableRequester implements BaseRequester {
+    String userId;
 
-    public InstallationWIPRequester() {
+    public SalesReceivableRequester(String userId) {
+        this.userId = userId;
     }
 
     @Override
     public void run() {
-        ApiResponse<Object> apiResponse = HTTPOperationController.installationWIP();
+        ApiResponse<Object> apiResponse = HTTPOperationController.salesReceivable(userId);
         if (apiResponse != null) {
             if (apiResponse.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 if (apiResponse.getResponse() != null) {
-                    EventBus.getDefault().post(new EventObject(Events.GET_INSTALLATION_WIP_SUCCESSFULL, apiResponse.getResponse()));
+                    EventBus.getDefault().post(new EventObject(Events.GET_SALES_RECEIVABLE_SUCCESSFULL, apiResponse.getResponse()));
                 } else {
-                    EventBus.getDefault().post(new EventObject(Events.GET_INSTALLATION_WIP_UNSUCCESSFULL, null));
+                    EventBus.getDefault().post(new EventObject(Events.GET_SALES_RECEIVABLE_UNSUCCESSFULL, null));
                 }
             } else {
                 EventBus.getDefault().post(new EventObject(Events.NO_INTERNET_CONNECTION, null));
