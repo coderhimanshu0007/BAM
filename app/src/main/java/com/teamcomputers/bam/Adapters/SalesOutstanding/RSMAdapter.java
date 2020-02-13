@@ -18,16 +18,18 @@ import com.teamcomputers.bam.Utils.BAMUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
 public class RSMAdapter extends RecyclerView.Adapter<RSMAdapter.ViewHolder> {
-    private FullSalesModel[] dataList;
+    private List<FullSalesModel> dataList;
     Activity mActivity;
 
-    public RSMAdapter(DashboardActivity dashboardActivityContext, FullSalesModel[] data) {
+    public RSMAdapter(DashboardActivity dashboardActivityContext, List<FullSalesModel> data) {
         this.dataList = data;
         this.mActivity = dashboardActivityContext;
     }
 
-    public void setItems(FullSalesModel[] data) {
+    public void setItems(List<FullSalesModel> data) {
         this.dataList = data;
     }
 
@@ -66,24 +68,24 @@ public class RSMAdapter extends RecyclerView.Adapter<RSMAdapter.ViewHolder> {
         } else if (position % 2 == 1) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         }
-        holder.tviName.setText(position + 1 + ". " + dataList[position].getName());
-        holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataList[position].getYTD()));
-        holder.tviQTD.setText(BAMUtil.getRoundOffValue(dataList[position].getQTD()));
-        holder.tviMTD.setText(BAMUtil.getRoundOffValue(dataList[position].getMTD()));
+        holder.tviName.setText(position + 1 + ". " + dataList.get(position).getName());
+        holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
+        holder.tviQTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getQTD()));
+        holder.tviMTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getMTD()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //SharedPreferencesController.getInstance(mActivity).setFrom("2");
                 //SharedPreferencesController.getInstance(mActivity).setLocation(dataList.get(position).getCustName());
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_ITEM, dataList[position]));
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_ITEM, position));
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return dataList.length;
+        return dataList.size();
     }
 }
 

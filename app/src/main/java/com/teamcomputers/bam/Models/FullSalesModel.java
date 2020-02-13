@@ -1,9 +1,12 @@
 package com.teamcomputers.bam.Models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class FullSalesModel {
+public class FullSalesModel implements Parcelable {
     @SerializedName("TMC")
     @Expose
     private String tMC;
@@ -59,4 +62,38 @@ public class FullSalesModel {
     public void setQTD(Double qTD) {
         this.qTD = qTD;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.tMC);
+        dest.writeString(this.name);
+        dest.writeDouble(this.yTD);
+        dest.writeDouble(this.qTD);
+        dest.writeDouble(this.mTD);
+    }
+
+    protected FullSalesModel(Parcel in) {
+        this.tMC = in.readString();
+        this.name = in.readString();
+        this.yTD = in.readDouble();
+        this.qTD = in.readDouble();
+        this.mTD = in.readDouble();
+    }
+
+    public static final Creator<FullSalesModel> CREATOR = new Creator<FullSalesModel>() {
+        @Override
+        public FullSalesModel createFromParcel(Parcel source) {
+            return new FullSalesModel(source);
+        }
+
+        @Override
+        public FullSalesModel[] newArray(int size) {
+            return new FullSalesModel[size];
+        }
+    };
 }

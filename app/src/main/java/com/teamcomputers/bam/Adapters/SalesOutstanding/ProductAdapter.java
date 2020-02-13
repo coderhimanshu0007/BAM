@@ -11,24 +11,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Interface.BAMConstant;
+import com.teamcomputers.bam.Models.FullSalesModel;
 import com.teamcomputers.bam.Models.RSMDataModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
+import com.teamcomputers.bam.Utils.BAMUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
-    private List<RSMDataModel> dataList;
+    private List<FullSalesModel> dataList;
     Activity mActivity;
 
-    public ProductAdapter(DashboardActivity dashboardActivityContext, List<RSMDataModel> data) {
+    public ProductAdapter(DashboardActivity dashboardActivityContext, List<FullSalesModel> data) {
         this.dataList = data;
         this.mActivity = dashboardActivityContext;
     }
 
-    public void setItems(List<RSMDataModel> data) {
+    public void setItems(List<FullSalesModel> data) {
         this.dataList = data;
     }
 
@@ -60,7 +62,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         }
         holder.tviName.setText(position + 1 + ". " + dataList.get(position).getName());
-        holder.tviPrice.setText(dataList.get(position).getYtd());
+        holder.tviPrice.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

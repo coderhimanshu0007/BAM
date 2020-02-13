@@ -28,6 +28,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,7 +48,7 @@ public class RSMFragment extends BaseFragment {
     RecyclerView rviRSM;
     private RSMAdapter adapter;
 
-    private ArrayList<RSMDataModel> rsmDataModelArrayList = new ArrayList<>();
+    List<FullSalesModel> model = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,19 +70,6 @@ public class RSMFragment extends BaseFragment {
 
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new FullSalesListRequester("1464", "R1", "RSM"));
-
-        /*rsmDataModelArrayList.add(new RSMDataModel("Sagar Pushkarna", "625.2", "625.2", "625.2"));
-        rsmDataModelArrayList.add(new RSMDataModel("Sagar Pushkarna", "625.2", "625.2", "625.2"));
-        rsmDataModelArrayList.add(new RSMDataModel("Sagar Pushkarna", "625.2", "625.2", "625.2"));
-        rsmDataModelArrayList.add(new RSMDataModel("Sagar Pushkarna", "625.2", "625.2", "625.2"));
-        rsmDataModelArrayList.add(new RSMDataModel("Sagar Pushkarna", "625.2", "625.2", "625.2"));
-        rsmDataModelArrayList.add(new RSMDataModel("Sagar Pushkarna", "625.2", "625.2", "625.2"));
-        rsmDataModelArrayList.add(new RSMDataModel("Sagar Pushkarna", "625.2", "625.2", "625.2"));
-        rsmDataModelArrayList.add(new RSMDataModel("Sagar Pushkarna", "625.2", "625.2", "625.2"));
-        rsmDataModelArrayList.add(new RSMDataModel("Sagar Pushkarna", "625.2", "625.2", "625.2"));
-        rsmDataModelArrayList.add(new RSMDataModel("Sagar Pushkarna", "625.2", "625.2", "625.2"));
-        adapter = new RSMAdapter(dashboardActivityContext, rsmDataModelArrayList);
-        rviRSM.setAdapter(adapter);*/
 
         return rootView;
     }
@@ -118,17 +107,16 @@ public class RSMFragment extends BaseFragment {
                         break;
                     case Events.GET_FULL_SALES_LIST_SUCCESSFULL:
                         dismissProgress();
-                        FullSalesModel[] model = new FullSalesModel[0];
                         try {
                             JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
-                            model = (FullSalesModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), FullSalesModel[].class);
-                            Log.e("Hello", "Helo");
-                            //SharedPreferencesController.getInstance(dashboardActivityContext).setSalesData(model);
+                            FullSalesModel[] data = (FullSalesModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), FullSalesModel[].class);
+                            model = new ArrayList<FullSalesModel>(Arrays.asList(data));
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         //initTreeData(model);
-                        initData(model);
+                        initData();
                         dismissProgress();
                         break;
                     case Events.GET_FULL_SALES_LIST_UNSUCCESSFULL:
@@ -136,8 +124,10 @@ public class RSMFragment extends BaseFragment {
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
                     case ClickEvents.RSM_ITEM:
+                        int position = (int) eventObject.getObject();
                         Bundle rsmDataBundle = new Bundle();
-                        rsmDataBundle.putParcelable(AccountsFragment.USER_PROFILE, (RSMDataModel) eventObject.getObject());
+                        rsmDataBundle.putParcelable(AccountsFragment.RSM_PROFILE, model.get(position));
+                        rsmDataBundle.putInt(AccountsFragment.RSM_POSITION, position);
                         rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.ACCOUNT_FRAGMENT, rsmDataBundle);
                         break;
@@ -146,7 +136,7 @@ public class RSMFragment extends BaseFragment {
         });
     }
 
-    private void initData(FullSalesModel[] model) {
+    private void initData() {
         adapter = new RSMAdapter(dashboardActivityContext, model);
         rviRSM.setAdapter(adapter);
     }

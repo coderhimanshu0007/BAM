@@ -11,24 +11,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Interface.BAMConstant;
+import com.teamcomputers.bam.Models.FullSalesModel;
 import com.teamcomputers.bam.Models.RSMDataModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
+import com.teamcomputers.bam.Utils.BAMUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
 public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHolder> {
-    private List<RSMDataModel> dataList;
+    private List<FullSalesModel> dataList;
     Activity mActivity;
 
-    public AccountAdapter(DashboardActivity dashboardActivityContext, List<RSMDataModel> data) {
+    public AccountAdapter(DashboardActivity dashboardActivityContext, List<FullSalesModel> data) {
         this.dataList = data;
         this.mActivity = dashboardActivityContext;
     }
 
-    public void setItems(List<RSMDataModel> data) {
+    public void setItems(List<FullSalesModel> data) {
         this.dataList = data;
     }
 
@@ -68,16 +70,14 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         }
         holder.tviName.setText(position + 1 + ". " + dataList.get(position).getName());
-        holder.tviYTD.setText(dataList.get(position).getYtd());
-        holder.tviQTD.setText(dataList.get(position).getQtd());
-        holder.tviMTD.setText(dataList.get(position).getMtd());
+        holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
+        holder.tviQTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getQTD()));
+        holder.tviMTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getMTD()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //SharedPreferencesController.getInstance(mActivity).setFrom("2");
-                //SharedPreferencesController.getInstance(mActivity).setLocation(dataList.get(position).getCustName());
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.ACCOUNT_ITEM, dataList.get(position)));
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.ACCOUNT_ITEM, position));
             }
         });
     }

@@ -171,7 +171,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text="YTD"
-                                    android:textColor="@color/login_bg"
+                                    android:textColor="@color/color_value"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
 
@@ -182,7 +182,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text="625.2"
-                                    android:textColor="@color/login_bg"
+                                    android:textColor="@color/color_value"
                                     android:textSize="14sp"
                                     app:fontFamily="@font/roboto_bold" />
                             </LinearLayout>
@@ -207,7 +207,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text="QTD"
-                                    android:textColor="@color/login_bg"
+                                    android:textColor="@color/color_value"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
 
@@ -218,7 +218,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text="625.2"
-                                    android:textColor="@color/login_bg"
+                                    android:textColor="@color/color_value"
                                     android:textSize="14sp"
                                     app:fontFamily="@font/roboto_bold" />
                             </LinearLayout>
@@ -242,7 +242,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text="MTD"
-                                    android:textColor="@color/login_bg"
+                                    android:textColor="@color/color_value"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
 
@@ -253,7 +253,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text="625.2"
-                                    android:textColor="@color/login_bg"
+                                    android:textColor="@color/color_value"
                                     android:textSize="14sp"
                                     app:fontFamily="@font/roboto_bold" />
                             </LinearLayout>
