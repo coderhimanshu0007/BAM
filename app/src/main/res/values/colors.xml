@@ -44,6 +44,7 @@
     <color name="color_heading_bg">#F7F7F7</color>
     <color name="color_heading">#96A3A8</color>
     <color name="color_value">#333333</color>
+    <color name="color_border_bg">#EDEDED</color>
 
     <color name="color_sr_start">#E5455D</color>
     <color name="color_sr_end">#F6886F</color>

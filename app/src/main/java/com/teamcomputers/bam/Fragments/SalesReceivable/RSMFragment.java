@@ -69,7 +69,7 @@ public class RSMFragment extends BaseFragment {
         rviRSM.setLayoutManager(layoutManager);
 
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FullSalesListRequester("1464", "R1", "RSM"));
+        BackgroundExecutor.getInstance().execute(new FullSalesListRequester("1464", "R1", "RSM", "", ""));
 
         return rootView;
     }
@@ -104,6 +104,10 @@ public class RSMFragment extends BaseFragment {
                     case Events.NO_INTERNET_CONNECTION:
                         dismissProgress();
                         showToast(ToastTexts.NO_INTERNET_CONNECTION);
+                        break;
+                    case Events.NOT_FOUND:
+                        dismissProgress();
+                        showToast(ToastTexts.NO_RECORD_FOUND);
                         break;
                     case Events.GET_FULL_SALES_LIST_SUCCESSFULL:
                         dismissProgress();

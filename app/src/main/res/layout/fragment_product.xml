@@ -190,10 +190,11 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginBottom="10dp"
                         android:layout_weight="1"
-                        android:text="Product List"
+                        android:gravity="center_horizontal"
+                        android:text="YTD"
                         android:textColor="@color/color_value"
                         android:textSize="12sp"
-                        app:fontFamily="@font/roboto_medium" />
+                        app:fontFamily="@font/roboto_bold" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -204,10 +205,23 @@
                         android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:text="Price"
+                        android:text="QTD"
                         android:textColor="@color/color_value"
                         android:textSize="12sp"
-                        app:fontFamily="@font/roboto_medium" />
+                        app:fontFamily="@font/roboto_bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:text="MTD"
+                        android:textColor="@color/color_value"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/roboto_bold" />
 
                 </LinearLayout>
 

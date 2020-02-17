@@ -108,7 +108,7 @@ public class AccountsFragment extends BaseFragment {
         rviRSM.setLayoutManager(layoutManager);
 
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FullSalesListRequester(fullSalesModel.getTMC(), "R2", "Sales"));
+        BackgroundExecutor.getInstance().execute(new FullSalesListRequester(fullSalesModel.getTMC(), "R2", "Sales", "", ""));
 
         return rootView;
     }
@@ -138,6 +138,10 @@ public class AccountsFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.NO_INTERNET_CONNECTION);
                         break;
+                    case Events.NOT_FOUND:
+                        dismissProgress();
+                        showToast(ToastTexts.NO_RECORD_FOUND);
+                        break;
                     case Events.GET_FULL_SALES_LIST_SUCCESSFULL:
                         dismissProgress();
                         try {
@@ -157,10 +161,14 @@ public class AccountsFragment extends BaseFragment {
                     case ClickEvents.ACCOUNT_ITEM:
                         int position = (int) eventObject.getObject();
                         Bundle acctDataBundle = new Bundle();
-                        acctDataBundle.putParcelable(ProductFragment.PRODUCT_PROFILE, model.get(position));
+                        acctDataBundle.putParcelable(CustomerFragment.ACCT_PROFILE, model.get(position));
+                        acctDataBundle.putInt(CustomerFragment.ACCT_POSITION, position);
+                        acctDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        dashboardActivityContext.replaceFragment(Fragments.CUSTOMER_FRAGMENT, acctDataBundle);
+                        /*acctDataBundle.putParcelable(ProductFragment.PRODUCT_PROFILE, model.get(position));
                         acctDataBundle.putInt(ProductFragment.PRODUCT_POSITION, position);
                         acctDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-                        dashboardActivityContext.replaceFragment(Fragments.PRODUCT_FRAGMENT, acctDataBundle);
+                        dashboardActivityContext.replaceFragment(Fragments.PRODUCT_FRAGMENT, acctDataBundle);*/
                         break;
                 }
             }

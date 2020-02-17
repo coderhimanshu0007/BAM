@@ -12,11 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.SalesOutstanding.AccountAdapter;
 import com.teamcomputers.bam.Adapters.SalesOutstanding.CustomerAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.FullSalesModel;
-import com.teamcomputers.bam.Models.RSMDataModel;
+import com.teamcomputers.bam.Models.SalesCustomerModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.SalesReceivable.FullSalesListRequester;
@@ -69,7 +68,7 @@ public class CustomerFragment extends BaseFragment {
     private CustomerAdapter adapter;
     private int position = 0;
 
-    List<FullSalesModel> model = new ArrayList<>();
+    List<SalesCustomerModel> model = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,7 +108,7 @@ public class CustomerFragment extends BaseFragment {
         rviRSM.setLayoutManager(layoutManager);
 
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FullSalesListRequester(fullSalesModel.getTMC(), "R3", "Customer"));
+        BackgroundExecutor.getInstance().execute(new FullSalesListRequester(fullSalesModel.getTMC(), "R4", "Customer", "", ""));
 
         return rootView;
     }
@@ -145,13 +144,16 @@ public class CustomerFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.NO_INTERNET_CONNECTION);
                         break;
+                    case Events.NOT_FOUND:
+                        dismissProgress();
+                        showToast(ToastTexts.NO_RECORD_FOUND);
+                        break;
                     case Events.GET_FULL_SALES_LIST_SUCCESSFULL:
                         dismissProgress();
                         try {
                             JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
-                            FullSalesModel[] data = (FullSalesModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), FullSalesModel[].class);
-                            model = new ArrayList<FullSalesModel>(Arrays.asList(data));
-
+                            SalesCustomerModel[] data = (SalesCustomerModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), SalesCustomerModel[].class);
+                            model = new ArrayList<SalesCustomerModel>(Arrays.asList(data));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -163,10 +165,24 @@ public class CustomerFragment extends BaseFragment {
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
                     case ClickEvents.CUSTOMER_ITEM:
-                        /*Bundle productDataBundle = new Bundle();
-                        productDataBundle.putParcelable(AccountsFragment.USER_PROFILE, (RSMDataModel) eventObject.getObject());
+                        Bundle productDataBundle = new Bundle();
+                        int position = (int) eventObject.getObject();
+                        productDataBundle.putString(ProductFragment.CUSTOMER, fullSalesModel.getTMC());
+                        productDataBundle.putString(ProductFragment.STATE_CODE, fullSalesModel.getTMC());
+                        productDataBundle.putParcelable(ProductFragment.PRODUCT_PROFILE, model.get(position));
+                        productDataBundle.putInt(ProductFragment.PRODUCT_POSITION, position);
                         productDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-                        dashboardActivityContext.replaceFragment(Fragments.PRODUCT_FRAGMENT, productDataBundle);*/
+                        dashboardActivityContext.replaceFragment(Fragments.PRODUCT_FRAGMENT, productDataBundle);
+                        break;
+                    case ClickEvents.STATE_ITEM:
+                        Bundle productStateBundle = new Bundle();
+                        int pos = (int) eventObject.getObject();
+                        productStateBundle.putString(ProductFragment.CUSTOMER, fullSalesModel.getTMC());
+                        productStateBundle.putString(ProductFragment.STATE_CODE, fullSalesModel.getTMC());
+                        productStateBundle.putParcelable(ProductFragment.PRODUCT_PROFILE, model.get(pos));
+                        productStateBundle.putInt(ProductFragment.PRODUCT_POSITION, pos);
+                        productStateBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        dashboardActivityContext.replaceFragment(Fragments.PRODUCT_FRAGMENT, productStateBundle);
                         break;
                 }
             }

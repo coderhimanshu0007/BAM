@@ -36,19 +36,21 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout llRSMLayout;
-        TextView tviName, tviPrice;
+        TextView tviName, tviYTD, tviQTD, tviMTD;
 
         public ViewHolder(View itemView) {
             super(itemView);
             llRSMLayout = (LinearLayout) itemView.findViewById(R.id.llRSMLayout);
             this.tviName = (TextView) itemView.findViewById(R.id.tviName);
-            this.tviPrice = (TextView) itemView.findViewById(R.id.tviPrice);
+            this.tviYTD = (TextView) itemView.findViewById(R.id.tviYTD);
+            this.tviQTD = (TextView) itemView.findViewById(R.id.tviQTD);
+            this.tviMTD = (TextView) itemView.findViewById(R.id.tviMTD);
         }
     }
 
     @Override
     public ProductAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_recyclerview_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rsm_recyclerview_layout, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -62,7 +64,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         }
         holder.tviName.setText(position + 1 + ". " + dataList.get(position).getName());
-        holder.tviPrice.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
+        holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
+        holder.tviQTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getQTD()));
+        holder.tviMTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getMTD()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

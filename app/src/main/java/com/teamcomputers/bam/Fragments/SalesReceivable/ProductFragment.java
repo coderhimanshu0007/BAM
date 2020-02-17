@@ -18,6 +18,7 @@ import com.teamcomputers.bam.Adapters.SalesOutstanding.ProductAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.FullSalesModel;
 import com.teamcomputers.bam.Models.RSMDataModel;
+import com.teamcomputers.bam.Models.SalesCustomerModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.SalesReceivable.FullSalesListRequester;
@@ -39,13 +40,15 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class ProductFragment extends BaseFragment {
+    public static final String CUSTOMER = "CUSTOMER";
+    public static final String STATE_CODE = "STATE_CODE";
     public static final String PRODUCT_PROFILE = "PRODUCT_PROFILE";
     public static final String PRODUCT_POSITION = "PRODUCT_POSITION";
     private View rootView;
     private Unbinder unbinder;
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
-    FullSalesModel fullSalesModel;
+    SalesCustomerModel fullSalesModel;
     String toolbarTitle = "";
 
     @BindView(R.id.llRSMLayout)
@@ -62,6 +65,7 @@ public class ProductFragment extends BaseFragment {
     RecyclerView rviRSM;
     private ProductAdapter adapter;
     private int position = 0;
+    private String customer, stateCode;
 
     List<FullSalesModel> model = new ArrayList<>();
 
@@ -77,6 +81,8 @@ public class ProductFragment extends BaseFragment {
         dashboardActivityContext = (DashboardActivity) context;
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
+        customer = getArguments().getString(CUSTOMER);
+        stateCode = getArguments().getString(STATE_CODE);
         fullSalesModel = getArguments().getParcelable(PRODUCT_PROFILE);
         position = getArguments().getInt(PRODUCT_POSITION);
 
@@ -91,7 +97,7 @@ public class ProductFragment extends BaseFragment {
         } else if (position % 2 == 1) {
             llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
         }
-        tviName.setText(fullSalesModel.getName());
+        tviName.setText(fullSalesModel.getCustomerName());
         tviYtd.setText(BAMUtil.getRoundOffValue(fullSalesModel.getYTD()));
         tviQtd.setText(BAMUtil.getRoundOffValue(fullSalesModel.getQTD()));
         tviMtd.setText(BAMUtil.getRoundOffValue(fullSalesModel.getMTD()));
@@ -103,7 +109,7 @@ public class ProductFragment extends BaseFragment {
         rviRSM.setLayoutManager(layoutManager);
 
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FullSalesListRequester(fullSalesModel.getTMC(), "R4", "Product"));
+        BackgroundExecutor.getInstance().execute(new FullSalesListRequester(customer, "R4", "Product", fullSalesModel.getCustomerName(), ""));
 
         return rootView;
     }
@@ -138,6 +144,10 @@ public class ProductFragment extends BaseFragment {
                     case Events.NO_INTERNET_CONNECTION:
                         dismissProgress();
                         showToast(ToastTexts.NO_INTERNET_CONNECTION);
+                        break;
+                    case Events.NOT_FOUND:
+                        dismissProgress();
+                        showToast(ToastTexts.NO_RECORD_FOUND);
                         break;
                     case Events.GET_FULL_SALES_LIST_SUCCESSFULL:
                         dismissProgress();

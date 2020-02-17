@@ -69,6 +69,7 @@ public interface BAMConstant {
         int COLLECTION = 11;
         int OTHERS = 12;
         int WS = 13;
+        int NOT_FOUND = 14;
 
         int GET_ORDERPROCESING_REFRESH_SUCCESSFULL = 30;
         int GET_ORDERPROCESING_REFRESH_UNSUCCESSFULL = 31;
@@ -145,6 +146,7 @@ public interface BAMConstant {
     interface ToastTexts {
         String LOGIN_SUCCESSFULL = "Login Successfull..";
         String NO_INTERNET_CONNECTION = "No Internet Connection...";
+        String NO_RECORD_FOUND = "No Record Found...";
         String WRONG_LOGIN_CREDENTIALS_USED = "Wrong Login Credential...";
         String LOGIN_UNSUCCESSFULL = "Login Unsuccessfull...";
         String OOPS_MESSAGE = "Oops Something went wrong...";
@@ -203,5 +205,6 @@ public interface BAMConstant {
         int RSM_ITEM = 201;
         int ACCOUNT_ITEM = 202;
         int CUSTOMER_ITEM = 203;
+        int STATE_ITEM = 204;
     }
 }

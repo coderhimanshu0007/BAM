@@ -13,16 +13,20 @@ public class FullSalesListRequester implements BaseRequester {
     String userId;
     String level;
     String type;
+    String customer;
+    String stateCode;
 
-    public FullSalesListRequester(String userId, String level, String type) {
+    public FullSalesListRequester(String userId, String level, String type, String customer, String stateCode) {
         this.userId = userId;
         this.level = level;
         this.type = type;
+        this.customer = customer;
+        this.stateCode = stateCode;
     }
 
     @Override
     public void run() {
-        ApiResponse<Object> apiResponse = HTTPOperationController.fullSalesList(userId, level, type);
+        ApiResponse<Object> apiResponse = HTTPOperationController.fullSalesList(userId, level, type, customer, stateCode);
         if (apiResponse != null) {
             if (apiResponse.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 // Log.e("Customer url",""+apiResponse.getResponseCode());
@@ -32,6 +36,8 @@ public class FullSalesListRequester implements BaseRequester {
                 } else {
                     EventBus.getDefault().post(new EventObject(Events.GET_FULL_SALES_LIST_UNSUCCESSFULL, null));
                 }
+            } else if (apiResponse.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
+                EventBus.getDefault().post(new EventObject(Events.NOT_FOUND, null));
             } else {
                 EventBus.getDefault().post(new EventObject(Events.NO_INTERNET_CONNECTION, null));
             }

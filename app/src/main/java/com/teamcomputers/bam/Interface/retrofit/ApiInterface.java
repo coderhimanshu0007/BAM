@@ -155,7 +155,9 @@ public interface ApiInterface {
     @POST("FullSalesList")
     Call<Object> fullSalesList(@Field("UserId") String userId,
                                @Field("Level") String level,
-                               @Field("Type") String type);
+                               @Field("Type") String type,
+                               @Field("Customer") String customer,
+                               @Field("StateCode") String stateCode);
 
     // YTD QTD
     @FormUrlEncoded
