@@ -97,7 +97,8 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
             }
         });
         List<SalesCustomerModel.StateCodeWise> stateCodeWise = dataList.get(position).getStateCodeWise();
-        StateAdapter aa = new StateAdapter(dashboardActivity, stateCodeWise);
+        dataList.get(position).setPosition(position);
+        StateAdapter aa = new StateAdapter(dashboardActivity, dataList.get(position));
         layoutManager = new LinearLayoutManager(dashboardActivity);
         holder.rviStateCode.setLayoutManager(layoutManager);
         holder.rviStateCode.setAdapter(aa);
@@ -105,16 +106,16 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 if (dataList.get(position).getOpen() == 0) {
-                    if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_expand) );
+                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_expand));
                     } else {
                         holder.llExpand.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.ic_expand));
                     }
                     dataList.get(position).setOpen(1);
                     holder.rviStateCode.setVisibility(View.VISIBLE);
                 } else if (dataList.get(position).getOpen() == 1) {
-                    if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_colapse) );
+                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_colapse));
                     } else {
                         holder.llExpand.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.ic_colapse));
                     }

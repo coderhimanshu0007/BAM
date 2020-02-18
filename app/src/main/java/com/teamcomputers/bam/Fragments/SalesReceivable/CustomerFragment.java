@@ -168,19 +168,19 @@ public class CustomerFragment extends BaseFragment {
                         Bundle productDataBundle = new Bundle();
                         int position = (int) eventObject.getObject();
                         productDataBundle.putString(ProductFragment.CUSTOMER, fullSalesModel.getTMC());
-                        productDataBundle.putString(ProductFragment.STATE_CODE, fullSalesModel.getTMC());
                         productDataBundle.putParcelable(ProductFragment.PRODUCT_PROFILE, model.get(position));
                         productDataBundle.putInt(ProductFragment.PRODUCT_POSITION, position);
+                        productDataBundle.putInt(ProductFragment.STATE_CODE, 0);
                         productDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.PRODUCT_FRAGMENT, productDataBundle);
                         break;
                     case ClickEvents.STATE_ITEM:
                         Bundle productStateBundle = new Bundle();
-                        int pos = (int) eventObject.getObject();
+                        SalesCustomerModel salesCustomerModel = (SalesCustomerModel) eventObject.getObject();
                         productStateBundle.putString(ProductFragment.CUSTOMER, fullSalesModel.getTMC());
-                        productStateBundle.putString(ProductFragment.STATE_CODE, fullSalesModel.getTMC());
-                        productStateBundle.putParcelable(ProductFragment.PRODUCT_PROFILE, model.get(pos));
-                        productStateBundle.putInt(ProductFragment.PRODUCT_POSITION, pos);
+                        productStateBundle.putParcelable(ProductFragment.PRODUCT_PROFILE, salesCustomerModel);
+                        productStateBundle.putInt(ProductFragment.PRODUCT_POSITION, salesCustomerModel.getPosition());
+                        productStateBundle.putInt(ProductFragment.STATE_CODE, 1);
                         productStateBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.PRODUCT_FRAGMENT, productStateBundle);
                         break;
@@ -218,6 +218,11 @@ public class CustomerFragment extends BaseFragment {
     }
 
     private void initData() {
+        /*for (int i = 0; i < model.size(); i++) {
+            for (int j = 0; j < model.get(i).getStateCodeWise().size(); j++) {
+                model.get(i).getStateCodeWise().get(j).setName(model.get(i).getCustomerName());
+            }
+        }*/
         adapter = new CustomerAdapter(dashboardActivityContext, model);
         rviRSM.setAdapter(adapter);
     }

@@ -24,9 +24,15 @@ public class SalesCustomerModel  implements Parcelable {
     @SerializedName("open")
     @Expose
     private int open;
+    @SerializedName("Position")
+    @Expose
+    private int position;
     @SerializedName("StateCodeWise")
     @Expose
     private List<StateCodeWise> stateCodeWise = null;
+
+    public SalesCustomerModel() {
+    }
 
     public String getCustomerName() {
         return customerName;
@@ -68,6 +74,14 @@ public class SalesCustomerModel  implements Parcelable {
         this.open = open;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     public List<StateCodeWise> getStateCodeWise() {
         return stateCodeWise;
     }
@@ -90,6 +104,9 @@ public class SalesCustomerModel  implements Parcelable {
         @SerializedName("MTD")
         @Expose
         private Double mTD;
+        @SerializedName("Name")
+        @Expose
+        private String name;
 
         public String getStateCode() {
             return stateCode;
@@ -123,6 +140,13 @@ public class SalesCustomerModel  implements Parcelable {
             this.mTD = mTD;
         }
 
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 
     @Override

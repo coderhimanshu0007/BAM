@@ -55,6 +55,8 @@ public class ProductFragment extends BaseFragment {
     LinearLayout llRSMLayout;
     @BindView(R.id.tviName)
     TextView tviName;
+    @BindView(R.id.tviStateName)
+    TextView tviStateName;
     @BindView(R.id.tviYtd)
     TextView tviYtd;
     @BindView(R.id.tviQtd)
@@ -64,8 +66,8 @@ public class ProductFragment extends BaseFragment {
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
     private ProductAdapter adapter;
-    private int position = 0;
-    private String customer, stateCode;
+    private int position = 0, stateCode = 0;
+    private String customer;
 
     List<FullSalesModel> model = new ArrayList<>();
 
@@ -82,7 +84,7 @@ public class ProductFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
         customer = getArguments().getString(CUSTOMER);
-        stateCode = getArguments().getString(STATE_CODE);
+        stateCode = getArguments().getInt(STATE_CODE);
         fullSalesModel = getArguments().getParcelable(PRODUCT_PROFILE);
         position = getArguments().getInt(PRODUCT_POSITION);
 
@@ -109,7 +111,13 @@ public class ProductFragment extends BaseFragment {
         rviRSM.setLayoutManager(layoutManager);
 
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FullSalesListRequester(customer, "R4", "Product", fullSalesModel.getCustomerName(), ""));
+        if (stateCode == 0) {
+            tviStateName.setText("");
+            BackgroundExecutor.getInstance().execute(new FullSalesListRequester(customer, "R4", "Product", fullSalesModel.getCustomerName(), ""));
+        } else if (stateCode == 1) {
+            tviStateName.setText(fullSalesModel.getStateCodeWise().get(0).getStateCode());
+            BackgroundExecutor.getInstance().execute(new FullSalesListRequester(customer, "R4", "Product", fullSalesModel.getCustomerName(), fullSalesModel.getStateCodeWise().get(0).getStateCode()));
+        }
 
         return rootView;
     }

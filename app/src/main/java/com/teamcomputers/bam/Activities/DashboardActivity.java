@@ -477,7 +477,7 @@ public class DashboardActivity extends BaseActivity {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         }
-
+        fragment.onDetach();
         drawerHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -646,7 +646,7 @@ public class DashboardActivity extends BaseActivity {
                             fragmentTransaction.addToBackStack(fragment.getFragmentName());
                         }
                     }
-                    fragmentTransaction.commit();
+                    fragmentTransaction.commitAllowingStateLoss();
                 } catch (Exception ignored) {
                     //Crashlytics.logException(ignored);
                 }
