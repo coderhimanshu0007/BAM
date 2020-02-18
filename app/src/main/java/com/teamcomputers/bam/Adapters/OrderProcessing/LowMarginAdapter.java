@@ -63,7 +63,7 @@ public class LowMarginAdapter extends RecyclerView.Adapter<LowMarginAdapter.View
         holder.tviHrsDays.setText(dataList.get(position).getHoursDays());
         holder.tviAmount.setText(String.valueOf(dataList.get(position).getAmount()));
         //holder.tviName.setText(String.valueOf(dataList.get(position).get("Name")));
-        holder.tviFinanceDelay.setText(String.valueOf(dataList.get(position).getAmount()));
+        holder.tviFinanceDelay.setText(String.format("%.2f", dataList.get(position).getMargin()));
     }
 
     @Override

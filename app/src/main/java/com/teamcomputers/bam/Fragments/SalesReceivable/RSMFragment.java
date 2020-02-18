@@ -3,6 +3,8 @@ package com.teamcomputers.bam.Fragments.SalesReceivable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -72,6 +74,12 @@ public class RSMFragment extends BaseFragment {
         BackgroundExecutor.getInstance().execute(new FullSalesListRequester("1464", "R1", "RSM", "", ""));
 
         return rootView;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_screen_share);
+        item.setVisible(true);
     }
 
     @Override
