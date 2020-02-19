@@ -1,7 +1,6 @@
 package com.teamcomputers.bam.Fragments.SalesReceivable;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +15,6 @@ import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.SalesOutstanding.RSMAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.FullSalesModel;
-import com.teamcomputers.bam.Models.RSMDataModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.SalesReceivable.FullSalesListRequester;
@@ -27,7 +25,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,13 +35,14 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class RSMFragment extends BaseFragment {
-    public static final String SALES_DATA = "SALES_DATA";
+    public static final String USER_ID = "USER_ID";
     private View rootView;
     private Unbinder unbinder;
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
 
     String toolbarTitle = "";
+    String userId = "";
 
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
@@ -66,12 +64,12 @@ public class RSMFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, rootView);
         toolbarTitle = getString(R.string.Heading_RSM);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
-
+        userId = getArguments().getString(USER_ID);
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviRSM.setLayoutManager(layoutManager);
 
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FullSalesListRequester("1464", "R1", "RSM", "", ""));
+        BackgroundExecutor.getInstance().execute(new FullSalesListRequester(userId, "R1", "RSM", "", ""));
 
         return rootView;
     }

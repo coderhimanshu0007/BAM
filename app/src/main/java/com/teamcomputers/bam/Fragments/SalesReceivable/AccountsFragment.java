@@ -17,7 +17,6 @@ import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.SalesOutstanding.AccountAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.FullSalesModel;
-import com.teamcomputers.bam.Models.RSMDataModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.SalesReceivable.FullSalesListRequester;

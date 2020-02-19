@@ -1,7 +1,6 @@
 package com.teamcomputers.bam.Fragments.SalesReceivable;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,8 +17,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.BAMApplication;
 import com.teamcomputers.bam.CustomView.CircularSeekBar;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.LoginModel;
 import com.teamcomputers.bam.Models.SalesReceivableModel;
 import com.teamcomputers.bam.Models.YTDQTDModel;
 import com.teamcomputers.bam.Models.common.EventObject;
@@ -29,6 +30,7 @@ import com.teamcomputers.bam.Requesters.SalesReceivable.SalesRefreshRequester;
 import com.teamcomputers.bam.Requesters.SalesReceivable.YTDQTDRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -66,6 +68,7 @@ public class SalesReceivableFragment extends BaseFragment {
     TextView tviDays;
     @BindView(R.id.seek_bar)
     CircularSeekBar seek_bar;
+    LoginModel loginModel;
 
     int days = 260;
     String type = null;
@@ -81,6 +84,8 @@ public class SalesReceivableFragment extends BaseFragment {
         dashboardActivityContext = (DashboardActivity) context;
         toolbarTitle = getString(R.string.Heading_Sales_Receivable);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
+
+        loginModel = SharedPreferencesController.getInstance(BAMApplication.getInstance()).getUserProfile();
 
         /*TabLayout tabLayout = rootView.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab());
@@ -188,7 +193,7 @@ public class SalesReceivableFragment extends BaseFragment {
                         break;
                     case Events.GET_SALES_REFRESH_SUCCESSFULL:
                         dashboardActivityContext.updateDate(eventObject.getObject().toString());
-                        BackgroundExecutor.getInstance().execute(new SalesReceivableRequester("1464"));
+                        BackgroundExecutor.getInstance().execute(new SalesReceivableRequester(loginModel.getUserID()));
                         break;
                     case Events.GET_SALES_REFRESH_UNSUCCESSFULL:
                         dismissProgress();
@@ -213,23 +218,27 @@ public class SalesReceivableFragment extends BaseFragment {
 
                             userId = model.getUserId();
                             level = model.getLevel();
-                            dataType = "RSM";
-                            tviYtd.setText(BAMUtil.getRoundOffValue(model.getYTD()));
-                            tviQtd.setText(BAMUtil.getRoundOffValue(model.getQTD()));
-                            tviMtd.setText(BAMUtil.getRoundOffValue(model.getMTD()));
+                            if (!level.equals("null")) {
+                                dataType = "RSM";
+                                tviYtd.setText(BAMUtil.getRoundOffValue(model.getYTD()));
+                                tviQtd.setText(BAMUtil.getRoundOffValue(model.getQTD()));
+                                tviMtd.setText(BAMUtil.getRoundOffValue(model.getMTD()));
 
-                            tviOpenSalesOrder.setText(BAMUtil.getRoundOffValue(model.getOpenSalesOrder()));
-                            tviOutstanding.setText(BAMUtil.getRoundOffValue(model.getOutStanding()));
-                            tviDays.setText(BAMUtil.getRoundOffValue(model.getDSO()));
+                                tviOpenSalesOrder.setText(BAMUtil.getRoundOffValue(model.getOpenSalesOrder()));
+                                tviOutstanding.setText(BAMUtil.getRoundOffValue(model.getOutStanding()));
+                                tviDays.setText(BAMUtil.getRoundOffValue(model.getDSO()));
 
-                            seek_bar.setMax(365);
-                            Integer dso = model.getDSO().intValue();
-                            seek_bar.setProgress(dso);
-                            //seek_bar.setProgress(250);
-                            tviDays.setText(String.valueOf(dso));
-                            if (dso > 30)
-                                seek_bar.setCircleProgressColorRed();
-                            seek_bar.setEnabled(false);
+                                seek_bar.setMax(365);
+                                Integer dso = model.getDSO().intValue();
+                                seek_bar.setProgress(dso);
+                                //seek_bar.setProgress(250);
+                                tviDays.setText(String.valueOf(dso));
+                                if (dso > 30)
+                                    seek_bar.setCircleProgressColorRed();
+                                seek_bar.setEnabled(false);
+                            } else if (level.equals("null")) {
+                                dashboardActivityContext.onBackPressed();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -316,7 +325,7 @@ public class SalesReceivableFragment extends BaseFragment {
         //showDialog("YTD");
         type = "YTD";
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new YTDQTDRequester("1464"));
+        BackgroundExecutor.getInstance().execute(new YTDQTDRequester(userId));
     }
 
     @OnClick(R.id.llQTD)
@@ -324,14 +333,14 @@ public class SalesReceivableFragment extends BaseFragment {
         //showDialog("QTD");
         type = "QTD";
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new YTDQTDRequester("1464"));
+        BackgroundExecutor.getInstance().execute(new YTDQTDRequester(userId));
     }
 
     @OnClick(R.id.txtSalesAnalysis)
     public void salesAnalysis() {
         if (level.equals("R1")) {
             Bundle rsmDataBundle = new Bundle();
-            //rsmDataBundle.putParcelable(RSMFragment.USER_PROFILE, (RSMDataModel) eventObject.getObject());
+            rsmDataBundle.putString(RSMFragment.USER_ID, userId);
             rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
             dashboardActivityContext.replaceFragment(Fragments.SALES_ANALYSIS_FRAGMENT, rsmDataBundle);
         }
