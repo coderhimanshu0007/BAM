@@ -44,13 +44,12 @@ import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.FeedbackFragment;
 import com.teamcomputers.bam.Fragments.Installation.InstallationFragment;
 import com.teamcomputers.bam.Fragments.Logistics.LogisticsFragment;
-import com.teamcomputers.bam.Fragments.NewSalesReceivable.NewRSMFragment;
+import com.teamcomputers.bam.Fragments.NewSalesReceivable.NewRSMTabFragment;
 import com.teamcomputers.bam.Fragments.NewSalesReceivable.NewSalesReceivableFragment;
 import com.teamcomputers.bam.Fragments.OrderProcessing.OrderProcessingFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.ProductFragment;
-import com.teamcomputers.bam.Fragments.SalesReceivable.RSMFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.SalesReceivableFragment;
 import com.teamcomputers.bam.Fragments.home.HomeFragment;
 import com.teamcomputers.bam.Models.LoginModel;
@@ -673,7 +672,7 @@ public class DashboardActivity extends BaseActivity {
                         fragment = new FeedbackFragment();
                         break;
                     case Fragments.SALES_ANALYSIS_FRAGMENT:
-                        fragment = new NewRSMFragment();
+                        fragment = new NewRSMTabFragment();
                         break;
                     case Fragments.ACCOUNT_FRAGMENT:
                         fragment = new AccountsFragment();

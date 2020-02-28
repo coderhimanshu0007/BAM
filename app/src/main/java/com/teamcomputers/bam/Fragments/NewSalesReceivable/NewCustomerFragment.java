@@ -161,7 +161,7 @@ public class NewCustomerFragment extends BaseFragment {
                     case Events.GET_SELECTED_CUSTOMER_LIST_SUCCESSFULL:
                         dismissProgress();
                         cviSPHeading.setVisibility(View.VISIBLE);
-                        FullSalesModel dataList = ((NewRSMFragment) getParentFragment()).dataList;
+                        FullSalesModel dataList = ((NewRSMTabFragment) getParentFragment()).dataList;
                         position = dataList.getPosition();
                         if (position == 0) {
                             llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
@@ -218,7 +218,7 @@ public class NewCustomerFragment extends BaseFragment {
 
     @OnClick(R.id.iviSPClose)
     public void SPClose() {
-        ((NewRSMFragment) getParentFragment()).id = userId;
+        ((NewRSMTabFragment) getParentFragment()).id = userId;
         cviSPHeading.setVisibility(View.GONE);
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new FullCustomerListRequester(userId, "R1", "Customer", "", ""));

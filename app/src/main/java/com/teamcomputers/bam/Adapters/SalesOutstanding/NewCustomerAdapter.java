@@ -101,31 +101,6 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
             holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
         }
 
-        /*Handler hdlr = new Handler();
-        i = holder.pBar.getProgress();
-        new Thread(new Runnable() {
-            public void run() {
-                while (i < 100) {
-                    i += 1;
-                    // Update the progress bar and display the current value in text view
-                    hdlr.post(new Runnable() {
-                        public void run() {
-                            holder.pBar.setProgress(i);
-                            //txtView.setText(i+"/"+pgsBar.getMax());
-                            if(i>50){
-                                holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_first_item_value), PorterDuff.Mode.SRC_IN);
-                            }
-                        }
-                    });
-                    try {
-                        // Sleep for 100 milliseconds to show the progress slowly.
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();*/
         holder.tviName.setText(position + 1 + ". " + dataList.get(position).getCustomerName());
         holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
         holder.tviQTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getQTD()));

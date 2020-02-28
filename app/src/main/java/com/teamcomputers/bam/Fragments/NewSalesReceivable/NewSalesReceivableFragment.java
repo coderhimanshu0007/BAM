@@ -292,7 +292,7 @@ public class NewSalesReceivableFragment extends BaseFragment {
     public void salesAnalysis() {
         if (level.equals("R1")) {
             Bundle rsmDataBundle = new Bundle();
-            rsmDataBundle.putString(NewRSMFragment.USER_ID, userId);
+            rsmDataBundle.putString(NewRSMTabFragment.USER_ID, userId);
             rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
             dashboardActivityContext.replaceFragment(Fragments.SALES_ANALYSIS_FRAGMENT, rsmDataBundle);
         }

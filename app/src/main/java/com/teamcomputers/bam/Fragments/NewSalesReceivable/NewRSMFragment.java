@@ -6,61 +6,79 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.tabs.TabLayout;
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.CustomView.CustomViewPager;
+import com.teamcomputers.bam.Adapters.SalesOutstanding.NewRSMAdapter;
+import com.teamcomputers.bam.Adapters.SalesOutstanding.SalesPersonAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
 import com.teamcomputers.bam.Models.FullSalesModel;
-import com.teamcomputers.bam.Models.SalesCustomerModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.NewSalesReceivable.SelectedCustomerListRequester;
-import com.teamcomputers.bam.Requesters.NewSalesReceivable.SelectedProductListRequester;
-import com.teamcomputers.bam.Requesters.OrderProcessing.OrderProcessingRefreshRequester;
+import com.teamcomputers.bam.Requesters.NewSalesReceivable.SalesPersonListRequester;
+import com.teamcomputers.bam.Requesters.SalesReceivable.FullSalesListRequester;
+import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
-import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
+import org.json.JSONException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class NewRSMFragment extends BaseFragment {
     public static final String USER_ID = "USER_ID";
+    public static final String RSM_PROFILE = "RSM_PROFILE";
+    public static final String RSM_POSITION = "RSM_POSITION";
     private View rootView;
     private Unbinder unbinder;
-    String userId = "";
-    public String id = "";
     private DashboardActivity dashboardActivityContext;
-    public FullSalesModel dataList;
-    public SalesCustomerModel customerList;
+    private LinearLayoutManager layoutManager;
 
-    private String[] navLabels = {
-            "Sales Person",
-            "Customer",
-            "Product"
-    };
-
-    private int[] navIcon = {
-            R.drawable.ic_sales_person,
-            R.drawable.ic_customer,
-            R.drawable.ic_product
-    };
-
-    String title = "";
     String toolbarTitle = "";
-    TabLayout tabLayout;
+
+    String userId = "";
+    @BindView(R.id.llRSMLayout)
+    LinearLayout llRSMLayout;
+    @BindView(R.id.cviRSMHeading)
+    CardView cviRSMHeading;
+    @BindView(R.id.tviName)
+    TextView tviName;
+    @BindView(R.id.tviTarget)
+    TextView tviTarget;
+    @BindView(R.id.tviActual)
+    TextView tviActual;
+    @BindView(R.id.tviAch)
+    TextView tviAch;
+    @BindView(R.id.viYTD)
+    View viYTD;
+    @BindView(R.id.viQTD)
+    View viQTD;
+    @BindView(R.id.viMTD)
+    View viMTD;
+    @BindView(R.id.rviRSM)
+    RecyclerView rviRSM;
+    private SalesPersonAdapter adapter;
+    private NewRSMAdapter rsmAdapter;
+    private int type = 0, pos = 0;
+
+    List<FullSalesModel> rsmDataList = new ArrayList<>();
+    List<FullSalesModel> spDataList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,86 +88,45 @@ public class NewRSMFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_new_rsm, container, false);
+        rootView = inflater.inflate(R.layout.fragment_sales_person, container, false);
         dashboardActivityContext = (DashboardActivity) context;
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
-        title = getString(R.string.Heading_RSM);
-        toolbarTitle = title;
         userId = getArguments().getString(USER_ID);
+        //fullSalesModel = getArguments().getParcelable(RSM_PROFILE);
+        /*position = getArguments().getInt(RSM_POSITION);
+
+        if (position == 0) {
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+        } else if (position == 1) {
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+        } else if (position == 2) {
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+        } else if (position % 2 == 0) {
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+        } else if (position % 2 == 1) {
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+        }
+        tviName.setText(fullSalesModel.getName());
+        tviYtd.setText(BAMUtil.getRoundOffValue(fullSalesModel.getYTD()));
+        tviQtd.setText(BAMUtil.getRoundOffValue(fullSalesModel.getQTD()));
+        tviMtd.setText(BAMUtil.getRoundOffValue(fullSalesModel.getMTD()));
+*/
+        toolbarTitle = getString(R.string.Sales);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
 
-        tabLayout = rootView.findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab());
-        tabLayout.addTab(tabLayout.newTab());
-        tabLayout.addTab(tabLayout.newTab());
+        layoutManager = new LinearLayoutManager(dashboardActivityContext);
+        rviRSM.setLayoutManager(layoutManager);
 
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            LinearLayout tab = (LinearLayout) LayoutInflater.from(dashboardActivityContext).inflate(R.layout.new_nav_tab, null);
-
-            TextView tab_label = tab.findViewById(R.id.nav_label);
-            ImageView iviNav_icon = tab.findViewById(R.id.iviNav_icon);
-
-            iviNav_icon.setImageResource(navIcon[i]);
-            tab_label.setText(navLabels[i]);
-            if (i == 0) {
-                tab_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
-                iviNav_icon.setColorFilter(ContextCompat.getColor(context, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
-            } else {
-                tab_label.setTextColor(getResources().getColor(R.color.color_value_54));
-                iviNav_icon.setColorFilter(ContextCompat.getColor(context, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
-            }
-            tabLayout.getTabAt(i).setCustomView(tab);
-        }
-
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        final CustomViewPager viewPager = (CustomViewPager) rootView.findViewById(R.id.view_pager);
-        viewPager.setPagingEnabled(false);
-        TabsAdapter tabsAdapter = new TabsAdapter(getChildFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(tabsAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 0) {
-                    toolbarTitle = title;
-                    dashboardActivityContext.setToolBarTitle(toolbarTitle);
-                } else if (tab.getPosition() == 1) {
-                    toolbarTitle = getString(R.string.Customer);
-                    dashboardActivityContext.setToolBarTitle(toolbarTitle);
-                } else if (tab.getPosition() == 2) {
-                    toolbarTitle = getString(R.string.Product);
-                    dashboardActivityContext.setToolBarTitle(toolbarTitle);
-                }
-                viewPager.setCurrentItem(tab.getPosition());
-                View tabView = tab.getCustomView();
-                ImageView iviNav_icon = tabView.findViewById(R.id.iviNav_icon);
-                TextView tab_label = tabView.findViewById(R.id.nav_label);
-                tab_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
-                iviNav_icon.setColorFilter(ContextCompat.getColor(context, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                View tabView = tab.getCustomView();
-                ImageView iviNav_icon = tabView.findViewById(R.id.iviNav_icon);
-                TextView tab_label = tabView.findViewById(R.id.nav_label);
-                tab_label.setTextColor(getResources().getColor(R.color.color_value_54));
-                iviNav_icon.setColorFilter(ContextCompat.getColor(context, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+        //showProgress(ProgressDialogTexts.LOADING);
+        //BackgroundExecutor.getInstance().execute(new FullSalesListRequester(fullSalesModel.getTMC(), "R2", "Sales", "", ""));
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new OrderProcessingRefreshRequester());
-        int position = SharedPreferencesController.getInstance(dashboardActivityContext).getOPPageNo();
-        tabLayout.getTabAt(position).select();
-        SharedPreferencesController.getInstance(dashboardActivityContext).setOPPageNo(0);
-
+        BackgroundExecutor.getInstance().execute(new FullSalesListRequester(userId, "R1", "RSM", "", ""));
+        /*if (((NewRSMTabFragment) getParentFragment()).title.equals("RSM")) {
+            BackgroundExecutor.getInstance().execute(new FullSalesListRequester(userId, "R1", "RSM", "", ""));
+        } else if (((NewRSMTabFragment) getParentFragment()).title.equals("Sales Person")) {
+            BackgroundExecutor.getInstance().execute(new SalesPersonListRequester(userId, "R2", "Sales", "", ""));
+        }*/
         return rootView;
     }
 
@@ -157,6 +134,12 @@ public class NewRSMFragment extends BaseFragment {
     public void onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_screen_share);
         item.setVisible(true);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -171,7 +154,7 @@ public class NewRSMFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return NewRSMFragment.class.getSimpleName();
+        return AccountsFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -184,55 +167,93 @@ public class NewRSMFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.NO_INTERNET_CONNECTION);
                         break;
-                    case Events.GET_ORDERPROCESING_REFRESH_SUCCESSFULL:
-                        dashboardActivityContext.updateDate(eventObject.getObject().toString());
+                    case Events.NOT_FOUND:
                         dismissProgress();
-                        //eventObjects = eventObject;
+                        showToast(ToastTexts.NO_RECORD_FOUND);
                         break;
-                    case Events.GET_ORDERPROCESING_REFRESH_UNSUCCESSFULL:
+                    case Events.GET_FULL_SALES_LIST_SUCCESSFULL:
+                        dismissProgress();
+                        try {
+                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            FullSalesModel[] data = (FullSalesModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), FullSalesModel[].class);
+                            rsmDataList = new ArrayList<FullSalesModel>(Arrays.asList(data));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //initTreeData(model);
+                        initRSMData("YTD");
+                        dismissProgress();
+                        break;
+                    case Events.GET_FULL_SALES_LIST_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
+                    /*case ClickEvents.RSM_CLICK:
+                        dashboardActivityContext.setToolBarTitle(getString(R.string.Sales));
+                        ((NewRSMTabFragment) getParentFragment()).title = getString(R.string.Sales);
+                        cviRSMHeading.setVisibility(View.VISIBLE);
+                        pos = (int) eventObject.getObject();
+                        if (pos == 0) {
+                            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                        } else if (pos == 1) {
+                            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                        } else if (pos == 2) {
+                            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                        } else if (pos % 2 == 0) {
+                            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                        } else if (pos % 2 == 1) {
+                            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                        }
+                        tviName.setText(rsmDataList.get(pos).getName());
+                        tviTarget.setText(BAMUtil.getRoundOffValue(rsmDataList.get(pos).getYTDTarget()));
+                        tviActual.setText(BAMUtil.getRoundOffValue(rsmDataList.get(pos).getYTD()));
+                        tviAch.setText(rsmDataList.get(pos).getYTDPercentage().intValue() + "%");
+                        type = 1;
+                        showProgress(ProgressDialogTexts.LOADING);
+                        BackgroundExecutor.getInstance().execute(new SalesPersonListRequester(rsmDataList.get(pos).getTMC(), "R2", "Sales", "", ""));
+                        break;
+                    case Events.GET_SALES_PERSON_LIST_SUCCESSFULL:
+                        dismissProgress();
+                        try {
+                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            FullSalesModel[] data = (FullSalesModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), FullSalesModel[].class);
+                            spDataList = new ArrayList<FullSalesModel>(Arrays.asList(data));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //initTreeData(model);
+                        initData("YTD");
+                        dismissProgress();
+                        break;
+                    case Events.GET_SALES_PERSON_LIST_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;*/
                     case ClickEvents.SP_CLICK:
-                        dataList = (FullSalesModel) eventObject.getObject();
-                        id = dataList.getTMC();
+                        /*dashboardActivityContext.setToolBarTitle(toolbarTitle);
+                        cviRSMHeading.setVisibility(View.VISIBLE);
+                        int pos = (int) eventObject.getObject();
+                        //model.get(position);
+                        tviName.setText(model.get(pos).getName());
+                        tviTarget.setText(BAMUtil.getRoundOffValue(model.get(pos).getYTD()));
+                        tviActual.setText(BAMUtil.getRoundOffValue(model.get(pos).getQTD()));
+                        tviAch.setText(BAMUtil.getRoundOffValue(model.get(pos).getMTD()));
                         showProgress(ProgressDialogTexts.LOADING);
-                        BackgroundExecutor.getInstance().execute(new SelectedCustomerListRequester(dataList.getTMC(), "R4", "Customer", "", ""));
-                        tabLayout.getTabAt(1).select();
+                        BackgroundExecutor.getInstance().execute(new SalesPersonListRequester(userId, "R1", "Sales", "", ""));*/
                         break;
-                    case ClickEvents.CUSTOMER_SELECT:
-                        customerList = (SalesCustomerModel) eventObject.getObject();
-                        showProgress(ProgressDialogTexts.LOADING);
-                        if (id.equals(userId)) {
-                            BackgroundExecutor.getInstance().execute(new SelectedProductListRequester(id, "R1", "Product", customerList.getCustomerName(), ""));
-                        } else if (id.equals("")) {
-                            BackgroundExecutor.getInstance().execute(new SelectedProductListRequester(userId, "R1", "Product", customerList.getCustomerName(), ""));
-                        } else {
-                            BackgroundExecutor.getInstance().execute(new SelectedProductListRequester(id, "R4", "Product", customerList.getCustomerName(), ""));
-                        }
-                        tabLayout.getTabAt(2).select();
-                        break;
-                    case ClickEvents.STATE_SELECT:
-                        customerList = (SalesCustomerModel) eventObject.getObject();
-                        showProgress(ProgressDialogTexts.LOADING);
-                        if (id.equals(userId)) {
-                            BackgroundExecutor.getInstance().execute(new SelectedProductListRequester(id, "R1", "Product", customerList.getCustomerName(), customerList.getStateCodeWise().get(0).getStateCode()));
-                        } else if (id.equals("")) {
-                            BackgroundExecutor.getInstance().execute(new SelectedProductListRequester(userId, "R1", "Product", customerList.getCustomerName(), customerList.getStateCodeWise().get(0).getStateCode()));
-                        } else {
-                            BackgroundExecutor.getInstance().execute(new SelectedProductListRequester(id, "R4", "Product", customerList.getCustomerName(), customerList.getStateCodeWise().get(0).getStateCode()));
-                        }
-                        tabLayout.getTabAt(2).select();
+                    case ClickEvents.RSM_ITEM:
+                        int position = (int) eventObject.getObject();
+                        Bundle rsmDataBundle = new Bundle();
+                        rsmDataBundle.putParcelable(AccountsFragment.RSM_PROFILE, rsmDataList.get(position));
+                        rsmDataBundle.putInt(AccountsFragment.RSM_POSITION, position);
+                        rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        dashboardActivityContext.replaceFragment(Fragments.ACCOUNT_FRAGMENT, rsmDataBundle);
                         break;
                 }
             }
         });
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -242,51 +263,79 @@ public class NewRSMFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void toogleProfile(Boolean toogle) {
-        super.toogleProfile(toogle);
-        if (toogle) {
-            //llProfile.setVisibility(View.VISIBLE);
-            //Toast.makeText(dashboardActivityContext, "Toogle true", Toast.LENGTH_SHORT).show();
-        } else {
-            //llProfile.setVisibility(View.GONE);
-            //Toast.makeText(dashboardActivityContext, "Toogle false", Toast.LENGTH_SHORT).show();
-        }
+    @OnClick(R.id.tviYTD)
+    public void tviYTD() {
+        viYTD.setVisibility(View.VISIBLE);
+        viQTD.setVisibility(View.INVISIBLE);
+        viMTD.setVisibility(View.INVISIBLE);
+        initRSMData("YTD");
+        rsmAdapter.notifyDataSetChanged();
+        /*if (type == 0) {
+            initRSMData("YTD");
+            rsmAdapter.notifyDataSetChanged();
+        } else if (type == 1) {
+            tviTarget.setText(BAMUtil.getRoundOffValue(rsmDataList.get(pos).getYTDTarget()));
+            tviActual.setText(BAMUtil.getRoundOffValue(rsmDataList.get(pos).getYTD()));
+            tviAch.setText(rsmDataList.get(pos).getYTDPercentage().intValue() + "%");
+            initData("YTD");
+            adapter.notifyDataSetChanged();
+        }*/
     }
 
-    public class TabsAdapter extends FragmentStatePagerAdapter {
-        int mNumOfTabs;
-
-        public TabsAdapter(FragmentManager fm, int NoofTabs) {
-            super(fm);
-            this.mNumOfTabs = NoofTabs;
-        }
-
-        @Override
-        public int getCount() {
-            return mNumOfTabs;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            Bundle bundle = new Bundle();
-            bundle.putString(SalesPersonFragment.USER_ID, userId);
-            switch (position) {
-                case 0:
-                    SalesPersonFragment salesPersonFragment = new SalesPersonFragment();
-                    salesPersonFragment.setArguments(bundle);
-                    return salesPersonFragment;
-                case 1:
-                    NewCustomerFragment newCustomerFragment = new NewCustomerFragment();
-                    newCustomerFragment.setArguments(bundle);
-                    return newCustomerFragment;
-                case 2:
-                    NewProductFragment newProductFragment = new NewProductFragment();
-                    newProductFragment.setArguments(bundle);
-                    return newProductFragment;
-                default:
-                    return null;
-            }
-        }
+    @OnClick(R.id.tviQTD)
+    public void tviQTD() {
+        viYTD.setVisibility(View.INVISIBLE);
+        viQTD.setVisibility(View.VISIBLE);
+        viMTD.setVisibility(View.INVISIBLE);
+        initRSMData("QTD");
+        rsmAdapter.notifyDataSetChanged();
+        /*if (type == 0) {
+            initRSMData("QTD");
+            rsmAdapter.notifyDataSetChanged();
+        } else if (type == 1) {
+            tviTarget.setText(BAMUtil.getRoundOffValue(rsmDataList.get(pos).getQTDTarget()));
+            tviActual.setText(BAMUtil.getRoundOffValue(rsmDataList.get(pos).getQTD()));
+            tviAch.setText(rsmDataList.get(pos).getQTDPercentage().intValue() + "%");
+            initData("QTD");
+            adapter.notifyDataSetChanged();
+        }*/
     }
+
+    @OnClick(R.id.tviMTD)
+    public void tviMTD() {
+        viYTD.setVisibility(View.INVISIBLE);
+        viQTD.setVisibility(View.INVISIBLE);
+        viMTD.setVisibility(View.VISIBLE);
+        initRSMData("MTD");
+        rsmAdapter.notifyDataSetChanged();
+        /*if (type == 0) {
+            initRSMData("MTD");
+            rsmAdapter.notifyDataSetChanged();
+        } else if (type == 1) {
+            tviTarget.setText(BAMUtil.getRoundOffValue(rsmDataList.get(pos).getMTDTarget()));
+            tviActual.setText(BAMUtil.getRoundOffValue(rsmDataList.get(pos).getMTD()));
+            tviAch.setText(rsmDataList.get(pos).getMTDPercentage().intValue() + "%");
+            initData("MTD");
+            adapter.notifyDataSetChanged();
+        }*/
+    }
+
+    @OnClick(R.id.iviRSMClose)
+    public void RSMClose() {
+        cviRSMHeading.setVisibility(View.GONE);
+        type = 1;
+        showProgress(ProgressDialogTexts.LOADING);
+        BackgroundExecutor.getInstance().execute(new SalesPersonListRequester(userId, "R1", "Sales", "", ""));
+        //BackgroundExecutor.getInstance().execute(new FullSalesListRequester(userId, "R1", "Sales", "", ""));
+    }
+
+    private void initRSMData(String type) {
+        rsmAdapter = new NewRSMAdapter(dashboardActivityContext, type, rsmDataList);
+        rviRSM.setAdapter(rsmAdapter);
+    }
+
+   /* private void initData(String type) {
+        adapter = new SalesPersonAdapter(dashboardActivityContext, type, spDataList);
+        rviRSM.setAdapter(adapter);
+    }*/
 }

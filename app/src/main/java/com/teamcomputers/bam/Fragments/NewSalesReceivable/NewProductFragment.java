@@ -195,8 +195,8 @@ public class NewProductFragment extends BaseFragment {
                         tviYtdHeading.setText("YTD");
                         tviQtdHeading.setText("QTD");
                         tviMtdHeading.setText("MTD");
-                        //FullSalesModel dataList = ((NewRSMFragment) getParentFragment()).dataList;
-                        SalesCustomerModel salesCustomerModel = ((NewRSMFragment) getParentFragment()).customerList;
+                        //FullSalesModel dataList = ((NewRSMTabFragment) getParentFragment()).dataList;
+                        SalesCustomerModel salesCustomerModel = ((NewRSMTabFragment) getParentFragment()).customerList;
                         position = salesCustomerModel.getPosition();
                         if (position == 0) {
                             llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));

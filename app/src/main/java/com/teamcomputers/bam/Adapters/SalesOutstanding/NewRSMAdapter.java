@@ -107,7 +107,9 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, position));
+                //EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, position));
+                dataList.get(position).setPosition(position);
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, dataList.get(position)));
             }
         });
     }

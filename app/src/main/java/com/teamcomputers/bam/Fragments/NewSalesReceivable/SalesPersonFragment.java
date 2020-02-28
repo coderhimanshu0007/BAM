@@ -22,7 +22,6 @@ import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
 import com.teamcomputers.bam.Models.FullSalesModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.SalesReceivable.FullSalesListRequester;
 import com.teamcomputers.bam.Requesters.NewSalesReceivable.SalesPersonListRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
@@ -121,7 +120,12 @@ public class SalesPersonFragment extends BaseFragment {
         //showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new FullSalesListRequester(fullSalesModel.getTMC(), "R2", "Sales", "", ""));
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FullSalesListRequester(userId, "R1", "RSM", "", ""));
+        BackgroundExecutor.getInstance().execute(new SalesPersonListRequester(userId, "R1", "Sales", "", ""));
+        /*if (((NewRSMTabFragment) getParentFragment()).title.equals("RSM")) {
+            BackgroundExecutor.getInstance().execute(new FullSalesListRequester(userId, "R1", "RSM", "", ""));
+        } else if (((NewRSMTabFragment) getParentFragment()).title.equals("Sales Person")) {
+            BackgroundExecutor.getInstance().execute(new SalesPersonListRequester(userId, "R1", "Sales", "", ""));
+        }*/
         return rootView;
     }
 
@@ -166,7 +170,7 @@ public class SalesPersonFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.NO_RECORD_FOUND);
                         break;
-                    case Events.GET_FULL_SALES_LIST_SUCCESSFULL:
+                    /*case Events.GET_FULL_SALES_LIST_SUCCESSFULL:
                         dismissProgress();
                         try {
                             JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
@@ -183,10 +187,10 @@ public class SalesPersonFragment extends BaseFragment {
                     case Events.GET_FULL_SALES_LIST_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
-                        break;
-                    case ClickEvents.RSM_CLICK:
+                        break;*/
+                    /*case ClickEvents.RSM_CLICK:
                         dashboardActivityContext.setToolBarTitle(getString(R.string.Sales));
-                        ((NewRSMFragment) getParentFragment()).title = getString(R.string.Sales);
+                        ((NewRSMTabFragment) getParentFragment()).title = getString(R.string.Sales);
                         cviRSMHeading.setVisibility(View.VISIBLE);
                         pos = (int) eventObject.getObject();
                         if (pos == 0) {
@@ -206,10 +210,32 @@ public class SalesPersonFragment extends BaseFragment {
                         tviAch.setText(rsmDataList.get(pos).getYTDPercentage().intValue() + "%");
                         type = 1;
                         showProgress(ProgressDialogTexts.LOADING);
-                        BackgroundExecutor.getInstance().execute(new SalesPersonListRequester(userId, "R1", "Sales", "", ""));
-                        break;
+                        BackgroundExecutor.getInstance().execute(new SalesPersonListRequester(rsmDataList.get(pos).getTMC(), "R2", "Sales", "", ""));
+                        break;*/
                     case Events.GET_SALES_PERSON_LIST_SUCCESSFULL:
                         dismissProgress();
+                        dashboardActivityContext.setToolBarTitle(getString(R.string.Sales));
+                        //((NewRSMTabFragment) getParentFragment()).title = getString(R.string.Sales);
+                        fullSalesModel = ((NewRSMTabFragment) getParentFragment()).salesPersonDataList;
+                        if (null != fullSalesModel) {
+                            cviRSMHeading.setVisibility(View.VISIBLE);
+                            pos = fullSalesModel.getPosition();
+                            if (pos == 0) {
+                                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                            } else if (pos == 1) {
+                                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                            } else if (pos == 2) {
+                                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                            } else if (pos % 2 == 0) {
+                                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                            } else if (pos % 2 == 1) {
+                                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                            }
+                            tviName.setText(fullSalesModel.getName());
+                            tviTarget.setText(BAMUtil.getRoundOffValue(fullSalesModel.getYTDTarget()));
+                            tviActual.setText(BAMUtil.getRoundOffValue(fullSalesModel.getYTD()));
+                            tviAch.setText(fullSalesModel.getYTDPercentage().intValue() + "%");
+                        }
                         try {
                             JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
                             FullSalesModel[] data = (FullSalesModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), FullSalesModel[].class);
@@ -263,7 +289,14 @@ public class SalesPersonFragment extends BaseFragment {
         viYTD.setVisibility(View.VISIBLE);
         viQTD.setVisibility(View.INVISIBLE);
         viMTD.setVisibility(View.INVISIBLE);
-        if (type == 0) {
+        if (null != fullSalesModel) {
+            tviTarget.setText(BAMUtil.getRoundOffValue(fullSalesModel.getYTDTarget()));
+            tviActual.setText(BAMUtil.getRoundOffValue(fullSalesModel.getYTD()));
+            tviAch.setText(fullSalesModel.getYTDPercentage().intValue() + "%");
+        }
+        initData("YTD");
+        adapter.notifyDataSetChanged();
+        /*if (type == 0) {
             initRSMData("YTD");
             rsmAdapter.notifyDataSetChanged();
         } else if (type == 1) {
@@ -272,7 +305,7 @@ public class SalesPersonFragment extends BaseFragment {
             tviAch.setText(rsmDataList.get(pos).getYTDPercentage().intValue() + "%");
             initData("YTD");
             adapter.notifyDataSetChanged();
-        }
+        }*/
     }
 
     @OnClick(R.id.tviQTD)
@@ -280,7 +313,14 @@ public class SalesPersonFragment extends BaseFragment {
         viYTD.setVisibility(View.INVISIBLE);
         viQTD.setVisibility(View.VISIBLE);
         viMTD.setVisibility(View.INVISIBLE);
-        if (type == 0) {
+        if (null != fullSalesModel) {
+            tviTarget.setText(BAMUtil.getRoundOffValue(fullSalesModel.getQTDTarget()));
+            tviActual.setText(BAMUtil.getRoundOffValue(fullSalesModel.getQTD()));
+            tviAch.setText(fullSalesModel.getQTDPercentage().intValue() + "%");
+        }
+        initData("QTD");
+        adapter.notifyDataSetChanged();
+        /*if (type == 0) {
             initRSMData("QTD");
             rsmAdapter.notifyDataSetChanged();
         } else if (type == 1) {
@@ -289,7 +329,7 @@ public class SalesPersonFragment extends BaseFragment {
             tviAch.setText(rsmDataList.get(pos).getQTDPercentage().intValue() + "%");
             initData("QTD");
             adapter.notifyDataSetChanged();
-        }
+        }*/
     }
 
     @OnClick(R.id.tviMTD)
@@ -297,7 +337,14 @@ public class SalesPersonFragment extends BaseFragment {
         viYTD.setVisibility(View.INVISIBLE);
         viQTD.setVisibility(View.INVISIBLE);
         viMTD.setVisibility(View.VISIBLE);
-        if (type == 0) {
+        if (null != fullSalesModel) {
+            tviTarget.setText(BAMUtil.getRoundOffValue(fullSalesModel.getMTDTarget()));
+            tviActual.setText(BAMUtil.getRoundOffValue(fullSalesModel.getMTD()));
+            tviAch.setText(fullSalesModel.getMTDPercentage().intValue() + "%");
+        }
+        initData("MTD");
+        adapter.notifyDataSetChanged();
+        /*if (type == 0) {
             initRSMData("MTD");
             rsmAdapter.notifyDataSetChanged();
         } else if (type == 1) {
@@ -306,11 +353,12 @@ public class SalesPersonFragment extends BaseFragment {
             tviAch.setText(rsmDataList.get(pos).getMTDPercentage().intValue() + "%");
             initData("MTD");
             adapter.notifyDataSetChanged();
-        }
+        }*/
     }
 
     @OnClick(R.id.iviRSMClose)
     public void RSMClose() {
+        ((NewRSMTabFragment) getParentFragment()).salesPersonDataList = null;
         cviRSMHeading.setVisibility(View.GONE);
         type = 1;
         showProgress(ProgressDialogTexts.LOADING);
