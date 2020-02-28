@@ -62,8 +62,8 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.ViewHolder> 
     public void onBindViewHolder(StateAdapter.ViewHolder holder, final int position) {
         holder.tviStateName.setText(position + 1 + ". " + dataList.get(position).getStateCode());
         holder.tviStateYTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
-        holder.tviStateQTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
-        holder.tviStateMTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
+        holder.tviStateQTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getQTD()));
+        holder.tviStateMTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getMTD()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +78,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.ViewHolder> 
                 salesCustomerModel.setStateCodeWise(selected);
                 //SharedPreferencesController.getInstance(mActivity).setFrom("2");
                 //SharedPreferencesController.getInstance(mActivity).setLocation(dataList.get(position).getCustName());
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.STATE_ITEM, salesCustomerModel));
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.STATE_SELECT, salesCustomerModel));
             }
         });
     }

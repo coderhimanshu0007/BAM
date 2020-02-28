@@ -9,6 +9,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class SalesCustomerModel  implements Parcelable {
+    @SerializedName("UserId")
+    @Expose
+    private String userId;
     @SerializedName("CustomerName")
     @Expose
     private String customerName;
@@ -32,6 +35,14 @@ public class SalesCustomerModel  implements Parcelable {
     private List<StateCodeWise> stateCodeWise = null;
 
     public SalesCustomerModel() {
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getCustomerName() {
@@ -156,6 +167,7 @@ public class SalesCustomerModel  implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.userId);
         dest.writeString(this.customerName);
         dest.writeDouble(this.yTD);
         dest.writeDouble(this.qTD);
@@ -165,6 +177,7 @@ public class SalesCustomerModel  implements Parcelable {
     }
 
     protected SalesCustomerModel(Parcel in) {
+        this.userId = in.readString();
         this.customerName = in.readString();
         this.yTD = in.readDouble();
         this.qTD = in.readDouble();

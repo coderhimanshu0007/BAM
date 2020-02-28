@@ -44,6 +44,8 @@ import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.FeedbackFragment;
 import com.teamcomputers.bam.Fragments.Installation.InstallationFragment;
 import com.teamcomputers.bam.Fragments.Logistics.LogisticsFragment;
+import com.teamcomputers.bam.Fragments.NewSalesReceivable.NewRSMFragment;
+import com.teamcomputers.bam.Fragments.NewSalesReceivable.NewSalesReceivableFragment;
 import com.teamcomputers.bam.Fragments.OrderProcessing.OrderProcessingFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
@@ -494,129 +496,184 @@ public class DashboardActivity extends BaseActivity {
                         fragment = new HomeFragment();
                         break;
                     case Fragments.ORDERPROCESSING_FRAGMENTS:
-                        fragment = new OrderProcessingFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            fragment = new OrderProcessingFragment();
+                        }
                         break;
                     case Fragments.ORDERPROCESSING_FRAGMENTS1:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setOPPageNo(0);
-                        fragment = new OrderProcessingFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setOPPageNo(0);
+                            fragment = new OrderProcessingFragment();
+                        }
                         break;
                     case Fragments.ORDERPROCESSING_FRAGMENTS2:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setOPPageNo(1);
-                        fragment = new OrderProcessingFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setOPPageNo(1);
+                            fragment = new OrderProcessingFragment();
+                        }
                         break;
                     case Fragments.ORDERPROCESSING_FRAGMENTS3:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setOPPageNo(2);
-                        fragment = new OrderProcessingFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setOPPageNo(2);
+                            fragment = new OrderProcessingFragment();
+                        }
                         break;
                     case Fragments.ORDERPROCESSING_FRAGMENTS4:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setOPPageNo(3);
-                        fragment = new OrderProcessingFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setOPPageNo(3);
+                            fragment = new OrderProcessingFragment();
+                        }
                         break;
                     case Fragments.PURCHASE_FRAGMENTS:
-                        //fragment = new PurchaseFragments();
-                        showToast(ToastTexts.WORK_PROGRESS);
+                        if (!userProfile.getSBU().equals("WS")) {
+                            //fragment = new PurchaseFragments();
+                            showToast(ToastTexts.WORK_PROGRESS);
+                        }
                         break;
                     case Fragments.PURCHASE_FRAGMENTS1:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setPurchasePageNo(0);
-                        //fragment = new PurchaseFragments();
-                        showToast(ToastTexts.WORK_PROGRESS);
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setPurchasePageNo(0);
+                            //fragment = new PurchaseFragments();
+                            showToast(ToastTexts.WORK_PROGRESS);
+                        }
                         break;
                     case Fragments.PURCHASE_FRAGMENTS2:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setPurchasePageNo(1);
-                        //fragment = new PurchaseFragments();
-                        showToast(ToastTexts.WORK_PROGRESS);
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setPurchasePageNo(1);
+                            //fragment = new PurchaseFragments();
+                            showToast(ToastTexts.WORK_PROGRESS);
+                        }
                         break;
                     case Fragments.PURCHASE_FRAGMENTS3:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setPurchasePageNo(2);
-                        //fragment = new PurchaseFragments();
-                        showToast(ToastTexts.WORK_PROGRESS);
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setPurchasePageNo(2);
+                            //fragment = new PurchaseFragments();
+                            showToast(ToastTexts.WORK_PROGRESS);
+                        }
                         break;
                     case Fragments.PURCHASE_FRAGMENTS4:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setPurchasePageNo(3);
-                        //fragment = new PurchaseFragments();
-                        showToast(ToastTexts.WORK_PROGRESS);
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setPurchasePageNo(3);
+                            //fragment = new PurchaseFragments();
+                            showToast(ToastTexts.WORK_PROGRESS);
+                        }
                         break;
                     case Fragments.LOGISTICS_FRAGMENTS:
-                        fragment = new LogisticsFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            fragment = new LogisticsFragment();
+                        }
                         break;
                     case Fragments.LOGISTICS_FRAGMENTS1:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setLogisticPageNo(0);
-                        fragment = new LogisticsFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setLogisticPageNo(0);
+                            fragment = new LogisticsFragment();
+                        }
                         break;
                     case Fragments.LOGISTICS_FRAGMENTS2:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setLogisticPageNo(1);
-                        fragment = new LogisticsFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setLogisticPageNo(1);
+                            fragment = new LogisticsFragment();
+                        }
                         break;
                     case Fragments.LOGISTICS_FRAGMENTS3:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setLogisticPageNo(2);
-                        fragment = new LogisticsFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setLogisticPageNo(2);
+                            fragment = new LogisticsFragment();
+                        }
                         break;
                     case Fragments.LOGISTICS_FRAGMENTS4:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setLogisticPageNo(3);
-                        fragment = new LogisticsFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setLogisticPageNo(3);
+                            fragment = new LogisticsFragment();
+                        }
                         break;
                     case Fragments.INSTALLATION_FRAGMENTS:
-                        fragment = new InstallationFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            fragment = new InstallationFragment();
+                        }
                         break;
                     case Fragments.INSTALLATION_FRAGMENTS1:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setInstallationPageNo(0);
-                        fragment = new InstallationFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setInstallationPageNo(0);
+                            fragment = new InstallationFragment();
+                        }
                         break;
                     case Fragments.INSTALLATION_FRAGMENTS2:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setInstallationPageNo(1);
-                        fragment = new InstallationFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setInstallationPageNo(1);
+                            fragment = new InstallationFragment();
+                        }
                         break;
                     case Fragments.INSTALLATION_FRAGMENTS3:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setInstallationPageNo(2);
-                        fragment = new InstallationFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setInstallationPageNo(2);
+                            fragment = new InstallationFragment();
+                        }
                         break;
                     case Fragments.INSTALLATION_FRAGMENTS4:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setInstallationPageNo(3);
-                        fragment = new InstallationFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setInstallationPageNo(3);
+                            fragment = new InstallationFragment();
+                        }
                         break;
                     case Fragments.COLLECTION_FRAGMENTS:
-                        //fragment = new CollectionFragment();
-                        showToast(ToastTexts.WORK_PROGRESS);
+                        if (!userProfile.getSBU().equals("WS")) {
+                            //fragment = new CollectionFragment();
+                            showToast(ToastTexts.WORK_PROGRESS);
+                        }
                         break;
                     case Fragments.COLLECTION_FRAGMENTS1:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setCollectionPageNo(0);
-                        //fragment = new CollectionFragment();
-                        showToast(ToastTexts.WORK_PROGRESS);
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setCollectionPageNo(0);
+                            //fragment = new CollectionFragment();
+                            showToast(ToastTexts.WORK_PROGRESS);
+                        }
                         break;
                     case Fragments.COLLECTION_FRAGMENTS2:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setCollectionPageNo(1);
-                        //fragment = new CollectionFragment();
-                        showToast(ToastTexts.WORK_PROGRESS);
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setCollectionPageNo(1);
+                            //fragment = new CollectionFragment();
+                            showToast(ToastTexts.WORK_PROGRESS);
+                        }
                         break;
                     case Fragments.COLLECTION_FRAGMENTS3:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setCollectionPageNo(2);
-                        //fragment = new CollectionFragment();
-                        showToast(ToastTexts.WORK_PROGRESS);
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setCollectionPageNo(2);
+                            //fragment = new CollectionFragment();
+                            showToast(ToastTexts.WORK_PROGRESS);
+                        }
                         break;
                     case Fragments.COLLECTION_FRAGMENTS4:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setCollectionPageNo(3);
-                        //fragment = new CollectionFragment();
-                        showToast(ToastTexts.WORK_PROGRESS);
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setCollectionPageNo(3);
+                            //fragment = new CollectionFragment();
+                            showToast(ToastTexts.WORK_PROGRESS);
+                        }
                         break;
                     case Fragments.OTHERS_FRAGMENTS:
                         showToast(ToastTexts.WORK_PROGRESS);
                         break;
                     case Fragments.SR_FRAGMENTS:
-                        fragment = new SalesReceivableFragment();
+                        //fragment = new SalesReceivableFragment();
+                        fragment = new NewSalesReceivableFragment();
                         break;
                     case Fragments.SR_FRAGMENTS1:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setSalesReceivablePageNo(0);
-                        fragment = new SalesReceivableFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSalesReceivablePageNo(0);
+                            fragment = new SalesReceivableFragment();
+                        }
                         break;
                     case Fragments.SR_FRAGMENTS2:
-                        SharedPreferencesController.getInstance(dashboardActivityContext).setSalesReceivablePageNo(1);
-                        fragment = new SalesReceivableFragment();
+                        if (!userProfile.getSBU().equals("WS")) {
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSalesReceivablePageNo(1);
+                            fragment = new SalesReceivableFragment();
+                        }
                         break;
                     case Fragments.FEEDBACK_FRAGMENTS:
                         fragment = new FeedbackFragment();
                         break;
                     case Fragments.SALES_ANALYSIS_FRAGMENT:
-                        fragment = new RSMFragment();
+                        fragment = new NewRSMFragment();
                         break;
                     case Fragments.ACCOUNT_FRAGMENT:
                         fragment = new AccountsFragment();
@@ -690,24 +747,26 @@ public class DashboardActivity extends BaseActivity {
         View v = fragment.getView();
         //View v = dashboardActivityContext.getWindow().getCurrentFocus();
         //View v = findViewById(android.R.id.content).getRootView();
-        v.setDrawingCacheEnabled(true);
-        Bitmap b = v.getDrawingCache();
-        String mPath = Environment.getExternalStorageDirectory().toString() + "/" + refreshDate + ".jpeg";
-        File myPath = null;
-        myPath = new File(mPath);
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(myPath);
-            b.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            fos.flush();
-            fos.close();
-            MediaStore.Images.Media.insertImage(getContentResolver(), b, "Screen", "screen");
-            shareIt(myPath);
-            //openScreenshot(myPath);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (null != v) {
+            v.setDrawingCacheEnabled(true);
+            Bitmap b = v.getDrawingCache();
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + refreshDate + ".jpeg";
+            File myPath = null;
+            myPath = new File(mPath);
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(myPath);
+                b.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                fos.flush();
+                fos.close();
+                MediaStore.Images.Media.insertImage(getContentResolver(), b, "Screen", "screen");
+                shareIt(myPath);
+                //openScreenshot(myPath);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -11,6 +11,7 @@
     <color name="start_header_color_bg_op">#287045FD</color>
     <color name="end_header_color_bg">#00ACED</color>
     <color name="start_home_color_bg">#684CFC</color>
+    <color name="start_home_color_opa_bg">#60684CFC</color>
     <color name="end_color_bg">#3CB6F9</color>
     <color name="login_btn_color">#02AAED</color>
 
@@ -44,7 +45,11 @@
     <color name="color_heading_bg">#F7F7F7</color>
     <color name="color_heading">#96A3A8</color>
     <color name="color_value">#333333</color>
+    <color name="color_value_54">#54333333</color>
     <color name="color_border_bg">#EDEDED</color>
+
+    <color name="color_btn_bg">#004181</color>
+    <color name="color_td">#1093FF</color>
 
     <color name="color_sr_start">#E5455D</color>
     <color name="color_sr_end">#F6886F</color>
@@ -53,5 +58,13 @@
     <color name="color_second_item_value">#EDEDF4</color>
     <color name="color_third_item_value">#CD7F32</color>
     <color name="text">#287045FD</color>
+
+    <color name="color_progress_background">#20FFFFFF</color>
+    <color name="color_progress_start">#F01414</color>
+    <color name="color_progress_mid">#E69C38</color>
+    <color name="color_progress_end">#6DB371</color>
+
+    <color name="shader">#33000000</color>
+    <color name="divider_color">#25434343</color>
 
 </resources>

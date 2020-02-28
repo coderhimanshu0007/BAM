@@ -57,7 +57,7 @@ public class YTDQTDModel {
 
     }
 
-    public class YTD {
+    public static class YTD {
 
         @SerializedName("Name")
         @Expose
@@ -65,6 +65,14 @@ public class YTDQTDModel {
         @SerializedName("Value")
         @Expose
         private Double value;
+
+        public YTD() {
+        }
+
+        public YTD(String name, Double value) {
+            this.name = name;
+            this.value = value;
+        }
 
         public String getName() {
             return name;
