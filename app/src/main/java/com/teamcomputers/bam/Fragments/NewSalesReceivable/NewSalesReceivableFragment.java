@@ -294,7 +294,17 @@ public class NewSalesReceivableFragment extends BaseFragment {
             Bundle rsmDataBundle = new Bundle();
             rsmDataBundle.putString(NewRSMTabFragment.USER_ID, userId);
             rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+            dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
+        } else if (level.equals("R2") || level.equals("R3")) {
+            Bundle rsmDataBundle = new Bundle();
+            rsmDataBundle.putString(NewRSMTabFragment.USER_ID, userId);
+            rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
             dashboardActivityContext.replaceFragment(Fragments.SALES_ANALYSIS_FRAGMENT, rsmDataBundle);
+        } else if (level.equals("R4")) {
+            Bundle rsmDataBundle = new Bundle();
+            rsmDataBundle.putString(NewRSMTabFragment.USER_ID, userId);
+            rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+            dashboardActivityContext.replaceFragment(Fragments.CUSTOMER_ANALYSIS_FRAGMENT, rsmDataBundle);
         }
         //EventBus.getDefault().post(new EventObject(Events.SALESANALYSIS, null));
     }

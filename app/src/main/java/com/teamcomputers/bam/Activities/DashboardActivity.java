@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.teamcomputers.bam.BAMApplication;
+import com.teamcomputers.bam.CustomView.CustomViewPager;
 import com.teamcomputers.bam.CustomView.TextViewCustom;
 import com.teamcomputers.bam.ExpandableRecyclerview.expandables.NavigationExpandable;
 import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItem;
@@ -51,7 +52,10 @@ import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.ProductFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.SalesReceivableFragment;
+import com.teamcomputers.bam.Fragments.SalesReceivableR2.NewSalesPersonTabFragment;
+import com.teamcomputers.bam.Fragments.SalesReceivableR4.NewCustomerTabFragment;
 import com.teamcomputers.bam.Fragments.home.HomeFragment;
+import com.teamcomputers.bam.Interface.BAMConstant;
 import com.teamcomputers.bam.Models.LoginModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
@@ -59,6 +63,7 @@ import com.teamcomputers.bam.Utils.CircularImageView;
 import com.teamcomputers.bam.Utils.WrapContentLinearLayoutManager;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
@@ -671,8 +676,14 @@ public class DashboardActivity extends BaseActivity {
                     case Fragments.FEEDBACK_FRAGMENTS:
                         fragment = new FeedbackFragment();
                         break;
-                    case Fragments.SALES_ANALYSIS_FRAGMENT:
+                    case Fragments.RSM_ANALYSIS_FRAGMENT:
                         fragment = new NewRSMTabFragment();
+                        break;
+                    case Fragments.SALES_ANALYSIS_FRAGMENT:
+                        fragment = new NewSalesPersonTabFragment();
+                        break;
+                    case Fragments.CUSTOMER_ANALYSIS_FRAGMENT:
+                        fragment = new NewCustomerTabFragment();
                         break;
                     case Fragments.ACCOUNT_FRAGMENT:
                         fragment = new AccountsFragment();
@@ -721,6 +732,10 @@ public class DashboardActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        /*if (fragment.getFragmentName().equals("NewCustomerTabFragment")) {
+            EventBus.getDefault().post(new EventObject(BAMConstant.BackpressEvents.R4_BACK_PRESS, null));
+        }*/
+
         if (fragment.getFragmentName().equals("HomeFragment")) {
             finish();
         }

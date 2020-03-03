@@ -833,7 +833,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="10dp"
-                                    android:text="Lorem ipsum is simply dummy text of the printing and typesetting industry."
+                                    android:text="Days sales outstanding (DSO) is a measure of the average number of days that it takes a company to collect payment after a sale has been made."
                                     android:textColor="@color/login_bg"
                                     android:textSize="10sp"
                                     app:fontFamily="@font/roboto" />

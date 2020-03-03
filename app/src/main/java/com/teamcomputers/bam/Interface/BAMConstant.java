@@ -205,10 +205,13 @@ public interface BAMConstant {
         int SR_FRAGMENTS1 = 1121;
         int SR_FRAGMENTS2 = 1122;
 
-        int SALES_ANALYSIS_FRAGMENT = 113;
+        int RSM_ANALYSIS_FRAGMENT = 113;
         int ACCOUNT_FRAGMENT = 114;
         int CUSTOMER_FRAGMENT = 115;
         int PRODUCT_FRAGMENT = 116;
+
+        int SALES_ANALYSIS_FRAGMENT = 117;
+        int CUSTOMER_ANALYSIS_FRAGMENT = 118;
     }
 
     interface ClickEvents {
@@ -220,5 +223,16 @@ public interface BAMConstant {
         int SP_CLICK = 206;
         int CUSTOMER_SELECT = 207;
         int STATE_SELECT = 208;
+    }
+
+    interface BackpressEvents {
+        int R1_BACK_PRESS = 301;
+        int R2_BACK_PRESS = 302;
+        int R3_BACK_PRESS = 303;
+        int R4_BACK_PRESS = 304;
+        /*int CUSTOMER_BACK_PRESS = 305;
+        int CUSTOMER_BACK_PRESS = 306;
+        int CUSTOMER_BACK_PRESS = 307;
+        int CUSTOMER_BACK_PRESS = 308;*/
     }
 }

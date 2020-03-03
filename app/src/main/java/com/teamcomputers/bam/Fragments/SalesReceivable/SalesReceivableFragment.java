@@ -342,7 +342,7 @@ public class SalesReceivableFragment extends BaseFragment {
             Bundle rsmDataBundle = new Bundle();
             rsmDataBundle.putString(RSMFragment.USER_ID, userId);
             rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-            dashboardActivityContext.replaceFragment(Fragments.SALES_ANALYSIS_FRAGMENT, rsmDataBundle);
+            dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
         }
         //EventBus.getDefault().post(new EventObject(Events.SALESANALYSIS, null));
     }
