@@ -16,12 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -36,7 +38,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.teamcomputers.bam.BAMApplication;
-import com.teamcomputers.bam.CustomView.CustomViewPager;
 import com.teamcomputers.bam.CustomView.TextViewCustom;
 import com.teamcomputers.bam.ExpandableRecyclerview.expandables.NavigationExpandable;
 import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItem;
@@ -54,8 +55,11 @@ import com.teamcomputers.bam.Fragments.SalesReceivable.ProductFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.SalesReceivableFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivableR2.NewSalesPersonTabFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivableR4.NewCustomerTabFragment;
+import com.teamcomputers.bam.Fragments.WSPages.WSCustomerFragment;
+import com.teamcomputers.bam.Fragments.WSPages.WSProductFragment;
+import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
+import com.teamcomputers.bam.Fragments.WSPages.WSSalesPersonFragment;
 import com.teamcomputers.bam.Fragments.home.HomeFragment;
-import com.teamcomputers.bam.Interface.BAMConstant;
 import com.teamcomputers.bam.Models.LoginModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
@@ -63,7 +67,6 @@ import com.teamcomputers.bam.Utils.CircularImageView;
 import com.teamcomputers.bam.Utils.WrapContentLinearLayoutManager;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
@@ -80,6 +83,8 @@ import butterknife.OnClick;
 
 public class DashboardActivity extends BaseActivity {
     public static final String IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED = "IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED";
+    @BindView(R.id.llWSTabs)
+    LinearLayout llWSTabs;
     @BindView(R.id.claMain)
     CoordinatorLayout claMain;
     @BindView(R.id.iviToolbarLogo)
@@ -109,6 +114,8 @@ public class DashboardActivity extends BaseActivity {
     private Handler drawerHandler = new Handler();
     private AppBarConfiguration mAppBarConfiguration;
 
+    public String userId = "", level = "";
+
     @Override
     protected int getLayout() {
         return R.layout.activity_dashboard;
@@ -137,7 +144,9 @@ public class DashboardActivity extends BaseActivity {
                         replaceFragment(Fragments.COLLECTION_FRAGMENTS, new Bundle());
                         break;
                     case Events.WS:
-                        replaceFragment(Fragments.SR_FRAGMENTS, new Bundle());
+                        Bundle srBundle = new Bundle();
+                        srBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        replaceFragment(Fragments.SR_FRAGMENTS, srBundle);
                         break;
                     case Events.OTHERS:
                         replaceFragment(Fragments.OTHERS_FRAGMENTS, new Bundle());
@@ -244,7 +253,9 @@ public class DashboardActivity extends BaseActivity {
 
     @OnClick(R.id.ll_SR)
     public void SR() {
-        replaceFragment(Fragments.SR_FRAGMENTS, new Bundle());
+        Bundle srBundle = new Bundle();
+        srBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        replaceFragment(Fragments.SR_FRAGMENTS, srBundle);
     }
 
     @OnClick(R.id.ll_favourits)
@@ -694,6 +705,18 @@ public class DashboardActivity extends BaseActivity {
                     case Fragments.PRODUCT_FRAGMENT:
                         fragment = new ProductFragment();
                         break;
+                    case Fragments.WS_RSM_FRAGMENT:
+                        fragment = new WSRSMFragment();
+                        break;
+                    case Fragments.WS_ACCOUNT_FRAGMENT:
+                        fragment = new WSSalesPersonFragment();
+                        break;
+                    case Fragments.WS_CUSTOMER_FRAGMENT:
+                        fragment = new WSCustomerFragment();
+                        break;
+                    case Fragments.WS_PRODUCT_FRAGMENT:
+                        fragment = new WSProductFragment();
+                        break;
                     default:
                         fragment = new HomeFragment();
                         break;
@@ -732,10 +755,6 @@ public class DashboardActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        /*if (fragment.getFragmentName().equals("NewCustomerTabFragment")) {
-            EventBus.getDefault().post(new EventObject(BAMConstant.BackpressEvents.R4_BACK_PRESS, null));
-        }*/
-
         if (fragment.getFragmentName().equals("HomeFragment")) {
             finish();
         }
@@ -800,6 +819,144 @@ public class DashboardActivity extends BaseActivity {
         Uri uri = Uri.fromFile(imageFile);
         intent.setDataAndType(uri, "image/*");
         startActivity(intent);
+    }
+
+    @BindView(R.id.llRSM_Nav_tab)
+    LinearLayout llRSM_Nav_tab;
+    @BindView(R.id.llSP_Nav_tab)
+    LinearLayout llSP_Nav_tab;
+
+    @BindView(R.id.iviRSMNav_icon)
+    ImageView iviRSMNav_icon;
+    @BindView(R.id.tviRSM_Nav_label)
+    TextView tviRSM_Nav_label;
+    @BindView(R.id.iviSP_Nav_icon)
+    ImageView iviSP_Nav_icon;
+    @BindView(R.id.tviSP_Nav_label)
+    TextView tviSP_Nav_label;
+    @BindView(R.id.iviCustomer_Nav_icon)
+    ImageView iviCustomer_Nav_icon;
+    @BindView(R.id.tviCustomer_Nav_label)
+    TextView tviCustomer_Nav_label;
+    @BindView(R.id.iviProduct_Nav_icon)
+    ImageView iviProduct_Nav_icon;
+    @BindView(R.id.tviProduct_Nav_label)
+    TextView tviProduct_Nav_label;
+
+    public void showTab(String level) {
+        if (level.equals("R1") || level.equals("R2") || level.equals("R4"))
+            llWSTabs.setVisibility(View.VISIBLE);
+    }
+
+    public void hideTab() {
+        llWSTabs.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.llRSM_Nav_tab)
+    public void RSMNavClick() {
+        //rSMClick();
+        Bundle rsmDataBundle = new Bundle();
+        rsmDataBundle.putString(WSRSMFragment.USER_ID, userId);
+        rsmDataBundle.putString(WSRSMFragment.USER_LEVEL, level);
+        rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
+        dashboardActivityContext.replaceFragment(Fragments.WS_RSM_FRAGMENT, rsmDataBundle);
+    }
+
+    @OnClick(R.id.llSP_Nav_tab)
+    public void SPNavClick() {
+        //sPClick();
+        Bundle spDataBundle = new Bundle();
+        spDataBundle.putString(WSSalesPersonFragment.USER_ID, userId);
+        spDataBundle.putString(WSSalesPersonFragment.USER_LEVEL, level);
+        spDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
+        dashboardActivityContext.replaceFragment(Fragments.WS_ACCOUNT_FRAGMENT, spDataBundle);
+    }
+
+    @OnClick(R.id.llCustomer_Nav_tab)
+    public void CustomerNavClick() {
+        //customerClick();
+        Bundle customerDataBundle = new Bundle();
+        customerDataBundle.putString(WSCustomerFragment.USER_ID, userId);
+        customerDataBundle.putString(WSCustomerFragment.USER_LEVEL, level);
+        customerDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
+        dashboardActivityContext.replaceFragment(Fragments.WS_CUSTOMER_FRAGMENT, customerDataBundle);
+    }
+
+    @OnClick(R.id.llProduct_Nav_tab)
+    public void ProductNavClick() {
+        //productClick();
+        Bundle productDataBundle = new Bundle();
+        productDataBundle.putString(WSProductFragment.USER_ID, userId);
+        productDataBundle.putString(WSProductFragment.USER_LEVEL, level);
+        productDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
+        dashboardActivityContext.replaceFragment(Fragments.WS_PRODUCT_FRAGMENT, productDataBundle);
+    }
+
+    public void rSMClick(String level) {
+        tviRSM_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
+        iviRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviSP_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviSP_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviCustomer_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviCustomer_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+    }
+
+    public void sPClick(String level) {
+        if (level.equals("R2") || level.equals("R3")) {
+            llRSM_Nav_tab.setVisibility(View.GONE);
+        }
+        tviRSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviSP_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
+        iviSP_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviCustomer_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviCustomer_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+    }
+
+    public void customerClick(String level) {
+        if (level.equals("R4")) {
+            llRSM_Nav_tab.setVisibility(View.GONE);
+            llSP_Nav_tab.setVisibility(View.GONE);
+        }
+        tviRSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviSP_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviSP_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviCustomer_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
+        iviCustomer_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+    }
+
+    public void productClick(String level) {
+        tviRSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviSP_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviSP_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviCustomer_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviCustomer_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviProduct_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
+        iviProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
 }

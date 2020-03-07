@@ -152,6 +152,10 @@ public class HTTPOperationController implements BAMConstant {
         return ConnectionUtil.execute(getApiInterface().fullSalesList(userId, level, type, customer, stateCode));
     }
 
+    public static ApiResponse filterSalesList(String userId, String level, String type, String RSM, String sales, String customer, String stateCode, String product) {
+        return ConnectionUtil.execute(getApiInterface().filterSalesList(userId, level, type, RSM, sales, customer, stateCode, product));
+    }
+
     public static ApiResponse yTDQTD(String userId) {
         return ConnectionUtil.execute(getApiInterface().yTDQTD(userId));
     }

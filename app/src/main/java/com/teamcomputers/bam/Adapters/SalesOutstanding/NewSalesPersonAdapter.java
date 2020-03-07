@@ -25,15 +25,20 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder> {
+public class NewSalesPersonAdapter extends RecyclerView.Adapter<NewSalesPersonAdapter.ViewHolder> {
     private List<FullSalesModel> dataList;
     Activity mActivity;
-    String type;
+    String type, level;
+    boolean fromRSM, fromCustomer, fromProduct;
 
-    public NewRSMAdapter(DashboardActivity dashboardActivityContext, String type, List<FullSalesModel> data) {
+    public NewSalesPersonAdapter(DashboardActivity dashboardActivityContext, String type, String level, List<FullSalesModel> data, boolean fromRSM, boolean fromCustomer, boolean fromProduct) {
         this.dataList = data;
         this.type = type;
+        this.level = level;
         this.mActivity = dashboardActivityContext;
+        this.fromRSM = fromRSM;
+        this.fromCustomer = fromCustomer;
+        this.fromProduct = fromProduct;
     }
 
     public void setItems(List<FullSalesModel> data) {
@@ -59,7 +64,7 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
     }
 
     @Override
-    public NewRSMAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NewSalesPersonAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sales_person_recyclerview_layout, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(view);
@@ -67,7 +72,7 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(NewRSMAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(NewSalesPersonAdapter.ViewHolder holder, final int position) {
         if (position == 0) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_first_item_value));
         } else if (position == 1) {
@@ -85,20 +90,20 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
         if (type.equals("YTD")) {
             target = BAMUtil.getRoundOffValue(dataList.get(position).getYTDTarget());
             actual = BAMUtil.getRoundOffValue(dataList.get(position).getYTD());
-            bar = (dataList.get(position).getYTDPercentage()).intValue();
+            //bar = (dataList.get(position).getYTDPercentage()).intValue();
         } else if (type.equals("QTD")) {
             target = BAMUtil.getRoundOffValue(dataList.get(position).getQTDTarget());
             actual = BAMUtil.getRoundOffValue(dataList.get(position).getQTD());
-            bar = (dataList.get(position).getQTDPercentage()).intValue();
+            //bar = (dataList.get(position).getQTDPercentage()).intValue();
         } else if (type.equals("MTD")) {
             target = BAMUtil.getRoundOffValue(dataList.get(position).getMTDTarget());
             actual = BAMUtil.getRoundOffValue(dataList.get(position).getMTD());
-            bar = (dataList.get(position).getMTDPercentage()).intValue();
+            //bar = (dataList.get(position).getMTDPercentage()).intValue();
         }
         holder.tviTarget.setText(target);
         holder.tviActual.setText(actual);
 
-
+        bar = (dataList.get(position).getYTDPercentage()).intValue();
         holder.tviACH.setText(bar + "%");
         holder.pBar.setProgress(bar);
 
@@ -109,6 +114,13 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
         } else if (bar >= 70) {
             holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
         }
+
+        if (level.equals("R2") || level.equals("R3")) {
+            if (fromCustomer && fromProduct) {
+                holder.iviOption.setVisibility(View.GONE);
+            }
+        }
+
         holder.iviOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +128,15 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
                 PopupMenu popup = new PopupMenu(mActivity, holder.iviOption);
                 //inflating menu from xml resource
                 popup.inflate(R.menu.options_menu);
+                if (level.equals("R2") || level.equals("R3")) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    if (fromCustomer) {
+                        popup.getMenu().getItem(2).setVisible(false);
+                    } else if (fromProduct) {
+                        popup.getMenu().getItem(3).setVisible(false);
+                    }
+                }
                 //adding click listener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -129,9 +150,11 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
                                 break;
                             case R.id.menu3:
                                 //handle menu3 click
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataList.get(position)));
                                 break;
                             case R.id.menu4:
                                 //handle menu3 click
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, dataList.get(position)));
                                 break;
                         }
                         return false;
@@ -144,9 +167,7 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, position));
-                dataList.get(position).setPosition(position);
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, dataList.get(position)));
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_CLICK, dataList.get(position)));
             }
         });
     }

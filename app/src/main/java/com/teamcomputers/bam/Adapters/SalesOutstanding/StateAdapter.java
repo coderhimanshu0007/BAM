@@ -78,7 +78,8 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.ViewHolder> 
                 salesCustomerModel.setStateCodeWise(selected);
                 //SharedPreferencesController.getInstance(mActivity).setFrom("2");
                 //SharedPreferencesController.getInstance(mActivity).setLocation(dataList.get(position).getCustName());
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.STATE_SELECT, salesCustomerModel));
+                //EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.STATE_SELECT, salesCustomerModel));
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.STATE_ITEM, salesCustomerModel));
             }
         });
     }

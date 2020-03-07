@@ -225,7 +225,7 @@ public class NewCustomerR4Fragment extends BaseFragment {
     }
 
     private void initData() {
-        adapter = new NewCustomerAdapter(dashboardActivityContext, userId, model);
+        adapter = new NewCustomerAdapter(dashboardActivityContext, userId, "", model, false,false, false);
         rviRSM.setAdapter(adapter);
     }
 }

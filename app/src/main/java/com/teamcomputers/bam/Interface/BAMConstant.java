@@ -151,6 +151,8 @@ public interface BAMConstant {
         int GET_FULL_PRODUCT_LIST_UNSUCCESSFULL = 101;
         int GET_SELECTED_PRODUCT_LIST_SUCCESSFULL = 102;
         int GET_SELECTED_PRODUCT_LIST_UNSUCCESSFULL = 103;
+        int GET_FILTER_SALES_LIST_SUCCESSFULL = 104;
+        int GET_FILTER_SALES_LIST_UNSUCCESSFULL = 105;
     }
 
     interface ToastTexts {
@@ -212,6 +214,11 @@ public interface BAMConstant {
 
         int SALES_ANALYSIS_FRAGMENT = 117;
         int CUSTOMER_ANALYSIS_FRAGMENT = 118;
+
+        int WS_RSM_FRAGMENT = 1001;
+        int WS_ACCOUNT_FRAGMENT = 1002;
+        int WS_CUSTOMER_FRAGMENT = 1003;
+        int WS_PRODUCT_FRAGMENT = 1004;
     }
 
     interface ClickEvents {
@@ -223,6 +230,10 @@ public interface BAMConstant {
         int SP_CLICK = 206;
         int CUSTOMER_SELECT = 207;
         int STATE_SELECT = 208;
+        int RSM_MENU_SELECT = 209;
+        int CUSTOMER_MENU_SELECT = 210;
+        int SP_MENU_SELECT = 211;
+        int PRODUCT_MENU_SELECT = 212;
     }
 
     interface BackpressEvents {

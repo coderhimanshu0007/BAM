@@ -159,6 +159,18 @@ public interface ApiInterface {
                                @Field("Customer") String customer,
                                @Field("StateCode") String stateCode);
 
+    // Full Sales List
+    @FormUrlEncoded
+    @POST("FilterSalesList")
+    Call<Object> filterSalesList(@Field("UserId") String userId,
+                                 @Field("Level") String level,
+                                 @Field("Type") String type,
+                                 @Field("RSM") String RSM,
+                                 @Field("Sales") String sales,
+                                 @Field("Customer") String customer,
+                                 @Field("StateCode") String stateCode,
+                                 @Field("Product") String product);
+
     // YTD QTD
     @FormUrlEncoded
     @POST("YTDQTD")

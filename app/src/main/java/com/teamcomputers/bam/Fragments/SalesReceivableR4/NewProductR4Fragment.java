@@ -295,7 +295,7 @@ public class NewProductR4Fragment extends BaseFragment {
     }
 
     private void initData(String type) {
-        adapter = new NewProductAdapter(dashboardActivityContext, type, model);
+        adapter = new NewProductAdapter(dashboardActivityContext, "", type, model, false, false, false);
         rviRSM.setAdapter(adapter);
     }
 }

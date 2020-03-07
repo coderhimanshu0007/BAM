@@ -21,6 +21,9 @@ import com.teamcomputers.bam.BAMApplication;
 import com.teamcomputers.bam.CustomView.CircularSeekBar;
 import com.teamcomputers.bam.CustomView.TextProgressBar;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Fragments.WSPages.WSCustomerFragment;
+import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
+import com.teamcomputers.bam.Fragments.WSPages.WSSalesPersonFragment;
 import com.teamcomputers.bam.Models.LoginModel;
 import com.teamcomputers.bam.Models.NewYTDQTDModel;
 import com.teamcomputers.bam.Models.SalesReceivableModel;
@@ -117,6 +120,7 @@ public class NewSalesReceivableFragment extends BaseFragment {
         //seek_bar.setProgress(250);
         tviDays.setText(String.valueOf(0));
         seek_bar.setCircleProgressColorGreen();
+        dashboardActivityContext.hideTab();
     }
 
     @Override
@@ -141,7 +145,7 @@ public class NewSalesReceivableFragment extends BaseFragment {
                         break;
                     case Events.GET_SALES_REFRESH_SUCCESSFULL:
                         dashboardActivityContext.updateDate(eventObject.getObject().toString());
-                        BackgroundExecutor.getInstance().execute(new SalesReceivableRequester(loginModel.getUserID()));
+                        BackgroundExecutor.getInstance().execute(new SalesReceivableRequester("6749"));
                         break;
                     case Events.GET_SALES_REFRESH_UNSUCCESSFULL:
                         dismissProgress();
@@ -166,6 +170,8 @@ public class NewSalesReceivableFragment extends BaseFragment {
 
                             userId = model.getUserId();
                             level = model.getLevel();
+                            dashboardActivityContext.userId = userId;
+                            dashboardActivityContext.level = level;
                             if (!level.equals("null")) {
                                 dataType = "RSM";
                                 tviTargetYTD.setText(BAMUtil.getRoundOffValue(model.getYTDTarget()));
@@ -293,18 +299,36 @@ public class NewSalesReceivableFragment extends BaseFragment {
         if (level.equals("R1")) {
             Bundle rsmDataBundle = new Bundle();
             rsmDataBundle.putString(NewRSMTabFragment.USER_ID, userId);
+            rsmDataBundle.putString(WSRSMFragment.USER_LEVEL, level);
             rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-            dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
+            //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
+            dashboardActivityContext.replaceFragment(Fragments.WS_RSM_FRAGMENT, rsmDataBundle);
         } else if (level.equals("R2") || level.equals("R3")) {
-            Bundle rsmDataBundle = new Bundle();
+            /*Bundle rsmDataBundle = new Bundle();
             rsmDataBundle.putString(NewRSMTabFragment.USER_ID, userId);
             rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-            dashboardActivityContext.replaceFragment(Fragments.SALES_ANALYSIS_FRAGMENT, rsmDataBundle);
+            dashboardActivityContext.replaceFragment(Fragments.SALES_ANALYSIS_FRAGMENT, rsmDataBundle);*/
+            Bundle rsmDataBundle = new Bundle();
+            rsmDataBundle.putString(WSSalesPersonFragment.USER_ID, userId);
+            rsmDataBundle.putString(WSSalesPersonFragment.USER_LEVEL, level);
+            rsmDataBundle.putParcelable(WSSalesPersonFragment.RSM_PROFILE, null);
+            rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+            dashboardActivityContext.replaceFragment(Fragments.WS_ACCOUNT_FRAGMENT, rsmDataBundle);
         } else if (level.equals("R4")) {
-            Bundle rsmDataBundle = new Bundle();
+            /*Bundle rsmDataBundle = new Bundle();
             rsmDataBundle.putString(NewRSMTabFragment.USER_ID, userId);
             rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-            dashboardActivityContext.replaceFragment(Fragments.CUSTOMER_ANALYSIS_FRAGMENT, rsmDataBundle);
+            dashboardActivityContext.replaceFragment(Fragments.CUSTOMER_ANALYSIS_FRAGMENT, rsmDataBundle);*/
+            Bundle spDataBundle = new Bundle();
+            spDataBundle.putString(WSCustomerFragment.USER_ID, userId);
+            spDataBundle.putString(WSCustomerFragment.USER_LEVEL, level);
+            spDataBundle.putBoolean(WSCustomerFragment.FROM_RSM, false);
+            spDataBundle.putBoolean(WSCustomerFragment.FROM_SP, false);
+            spDataBundle.putBoolean(WSCustomerFragment.FROM_PRODUCT, false);
+            spDataBundle.putParcelable(WSCustomerFragment.RSM_PROFILE, null);
+            spDataBundle.putParcelable(WSCustomerFragment.SP_PROFILE, null);
+            spDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+            dashboardActivityContext.replaceFragment(Fragments.WS_CUSTOMER_FRAGMENT, spDataBundle);
         }
         //EventBus.getDefault().post(new EventObject(Events.SALESANALYSIS, null));
     }
