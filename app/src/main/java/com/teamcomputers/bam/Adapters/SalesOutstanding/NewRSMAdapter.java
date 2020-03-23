@@ -28,12 +28,17 @@ import java.util.List;
 public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder> {
     private List<FullSalesModel> dataList;
     Activity mActivity;
-    String type;
+    String type, level;
+    boolean fromSP, fromCustomer, fromProduct;
 
-    public NewRSMAdapter(DashboardActivity dashboardActivityContext, String type, List<FullSalesModel> data) {
+    public NewRSMAdapter(DashboardActivity dashboardActivityContext, String type, String level, List<FullSalesModel> data, boolean fromSP, boolean fromCustomer, boolean fromProduct) {
         this.dataList = data;
         this.type = type;
+        this.level = level;
         this.mActivity = dashboardActivityContext;
+        this.fromSP = fromSP;
+        this.fromCustomer = fromCustomer;
+        this.fromProduct = fromProduct;
     }
 
     public void setItems(List<FullSalesModel> data) {
@@ -109,6 +114,12 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
         } else if (bar >= 70) {
             holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
         }
+        if (level.equals("R1")) {
+            if (fromSP && fromCustomer && fromProduct) {
+                holder.iviOption.setVisibility(View.GONE);
+            }
+        }
+
         holder.iviOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +127,33 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
                 PopupMenu popup = new PopupMenu(mActivity, holder.iviOption);
                 //inflating menu from xml resource
                 popup.inflate(R.menu.options_menu);
+                if (level.equals("R1")) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    if (fromSP && fromCustomer) {
+                        popup.getMenu().getItem(1).setVisible(false);
+                        popup.getMenu().getItem(2).setVisible(false);
+                    } else if (fromSP && fromProduct) {
+                        popup.getMenu().getItem(1).setVisible(false);
+                        popup.getMenu().getItem(3).setVisible(false);
+                    } else if (fromCustomer && fromProduct) {
+                        popup.getMenu().getItem(2).setVisible(false);
+                        popup.getMenu().getItem(3).setVisible(false);
+                    } else if (fromSP) {
+                        popup.getMenu().getItem(1).setVisible(false);
+                    } else if (fromCustomer) {
+                        popup.getMenu().getItem(2).setVisible(false);
+                    } else if (fromProduct) {
+                        popup.getMenu().getItem(3).setVisible(false);
+                    }
+                } else if (level.equals("R2") || level.equals("R3")) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    if (fromCustomer) {
+                        popup.getMenu().getItem(2).setVisible(false);
+                    } else if (fromProduct) {
+                        popup.getMenu().getItem(3).setVisible(false);
+                    }
+                }
                 //adding click listener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -126,12 +164,18 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click
+                                dataList.get(position).setPosition(position);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, dataList.get(position)));
                                 break;
                             case R.id.menu3:
                                 //handle menu3 click
+                                dataList.get(position).setPosition(position);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataList.get(position)));
                                 break;
                             case R.id.menu4:
                                 //handle menu3 click
+                                dataList.get(position).setPosition(position);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, dataList.get(position)));
                                 break;
                         }
                         return false;

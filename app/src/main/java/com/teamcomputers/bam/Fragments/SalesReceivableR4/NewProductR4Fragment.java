@@ -283,7 +283,7 @@ public class NewProductR4Fragment extends BaseFragment {
         adapter.notifyDataSetChanged();
     }
 
-    @OnClick(R.id.iviProductClose)
+    @OnClick(R.id.iviR1Close)
     public void productClose() {
         llTabHeading.setVisibility(View.VISIBLE);
         cviProductHeading.setVisibility(View.GONE);

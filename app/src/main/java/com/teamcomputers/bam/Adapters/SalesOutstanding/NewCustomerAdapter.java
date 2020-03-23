@@ -110,7 +110,11 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
         } else if (bar >= 70) {
             holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
         }
-        if (level.equals("R2") || level.equals("R3")) {
+        if (level.equals("R1")) {
+            if (fromRSM && fromSP && fromProduct) {
+                holder.iviOption.setVisibility(View.GONE);
+            }
+        } else if (level.equals("R2") || level.equals("R3")) {
             if (fromSP && fromProduct) {
                 holder.iviOption.setVisibility(View.GONE);
             }
@@ -131,6 +135,22 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
                 popup.inflate(R.menu.options_menu);
                 if (level.equals("R1")) {
                     popup.getMenu().getItem(2).setVisible(false);
+                    if (fromSP && fromProduct) {
+                        popup.getMenu().getItem(1).setVisible(false);
+                        popup.getMenu().getItem(3).setVisible(false);
+                    } else if (fromSP && fromRSM) {
+                        popup.getMenu().getItem(0).setVisible(false);
+                        popup.getMenu().getItem(1).setVisible(false);
+                    } else if (fromProduct && fromRSM) {
+                        popup.getMenu().getItem(0).setVisible(false);
+                        popup.getMenu().getItem(3).setVisible(false);
+                    } else if (fromSP) {
+                        popup.getMenu().getItem(1).setVisible(false);
+                    } else if (fromProduct) {
+                        popup.getMenu().getItem(2).setVisible(false);
+                    } else if (fromRSM) {
+                        popup.getMenu().getItem(0).setVisible(false);
+                    }
                 } else if (level.equals("R2") || level.equals("R3")) {
                     popup.getMenu().getItem(0).setVisible(false);
                     popup.getMenu().getItem(2).setVisible(false);
@@ -151,6 +171,8 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
                         switch (item.getItemId()) {
                             case R.id.menu1:
                                 //handle menu1 click
+                                dataList.get(position).setUserId(userId);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataList.get(position)));
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click

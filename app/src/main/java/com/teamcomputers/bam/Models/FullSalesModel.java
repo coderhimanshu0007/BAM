@@ -10,6 +10,9 @@ public class FullSalesModel implements Parcelable {
     @SerializedName("TMC")
     @Expose
     private String tMC;
+    @SerializedName("Code")
+    @Expose
+    private String code;
     @SerializedName("Name")
     @Expose
     private String name;
@@ -51,6 +54,15 @@ public class FullSalesModel implements Parcelable {
     public void setTMC(String tMC) {
         this.tMC = tMC;
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
 
     public String getName() {
         return name;
@@ -149,6 +161,7 @@ public class FullSalesModel implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.tMC);
+        dest.writeString(this.code);
         dest.writeString(this.name);
         dest.writeDouble(this.yTD);
         dest.writeDouble(this.qTD);
@@ -164,6 +177,7 @@ public class FullSalesModel implements Parcelable {
 
     protected FullSalesModel(Parcel in) {
         this.tMC = in.readString();
+        this.code = in.readString();
         this.name = in.readString();
         this.yTD = in.readDouble();
         this.qTD = in.readDouble();

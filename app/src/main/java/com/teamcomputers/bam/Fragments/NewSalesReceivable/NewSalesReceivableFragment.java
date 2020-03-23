@@ -145,7 +145,7 @@ public class NewSalesReceivableFragment extends BaseFragment {
                         break;
                     case Events.GET_SALES_REFRESH_SUCCESSFULL:
                         dashboardActivityContext.updateDate(eventObject.getObject().toString());
-                        BackgroundExecutor.getInstance().execute(new SalesReceivableRequester("6749"));
+                        BackgroundExecutor.getInstance().execute(new SalesReceivableRequester(loginModel.getUserID()));
                         break;
                     case Events.GET_SALES_REFRESH_UNSUCCESSFULL:
                         dismissProgress();

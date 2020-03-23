@@ -54,7 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BAMConst
 
     private void initProgressDialog(String message) {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(true);
+        progressDialog.setCancelable(false);
         progressDialog.setMessage(message);
     }
 

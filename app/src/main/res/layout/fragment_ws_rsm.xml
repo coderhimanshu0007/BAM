@@ -7,7 +7,6 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llTabHeading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
@@ -117,7 +116,7 @@
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cviProductHeading"
+                    android:id="@+id/cviRSMHeading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -130,7 +129,7 @@
                     app:cardCornerRadius="5dp">
 
                     <LinearLayout
-                        android:id="@+id/llProductLayout"
+                        android:id="@+id/llRSMLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/color_first_item_value"
@@ -193,7 +192,6 @@
                                         android:id="@+id/tviR1StateName"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_centerVertical="true"
                                         android:layout_toLeftOf="@+id/iviR1Close"
                                         android:textColor="@color/color_value"
                                         android:textSize="14sp"
@@ -230,6 +228,7 @@
                                         android:id="@+id/tviR2StateName"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
                                         android:layout_centerVertical="true"
                                         android:layout_toLeftOf="@+id/iviR2Close"
                                         android:textColor="@color/color_value"
@@ -267,12 +266,14 @@
                                         android:id="@+id/tviR3StateName"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
                                         android:layout_centerVertical="true"
                                         android:layout_toLeftOf="@+id/iviR3Close"
                                         android:textColor="@color/color_value"
                                         android:textSize="14sp"
                                         app:fontFamily="@font/roboto_bold" />
                                 </RelativeLayout>
+
                             </LinearLayout>
                         </RelativeLayout>
 
@@ -296,11 +297,12 @@
                                 android:padding="7dp">
 
                                 <TextView
+                                    android:id="@+id/tviTargetHeading"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:gravity="center"
-                                    android:text="YTD"
+                                    android:text="TARGET"
                                     android:textColor="@color/color_value"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
@@ -332,11 +334,12 @@
                                 android:padding="7dp">
 
                                 <TextView
+                                    android:id="@+id/tviActualHeading"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:gravity="center"
-                                    android:text="QTD"
+                                    android:text="ACTUAL"
                                     android:textColor="@color/color_value"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
@@ -367,11 +370,12 @@
                                 android:padding="7dp">
 
                                 <TextView
+                                    android:id="@+id/tviAchHeading"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:gravity="center"
-                                    android:text="MTD"
+                                    android:text="ACH%"
                                     android:textColor="@color/color_value"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
@@ -382,7 +386,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:gravity="center"
-                                    android:text="66.25"
+                                    android:text="66.25%"
                                     android:textColor="@color/color_value"
                                     android:textSize="14sp"
                                     app:fontFamily="@font/roboto_bold" />
@@ -412,7 +416,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tviYtdHeading"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
@@ -427,7 +430,6 @@
                             app:fontFamily="@font/roboto_bold" />
 
                         <TextView
-                            android:id="@+id/tviQtdHeading"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
@@ -442,7 +444,6 @@
                             app:fontFamily="@font/roboto_bold" />
 
                         <TextView
-                            android:id="@+id/tviMtdHeading"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
@@ -464,7 +465,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="55dp"
                     android:scrollbars="none" />
             </LinearLayout>
         </ScrollView>

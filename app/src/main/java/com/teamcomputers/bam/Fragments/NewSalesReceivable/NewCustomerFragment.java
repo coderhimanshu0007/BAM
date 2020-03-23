@@ -216,7 +216,7 @@ public class NewCustomerFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
-    @OnClick(R.id.iviSPClose)
+    @OnClick(R.id.iviR1Close)
     public void SPClose() {
         ((NewRSMTabFragment) getParentFragment()).id = userId;
         cviSPHeading.setVisibility(View.GONE);

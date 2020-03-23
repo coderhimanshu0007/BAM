@@ -162,8 +162,8 @@ public class DashboardActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dashboardActivityContext = this;
         if (SharedPreferencesController.getInstance(dashboardActivityContext).isUserLoggedIn()) {
-            dashboardActivityContext = this;
             toolbar = (Toolbar) findViewById(R.id.tool_bar);
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayShowTitleEnabled(false);

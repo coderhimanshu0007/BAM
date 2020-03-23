@@ -114,8 +114,11 @@ public class NewSalesPersonAdapter extends RecyclerView.Adapter<NewSalesPersonAd
         } else if (bar >= 70) {
             holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
         }
-
-        if (level.equals("R2") || level.equals("R3")) {
+        if (level.equals("R1")) {
+            if (fromRSM && fromCustomer && fromProduct) {
+                holder.iviOption.setVisibility(View.GONE);
+            }
+        } else if (level.equals("R2") || level.equals("R3")) {
             if (fromCustomer && fromProduct) {
                 holder.iviOption.setVisibility(View.GONE);
             }
@@ -128,7 +131,25 @@ public class NewSalesPersonAdapter extends RecyclerView.Adapter<NewSalesPersonAd
                 PopupMenu popup = new PopupMenu(mActivity, holder.iviOption);
                 //inflating menu from xml resource
                 popup.inflate(R.menu.options_menu);
-                if (level.equals("R2") || level.equals("R3")) {
+                if (level.equals("R1")) {
+                    popup.getMenu().getItem(1).setVisible(false);
+                    if (fromRSM && fromCustomer) {
+                        popup.getMenu().getItem(0).setVisible(false);
+                        popup.getMenu().getItem(2).setVisible(false);
+                    } else if (fromRSM && fromProduct) {
+                        popup.getMenu().getItem(0).setVisible(false);
+                        popup.getMenu().getItem(3).setVisible(false);
+                    } else if (fromCustomer && fromProduct) {
+                        popup.getMenu().getItem(2).setVisible(false);
+                        popup.getMenu().getItem(3).setVisible(false);
+                    } else if (fromRSM) {
+                        popup.getMenu().getItem(0).setVisible(false);
+                    } else if (fromCustomer) {
+                        popup.getMenu().getItem(2).setVisible(false);
+                    } else if (fromProduct) {
+                        popup.getMenu().getItem(3).setVisible(false);
+                    }
+                } else if (level.equals("R2") || level.equals("R3")) {
                     popup.getMenu().getItem(0).setVisible(false);
                     popup.getMenu().getItem(1).setVisible(false);
                     if (fromCustomer) {
@@ -144,6 +165,7 @@ public class NewSalesPersonAdapter extends RecyclerView.Adapter<NewSalesPersonAd
                         switch (item.getItemId()) {
                             case R.id.menu1:
                                 //handle menu1 click
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataList.get(position)));
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click

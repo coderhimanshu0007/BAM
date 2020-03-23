@@ -320,7 +320,7 @@ public class NewRSMFragment extends BaseFragment {
         }*/
     }
 
-    @OnClick(R.id.iviRSMClose)
+    @OnClick(R.id.iviR1Close)
     public void RSMClose() {
         cviRSMHeading.setVisibility(View.GONE);
         type = 1;
@@ -330,7 +330,7 @@ public class NewRSMFragment extends BaseFragment {
     }
 
     private void initRSMData(String type) {
-        rsmAdapter = new NewRSMAdapter(dashboardActivityContext, type, rsmDataList);
+        rsmAdapter = new NewRSMAdapter(dashboardActivityContext, type, "",rsmDataList, false, false, false);
         rviRSM.setAdapter(rsmAdapter);
     }
 

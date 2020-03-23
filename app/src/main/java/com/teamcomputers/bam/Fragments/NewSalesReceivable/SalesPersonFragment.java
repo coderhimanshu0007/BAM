@@ -356,7 +356,7 @@ public class SalesPersonFragment extends BaseFragment {
         }*/
     }
 
-    @OnClick(R.id.iviRSMClose)
+    @OnClick(R.id.iviR1Close)
     public void RSMClose() {
         ((NewRSMTabFragment) getParentFragment()).salesPersonDataList = null;
         cviRSMHeading.setVisibility(View.GONE);
@@ -367,7 +367,7 @@ public class SalesPersonFragment extends BaseFragment {
     }
 
     private void initRSMData(String type) {
-        rsmAdapter = new NewRSMAdapter(dashboardActivityContext, type, rsmDataList);
+        rsmAdapter = new NewRSMAdapter(dashboardActivityContext, type, "", rsmDataList, false, false, false);
         rviRSM.setAdapter(rsmAdapter);
     }
 

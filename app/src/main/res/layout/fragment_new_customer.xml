@@ -46,26 +46,110 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <TextView
-                                android:id="@+id/tviName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginRight="5dp"
-                                android:text="Sagar Pushkarna"
-                                android:textColor="@color/color_value"
-                                android:textSize="14sp"
-                                app:fontFamily="@font/roboto_bold" />
-
-                            <ImageView
-                                android:id="@+id/iviSPClose"
+                            <LinearLayout
+                                android:id="@+id/llClose"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
-                                android:padding="10dp"
-                                android:tint="@color/color_value"
-                                app:srcCompat="@drawable/ic_close_dialog" />
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/iviClose"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:padding="10dp"
+                                    android:tint="@color/color_value"
+                                    app:srcCompat="@drawable/ic_close_dialog" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_toLeftOf="@+id/llClose"
+                                android:orientation="vertical">
+
+                                <RelativeLayout
+                                    android:id="@+id/rlR1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:id="@+id/tviR1Name"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginRight="5dp"
+                                        android:text="Sagar Pushkarna"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="14sp"
+                                        app:fontFamily="@font/roboto_bold" />
+
+                                    <ImageView
+                                        android:id="@+id/iviR1Close"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:padding="10dp"
+                                        android:tint="@color/color_value"
+                                        app:srcCompat="@drawable/ic_close_dialog" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/rlR2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:id="@+id/tviR2Name"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginRight="5dp"
+                                        android:text="Sagar Pushkarna"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="14sp"
+                                        app:fontFamily="@font/roboto_bold" />
+
+                                    <ImageView
+                                        android:id="@+id/iviR2Close"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:padding="10dp"
+                                        android:tint="@color/color_value"
+                                        app:srcCompat="@drawable/ic_close_dialog" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/rlR3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:id="@+id/tviR3Name"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginRight="5dp"
+                                        android:text="Sagar Pushkarna"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="14sp"
+                                        app:fontFamily="@font/roboto_bold" />
+
+                                    <ImageView
+                                        android:id="@+id/iviR3Close"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:padding="10dp"
+                                        android:tint="@color/color_value"
+                                        app:srcCompat="@drawable/ic_close_dialog" />
+                                </RelativeLayout>
+                            </LinearLayout>
                         </RelativeLayout>
 
                         <LinearLayout

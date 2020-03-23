@@ -85,7 +85,12 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         }
         holder.tviName.setText(position + 1 + ". " + dataList.get(position).getName());
-        if (!type.equals("0")) {
+        if (fromRSM || fromSP || fromCustomer) {
+            holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
+            holder.tviQTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getQTD()));
+            holder.tviMTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getMTD()));
+            holder.pBar.setVisibility(View.GONE);
+        } else {
             String target = "", actual = "";
             int bar = 0;
             if (type.equals("YTD")) {
@@ -119,14 +124,10 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
             } else if (bar >= 70) {
                 holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
             }
-        } else {
-            holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
-            holder.tviQTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getQTD()));
-            holder.tviMTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getMTD()));
-            holder.pBar.setVisibility(View.GONE);
         }
+
         if (level.equals("R1")) {
-            if (fromSP && fromSP && fromCustomer) {
+            if (fromRSM && fromSP && fromCustomer) {
                 holder.iviOption.setVisibility(View.GONE);
             }
         } else if (level.equals("R2") || level.equals("R3")) {
@@ -137,7 +138,6 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
             holder.iviOption.setVisibility(View.GONE);
         } else if (level.equals("R4") && !fromCustomer) {
             holder.iviOption.setVisibility(View.VISIBLE);
-
         }
 
         holder.iviOption.setOnClickListener(new View.OnClickListener() {
@@ -147,7 +147,25 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
                 PopupMenu popup = new PopupMenu(mActivity, holder.iviOption);
                 //inflating menu from xml resource
                 popup.inflate(R.menu.options_menu);
-                if (level.equals("R2")) {
+                if (level.equals("R1")) {
+                    popup.getMenu().getItem(3).setVisible(false);
+                    if (fromSP && fromCustomer) {
+                        popup.getMenu().getItem(1).setVisible(false);
+                        popup.getMenu().getItem(2).setVisible(false);
+                    } else if (fromSP && fromRSM) {
+                        popup.getMenu().getItem(0).setVisible(false);
+                        popup.getMenu().getItem(1).setVisible(false);
+                    } else if (fromCustomer && fromRSM) {
+                        popup.getMenu().getItem(0).setVisible(false);
+                        popup.getMenu().getItem(2).setVisible(false);
+                    } else if (fromSP) {
+                        popup.getMenu().getItem(1).setVisible(false);
+                    } else if (fromCustomer) {
+                        popup.getMenu().getItem(2).setVisible(false);
+                    } else if (fromRSM) {
+                        popup.getMenu().getItem(0).setVisible(false);
+                    }
+                } else if (level.equals("R2") || level.equals("R3")) {
                     popup.getMenu().getItem(0).setVisible(false);
                     popup.getMenu().getItem(3).setVisible(false);
                     if (fromSP) {
@@ -167,6 +185,7 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
                         switch (item.getItemId()) {
                             case R.id.menu1:
                                 //handle menu1 click
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataList.get(position)));
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click
