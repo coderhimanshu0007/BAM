@@ -88,6 +88,9 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        dashboardActivityContext.hideTab();
+        dashboardActivityContext.hideTOSTab();
+        dashboardActivityContext.hideOSOTab();
         //getFragmentName();
     }
 

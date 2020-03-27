@@ -101,9 +101,6 @@ public class NewSalesReceivableFragment extends BaseFragment {
 
         loginModel = SharedPreferencesController.getInstance(BAMApplication.getInstance()).getUserProfile();
 
-        showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new SalesRefreshRequester());
-
         return rootView;
     }
 
@@ -121,6 +118,10 @@ public class NewSalesReceivableFragment extends BaseFragment {
         tviDays.setText(String.valueOf(0));
         seek_bar.setCircleProgressColorGreen();
         dashboardActivityContext.hideTab();
+        dashboardActivityContext.hideOSOTab();
+        dashboardActivityContext.hideTOSTab();
+        showProgress(ProgressDialogTexts.LOADING);
+        BackgroundExecutor.getInstance().execute(new SalesRefreshRequester());
     }
 
     @Override
@@ -335,13 +336,63 @@ public class NewSalesReceivableFragment extends BaseFragment {
 
     @OnClick(R.id.txtBtnOpenSellsOrderAnalysis)
     public void btnOpenSellsOrderAnalysis() {
-
+        if (level.equals("R1")) {
+            Bundle rsmDataBundle = new Bundle();
+            rsmDataBundle.putString(NewRSMTabFragment.USER_ID, userId);
+            rsmDataBundle.putString(WSRSMFragment.USER_LEVEL, level);
+            rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+            //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
+            dashboardActivityContext.replaceFragment(Fragments.OSO_RSM_FRAGMENT, rsmDataBundle);
+        } else if (level.equals("R2") || level.equals("R3")) {
+            Bundle rsmDataBundle = new Bundle();
+            rsmDataBundle.putString(WSSalesPersonFragment.USER_ID, userId);
+            rsmDataBundle.putString(WSSalesPersonFragment.USER_LEVEL, level);
+            rsmDataBundle.putParcelable(WSSalesPersonFragment.RSM_PROFILE, null);
+            rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+            dashboardActivityContext.replaceFragment(Fragments.OSO_ACCOUNT_FRAGMENT, rsmDataBundle);
+        } else if (level.equals("R4")) {
+            Bundle spDataBundle = new Bundle();
+            spDataBundle.putString(WSCustomerFragment.USER_ID, userId);
+            spDataBundle.putString(WSCustomerFragment.USER_LEVEL, level);
+            spDataBundle.putBoolean(WSCustomerFragment.FROM_RSM, false);
+            spDataBundle.putBoolean(WSCustomerFragment.FROM_SP, false);
+            spDataBundle.putBoolean(WSCustomerFragment.FROM_PRODUCT, false);
+            spDataBundle.putParcelable(WSCustomerFragment.RSM_PROFILE, null);
+            spDataBundle.putParcelable(WSCustomerFragment.SP_PROFILE, null);
+            spDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+            dashboardActivityContext.replaceFragment(Fragments.OSO_CUSTOMER_FRAGMENT, spDataBundle);
+        }
     }
 
 
     @OnClick(R.id.txtBtnOutstandingAnalysis)
     public void btnOutstandingAnalysis() {
-
+        if (level.equals("R1")) {
+            Bundle rsmDataBundle = new Bundle();
+            rsmDataBundle.putString(NewRSMTabFragment.USER_ID, userId);
+            rsmDataBundle.putString(WSRSMFragment.USER_LEVEL, level);
+            rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+            //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
+            dashboardActivityContext.replaceFragment(Fragments.TOS_RSM_FRAGMENT, rsmDataBundle);
+        } else if (level.equals("R2") || level.equals("R3")) {
+            Bundle rsmDataBundle = new Bundle();
+            rsmDataBundle.putString(WSSalesPersonFragment.USER_ID, userId);
+            rsmDataBundle.putString(WSSalesPersonFragment.USER_LEVEL, level);
+            rsmDataBundle.putParcelable(WSSalesPersonFragment.RSM_PROFILE, null);
+            rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+            dashboardActivityContext.replaceFragment(Fragments.TOS_ACCOUNT_FRAGMENT, rsmDataBundle);
+        } else if (level.equals("R4")) {
+            Bundle spDataBundle = new Bundle();
+            spDataBundle.putString(WSCustomerFragment.USER_ID, userId);
+            spDataBundle.putString(WSCustomerFragment.USER_LEVEL, level);
+            spDataBundle.putBoolean(WSCustomerFragment.FROM_RSM, false);
+            spDataBundle.putBoolean(WSCustomerFragment.FROM_SP, false);
+            spDataBundle.putBoolean(WSCustomerFragment.FROM_PRODUCT, false);
+            spDataBundle.putParcelable(WSCustomerFragment.RSM_PROFILE, null);
+            spDataBundle.putParcelable(WSCustomerFragment.SP_PROFILE, null);
+            spDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+            dashboardActivityContext.replaceFragment(Fragments.TOS_CUSTOMER_FRAGMENT, spDataBundle);
+        }
     }
 
 

@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@null"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/login_bg"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cviRSMHeading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="2dp"
+                    android:elevation="@dimen/cardview_compat_inset_shadow"
+                    android:padding="3dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="5dp">
+
+                    <LinearLayout
+                        android:id="@+id/llRSMLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/color_first_item_value"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:id="@+id/llClose"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/iviClose"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:padding="10dp"
+                                    android:tint="@color/color_value"
+                                    app:srcCompat="@drawable/ic_close_dialog" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_toLeftOf="@+id/llClose"
+                                android:orientation="vertical">
+
+                                <RelativeLayout
+                                    android:id="@+id/rlR1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:id="@+id/tviR1Name"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginRight="5dp"
+                                        android:text="Sagar Pushkarna"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="14sp"
+                                        app:fontFamily="@font/roboto_bold" />
+
+                                    <ImageView
+                                        android:id="@+id/iviR1Close"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:padding="10dp"
+                                        android:tint="@color/color_value"
+                                        app:srcCompat="@drawable/ic_close_dialog" />
+
+                                    <TextView
+                                        android:id="@+id/tviR1StateName"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_toLeftOf="@+id/iviR1Close"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="14sp"
+                                        app:fontFamily="@font/roboto_bold" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/rlR2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:id="@+id/tviR2Name"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginRight="5dp"
+                                        android:text="Sagar Pushkarna"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="14sp"
+                                        app:fontFamily="@font/roboto_bold" />
+
+                                    <ImageView
+                                        android:id="@+id/iviR2Close"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:padding="10dp"
+                                        android:tint="@color/color_value"
+                                        app:srcCompat="@drawable/ic_close_dialog" />
+
+                                    <TextView
+                                        android:id="@+id/tviR2StateName"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_centerVertical="true"
+                                        android:layout_toLeftOf="@+id/iviR2Close"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="14sp"
+                                        app:fontFamily="@font/roboto_bold" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/rlR3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:id="@+id/tviR3Name"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginRight="5dp"
+                                        android:text="Sagar Pushkarna"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="14sp"
+                                        app:fontFamily="@font/roboto_bold" />
+
+                                    <ImageView
+                                        android:id="@+id/iviR3Close"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:padding="10dp"
+                                        android:tint="@color/color_value"
+                                        app:srcCompat="@drawable/ic_close_dialog" />
+
+                                    <TextView
+                                        android:id="@+id/tviR3StateName"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_centerVertical="true"
+                                        android:layout_toLeftOf="@+id/iviR3Close"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="14sp"
+                                        app:fontFamily="@font/roboto_bold" />
+                                </RelativeLayout>
+
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/llTarget"
+                                android:layout_width="0dp"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginTop="14dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginBottom="14dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/td_bg"
+                                android:backgroundTint="@color/text"
+                                android:orientation="vertical"
+                                android:padding="7dp">
+
+                                <TextView
+                                    android:id="@+id/tviTargetHeading"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="TARGET"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="12sp"
+                                    app:fontFamily="@font/roboto_medium" />
+
+                                <TextView
+                                    android:id="@+id/tviTarget"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="625.2"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="14sp"
+                                    app:fontFamily="@font/roboto_bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/llActual"
+                                android:layout_width="0dp"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginTop="14dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginBottom="14dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/td_bg"
+                                android:backgroundTint="@color/text"
+                                android:orientation="vertical"
+                                android:padding="7dp">
+
+                                <TextView
+                                    android:id="@+id/tviActualHeading"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="ACTUAL"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="12sp"
+                                    app:fontFamily="@font/roboto_medium" />
+
+                                <TextView
+                                    android:id="@+id/tviActual"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="625.2"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="14sp"
+                                    app:fontFamily="@font/roboto_bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginTop="14dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginBottom="14dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/td_bg"
+                                android:backgroundTint="@color/text"
+                                android:orientation="vertical"
+                                android:padding="7dp">
+
+                                <TextView
+                                    android:id="@+id/tviAchHeading"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="ACH%"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="12sp"
+                                    app:fontFamily="@font/roboto_medium" />
+
+                                <TextView
+                                    android:id="@+id/tviAch"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="66.25%"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="14sp"
+                                    app:fontFamily="@font/roboto_bold" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginRight="20dp"
+                    android:elevation="@dimen/cardview_compat_inset_shadow"
+                    android:padding="3dp"
+                    app:cardCornerRadius="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_heading_bg"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="TARGET"
+                            android:textColor="@color/color_value"
+                            android:textSize="12sp"
+                            app:fontFamily="@font/roboto_bold" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="ACTUAL"
+                            android:textColor="@color/color_value"
+                            android:textSize="12sp"
+                            app:fontFamily="@font/roboto_bold" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="ACHIEVEMENT"
+                            android:textColor="@color/color_value"
+                            android:textSize="12sp"
+                            app:fontFamily="@font/roboto_bold" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rviRSM"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="55dp"
+                    android:scrollbars="none" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</LinearLayout>

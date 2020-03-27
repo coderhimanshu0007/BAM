@@ -155,5 +155,294 @@
 
         </LinearLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llOSOTabs"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="@color/color_white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text"
+            android:gravity="center"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:background="@color/color_white"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/llOSORSM_Nav_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviOSORSMNav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/end_header_color_bg"
+                    app:srcCompat="@drawable/ic_sales_person" />
+
+                <TextView
+                    android:id="@+id/tviOSORSM_Nav_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@android:color/black"
+                    android:text="RSM"
+                    android:textColor="@color/end_header_color_bg"
+                    android:textSize="11sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llOSOSP_Nav_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviOSOSP_Nav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/color_value_54"
+                    app:srcCompat="@drawable/ic_sales_person" />
+
+                <TextView
+                    android:id="@+id/tviOSOSP_Nav_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@android:color/black"
+                    android:text="Sales Person"
+                    android:textColor="@color/color_value_54"
+                    android:textSize="11sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llOSOCustomer_Nav_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviOSOCustomer_Nav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/color_value_54"
+                    app:srcCompat="@drawable/ic_customer" />
+
+                <TextView
+                    android:id="@+id/tviOSOCustomer_Nav_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@android:color/black"
+                    android:text="Customer"
+                    android:textColor="@color/color_value_54"
+                    android:textSize="11sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llOSOInvoice_Nav_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviOSOInvoice_Nav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/color_value_54"
+                    app:srcCompat="@drawable/ic_invoice" />
+
+                <TextView
+                    android:id="@+id/tviOSOInvoice_Nav_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@android:color/black"
+                    android:text="Invoice"
+                    android:textColor="@color/color_value_54"
+                    android:textSize="11sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llTOSTabs"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="@color/color_white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text"
+            android:gravity="center"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:background="@color/color_white"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/llTOSRSM_Nav_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviTOSRSMNav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/end_header_color_bg"
+                    app:srcCompat="@drawable/ic_sales_person" />
+
+                <TextView
+                    android:id="@+id/tviTOSRSM_Nav_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@android:color/black"
+                    android:text="RSM"
+                    android:textColor="@color/end_header_color_bg"
+                    android:textSize="11sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llTOSSP_Nav_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviTOSSP_Nav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/color_value_54"
+                    app:srcCompat="@drawable/ic_sales_person" />
+
+                <TextView
+                    android:id="@+id/tviTOSSP_Nav_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@android:color/black"
+                    android:text="Sales Person"
+                    android:textColor="@color/color_value_54"
+                    android:textSize="11sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llTOSCustomer_Nav_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviTOSCustomer_Nav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/color_value_54"
+                    app:srcCompat="@drawable/ic_customer" />
+
+                <TextView
+                    android:id="@+id/tviTOSCustomer_Nav_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@android:color/black"
+                    android:text="Customer"
+                    android:textColor="@color/color_value_54"
+                    android:textSize="11sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llTOSProduct_Nav_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviTOSProduct_Nav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/color_value_54"
+                    app:srcCompat="@drawable/ic_product" />
+
+                <TextView
+                    android:id="@+id/tviTOSProduct_Nav_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@android:color/black"
+                    android:text="Product"
+                    android:textColor="@color/color_value_54"
+                    android:textSize="11sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

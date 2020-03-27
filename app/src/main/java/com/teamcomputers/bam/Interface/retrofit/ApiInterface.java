@@ -175,4 +175,30 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("YTDQTD")
     Call<Object> yTDQTD(@Field("UserId") String userId);
+
+    // Open Sales Order List
+    @FormUrlEncoded
+    @POST("SalesOpenOrderList")
+    Call<Object> openSalesOrderList(@Field("UserId") String userId,
+                                    @Field("Level") String level,
+                                    @Field("Type") String type,
+                                    @Field("RSM") String RSM,
+                                    @Field("Sales") String sales,
+                                    @Field("Customer") String customer,
+                                    @Field("StateCode") String stateCode,
+                                    @Field("Invoice")String invoice,
+                                    @Field("Product") String product);
+
+    // Outstanding List
+    @FormUrlEncoded
+    @POST("AccountReceivablesList")
+    Call<Object> outstandingList(@Field("UserId") String userId,
+                                 @Field("Level") String level,
+                                 @Field("Type") String type,
+                                 @Field("RSM") String RSM,
+                                 @Field("Sales") String sales,
+                                 @Field("Customer") String customer,
+                                 @Field("StateCode") String stateCode,
+                                 @Field("Product") String product);
+
 }
