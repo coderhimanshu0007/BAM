@@ -167,8 +167,13 @@ public class TOCustomerAdapter extends RecyclerView.Adapter<TOCustomerAdapter.Vi
                                 break;
                             case R.id.menu4:
                                 //handle menu3 click
-                                dataList.get(position).setUserId(userId);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataList.get(position)));
+                                TOCustomerModel toCustomerModel = new TOCustomerModel();
+                                toCustomerModel.setUserId(userId);
+                                toCustomerModel.setCustomerName(dataList.get(position).getCustomerName());
+                                toCustomerModel.setAmount(dataList.get(position).getAmount());
+                                toCustomerModel.setPosition(dataList.get(position).getPosition());
+                                toCustomerModel.setOpen(dataList.get(position).getOpen());
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, toCustomerModel));
                                 break;
                         }
                         return false;
@@ -182,10 +187,14 @@ public class TOCustomerAdapter extends RecyclerView.Adapter<TOCustomerAdapter.Vi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //SharedPreferencesController.getInstance(mActivity).setFrom("2");
-                //SharedPreferencesController.getInstance(mActivity).setLocation(dataList.get(position).getCustName());
-                dataList.get(position).setUserId(userId);
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataList.get(position)));
+                TOCustomerModel toCustomerModel = new TOCustomerModel();
+                toCustomerModel.setUserId(userId);
+                toCustomerModel.setCustomerName(dataList.get(position).getCustomerName());
+                toCustomerModel.setAmount(dataList.get(position).getAmount());
+                toCustomerModel.setPosition(dataList.get(position).getPosition());
+                toCustomerModel.setOpen(dataList.get(position).getOpen());
+                //dataList.get(position).setUserId(userId);
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, toCustomerModel));
             }
         });
         //List<TOCustomerModel.StateCodeWise> stateCodeWise = dataList.get(position).getStateCodeWise();

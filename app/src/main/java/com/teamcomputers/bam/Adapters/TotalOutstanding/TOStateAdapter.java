@@ -13,6 +13,7 @@ import com.teamcomputers.bam.Interface.BAMConstant;
 import com.teamcomputers.bam.Models.TotalOutstanding.TOCustomerModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
+import com.teamcomputers.bam.Utils.BAMUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -37,21 +38,19 @@ public class TOStateAdapter extends RecyclerView.Adapter<TOStateAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tviStateName, tviStateYTD, tviStateQTD, tviStateMTD;
+        TextView tviStateName, tviStateAmount;
         ;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.tviStateName = (TextView) itemView.findViewById(R.id.tviStateName);
-            this.tviStateYTD = (TextView) itemView.findViewById(R.id.tviStateYTD);
-            this.tviStateQTD = (TextView) itemView.findViewById(R.id.tviStateQTD);
-            this.tviStateMTD = (TextView) itemView.findViewById(R.id.tviStateMTD);
+            this.tviStateAmount = (TextView) itemView.findViewById(R.id.tviStateAmount);
         }
     }
 
     @Override
     public TOStateAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflter.inflate(R.layout.state_recyclerview_layout, parent, false);
+        View view = inflter.inflate(R.layout.to_state_recyclerview_layout, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -60,24 +59,17 @@ public class TOStateAdapter extends RecyclerView.Adapter<TOStateAdapter.ViewHold
     @Override
     public void onBindViewHolder(TOStateAdapter.ViewHolder holder, final int position) {
         holder.tviStateName.setText(position + 1 + ". " + dataList.get(position).getStateCode());
-        //holder.tviStateYTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
-        //holder.tviStateQTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getQTD()));
-        //holder.tviStateMTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getMTD()));
+        holder.tviStateAmount.setText(BAMUtil.getRoundOffValue(dataList.get(position).getAmount()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TOCustomerModel toCustomerModel = new TOCustomerModel();
                 toCustomerModel.setCustomerName(data.getCustomerName());
-                //salesCustomerModel.setYTD(data.getYTD());
-                //salesCustomerModel.setQTD(data.getQTD());
-                //salesCustomerModel.setMTD(data.getMTD());
+                toCustomerModel.setAmount(data.getAmount());
                 toCustomerModel.setPosition(data.getPosition());
                 List<TOCustomerModel.StateCodeWise> selected = new ArrayList<>();
                 selected.add(dataList.get(position));
                 toCustomerModel.setStateCodeWise(selected);
-                //SharedPreferencesController.getInstance(mActivity).setFrom("2");
-                //SharedPreferencesController.getInstance(mActivity).setLocation(dataList.get(position).getCustName());
-                //EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.STATE_SELECT, salesCustomerModel));
                 EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.STATE_ITEM, toCustomerModel));
             }
         });

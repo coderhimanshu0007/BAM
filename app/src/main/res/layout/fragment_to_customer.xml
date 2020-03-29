@@ -32,7 +32,7 @@
                     android:layout_marginBottom="2dp"
                     android:elevation="@dimen/cardview_compat_inset_shadow"
                     android:padding="3dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:cardCornerRadius="5dp">
 
                     <LinearLayout
@@ -158,7 +158,7 @@
                             android:orientation="horizontal">
 
                             <LinearLayout
-                                android:id="@+id/llTarget"
+                                android:id="@+id/llAmount"
                                 android:layout_width="0dp"
                                 android:layout_height="50dp"
                                 android:layout_marginLeft="20dp"
@@ -176,13 +176,13 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:gravity="center"
-                                    android:text="YTD"
+                                    android:text="Amount"
                                     android:textColor="@color/color_value"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
 
                                 <TextView
-                                    android:id="@+id/tviYTD"
+                                    android:id="@+id/tviAmount"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -194,7 +194,7 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/llActual"
+                                android:id="@+id/llDSO"
                                 android:layout_width="0dp"
                                 android:layout_height="50dp"
                                 android:layout_marginLeft="20dp"
@@ -205,63 +205,48 @@
                                 android:background="@drawable/td_bg"
                                 android:backgroundTint="@color/text"
                                 android:orientation="vertical"
-                                android:padding="7dp">
+                                android:padding="1dp">
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:gravity="center"
-                                    android:text="QTD"
+                                    android:text="DSO"
                                     android:textColor="@color/color_value"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
 
-                                <TextView
-                                    android:id="@+id/tviQTD"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="625.2"
-                                    android:textColor="@color/color_value"
-                                    android:textSize="14sp"
-                                    app:fontFamily="@font/roboto_bold" />
-                            </LinearLayout>
+                                    android:gravity="center">
 
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="50dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="14dp"
-                                android:layout_marginRight="20dp"
-                                android:layout_marginBottom="14dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/td_bg"
-                                android:backgroundTint="@color/text"
-                                android:orientation="vertical"
-                                android:padding="7dp">
+                                    <ProgressBar
+                                        android:id="@+id/pBar"
+                                        style="?android:attr/progressBarStyleHorizontal"
+                                        android:layout_width="55dp"
+                                        android:layout_height="10dp"
+                                        android:indeterminate="false"
+                                        android:max="100"
+                                        android:minWidth="200dp"
+                                        android:minHeight="10dp"
+                                        android:progress="0"
+                                        android:progressDrawable="@drawable/seekbar_drawable_progress" />
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="MTD"
-                                    android:textColor="@color/color_value"
-                                    android:textSize="12sp"
-                                    app:fontFamily="@font/roboto_medium" />
+                                    <TextView
+                                        android:id="@+id/tviDSO"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/pBar"
+                                        android:layout_centerHorizontal="true"
+                                        android:text="625.2"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="14sp"
+                                        app:fontFamily="@font/roboto_bold" />
 
-                                <TextView
-                                    android:id="@+id/tviMTD"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="66.25%"
-                                    android:textColor="@color/color_value"
-                                    android:textSize="14sp"
-                                    app:fontFamily="@font/roboto_bold" />
+                                </RelativeLayout>
                             </LinearLayout>
 
                         </LinearLayout>
@@ -295,7 +280,7 @@
                             android:layout_marginBottom="10dp"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:text="YTD"
+                            android:text="Customer Name"
                             android:textColor="@color/color_value"
                             android:textSize="12sp"
                             app:fontFamily="@font/roboto_bold" />
@@ -309,7 +294,7 @@
                             android:layout_marginBottom="10dp"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:text="QTD"
+                            android:text=""
                             android:textColor="@color/color_value"
                             android:textSize="12sp"
                             app:fontFamily="@font/roboto_bold" />
@@ -322,7 +307,7 @@
                             android:layout_marginBottom="10dp"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:text="MTD"
+                            android:text="Amount"
                             android:textColor="@color/color_value"
                             android:textSize="12sp"
                             app:fontFamily="@font/roboto_bold" />
