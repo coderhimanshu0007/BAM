@@ -99,6 +99,7 @@
                                         android:id="@+id/tviR1StateName"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
                                         android:layout_toLeftOf="@+id/iviR1Close"
                                         android:textColor="@color/color_value"
                                         android:textSize="14sp"
@@ -135,7 +136,6 @@
                                         android:id="@+id/tviR2StateName"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_alignParentRight="true"
                                         android:layout_centerVertical="true"
                                         android:layout_toLeftOf="@+id/iviR2Close"
                                         android:textColor="@color/color_value"
@@ -173,14 +173,12 @@
                                         android:id="@+id/tviR3StateName"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_alignParentRight="true"
                                         android:layout_centerVertical="true"
                                         android:layout_toLeftOf="@+id/iviR3Close"
                                         android:textColor="@color/color_value"
                                         android:textSize="14sp"
                                         app:fontFamily="@font/roboto_bold" />
                                 </RelativeLayout>
-
                             </LinearLayout>
                         </RelativeLayout>
 
@@ -190,7 +188,7 @@
                             android:orientation="horizontal">
 
                             <LinearLayout
-                                android:id="@+id/llTarget"
+                                android:id="@+id/llAmount"
                                 android:layout_width="0dp"
                                 android:layout_height="50dp"
                                 android:layout_marginLeft="20dp"
@@ -204,18 +202,17 @@
                                 android:padding="7dp">
 
                                 <TextView
-                                    android:id="@+id/tviTargetHeading"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:gravity="center"
-                                    android:text="TARGET"
+                                    android:text="Amount"
                                     android:textColor="@color/color_value"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
 
                                 <TextView
-                                    android:id="@+id/tviTarget"
+                                    android:id="@+id/tviAmount"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -227,7 +224,7 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/llActual"
+                                android:id="@+id/llDSO"
                                 android:layout_width="0dp"
                                 android:layout_height="50dp"
                                 android:layout_marginLeft="20dp"
@@ -238,65 +235,48 @@
                                 android:background="@drawable/td_bg"
                                 android:backgroundTint="@color/text"
                                 android:orientation="vertical"
-                                android:padding="7dp">
+                                android:padding="1dp">
 
                                 <TextView
-                                    android:id="@+id/tviActualHeading"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:gravity="center"
-                                    android:text="ACTUAL"
+                                    android:text="DSO"
                                     android:textColor="@color/color_value"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
 
-                                <TextView
-                                    android:id="@+id/tviActual"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="625.2"
-                                    android:textColor="@color/color_value"
-                                    android:textSize="14sp"
-                                    app:fontFamily="@font/roboto_bold" />
-                            </LinearLayout>
+                                    android:gravity="center">
 
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="50dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="14dp"
-                                android:layout_marginRight="20dp"
-                                android:layout_marginBottom="14dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/td_bg"
-                                android:backgroundTint="@color/text"
-                                android:orientation="vertical"
-                                android:padding="7dp">
+                                    <ProgressBar
+                                        android:id="@+id/pBar"
+                                        style="?android:attr/progressBarStyleHorizontal"
+                                        android:layout_width="55dp"
+                                        android:layout_height="10dp"
+                                        android:indeterminate="false"
+                                        android:max="100"
+                                        android:minWidth="200dp"
+                                        android:minHeight="10dp"
+                                        android:progress="0"
+                                        android:progressDrawable="@drawable/seekbar_drawable_progress" />
 
-                                <TextView
-                                    android:id="@+id/tviAchHeading"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="ACH%"
-                                    android:textColor="@color/color_value"
-                                    android:textSize="12sp"
-                                    app:fontFamily="@font/roboto_medium" />
+                                    <TextView
+                                        android:id="@+id/tviDSO"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/pBar"
+                                        android:layout_centerHorizontal="true"
+                                        android:text="625.2"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="14sp"
+                                        app:fontFamily="@font/roboto_bold" />
 
-                                <TextView
-                                    android:id="@+id/tviAch"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="66.25%"
-                                    android:textColor="@color/color_value"
-                                    android:textSize="14sp"
-                                    app:fontFamily="@font/roboto_bold" />
+                                </RelativeLayout>
                             </LinearLayout>
 
                         </LinearLayout>
@@ -331,21 +311,7 @@
                             android:layout_marginBottom="10dp"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:text="TARGET"
-                            android:textColor="@color/color_value"
-                            android:textSize="12sp"
-                            app:fontFamily="@font/roboto_bold" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:text="ACTUAL"
+                            android:text="AMOUNT"
                             android:textColor="@color/color_value"
                             android:textSize="12sp"
                             app:fontFamily="@font/roboto_bold" />
@@ -358,7 +324,7 @@
                             android:layout_marginBottom="10dp"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:text="ACHIEVEMENT"
+                            android:text="DSO"
                             android:textColor="@color/color_value"
                             android:textSize="12sp"
                             app:fontFamily="@font/roboto_bold" />

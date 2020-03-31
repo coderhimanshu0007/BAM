@@ -212,7 +212,7 @@ public class TOSProductFragment extends BaseFragment {
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
                     case ClickEvents.RSM_MENU_SELECT:
-                        FullSalesModel rsmMenuData = (FullSalesModel) eventObject.getObject();
+                        TOProductModel rsmMenuData = (TOProductModel) eventObject.getObject();
                         Bundle rsmMenuDataBundle = new Bundle();
                         rsmMenuDataBundle.putString(WSRSMFragment.USER_ID, userId);
                         rsmMenuDataBundle.putString(WSRSMFragment.USER_LEVEL, level);
@@ -233,7 +233,7 @@ public class TOSProductFragment extends BaseFragment {
                         dashboardActivityContext.replaceFragment(Fragments.TOS_RSM_FRAGMENT, rsmMenuDataBundle);
                         break;
                     case ClickEvents.SP_MENU_SELECT:
-                        FullSalesModel productData = (FullSalesModel) eventObject.getObject();
+                        TOProductModel productData = (TOProductModel) eventObject.getObject();
                         Bundle productDataBundle = new Bundle();
                         productDataBundle.putString(WSSalesPersonFragment.USER_ID, userId);
                         productDataBundle.putString(WSSalesPersonFragment.USER_LEVEL, level);
@@ -253,7 +253,7 @@ public class TOSProductFragment extends BaseFragment {
                         dashboardActivityContext.replaceFragment(Fragments.TOS_ACCOUNT_FRAGMENT, productDataBundle);
                         break;
                     case ClickEvents.CUSTOMER_MENU_SELECT:
-                        FullSalesModel salesModel = (FullSalesModel) eventObject.getObject();
+                        TOProductModel salesModel = (TOProductModel) eventObject.getObject();
                         Bundle spDataBundle = new Bundle();
                         spDataBundle.putString(WSCustomerFragment.USER_ID, userId);
                         spDataBundle.putString(WSCustomerFragment.USER_LEVEL, level);
@@ -456,8 +456,10 @@ public class TOSProductFragment extends BaseFragment {
             }
             tviR1Name.setText(rsmProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
-            tviDSO.setText(BAMUtil.getRoundOffValue(rsmProfile.getDSO()));
+            llDSO.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getDSO()).intValue();
+            tviDSO.setText(bar + "");
+            pBar.setProgress(bar);
             if (bar < 35) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             } else if (bar >= 35 && bar < 70) {
@@ -481,9 +483,11 @@ public class TOSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(spProfile.getName());
-            tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
-            tviDSO.setText(BAMUtil.getRoundOffValue(rsmProfile.getDSO()));
-            bar = (rsmProfile.getDSO()).intValue();
+            tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
+            llDSO.setVisibility(View.VISIBLE);
+            bar = (spProfile.getDSO()).intValue();
+            tviDSO.setText(bar + "");
+            pBar.setProgress(bar);
             if (bar < 35) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             } else if (bar >= 35 && bar < 70) {
@@ -508,6 +512,7 @@ public class TOSProductFragment extends BaseFragment {
             }
             tviR1Name.setText(customerProfile.getCustomerName());
             tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
+            llDSO.setVisibility(View.GONE);
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
@@ -539,8 +544,10 @@ public class TOSProductFragment extends BaseFragment {
             }
             tviR2Name.setText(rsmProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
-            tviDSO.setText(BAMUtil.getRoundOffValue(rsmProfile.getDSO()));
+            llDSO.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getDSO()).intValue();
+            tviDSO.setText(bar + "");
+            pBar.setProgress(bar);
             if (bar < 35) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             } else if (bar >= 35 && bar < 70) {
@@ -564,9 +571,11 @@ public class TOSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(spProfile.getName());
-            tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
-            tviDSO.setText(BAMUtil.getRoundOffValue(rsmProfile.getDSO()));
-            bar = (rsmProfile.getDSO()).intValue();
+            tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
+            llDSO.setVisibility(View.VISIBLE);
+            bar = (spProfile.getDSO()).intValue();
+            tviDSO.setText(bar + "");
+            pBar.setProgress(bar);
             if (bar < 35) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             } else if (bar >= 35 && bar < 70) {
@@ -597,6 +606,7 @@ public class TOSProductFragment extends BaseFragment {
                 tviR2StateName.setVisibility(View.GONE);
             }
             tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
+            llDSO.setVisibility(View.GONE);
             //tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             //tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
             //tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
@@ -634,8 +644,10 @@ public class TOSProductFragment extends BaseFragment {
             }
             tviR3Name.setText(rsmProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
-            tviDSO.setText(BAMUtil.getRoundOffValue(rsmProfile.getDSO()));
+            llDSO.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getDSO()).intValue();
+            tviDSO.setText(bar + "");
+            pBar.setProgress(bar);
             if (bar < 35) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             } else if (bar >= 35 && bar < 70) {
@@ -659,9 +671,11 @@ public class TOSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(spProfile.getName());
-            tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
-            tviDSO.setText(BAMUtil.getRoundOffValue(rsmProfile.getDSO()));
-            bar = (rsmProfile.getDSO()).intValue();
+            tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
+            llDSO.setVisibility(View.VISIBLE);
+            bar = (spProfile.getDSO()).intValue();
+            tviDSO.setText(bar + "");
+            pBar.setProgress(bar);
             if (bar < 35) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             } else if (bar >= 35 && bar < 70) {
@@ -693,6 +707,7 @@ public class TOSProductFragment extends BaseFragment {
                 tviR3StateName.setVisibility(View.GONE);
             }
             tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
+            llDSO.setVisibility(View.GONE);
             //tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             //tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
             //tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
