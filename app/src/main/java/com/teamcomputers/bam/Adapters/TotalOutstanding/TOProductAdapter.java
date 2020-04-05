@@ -70,7 +70,7 @@ public class TOProductAdapter extends RecyclerView.Adapter<TOProductAdapter.View
 
     @Override
     public void onBindViewHolder(TOProductAdapter.ViewHolder holder, final int position) {
-        if (position == 0) {
+        /*if (position == 0) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_first_item_value));
         } else if (position == 1) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_second_item_value));
@@ -80,7 +80,8 @@ public class TOProductAdapter extends RecyclerView.Adapter<TOProductAdapter.View
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_white));
         } else if (position % 2 == 1) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
-        }
+        }*/
+        holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         holder.tviName.setText(position + 1 + ". " + dataList.get(position).getName());
         holder.tviAmount.setText(BAMUtil.getRoundOffValue(dataList.get(position).getAmount()));
 

@@ -214,7 +214,7 @@ public class TOSSalesPersonFragment extends BaseFragment {
                         break;
                     case ClickEvents.SP_CLICK:
                         if (!fromCustomer) {
-                            FullSalesModel spData = (FullSalesModel) eventObject.getObject();
+                            TORSMSalesModel spData = (TORSMSalesModel) eventObject.getObject();
                             Bundle spDataBundle = new Bundle();
                             spDataBundle.putString(WSCustomerFragment.USER_ID, userId);
                             spDataBundle.putString(WSCustomerFragment.USER_LEVEL, level);
@@ -469,7 +469,7 @@ public class TOSSalesPersonFragment extends BaseFragment {
         rlR3.setVisibility(View.GONE);
         if (rsmPos == 1) {
             pos = rsmProfile.getPosition();
-            if (pos == 0) {
+            /*if (pos == 0) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (pos == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -479,23 +479,22 @@ public class TOSSalesPersonFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (pos % 2 == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR1Name.setText(rsmProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getDSO()).intValue();
-            tviDSO.setText(bar + "");
+            tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
-            if (bar < 35) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 35 && bar < 70) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 70) {
+            if (bar < 30) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            } else {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             }
         } else if (cPos == 1) {
             pos = customerProfile.getPosition();
-            if (pos == 0) {
+            /*if (pos == 0) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (pos == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -505,7 +504,8 @@ public class TOSSalesPersonFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (pos % 2 == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR1Name.setText(customerProfile.getCustomerName());
             tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
             llDSO.setVisibility(View.GONE);
@@ -514,7 +514,7 @@ public class TOSSalesPersonFragment extends BaseFragment {
             //tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
         } else if (pPos == 1) {
             pos = productProfile.getPosition();
-            if (pos == 0) {
+            /*if (pos == 0) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (pos == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -524,7 +524,8 @@ public class TOSSalesPersonFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (pos % 2 == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR1Name.setText(productProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(productProfile.getAmount()));
             llDSO.setVisibility(View.GONE);
@@ -544,7 +545,7 @@ public class TOSSalesPersonFragment extends BaseFragment {
         rlR3.setVisibility(View.GONE);
         if (rsmPos == 2) {
             pos = rsmProfile.getPosition();
-            if (pos == 0) {
+            /*if (pos == 0) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (pos == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -554,23 +555,22 @@ public class TOSSalesPersonFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (pos % 2 == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR2Name.setText(rsmProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getDSO()).intValue();
-            tviDSO.setText(bar + "");
+            tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
-            if (bar < 35) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 35 && bar < 70) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 70) {
+            if (bar < 30) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            } else {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             }
         } else if (cPos == 2) {
             pos = customerProfile.getPosition();
-            if (pos == 0) {
+            /*if (pos == 0) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (pos == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -580,7 +580,8 @@ public class TOSSalesPersonFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (pos % 2 == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR2Name.setText(customerProfile.getCustomerName());
             tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
             llDSO.setVisibility(View.GONE);
@@ -595,7 +596,7 @@ public class TOSSalesPersonFragment extends BaseFragment {
             //tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
         } else if (pPos == 2) {
             pos = productProfile.getPosition();
-            if (pos == 0) {
+            /*if (pos == 0) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (pos == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -605,7 +606,8 @@ public class TOSSalesPersonFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (pos % 2 == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR2Name.setText(productProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(productProfile.getAmount()));
             llDSO.setVisibility(View.GONE);
@@ -632,7 +634,7 @@ public class TOSSalesPersonFragment extends BaseFragment {
     private void row3Display() {
         if (rsmPos == 4) {
             pos = rsmProfile.getPosition();
-            if (pos == 0) {
+            /*if (pos == 0) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (pos == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -642,23 +644,22 @@ public class TOSSalesPersonFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (pos % 2 == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR3Name.setText(rsmProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getDSO()).intValue();
-            tviDSO.setText(bar + "");
+            tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
-            if (bar < 35) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 35 && bar < 70) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 70) {
+            if (bar < 30) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            } else {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             }
         } else if (cPos == 4) {
             pos = customerProfile.getPosition();
-            if (pos == 0) {
+            /*if (pos == 0) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (pos == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -668,7 +669,8 @@ public class TOSSalesPersonFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (pos % 2 == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR3Name.setText(customerProfile.getCustomerName());
             tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
             llDSO.setVisibility(View.GONE);
@@ -683,7 +685,7 @@ public class TOSSalesPersonFragment extends BaseFragment {
             //tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
         } else if (pPos == 4) {
             pos = productProfile.getPosition();
-            if (pos == 0) {
+            /*if (pos == 0) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (pos == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -693,7 +695,8 @@ public class TOSSalesPersonFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (pos % 2 == 1) {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR3Name.setText(productProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(productProfile.getAmount()));
             llDSO.setVisibility(View.GONE);

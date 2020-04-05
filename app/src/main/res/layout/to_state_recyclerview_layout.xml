@@ -13,6 +13,7 @@
         android:id="@+id/llRSMLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:background="@drawable/border_bg_statewise"
         android:orientation="horizontal">
 
@@ -20,11 +21,11 @@
             android:id="@+id/tviStateName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="30dp"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:text=""
+            android:text="test"
             android:textColor="@color/color_value"
             android:textSize="14sp"
             app:fontFamily="@font/roboto_bold" />
@@ -33,13 +34,28 @@
             android:id="@+id/tviStateAmount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="30dp"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text=""
+            android:gravity="right"
+            android:layout_gravity="center_vertical"
+            android:text="1234"
             android:textColor="@color/color_value"
             android:textSize="14sp"
             app:fontFamily="@font/roboto_medium" />
+
+        <ImageView
+            android:id="@+id/iviOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:tint="@color/color_value"
+            app:srcCompat="@drawable/ic_more_vert_black" />
 
     </LinearLayout>
 

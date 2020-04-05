@@ -322,7 +322,7 @@ public class DashboardActivity extends BaseActivity {
         Date newDate = new Date(date);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy\nhh:mm:ss aa", Locale.getDefault());
         String refreshDate = sdf.format(newDate);
-        tv_date.setText(String.valueOf(refreshDate));
+        tv_date.setText(String.valueOf(refreshDate) + "\nValues In Lacs");
     }
 
     private void setNavigationDrawerData() {

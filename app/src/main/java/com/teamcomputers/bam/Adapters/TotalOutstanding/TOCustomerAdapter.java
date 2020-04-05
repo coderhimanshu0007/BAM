@@ -84,7 +84,7 @@ public class TOCustomerAdapter extends RecyclerView.Adapter<TOCustomerAdapter.Vi
     @Override
     public void onBindViewHolder(TOCustomerAdapter.ViewHolder holder, final int position) {
         dataList.get(position).setOpen(0);
-        if (position == 0) {
+        /*if (position == 0) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_first_item_value));
         } else if (position == 1) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_second_item_value));
@@ -94,7 +94,8 @@ public class TOCustomerAdapter extends RecyclerView.Adapter<TOCustomerAdapter.Vi
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_white));
         } else if (position % 2 == 1) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
-        }
+        }*/
+        holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         if (level.equals("R1")) {
             if (fromRSM && fromSP && fromProduct) {
                 holder.iviOption.setVisibility(View.GONE);
@@ -199,7 +200,7 @@ public class TOCustomerAdapter extends RecyclerView.Adapter<TOCustomerAdapter.Vi
         });
         //List<TOCustomerModel.StateCodeWise> stateCodeWise = dataList.get(position).getStateCodeWise();
         dataList.get(position).setPosition(position);
-        TOStateAdapter aa = new TOStateAdapter(dashboardActivity, dataList.get(position));
+        TOStateAdapter aa = new TOStateAdapter(dashboardActivity, userId, level, dataList.get(position), fromRSM, fromSP, fromProduct);
         layoutManager = new LinearLayoutManager(dashboardActivity);
         holder.rviStateCode.setLayoutManager(layoutManager);
         holder.rviStateCode.setAdapter(aa);

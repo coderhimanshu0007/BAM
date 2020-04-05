@@ -311,7 +311,7 @@
                             android:layout_marginBottom="10dp"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:text="AMOUNT"
+                            android:text="OUTSTANDING"
                             android:textColor="@color/color_value"
                             android:textSize="12sp"
                             app:fontFamily="@font/roboto_bold" />

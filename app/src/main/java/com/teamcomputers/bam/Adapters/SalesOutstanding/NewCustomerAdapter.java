@@ -207,7 +207,7 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
         });
         List<SalesCustomerModel.StateCodeWise> stateCodeWise = dataList.get(position).getStateCodeWise();
         dataList.get(position).setPosition(position);
-        StateAdapter aa = new StateAdapter(dashboardActivity, dataList.get(position));
+        StateAdapter aa = new StateAdapter(dashboardActivity, userId, level, dataList.get(position), fromRSM, fromSP, fromProduct);
         layoutManager = new LinearLayoutManager(dashboardActivity);
         holder.rviStateCode.setLayoutManager(layoutManager);
         holder.rviStateCode.setAdapter(aa);

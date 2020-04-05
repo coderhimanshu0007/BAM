@@ -176,7 +176,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:gravity="center"
-                                    android:text="Amount"
+                                    android:text="Outstanding"
                                     android:textColor="@color/color_value"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
@@ -280,7 +280,7 @@
                             android:layout_marginBottom="10dp"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:text="Customer Name"
+                            android:text="CUSTOMER NAME"
                             android:textColor="@color/color_value"
                             android:textSize="12sp"
                             app:fontFamily="@font/roboto_bold" />
@@ -307,7 +307,7 @@
                             android:layout_marginBottom="10dp"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:text="Amount"
+                            android:text="OUTSTANDING"
                             android:textColor="@color/color_value"
                             android:textSize="12sp"
                             app:fontFamily="@font/roboto_bold" />

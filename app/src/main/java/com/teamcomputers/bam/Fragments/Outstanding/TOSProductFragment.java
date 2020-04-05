@@ -443,7 +443,7 @@ public class TOSProductFragment extends BaseFragment {
         if (rsmPos == 1) {
 
             position = rsmProfile.getPosition();
-            if (position == 0) {
+            /*if (position == 0) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -453,25 +453,24 @@ public class TOSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR1Name.setText(rsmProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getDSO()).intValue();
-            tviDSO.setText(bar + "");
+            tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
-            if (bar < 35) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 35 && bar < 70) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 70) {
+            if (bar < 30) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            } else {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             }
         } else if (spPos == 1) {
             cviProductHeading.setVisibility(View.VISIBLE);
 
             position = spProfile.getPosition();
-            if (position == 0) {
+            /*if (position == 0) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -481,25 +480,24 @@ public class TOSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR1Name.setText(spProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (spProfile.getDSO()).intValue();
-            tviDSO.setText(bar + "");
+            tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
-            if (bar < 35) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 35 && bar < 70) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 70) {
+            if (bar < 30) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            } else {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             }
         } else if (cPos == 1) {
             cviProductHeading.setVisibility(View.VISIBLE);
 
             position = customerProfile.getPosition();
-            if (position == 0) {
+            /*if (position == 0) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -509,7 +507,8 @@ public class TOSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR1Name.setText(customerProfile.getCustomerName());
             tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
             llDSO.setVisibility(View.GONE);
@@ -531,7 +530,7 @@ public class TOSProductFragment extends BaseFragment {
         if (rsmPos == 2) {
 
             position = rsmProfile.getPosition();
-            if (position == 0) {
+            /*if (position == 0) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -541,25 +540,24 @@ public class TOSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR2Name.setText(rsmProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getDSO()).intValue();
-            tviDSO.setText(bar + "");
+            tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
-            if (bar < 35) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 35 && bar < 70) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 70) {
+            if (bar < 30) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            } else {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             }
         } else if (spPos == 2) {
             cviProductHeading.setVisibility(View.VISIBLE);
 
             position = spProfile.getPosition();
-            if (position == 0) {
+            /*if (position == 0) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -569,25 +567,24 @@ public class TOSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR2Name.setText(spProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (spProfile.getDSO()).intValue();
-            tviDSO.setText(bar + "");
+            tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
-            if (bar < 35) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 35 && bar < 70) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 70) {
+            if (bar < 30) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            } else {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             }
         } else if (cPos == 2) {
             cviProductHeading.setVisibility(View.VISIBLE);
 
             position = customerProfile.getPosition();
-            if (position == 0) {
+            /*if (position == 0) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -597,7 +594,8 @@ public class TOSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR2Name.setText(customerProfile.getCustomerName());
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 tviR2StateName.setVisibility(View.VISIBLE);
@@ -631,7 +629,7 @@ public class TOSProductFragment extends BaseFragment {
         if (rsmPos == 4) {
 
             position = rsmProfile.getPosition();
-            if (position == 0) {
+            /*if (position == 0) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -641,25 +639,24 @@ public class TOSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR3Name.setText(rsmProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getDSO()).intValue();
-            tviDSO.setText(bar + "");
+            tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
-            if (bar < 35) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 35 && bar < 70) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 70) {
+            if (bar < 30) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            } else {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             }
         } else if (spPos == 4) {
             cviProductHeading.setVisibility(View.VISIBLE);
 
             position = spProfile.getPosition();
-            if (position == 0) {
+            /*if (position == 0) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -669,25 +666,24 @@ public class TOSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR3Name.setText(spProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (spProfile.getDSO()).intValue();
-            tviDSO.setText(bar + "");
+            tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
-            if (bar < 35) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 35 && bar < 70) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 70) {
+            if (bar < 30) {
                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            } else {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
             }
         } else if (cPos == 4) {
             cviProductHeading.setVisibility(View.VISIBLE);
 
             position = customerProfile.getPosition();
-            if (position == 0) {
+            /*if (position == 0) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
@@ -697,7 +693,8 @@ public class TOSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
+            }*/
+            llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR3Name.setText(customerProfile.getCustomerName());
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);

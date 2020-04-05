@@ -73,7 +73,7 @@ public class TORSMAdapter extends RecyclerView.Adapter<TORSMAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(TORSMAdapter.ViewHolder holder, final int position) {
         int bar = 0;
-        if (position == 0) {
+        /*if (position == 0) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_first_item_value));
         } else if (position == 1) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_second_item_value));
@@ -83,18 +83,17 @@ public class TORSMAdapter extends RecyclerView.Adapter<TORSMAdapter.ViewHolder> 
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_white));
         } else if (position % 2 == 1) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
-        }
+        }*/
+        holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         holder.tviName.setText(position + 1 + ". " + dataList.get(position).getName());
         holder.tviAmount.setText(BAMUtil.getRoundOffValue(dataList.get(position).getAmount()));
         bar = (dataList.get(position).getDSO()).intValue();
-        holder.tviDSO.setText(bar + "%");
+        holder.tviDSO.setText(bar + " Days");
         holder.pBar.setProgress(bar);
-        if (bar < 35) {
-            holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
-        } else if (bar >= 35 && bar < 70) {
-            holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
-        } else if (bar >= 70) {
+        if (bar < 30) {
             holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+        } else {
+            holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
         }
 
         if (level.equals("R1")) {
