@@ -287,7 +287,7 @@ public class WSProductFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.NO_RECORD_FOUND);
                         break;
-                    case Events.GET_FILTER_SALES_LIST_SUCCESSFULL:
+                    case Events.GET_PRODUCT_LIST_SUCCESSFULL:
                         dismissProgress();
                         try {
                             JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
@@ -299,7 +299,7 @@ public class WSProductFragment extends BaseFragment {
                         initData("YTD");
                         dismissProgress();
                         break;
-                    case Events.GET_FILTER_SALES_LIST_UNSUCCESSFULL:
+                    case Events.GET_PRODUCT_LIST_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
@@ -314,7 +314,7 @@ public class WSProductFragment extends BaseFragment {
                         rsmMenuDataBundle.putInt(WSRSMFragment.SP_POS, spPos);
                         rsmMenuDataBundle.putInt(WSRSMFragment.PRODUCT_POS, pPos);
 
-                        rsmMenuDataBundle.putBoolean(WSRSMFragment.FROM_SP, fromRSM);
+                        rsmMenuDataBundle.putBoolean(WSRSMFragment.FROM_SP, fromSP);
                         rsmMenuDataBundle.putBoolean(WSRSMFragment.FROM_CUSTOMER, fromCustomer);
                         rsmMenuDataBundle.putBoolean(WSRSMFragment.FROM_PRODUCT, true);
 

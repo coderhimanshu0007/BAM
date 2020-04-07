@@ -39,9 +39,27 @@ public class OpenSalesOrderRequester implements BaseRequester {
             if (apiResponse.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 // Log.e("Customer url",""+apiResponse.getResponseCode());
                 if (apiResponse.getResponse() != null) {
-                    EventBus.getDefault().post(new EventObject(Events.GET_OPEN_SALES_ORDER_LIST_SUCCESSFULL, apiResponse.getResponse()));
+                    if (type.equals("RSM")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_RSM_OSO_LIST_SUCCESSFULL, apiResponse.getResponse()));
+                    } else if (type.equals("Sales")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_SALES_OSO_LIST_SUCCESSFULL, apiResponse.getResponse()));
+                    } else if (type.equals("Customer")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_CUSTOMER_OSO_LIST_SUCCESSFULL, apiResponse.getResponse()));
+                    } else if (type.equals("Invoice")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_INVOICE_OSO_LIST_SUCCESSFULL, apiResponse.getResponse()));
+                    }
+                    //EventBus.getDefault().post(new EventObject(Events.GET_OPEN_SALES_ORDER_LIST_SUCCESSFULL, apiResponse.getResponse()));
                 } else {
-                    EventBus.getDefault().post(new EventObject(Events.GET_OPEN_SALES_ORDER_LIST_UNSUCCESSFULL, null));
+                    if (type.equals("RSM")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_RSM_OSO_LIST_UNSUCCESSFULL, null));
+                    } else if (type.equals("Sales")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_SALES_OSO_LIST_UNSUCCESSFULL, null));
+                    } else if (type.equals("Customer")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_CUSTOMER_OSO_LIST_UNSUCCESSFULL, null));
+                    } else if (type.equals("Invoice")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_INVOICE_OSO_LIST_UNSUCCESSFULL, null));
+                    }
+                    //EventBus.getDefault().post(new EventObject(Events.GET_OPEN_SALES_ORDER_LIST_UNSUCCESSFULL, null));
                 }
             } else if (apiResponse.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
                 EventBus.getDefault().post(new EventObject(Events.NOT_FOUND, null));

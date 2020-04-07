@@ -38,9 +38,27 @@ public class FilterSalesListRequester implements BaseRequester {
                 // Log.e("Customer url",""+apiResponse.getResponseCode());
                 //ArrayList<LogisticDispatchModel> dispatchModel = (ArrayList<LogisticDispatchModel>) apiResponse.getResponse();
                 if (apiResponse.getResponse() != null) {
-                    EventBus.getDefault().post(new EventObject(Events.GET_FILTER_SALES_LIST_SUCCESSFULL, apiResponse.getResponse()));
+                    if (type.equals("RSM")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_RSM_LIST_SUCCESSFULL, apiResponse.getResponse()));
+                    } else if (type.equals("Sales")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_SALES_LIST_SUCCESSFULL, apiResponse.getResponse()));
+                    } else if (type.equals("Customer")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_CUSTOMER_LIST_SUCCESSFULL, apiResponse.getResponse()));
+                    } else if (type.equals("Product")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_PRODUCT_LIST_SUCCESSFULL, apiResponse.getResponse()));
+                    }
+                    //EventBus.getDefault().post(new EventObject(Events.GET_FILTER_SALES_LIST_SUCCESSFULL, apiResponse.getResponse()));
                 } else {
-                    EventBus.getDefault().post(new EventObject(Events.GET_FILTER_SALES_LIST_UNSUCCESSFULL, null));
+                    if (type.equals("RSM")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_RSM_LIST_UNSUCCESSFULL, null));
+                    } else if (type.equals("Sales")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_SALES_LIST_UNSUCCESSFULL, null));
+                    } else if (type.equals("Customer")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_CUSTOMER_LIST_UNSUCCESSFULL, null));
+                    } else if (type.equals("Product")) {
+                        EventBus.getDefault().post(new EventObject(Events.GET_PRODUCT_LIST_UNSUCCESSFULL, null));
+                    }
+                    //EventBus.getDefault().post(new EventObject(Events.GET_FILTER_SALES_LIST_UNSUCCESSFULL, null));
                 }
             } else if (apiResponse.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
                 EventBus.getDefault().post(new EventObject(Events.NOT_FOUND, null));

@@ -184,6 +184,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentRight="true"
+                                        android:layout_marginTop="5dp"
                                         android:padding="10dp"
                                         android:tint="@color/color_value"
                                         app:srcCompat="@drawable/ic_close_dialog" />
@@ -192,7 +193,9 @@
                                         android:id="@+id/tviR1StateName"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginTop="10dp"
                                         android:layout_toLeftOf="@+id/iviR1Close"
+                                        android:text=""
                                         android:textColor="@color/color_value"
                                         android:textSize="14sp"
                                         app:fontFamily="@font/roboto_bold" />
@@ -228,9 +231,9 @@
                                         android:id="@+id/tviR2StateName"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_alignParentRight="true"
                                         android:layout_centerVertical="true"
                                         android:layout_toLeftOf="@+id/iviR2Close"
+                                        android:text=""
                                         android:textColor="@color/color_value"
                                         android:textSize="14sp"
                                         app:fontFamily="@font/roboto_bold" />
@@ -266,9 +269,9 @@
                                         android:id="@+id/tviR3StateName"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_alignParentRight="true"
                                         android:layout_centerVertical="true"
                                         android:layout_toLeftOf="@+id/iviR3Close"
+                                        android:text=""
                                         android:textColor="@color/color_value"
                                         android:textSize="14sp"
                                         app:fontFamily="@font/roboto_bold" />

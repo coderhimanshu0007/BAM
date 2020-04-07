@@ -157,7 +157,7 @@ public class OSOSalesPersonAdapter extends RecyclerView.Adapter<OSOSalesPersonAd
             public void onClick(View v) {
                 //EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, position));
                 dataList.get(position).setPosition(position);
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, dataList.get(position)));
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_CLICK, dataList.get(position)));
             }
         });
     }

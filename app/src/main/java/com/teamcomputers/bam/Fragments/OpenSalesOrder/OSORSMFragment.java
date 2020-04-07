@@ -181,7 +181,7 @@ public class OSORSMFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.NO_RECORD_FOUND);
                         break;
-                    case Events.GET_OPEN_SALES_ORDER_LIST_SUCCESSFULL:
+                    case Events.GET_RSM_OSO_LIST_SUCCESSFULL:
                         dismissProgress();
                         try {
                             JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
@@ -194,7 +194,7 @@ public class OSORSMFragment extends BaseFragment {
                         initRSMData("YTD");
                         dismissProgress();
                         break;
-                    case Events.GET_OPEN_SALES_ORDER_LIST_UNSUCCESSFULL:
+                    case Events.GET_RSM_OSO_LIST_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;

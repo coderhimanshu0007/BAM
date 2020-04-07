@@ -195,7 +195,7 @@ public class TOSSalesPersonFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.NO_RECORD_FOUND);
                         break;
-                    case Events.GET_OUTSTANDING_LIST_SUCCESSFULL:
+                    case Events.GET_SALES_TOS_LIST_SUCCESSFULL:
                         dismissProgress();
                         try {
                             JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
@@ -208,7 +208,7 @@ public class TOSSalesPersonFragment extends BaseFragment {
                         initData("YTD");
                         dismissProgress();
                         break;
-                    case Events.GET_OUTSTANDING_LIST_UNSUCCESSFULL:
+                    case Events.GET_SALES_TOS_LIST_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;

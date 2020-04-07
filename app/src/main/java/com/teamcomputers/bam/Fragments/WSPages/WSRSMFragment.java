@@ -255,7 +255,7 @@ public class WSRSMFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.NO_RECORD_FOUND);
                         break;
-                    case Events.GET_FILTER_SALES_LIST_SUCCESSFULL:
+                    case Events.GET_RSM_LIST_SUCCESSFULL:
                         dismissProgress();
                         try {
                             JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
@@ -268,7 +268,7 @@ public class WSRSMFragment extends BaseFragment {
                         initRSMData("YTD");
                         dismissProgress();
                         break;
-                    case Events.GET_FILTER_SALES_LIST_UNSUCCESSFULL:
+                    case Events.GET_RSM_LIST_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
@@ -437,6 +437,7 @@ public class WSRSMFragment extends BaseFragment {
         } else if (cPos == 1) {
             fromCustomer = false;
             customerProfile = null;
+            tviR1StateName.setText("");
             cPos = 0;
             if (spPos == 2) {
                 spPos = 1;
@@ -481,6 +482,7 @@ public class WSRSMFragment extends BaseFragment {
         } else if (cPos == 2) {
             fromCustomer = false;
             customerProfile = null;
+            tviR2StateName.setText("");
             cPos = 0;
             if (spPos == 4) {
                 spPos = 2;
@@ -511,6 +513,7 @@ public class WSRSMFragment extends BaseFragment {
         } else if (cPos == 4) {
             fromCustomer = false;
             customerProfile = null;
+            tviR3StateName.setText("");
             cPos = 0;
         } else if (pPos == 4) {
             fromProduct = false;
@@ -523,6 +526,8 @@ public class WSRSMFragment extends BaseFragment {
     private void rowsDisplay() {
         if (fromSP || fromCustomer || fromProduct) {
             cviRSMHeading.setVisibility(View.VISIBLE);
+        } else {
+            cviRSMHeading.setVisibility(View.GONE);
         }
 
         int totalPosition = spPos + cPos + pPos;
@@ -582,13 +587,13 @@ public class WSRSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(customerProfile.getCustomerName());
-            /*if (customerProfile.getStateCodeWise().size() == 1) {
+            if (customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR1StateName.setVisibility(View.GONE);
-            }*/
+            }
             tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
             tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
@@ -645,12 +650,12 @@ public class WSRSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(customerProfile.getCustomerName());
-            /*if (customerProfile.getStateCodeWise().size() == 1) {
+            if (customerProfile.getStateCodeWise().size() == 1) {
                 tviR2StateName.setVisibility(View.VISIBLE);
                 tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR2StateName.setVisibility(View.GONE);
-            }*/
+            }
             tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
             tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
@@ -676,13 +681,13 @@ public class WSRSMFragment extends BaseFragment {
             tviR1Name.setText(spProfile.getName());
         } else if (cPos == 1) {
             tviR1Name.setText(customerProfile.getCustomerName());
-           /* if (customerProfile.getStateCodeWise().size() == 1) {
+            if (customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR1StateName.setVisibility(View.GONE);
-            }*/
+            }
         } else if (pPos == 1) {
             tviR1Name.setText(productProfile.getName());
         }
@@ -720,12 +725,12 @@ public class WSRSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(customerProfile.getCustomerName());
-            /*if (customerProfile.getStateCodeWise().size() == 1) {
+            if (customerProfile.getStateCodeWise().size() == 1) {
                 tviR3StateName.setVisibility(View.VISIBLE);
                 tviR3StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR3StateName.setVisibility(View.GONE);
-            }*/
+            }
             tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
             tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
@@ -752,12 +757,12 @@ public class WSRSMFragment extends BaseFragment {
             tviR2Name.setText(spProfile.getName());
         } else if (cPos == 2) {
             tviR2Name.setText(customerProfile.getCustomerName());
-            /*if (customerProfile.getStateCodeWise().size() == 1) {
+            if (customerProfile.getStateCodeWise().size() == 1) {
                 tviR2StateName.setVisibility(View.VISIBLE);
                 tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR2StateName.setVisibility(View.GONE);
-            }*/
+            }
         } else if (pPos == 2) {
             tviR2Name.setText(productProfile.getName());
         }
@@ -765,13 +770,13 @@ public class WSRSMFragment extends BaseFragment {
             tviR1Name.setText(spProfile.getName());
         } else if (cPos == 1) {
             tviR1Name.setText(customerProfile.getCustomerName());
-            /*if (customerProfile.getStateCodeWise().size() == 1) {
+            if (customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR1StateName.setVisibility(View.GONE);
-            }*/
+            }
         } else if (pPos == 1) {
             tviR1Name.setText(productProfile.getName());
         }
