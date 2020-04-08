@@ -28,6 +28,7 @@ import com.teamcomputers.bam.Utils.BAMUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OSOCustomerAdapter extends RecyclerView.Adapter<OSOCustomerAdapter.ViewHolder> {
@@ -188,8 +189,17 @@ public class OSOCustomerAdapter extends RecyclerView.Adapter<OSOCustomerAdapter.
             public void onClick(View v) {
                 //SharedPreferencesController.getInstance(mActivity).setFrom("2");
                 //SharedPreferencesController.getInstance(mActivity).setLocation(dataList.get(position).getCustName());
-                dataList.get(position).setUserId(userId);
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataList.get(position)));
+                //dataList.get(position).setUserId(userId);
+                //EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataList.get(position)));
+                OSOCustomerModel pData = new OSOCustomerModel();
+                pData.setCustomerName(dataList.get(position).getCustomerName());
+                pData.setUserId(userId);
+                pData.setSOAmount(dataList.get(position).getSOAmount());
+                pData.setPosition(dataList.get(position).getPosition());
+                //List<OSOCustomerModel.StateCodeWise> pSelected = new ArrayList<>();
+                //pSelected.add(dataList.get(position));
+                pData.setStateCodeWise(null);
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, pData));
             }
         });
         //List<TOCustomerModel.StateCodeWise> stateCodeWise = dataList.get(position).getStateCodeWise();

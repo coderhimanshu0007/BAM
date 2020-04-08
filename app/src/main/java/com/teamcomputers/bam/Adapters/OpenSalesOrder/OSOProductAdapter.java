@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,11 +41,13 @@ public class OSOProductAdapter extends RecyclerView.Adapter<OSOProductAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tviStateName, tviStateSOAmount;
+        ImageView iviOption;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.tviStateName = (TextView) itemView.findViewById(R.id.tviStateName);
             this.tviStateSOAmount = (TextView) itemView.findViewById(R.id.tviStateSOAmount);
+            this.iviOption = (ImageView) itemView.findViewById(R.id.iviOption);
         }
     }
 
@@ -60,6 +63,7 @@ public class OSOProductAdapter extends RecyclerView.Adapter<OSOProductAdapter.Vi
     public void onBindViewHolder(OSOProductAdapter.ViewHolder holder, final int position) {
         holder.tviStateName.setText(position + 1 + ". " + dataList.get(position).getProduct());
         holder.tviStateSOAmount.setText(BAMUtil.getRoundOffValue(dataList.get(position).getSOAmount()));
+        holder.iviOption.setVisibility(View.GONE);
        /* holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

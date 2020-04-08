@@ -83,12 +83,15 @@ public class OSORSMFragment extends BaseFragment {
     TextView tviR3Name;
     @BindView(R.id.iviR1Close)
     ImageView iviR1Close;
-    @BindView(R.id.tviR1SOAmount)
-    TextView tviR1SOAmount;
-    @BindView(R.id.tviR2SOAmount)
-    TextView tviR2SOAmount;
-    @BindView(R.id.tviR3SOAmount)
-    TextView tviR3SOAmount;
+    @BindView(R.id.tviSOAmount)
+    TextView tviSOAmount;
+    @BindView(R.id.tviR1StateName)
+    TextView tviR1StateName;
+    @BindView(R.id.tviR2StateName)
+    TextView tviR2StateName;
+    @BindView(R.id.tviR3StateName)
+    TextView tviR3StateName;
+
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
     private OSORSMAdapter rsmAdapter;
@@ -281,7 +284,7 @@ public class OSORSMFragment extends BaseFragment {
         cviRSMHeading.setVisibility(View.GONE);
         type = 1;
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "RSM", "", "", "", "", "",""));
+        BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "RSM", "", "", "", "", "", ""));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -303,6 +306,7 @@ public class OSORSMFragment extends BaseFragment {
         } else if (cPos == 1) {
             fromCustomer = false;
             customerProfile = null;
+            tviR1StateName.setText("");
             cPos = 0;
             if (spPos == 2) {
                 spPos = 1;
@@ -347,6 +351,7 @@ public class OSORSMFragment extends BaseFragment {
         } else if (cPos == 2) {
             fromCustomer = false;
             customerProfile = null;
+            tviR2StateName.setText("");
             cPos = 0;
             if (spPos == 4) {
                 spPos = 2;
@@ -377,6 +382,7 @@ public class OSORSMFragment extends BaseFragment {
         } else if (cPos == 4) {
             fromCustomer = false;
             customerProfile = null;
+            tviR3StateName.setText("");
             cPos = 0;
         } else if (iPos == 4) {
             fromInvoice = false;
@@ -431,7 +437,7 @@ public class OSORSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(spProfile.getName());
-            tviR1SOAmount.setText(BAMUtil.getRoundOffValue(spProfile.getSOAmount()));
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(spProfile.getSOAmount()));
             //tviTarget.setText(BAMUtil.getRoundOffValue(spProfile.getYTDTarget()));
             //tviActual.setText(BAMUtil.getRoundOffValue(spProfile.getYTD()));
             //tviAch.setText(spProfile.getYTDPercentage().intValue() + "%");
@@ -449,14 +455,14 @@ public class OSORSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(customerProfile.getCustomerName());
-            tviR1SOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
-            /*if (customerProfile.getStateCodeWise().size() == 1) {
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
+            if (customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR1StateName.setVisibility(View.GONE);
-            }*/
+            }
             //tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             //tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
             //tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
@@ -474,7 +480,7 @@ public class OSORSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(invoiceProfile.getInvoiceNo());
-            tviR1SOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
             //tviTarget.setText(BAMUtil.getRoundOffValue(invoiceProfile.getYTDTarget()));
             //tviActual.setText(BAMUtil.getRoundOffValue(invoiceProfile.getYTD()));
             //tviAch.setText(invoiceProfile.getYTDPercentage().intValue() + "%");
@@ -497,7 +503,7 @@ public class OSORSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(spProfile.getName());
-            tviR2SOAmount.setText(BAMUtil.getRoundOffValue(spProfile.getSOAmount()));
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(spProfile.getSOAmount()));
             //tviTarget.setText(BAMUtil.getRoundOffValue(spProfile.getYTDTarget()));
             //tviActual.setText(BAMUtil.getRoundOffValue(spProfile.getYTD()));
             //tviAch.setText(spProfile.getYTDPercentage().intValue() + "%");
@@ -515,13 +521,13 @@ public class OSORSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(customerProfile.getCustomerName());
-            tviR2SOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
-            /*if (customerProfile.getStateCodeWise().size() == 1) {
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
+            if (customerProfile.getStateCodeWise().size() == 1) {
                 tviR2StateName.setVisibility(View.VISIBLE);
                 tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR2StateName.setVisibility(View.GONE);
-            }*/
+            }
             //tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             //tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
             //tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
@@ -539,27 +545,27 @@ public class OSORSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(invoiceProfile.getInvoiceNo());
-            tviR2SOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
             //tviTarget.setText(BAMUtil.getRoundOffValue(invoiceProfile.getYTDTarget()));
             //tviActual.setText(BAMUtil.getRoundOffValue(invoiceProfile.getYTD()));
             //tviAch.setText(invoiceProfile.getYTDPercentage().intValue() + "%");
         }
         if (spPos == 1) {
             tviR1Name.setText(spProfile.getName());
-            tviR1SOAmount.setText(BAMUtil.getRoundOffValue(spProfile.getSOAmount()));
+            //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(spProfile.getSOAmount()));
         } else if (cPos == 1) {
             tviR1Name.setText(customerProfile.getCustomerName());
-            tviR1SOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
-           /* if (customerProfile.getStateCodeWise().size() == 1) {
+            //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
+            if (customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR1StateName.setVisibility(View.GONE);
-            }*/
+            }
         } else if (iPos == 1) {
             tviR1Name.setText(invoiceProfile.getInvoiceNo());
-            tviR1SOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
+            //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
         }
     }
 
@@ -578,7 +584,7 @@ public class OSORSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(spProfile.getName());
-            tviR3SOAmount.setText(BAMUtil.getRoundOffValue(spProfile.getSOAmount()));
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(spProfile.getSOAmount()));
             //tviTarget.setText(BAMUtil.getRoundOffValue(spProfile.getYTDTarget()));
             //tviActual.setText(BAMUtil.getRoundOffValue(spProfile.getYTD()));
             //tviAch.setText(spProfile.getYTDPercentage().intValue() + "%");
@@ -596,13 +602,13 @@ public class OSORSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(customerProfile.getCustomerName());
-            tviR3SOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
-            /*if (customerProfile.getStateCodeWise().size() == 1) {
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
+            if (customerProfile.getStateCodeWise().size() == 1) {
                 tviR3StateName.setVisibility(View.VISIBLE);
                 tviR3StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR3StateName.setVisibility(View.GONE);
-            }*/
+            }
             //tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             //tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
             //tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
@@ -620,7 +626,7 @@ public class OSORSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(invoiceProfile.getInvoiceNo());
-            tviR3SOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
             //tviTarget.setText(BAMUtil.getRoundOffValue(invoiceProfile.getYTDTarget()));
             //tviActual.setText(BAMUtil.getRoundOffValue(invoiceProfile.getYTD()));
             //tviAch.setText(invoiceProfile.getYTDPercentage().intValue() + "%");
@@ -628,36 +634,36 @@ public class OSORSMFragment extends BaseFragment {
 
         if (spPos == 2) {
             tviR2Name.setText(spProfile.getName());
-            tviR2SOAmount.setText(BAMUtil.getRoundOffValue(spProfile.getSOAmount()));
+            //tviR2SOAmount.setText(BAMUtil.getRoundOffValue(spProfile.getSOAmount()));
         } else if (cPos == 2) {
             tviR2Name.setText(customerProfile.getCustomerName());
-            tviR2SOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
-            /*if (customerProfile.getStateCodeWise().size() == 1) {
+            //tviR2SOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
+            if (customerProfile.getStateCodeWise().size() == 1) {
                 tviR2StateName.setVisibility(View.VISIBLE);
                 tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR2StateName.setVisibility(View.GONE);
-            }*/
+            }
         } else if (iPos == 2) {
             tviR2Name.setText(invoiceProfile.getInvoiceNo());
-            tviR2SOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
+            //tviR2SOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
         }
         if (spPos == 1) {
             tviR1Name.setText(spProfile.getName());
-            tviR1SOAmount.setText(BAMUtil.getRoundOffValue(spProfile.getSOAmount()));
+            //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(spProfile.getSOAmount()));
         } else if (cPos == 1) {
             tviR1Name.setText(customerProfile.getCustomerName());
-            tviR1SOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
-            /*if (customerProfile.getStateCodeWise().size() == 1) {
+            //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
+            if (customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR1StateName.setVisibility(View.GONE);
-            }*/
+            }
         } else if (iPos == 1) {
             tviR1Name.setText(invoiceProfile.getInvoiceNo());
-            tviR1SOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
+            //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
         }
     }
 
