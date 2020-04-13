@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,6 +43,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class OSOSalesPersonFragment extends BaseFragment {
@@ -69,6 +71,8 @@ public class OSOSalesPersonFragment extends BaseFragment {
 
     String toolbarTitle = "";
     String userId = "", level = "";
+    @BindView(R.id.txtSearch)
+    EditText txtSearch;
     @BindView(R.id.llRSMLayout)
     LinearLayout llRSMLayout;
     @BindView(R.id.cviRSMHeading)
@@ -99,7 +103,7 @@ public class OSOSalesPersonFragment extends BaseFragment {
     RecyclerView rviRSM;
     private OSOSalesPersonAdapter adapter;
     private int type = 0, pos = 0, rsmPos = 0, spPos = 0, cPos = 0, iPos = 0;
-    boolean fromRSM, fromCustomer, fromInvoice;
+    boolean fromRSM, fromCustomer, fromInvoice, search = false;
 
     List<OSORSMSalesModel> spDataList = new ArrayList<>();
 
@@ -167,7 +171,7 @@ public class OSOSalesPersonFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return AccountsFragment.class.getSimpleName();
+        return OSOSalesPersonFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -305,6 +309,22 @@ public class OSOSalesPersonFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnTextChanged(R.id.txtSearch)
+    public void search() {
+        adapter.getFilter().filter(txtSearch.getText().toString());
+    }
+
+    @OnClick(R.id.iviSearch)
+    public void Search(){
+        if (!search) {
+            txtSearch.setVisibility(View.VISIBLE);
+            search = true;
+        } else if (search) {
+            txtSearch.setVisibility(View.GONE);
+            search = false;
+        }
     }
 
     @OnClick(R.id.iviClose)

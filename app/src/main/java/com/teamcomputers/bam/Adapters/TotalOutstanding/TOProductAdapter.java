@@ -1,14 +1,14 @@
 package com.teamcomputers.bam.Adapters.TotalOutstanding;
 
 import android.app.Activity;
-import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.PopupMenu;
@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Interface.BAMConstant;
-import com.teamcomputers.bam.Models.FullSalesModel;
 import com.teamcomputers.bam.Models.TotalOutstanding.TOProductModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
@@ -24,16 +23,19 @@ import com.teamcomputers.bam.Utils.BAMUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TOProductAdapter extends RecyclerView.Adapter<TOProductAdapter.ViewHolder> {
+public class TOProductAdapter extends RecyclerView.Adapter<TOProductAdapter.ViewHolder> implements Filterable {
     private List<TOProductModel> dataList;
+    private List<TOProductModel> dataListFiltered;
     String level, type;
     Activity mActivity;
     boolean fromRSM, fromSP, fromCustomer;
 
     public TOProductAdapter(DashboardActivity dashboardActivityContext, String level, String type, List<TOProductModel> data, boolean fromRSM, boolean fromSP, boolean fromCustomer) {
         this.dataList = data;
+        this.dataListFiltered = data;
         this.level = level;
         this.type = type;
         this.mActivity = dashboardActivityContext;
@@ -43,7 +45,42 @@ public class TOProductAdapter extends RecyclerView.Adapter<TOProductAdapter.View
     }
 
     public void setItems(List<TOProductModel> data) {
-        this.dataList = data;
+        this.dataListFiltered = data;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    dataListFiltered = dataList;
+                } else {
+                    List<TOProductModel> filteredList = new ArrayList<>();
+                    for (TOProductModel row : dataList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getName().contains(charSequence)) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    dataListFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = dataListFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults filterResults) {
+                dataListFiltered = (ArrayList<TOProductModel>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -69,7 +106,7 @@ public class TOProductAdapter extends RecyclerView.Adapter<TOProductAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(TOProductAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         /*if (position == 0) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_first_item_value));
         } else if (position == 1) {
@@ -82,8 +119,8 @@ public class TOProductAdapter extends RecyclerView.Adapter<TOProductAdapter.View
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         }*/
         holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
-        holder.tviName.setText(position + 1 + ". " + dataList.get(position).getName());
-        holder.tviAmount.setText(BAMUtil.getRoundOffValue(dataList.get(position).getAmount()));
+        holder.tviName.setText(position + 1 + ". " + dataListFiltered.get(position).getName());
+        holder.tviAmount.setText(BAMUtil.getRoundOffValue(dataListFiltered.get(position).getAmount()));
 
         if (level.equals("R1")) {
             if (fromRSM && fromSP && fromCustomer) {
@@ -144,15 +181,15 @@ public class TOProductAdapter extends RecyclerView.Adapter<TOProductAdapter.View
                         switch (item.getItemId()) {
                             case R.id.menu1:
                                 //handle menu1 click
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataList.get(position)));
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, dataList.get(position)));
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu3:
                                 //handle menu3 click
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataList.get(position)));
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu4:
                                 //handle menu3 click
@@ -176,7 +213,7 @@ public class TOProductAdapter extends RecyclerView.Adapter<TOProductAdapter.View
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return dataListFiltered.size();
     }
 }
 

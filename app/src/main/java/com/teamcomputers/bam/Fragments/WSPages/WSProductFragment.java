@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,7 +21,6 @@ import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.SalesOutstanding.NewProductAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
-import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
 import com.teamcomputers.bam.Models.FullSalesModel;
 import com.teamcomputers.bam.Models.SalesCustomerModel;
 import com.teamcomputers.bam.Models.common.EventObject;
@@ -41,6 +41,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class WSProductFragment extends BaseFragment {
@@ -63,8 +64,10 @@ public class WSProductFragment extends BaseFragment {
     private LinearLayoutManager layoutManager;
 
     String userId = "", level;
-    boolean fromRSM, fromSP, fromCustomer;
+    boolean fromRSM, fromSP, fromCustomer, search = false;
     String toolbarTitle = "";
+    @BindView(R.id.txtSearch)
+    EditText txtSearch;
     @BindView(R.id.llTabHeading)
     LinearLayout llTabHeading;
     @BindView(R.id.cviProductHeading)
@@ -270,7 +273,7 @@ public class WSProductFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return AccountsFragment.class.getSimpleName();
+        return WSProductFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -375,6 +378,22 @@ public class WSProductFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnTextChanged(R.id.txtSearch)
+    public void search() {
+        adapter.getFilter().filter(txtSearch.getText().toString());
+    }
+
+    @OnClick(R.id.iviSearch)
+    public void Search(){
+        if (!search) {
+            txtSearch.setVisibility(View.VISIBLE);
+            search = true;
+        } else if (search) {
+            txtSearch.setVisibility(View.GONE);
+            search = false;
+        }
     }
 
     @OnClick(R.id.tviYTD)

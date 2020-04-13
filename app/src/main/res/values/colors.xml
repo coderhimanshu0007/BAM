@@ -66,5 +66,7 @@
 
     <color name="shader">#33000000</color>
     <color name="divider_color">#25434343</color>
+    <color name="color_map">#25434343</color>
+    <color name="color_filter_amount">#CABEF7</color>
 
 </resources>

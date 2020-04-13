@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,7 +25,6 @@ import com.teamcomputers.bam.Models.FullSalesModel;
 import com.teamcomputers.bam.Models.SalesCustomerModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.NewSalesReceivable.SalesPersonListRequester;
 import com.teamcomputers.bam.Requesters.SalesReceivable.FilterSalesListRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
@@ -41,6 +41,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class WSSalesPersonFragment extends BaseFragment {
@@ -67,6 +68,8 @@ public class WSSalesPersonFragment extends BaseFragment {
 
     String toolbarTitle = "";
     String userId = "", level = "";
+    @BindView(R.id.txtSearch)
+    EditText txtSearch;
     @BindView(R.id.llRSMLayout)
     LinearLayout llRSMLayout;
     @BindView(R.id.cviRSMHeading)
@@ -113,7 +116,7 @@ public class WSSalesPersonFragment extends BaseFragment {
     RecyclerView rviRSM;
     private NewSalesPersonAdapter adapter;
     private int type = 0, pos = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0;
-    boolean fromRSM, fromCustomer, fromProduct;
+    boolean fromRSM, fromCustomer, fromProduct, search = false;
 
     List<FullSalesModel> spDataList = new ArrayList<>();
 
@@ -371,7 +374,7 @@ public class WSSalesPersonFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return AccountsFragment.class.getSimpleName();
+        return WSSalesPersonFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -543,6 +546,22 @@ public class WSSalesPersonFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnTextChanged(R.id.txtSearch)
+    public void search() {
+        adapter.getFilter().filter(txtSearch.getText().toString());
+    }
+
+    @OnClick(R.id.iviSearch)
+    public void Search(){
+        if (!search) {
+            txtSearch.setVisibility(View.VISIBLE);
+            search = true;
+        } else if (search) {
+            txtSearch.setVisibility(View.GONE);
+            search = false;
+        }
     }
 
     @OnClick(R.id.tviYTD)

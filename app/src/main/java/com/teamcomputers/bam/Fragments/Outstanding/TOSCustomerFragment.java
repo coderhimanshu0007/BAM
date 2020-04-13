@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -26,7 +27,6 @@ import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSProductFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSSalesPersonFragment;
-import com.teamcomputers.bam.Models.FullSalesModel;
 import com.teamcomputers.bam.Models.TotalOutstanding.TOCustomerModel;
 import com.teamcomputers.bam.Models.TotalOutstanding.TOProductModel;
 import com.teamcomputers.bam.Models.TotalOutstanding.TORSMSalesModel;
@@ -48,6 +48,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class TOSCustomerFragment extends BaseFragment {
@@ -67,9 +68,11 @@ public class TOSCustomerFragment extends BaseFragment {
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
 
-    boolean fromRSM, fromSP, fromProduct;
+    boolean fromRSM, fromSP, fromProduct, search = false;
     String toolbarTitle = "";
     String userId = "", level = "";
+    @BindView(R.id.txtSearch)
+    EditText txtSearch;
     @BindView(R.id.cviSPHeading)
     CardView cviSPHeading;
     @BindView(R.id.llSPLayout)
@@ -169,7 +172,7 @@ public class TOSCustomerFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return AccountsFragment.class.getSimpleName();
+        return TOSCustomerFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -313,6 +316,22 @@ public class TOSCustomerFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnTextChanged(R.id.txtSearch)
+    public void search() {
+        adapter.getFilter().filter(txtSearch.getText().toString());
+    }
+
+    @OnClick(R.id.iviSearch)
+    public void Search(){
+        if (!search) {
+            txtSearch.setVisibility(View.VISIBLE);
+            search = true;
+        } else if (search) {
+            txtSearch.setVisibility(View.GONE);
+            search = false;
+        }
     }
 
     @OnClick(R.id.iviClose)

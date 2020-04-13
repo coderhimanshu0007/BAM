@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_drawable"
+    tools:context=".Activities.SplashActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_map"
+        android:orientation="vertical" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="270dp"
+            android:layout_height="116dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="69dp"
+            android:background="@drawable/kockpit_logo_white"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:layout_width="99dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="22dp"
+            android:background="@drawable/teamcomputers_logo_white"
+            android:orientation="vertical" />
+    </RelativeLayout>
+
+</RelativeLayout>

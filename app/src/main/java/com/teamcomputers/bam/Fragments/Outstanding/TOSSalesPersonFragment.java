@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -25,8 +26,6 @@ import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSCustomerFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSProductFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
-import com.teamcomputers.bam.Models.FullSalesModel;
-import com.teamcomputers.bam.Models.SalesCustomerModel;
 import com.teamcomputers.bam.Models.TotalOutstanding.TOCustomerModel;
 import com.teamcomputers.bam.Models.TotalOutstanding.TOProductModel;
 import com.teamcomputers.bam.Models.TotalOutstanding.TORSMSalesModel;
@@ -48,6 +47,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class TOSSalesPersonFragment extends BaseFragment {
@@ -71,6 +71,8 @@ public class TOSSalesPersonFragment extends BaseFragment {
 
     String toolbarTitle = "";
     String userId = "", level = "";
+    @BindView(R.id.txtSearch)
+    EditText txtSearch;
     @BindView(R.id.llRSMLayout)
     LinearLayout llRSMLayout;
     @BindView(R.id.cviRSMHeading)
@@ -107,7 +109,7 @@ public class TOSSalesPersonFragment extends BaseFragment {
     RecyclerView rviRSM;
     private TOSalesPersonAdapter adapter;
     private int type = 0, pos = 0, bar = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0;
-    boolean fromRSM, fromCustomer, fromProduct;
+    boolean fromRSM, fromCustomer, fromProduct, search = false;
 
     TOCustomerModel customerProfile;
     TORSMSalesModel rsmProfile;
@@ -178,7 +180,7 @@ public class TOSSalesPersonFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return AccountsFragment.class.getSimpleName();
+        return TOSSalesPersonFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -316,6 +318,22 @@ public class TOSSalesPersonFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnTextChanged(R.id.txtSearch)
+    public void search() {
+        adapter.getFilter().filter(txtSearch.getText().toString());
+    }
+
+    @OnClick(R.id.iviSearch)
+    public void Search(){
+        if (!search) {
+            txtSearch.setVisibility(View.VISIBLE);
+            search = true;
+        } else if (search) {
+            txtSearch.setVisibility(View.GONE);
+            search = false;
+        }
     }
 
     @OnClick(R.id.iviClose)

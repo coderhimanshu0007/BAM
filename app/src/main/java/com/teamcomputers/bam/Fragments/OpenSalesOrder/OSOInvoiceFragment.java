@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,6 +42,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class OSOInvoiceFragment extends BaseFragment {
@@ -63,8 +65,10 @@ public class OSOInvoiceFragment extends BaseFragment {
     private LinearLayoutManager layoutManager;
 
     String userId = "", level;
-    boolean fromRSM, fromSP, fromCustomer;
+    boolean fromRSM, fromSP, fromCustomer, search = false;
     String toolbarTitle = "";
+    @BindView(R.id.txtSearch)
+    EditText txtSearch;
     @BindView(R.id.cviProductHeading)
     CardView cviProductHeading;
     @BindView(R.id.llProductLayout)
@@ -169,7 +173,7 @@ public class OSOInvoiceFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return AccountsFragment.class.getSimpleName();
+        return OSOInvoiceFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -274,6 +278,22 @@ public class OSOInvoiceFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnTextChanged(R.id.txtSearch)
+    public void search() {
+        adapter.getFilter().filter(txtSearch.getText().toString());
+    }
+
+    @OnClick(R.id.iviSearch)
+    public void Search(){
+        if (!search) {
+            txtSearch.setVisibility(View.VISIBLE);
+            search = true;
+        } else if (search) {
+            txtSearch.setVisibility(View.GONE);
+            search = false;
+        }
     }
 
     @OnClick(R.id.iviClose)

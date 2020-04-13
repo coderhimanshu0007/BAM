@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,6 +42,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class WSCustomerFragment extends BaseFragment {
@@ -62,9 +64,11 @@ public class WSCustomerFragment extends BaseFragment {
 
     FullSalesModel rsmProfile, salesProfile, productProfile;
 
-    boolean fromRSM, fromSP, fromProduct;
+    boolean fromRSM, fromSP, fromProduct, search = false;
     String toolbarTitle = "";
     String userId = "", level = "";
+    @BindView(R.id.txtSearch)
+    EditText txtSearch;
     @BindView(R.id.cviSPHeading)
     CardView cviSPHeading;
     @BindView(R.id.llSPLayout)
@@ -216,7 +220,7 @@ public class WSCustomerFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return AccountsFragment.class.getSimpleName();
+        return WSCustomerFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -360,6 +364,22 @@ public class WSCustomerFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnTextChanged(R.id.txtSearch)
+    public void search() {
+        adapter.getFilter().filter(txtSearch.getText().toString());
+    }
+
+    @OnClick(R.id.iviSearch)
+    public void Search(){
+        if (!search) {
+            txtSearch.setVisibility(View.VISIBLE);
+            search = true;
+        } else if (search) {
+            txtSearch.setVisibility(View.GONE);
+            search = false;
+        }
     }
 
     @OnClick(R.id.iviClose)

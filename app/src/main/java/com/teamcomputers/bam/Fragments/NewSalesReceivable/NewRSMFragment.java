@@ -154,7 +154,7 @@ public class NewRSMFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return AccountsFragment.class.getSimpleName();
+        return NewRSMFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -330,7 +330,7 @@ public class NewRSMFragment extends BaseFragment {
     }
 
     private void initRSMData(String type) {
-        rsmAdapter = new NewRSMAdapter(dashboardActivityContext, type, "",rsmDataList, false, false, false);
+        rsmAdapter = new NewRSMAdapter(dashboardActivityContext, type, "", rsmDataList, false, false, false);
         rviRSM.setAdapter(rsmAdapter);
     }
 

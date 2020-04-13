@@ -1,11 +1,14 @@
 package com.teamcomputers.bam.Fragments.WSPages;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -18,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.SalesOutstanding.NewRSMAdapter;
-import com.teamcomputers.bam.Adapters.SalesOutstanding.SalesPersonAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
 import com.teamcomputers.bam.Models.FullSalesModel;
@@ -41,6 +43,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class WSRSMFragment extends BaseFragment {
@@ -64,6 +67,8 @@ public class WSRSMFragment extends BaseFragment {
     String toolbarTitle = "";
 
     String userId = "", level = "";
+    @BindView(R.id.txtSearch)
+    EditText txtSearch;
     @BindView(R.id.llRSMLayout)
     LinearLayout llRSMLayout;
     @BindView(R.id.cviRSMHeading)
@@ -102,10 +107,9 @@ public class WSRSMFragment extends BaseFragment {
     View viMTD;
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
-    private SalesPersonAdapter adapter;
     private NewRSMAdapter rsmAdapter;
     private int type = 0, pos = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0;
-    boolean fromSP, fromCustomer, fromProduct;
+    boolean fromSP, fromCustomer, fromProduct, search = false;
 
     FullSalesModel spData;
     List<FullSalesModel> rsmDataList = new ArrayList<>();
@@ -238,7 +242,7 @@ public class WSRSMFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return AccountsFragment.class.getSimpleName();
+        return WSRSMFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -342,6 +346,32 @@ public class WSRSMFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnTextChanged(R.id.txtSearch)
+    public void search() {
+        rsmAdapter.getFilter().filter(txtSearch.getText().toString());
+    }
+
+    @OnClick(R.id.iviSearch)
+    public void Search(){
+        if (!search) {
+            txtSearch.setVisibility(View.VISIBLE);
+            search = true;
+        } else if (search) {
+            txtSearch.setVisibility(View.GONE);
+            search = false;
+            /*txtSearch.animate()
+                    .translationY(0)
+                    .alpha(0.0f)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            txtSearch.setVisibility(View.GONE);
+                        }
+                    });*/
+        }
     }
 
     @OnClick(R.id.tviYTD)

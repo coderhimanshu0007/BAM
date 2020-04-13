@@ -75,6 +75,7 @@ import com.teamcomputers.bam.Utils.CircularImageView;
 import com.teamcomputers.bam.Utils.WrapContentLinearLayoutManager;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
@@ -255,6 +256,39 @@ public class DashboardActivity extends BaseActivity {
                 return false;
             }
         });
+        /*MenuItem action_search = menu.findItem(R.id.action_search);
+        action_search.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                //getScreen();
+                if (fragment.getFragmentName().equals("WSRSMFragment")) {
+                    EventBus.getDefault().post(new EventObject(ClickEvents.WS_RSM_SEARCH, null));
+                } else if (fragment.getFragmentName().equals("WSSalesPersonFragment")) {
+                    EventBus.getDefault().post(new EventObject(ClickEvents.WS_SP_SEARCH, null));
+                } else if (fragment.getFragmentName().equals("WSCustomerFragment")) {
+                    EventBus.getDefault().post(new EventObject(ClickEvents.WS_CUSTOMER_SEARCH, null));
+                } else if (fragment.getFragmentName().equals("WSProductFragment")) {
+                    EventBus.getDefault().post(new EventObject(ClickEvents.WS_PRODUCT_SEARCH, null));
+                } else if (fragment.getFragmentName().equals("OSORSMFragment")) {
+                    EventBus.getDefault().post(new EventObject(ClickEvents.OSO_RSM_SEARCH, null));
+                } else if (fragment.getFragmentName().equals("OSOSalesPersonFragment")) {
+                    EventBus.getDefault().post(new EventObject(ClickEvents.OSO_SP_SEARCH, null));
+                } else if (fragment.getFragmentName().equals("OSOCustomerFragment")) {
+                    EventBus.getDefault().post(new EventObject(ClickEvents.OSO_CUSTOMER_SEARCH, null));
+                } else if (fragment.getFragmentName().equals("OSOProductFragment")) {
+                    EventBus.getDefault().post(new EventObject(ClickEvents.OSO_PRODUCT_SEARCH, null));
+                } else if (fragment.getFragmentName().equals("TOSRSMFragment")) {
+                    EventBus.getDefault().post(new EventObject(ClickEvents.TOS_RSM_SEARCH, null));
+                } else if (fragment.getFragmentName().equals("TOSSalesPersonFragment")) {
+                    EventBus.getDefault().post(new EventObject(ClickEvents.TOS_SP_SEARCH, null));
+                } else if (fragment.getFragmentName().equals("TOSCustomerFragment")) {
+                    EventBus.getDefault().post(new EventObject(ClickEvents.TOS_CUSTOMER_SEARCH, null));
+                } else if (fragment.getFragmentName().equals("TOSProductFragment")) {
+                    EventBus.getDefault().post(new EventObject(ClickEvents.TOS_PRODUCT_SEARCH, null));
+                }
+                return false;
+            }
+        });*/
         return true;
     }
 

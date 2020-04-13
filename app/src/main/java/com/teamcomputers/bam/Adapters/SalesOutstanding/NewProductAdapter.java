@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -23,16 +25,19 @@ import com.teamcomputers.bam.Utils.BAMUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.ViewHolder> {
+public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.ViewHolder> implements Filterable {
     private List<FullSalesModel> dataList;
+    private List<FullSalesModel> dataListFiltered;
     String level, type;
     Activity mActivity;
     boolean fromRSM, fromSP, fromCustomer;
 
     public NewProductAdapter(DashboardActivity dashboardActivityContext, String level, String type, List<FullSalesModel> data, boolean fromRSM, boolean fromSP, boolean fromCustomer) {
         this.dataList = data;
+        this.dataListFiltered = data;
         this.level = level;
         this.type = type;
         this.mActivity = dashboardActivityContext;
@@ -43,6 +48,41 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
 
     public void setItems(List<FullSalesModel> data) {
         this.dataList = data;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    dataListFiltered = dataList;
+                } else {
+                    List<FullSalesModel> filteredList = new ArrayList<>();
+                    for (FullSalesModel row : dataList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getName().contains(charSequence)) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    dataListFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = dataListFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults filterResults) {
+                dataListFiltered = (ArrayList<FullSalesModel>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -84,26 +124,26 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
         } else if (position % 2 == 1) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         }
-        holder.tviName.setText(position + 1 + ". " + dataList.get(position).getName());
+        holder.tviName.setText(position + 1 + ". " + dataListFiltered.get(position).getName());
         if (fromRSM || fromSP || fromCustomer) {
-            holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
-            holder.tviQTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getQTD()));
-            holder.tviMTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getMTD()));
+            holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataListFiltered.get(position).getYTD()));
+            holder.tviQTD.setText(BAMUtil.getRoundOffValue(dataListFiltered.get(position).getQTD()));
+            holder.tviMTD.setText(BAMUtil.getRoundOffValue(dataListFiltered.get(position).getMTD()));
             holder.pBar.setVisibility(View.GONE);
         } else {
             String target = "", actual = "";
             int bar = 0;
             if (type.equals("YTD")) {
-                target = BAMUtil.getRoundOffValue(dataList.get(position).getYTDTarget());
-                actual = BAMUtil.getRoundOffValue(dataList.get(position).getYTD());
+                target = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getYTDTarget());
+                actual = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getYTD());
                 //bar = (dataList.get(position).getYTDPercentage()).intValue();
             } else if (type.equals("QTD")) {
-                target = BAMUtil.getRoundOffValue(dataList.get(position).getQTDTarget());
-                actual = BAMUtil.getRoundOffValue(dataList.get(position).getQTD());
+                target = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getQTDTarget());
+                actual = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getQTD());
                 //bar = (dataList.get(position).getQTDPercentage()).intValue();
             } else if (type.equals("MTD")) {
-                target = BAMUtil.getRoundOffValue(dataList.get(position).getMTDTarget());
-                actual = BAMUtil.getRoundOffValue(dataList.get(position).getMTD());
+                target = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getMTDTarget());
+                actual = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getMTD());
                 //bar = (dataList.get(position).getMTDPercentage()).intValue();
             }
 
@@ -113,7 +153,7 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
             holder.tviYTD.setText(target);
             holder.tviQTD.setText(actual);
 
-            bar = (dataList.get(position).getYTDPercentage()).intValue();
+            bar = (dataListFiltered.get(position).getYTDPercentage()).intValue();
             holder.tviMTD.setText(bar + "%");
             holder.pBar.setProgress(bar);
 
@@ -185,15 +225,15 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
                         switch (item.getItemId()) {
                             case R.id.menu1:
                                 //handle menu1 click
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataList.get(position)));
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, dataList.get(position)));
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu3:
                                 //handle menu3 click
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataList.get(position)));
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu4:
                                 //handle menu3 click
@@ -217,7 +257,7 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return dataListFiltered.size();
     }
 }
 

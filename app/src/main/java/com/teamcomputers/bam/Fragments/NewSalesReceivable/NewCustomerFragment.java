@@ -125,7 +125,7 @@ public class NewCustomerFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return AccountsFragment.class.getSimpleName();
+        return NewCustomerFragment.class.getSimpleName();
     }
 
     @Subscribe

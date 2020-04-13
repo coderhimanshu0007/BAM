@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,16 +23,19 @@ import com.teamcomputers.bam.Utils.BAMUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class OSOSalesPersonAdapter extends RecyclerView.Adapter<OSOSalesPersonAdapter.ViewHolder> {
+public class OSOSalesPersonAdapter extends RecyclerView.Adapter<OSOSalesPersonAdapter.ViewHolder> implements Filterable {
     private List<OSORSMSalesModel> dataList;
+    private List<OSORSMSalesModel> dataListFiltered;
     Activity mActivity;
     String type, level;
     boolean fromRSM, fromCustomer, fromProduct;
 
     public OSOSalesPersonAdapter(DashboardActivity dashboardActivityContext, String type, String level, List<OSORSMSalesModel> data, boolean fromRSM, boolean fromCustomer, boolean fromProduct) {
         this.dataList = data;
+        this.dataListFiltered = data;
         this.type = type;
         this.level = level;
         this.mActivity = dashboardActivityContext;
@@ -40,7 +45,42 @@ public class OSOSalesPersonAdapter extends RecyclerView.Adapter<OSOSalesPersonAd
     }
 
     public void setItems(List<OSORSMSalesModel> data) {
-        this.dataList = data;
+        this.dataListFiltered = data;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    dataListFiltered = dataList;
+                } else {
+                    List<OSORSMSalesModel> filteredList = new ArrayList<>();
+                    for (OSORSMSalesModel row : dataList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getName().contains(charSequence)) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    dataListFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = dataListFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults filterResults) {
+                dataListFiltered = (ArrayList<OSORSMSalesModel>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -66,7 +106,7 @@ public class OSOSalesPersonAdapter extends RecyclerView.Adapter<OSOSalesPersonAd
     }
 
     @Override
-    public void onBindViewHolder(OSOSalesPersonAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         if (position == 0) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_first_item_value));
         } else if (position == 1) {
@@ -78,8 +118,8 @@ public class OSOSalesPersonAdapter extends RecyclerView.Adapter<OSOSalesPersonAd
         } else if (position % 2 == 1) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         }
-        holder.tviName.setText(position + 1 + ". " + dataList.get(position).getName());
-        holder.tviSOAmount.setText(BAMUtil.getRoundOffValue(dataList.get(position).getSOAmount()));
+        holder.tviName.setText(position + 1 + ". " + dataListFiltered.get(position).getName());
+        holder.tviSOAmount.setText(BAMUtil.getRoundOffValue(dataListFiltered.get(position).getSOAmount()));
         if (level.equals("R1")) {
             if (fromRSM && fromCustomer && fromProduct) {
                 holder.iviOption.setVisibility(View.GONE);
@@ -131,18 +171,18 @@ public class OSOSalesPersonAdapter extends RecyclerView.Adapter<OSOSalesPersonAd
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click
-                                dataList.get(position).setPosition(position);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, dataList.get(position)));
+                                dataListFiltered.get(position).setPosition(position);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu3:
                                 //handle menu3 click
-                                dataList.get(position).setPosition(position);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataList.get(position)));
+                                dataListFiltered.get(position).setPosition(position);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu4:
                                 //handle menu3 click
-                                dataList.get(position).setPosition(position);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, dataList.get(position)));
+                                dataListFiltered.get(position).setPosition(position);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                         }
                         return false;
@@ -156,15 +196,15 @@ public class OSOSalesPersonAdapter extends RecyclerView.Adapter<OSOSalesPersonAd
             @Override
             public void onClick(View v) {
                 //EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, position));
-                dataList.get(position).setPosition(position);
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_CLICK, dataList.get(position)));
+                dataListFiltered.get(position).setPosition(position);
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_CLICK, dataListFiltered.get(position)));
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return dataListFiltered.size();
     }
 }
 

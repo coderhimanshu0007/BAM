@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -19,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.SalesOutstanding.SalesPersonAdapter;
 import com.teamcomputers.bam.Adapters.TotalOutstanding.TORSMAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
@@ -47,6 +47,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class TOSRSMFragment extends BaseFragment {
@@ -70,6 +71,8 @@ public class TOSRSMFragment extends BaseFragment {
     String toolbarTitle = "";
 
     String userId = "", level = "";
+    @BindView(R.id.txtSearch)
+    EditText txtSearch;
     @BindView(R.id.llRSMLayout)
     LinearLayout llRSMLayout;
     @BindView(R.id.cviRSMHeading)
@@ -106,7 +109,7 @@ public class TOSRSMFragment extends BaseFragment {
     RecyclerView rviRSM;
     private TORSMAdapter rsmAdapter;
     private int type = 0, pos = 0, bar = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0;
-    boolean fromSP, fromCustomer, fromProduct;
+    boolean fromSP, fromCustomer, fromProduct, search = false;
 
     TORSMSalesModel spData;
 
@@ -178,7 +181,7 @@ public class TOSRSMFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return AccountsFragment.class.getSimpleName();
+        return TOSRSMFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -282,6 +285,22 @@ public class TOSRSMFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnTextChanged(R.id.txtSearch)
+    public void search() {
+        rsmAdapter.getFilter().filter(txtSearch.getText().toString());
+    }
+
+    @OnClick(R.id.iviSearch)
+    public void Search(){
+        if (!search) {
+            txtSearch.setVisibility(View.VISIBLE);
+            search = true;
+        } else if (search) {
+            txtSearch.setVisibility(View.GONE);
+            search = false;
+        }
     }
 
     @OnClick(R.id.iviClose)

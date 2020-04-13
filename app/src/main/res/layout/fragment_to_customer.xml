@@ -6,6 +6,42 @@
     android:background="@null"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:id="@+id/rlSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@null"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iviSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            app:srcCompat="@drawable/ic_search_black_24dp" />
+
+        <EditText
+            android:id="@+id/txtSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/iviSearch"
+            android:background="@drawable/border_bg_search"
+            android:hint="Search here"
+            android:inputType="textPersonName"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,8 +67,8 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="2dp"
                     android:elevation="@dimen/cardview_compat_inset_shadow"
-                    android:padding="3dp"
                     android:visibility="gone"
+                    android:padding="3dp"
                     app:cardCornerRadius="5dp">
 
                     <LinearLayout
@@ -40,214 +76,222 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/color_first_item_value"
-                        android:foreground="@drawable/ic_map"
                         android:orientation="vertical">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <LinearLayout
-                                android:id="@+id/llClose"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    android:id="@+id/iviClose"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:padding="10dp"
-                                    android:tint="@color/color_value"
-                                    app:srcCompat="@drawable/ic_close_dialog" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_toLeftOf="@+id/llClose"
-                                android:orientation="vertical">
-
-                                <RelativeLayout
-                                    android:id="@+id/rlR1"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <TextView
-                                        android:id="@+id/tviR1Name"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="10dp"
-                                        android:layout_marginTop="10dp"
-                                        android:layout_marginRight="5dp"
-                                        android:text="Sagar Pushkarna"
-                                        android:textColor="@color/color_value"
-                                        android:textSize="14sp"
-                                        app:fontFamily="@font/roboto_bold" />
-
-                                    <ImageView
-                                        android:id="@+id/iviR1Close"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentRight="true"
-                                        android:padding="10dp"
-                                        android:tint="@color/color_value"
-                                        app:srcCompat="@drawable/ic_close_dialog" />
-                                </RelativeLayout>
-
-                                <RelativeLayout
-                                    android:id="@+id/rlR2"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <TextView
-                                        android:id="@+id/tviR2Name"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="10dp"
-                                        android:layout_marginTop="10dp"
-                                        android:layout_marginRight="5dp"
-                                        android:text="Sagar Pushkarna"
-                                        android:textColor="@color/color_value"
-                                        android:textSize="14sp"
-                                        app:fontFamily="@font/roboto_bold" />
-
-                                    <ImageView
-                                        android:id="@+id/iviR2Close"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentRight="true"
-                                        android:padding="10dp"
-                                        android:tint="@color/color_value"
-                                        app:srcCompat="@drawable/ic_close_dialog" />
-                                </RelativeLayout>
-
-                                <RelativeLayout
-                                    android:id="@+id/rlR3"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <TextView
-                                        android:id="@+id/tviR3Name"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="10dp"
-                                        android:layout_marginTop="10dp"
-                                        android:layout_marginRight="5dp"
-                                        android:text="Sagar Pushkarna"
-                                        android:textColor="@color/color_value"
-                                        android:textSize="14sp"
-                                        app:fontFamily="@font/roboto_bold" />
-
-                                    <ImageView
-                                        android:id="@+id/iviR3Close"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentRight="true"
-                                        android:padding="10dp"
-                                        android:tint="@color/color_value"
-                                        app:srcCompat="@drawable/ic_close_dialog" />
-                                </RelativeLayout>
-                            </LinearLayout>
-                        </RelativeLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:background="@drawable/ic_dso_map"
+                            android:backgroundTint="@color/color_map"
+                            android:orientation="vertical">
 
-                            <LinearLayout
-                                android:id="@+id/llAmount"
-                                android:layout_width="0dp"
-                                android:layout_height="50dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="14dp"
-                                android:layout_marginRight="20dp"
-                                android:layout_marginBottom="14dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/td_bg"
-                                android:backgroundTint="@color/text"
-                                android:orientation="vertical"
-                                android:padding="7dp">
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="Outstanding"
-                                    android:textColor="@color/color_value"
-                                    android:textSize="12sp"
-                                    app:fontFamily="@font/roboto_medium" />
-
-                                <TextView
-                                    android:id="@+id/tviAmount"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="625.2"
-                                    android:textColor="@color/color_value"
-                                    android:textSize="14sp"
-                                    app:fontFamily="@font/roboto_bold" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/llDSO"
-                                android:layout_width="0dp"
-                                android:layout_height="50dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="14dp"
-                                android:layout_marginRight="20dp"
-                                android:layout_marginBottom="14dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/td_bg"
-                                android:backgroundTint="@color/text"
-                                android:orientation="vertical"
-                                android:padding="1dp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="DSO"
-                                    android:textColor="@color/color_value"
-                                    android:textSize="12sp"
-                                    app:fontFamily="@font/roboto_medium" />
-
-                                <RelativeLayout
+                                <LinearLayout
+                                    android:id="@+id/llClose"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:gravity="center">
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:orientation="vertical">
 
-                                    <ProgressBar
-                                        android:id="@+id/pBar"
-                                        style="?android:attr/progressBarStyleHorizontal"
-                                        android:layout_width="55dp"
-                                        android:layout_height="10dp"
-                                        android:indeterminate="false"
-                                        android:max="100"
-                                        android:minWidth="200dp"
-                                        android:minHeight="10dp"
-                                        android:progress="0"
-                                        android:progressDrawable="@drawable/seekbar_drawable_progress" />
-
-                                    <TextView
-                                        android:id="@+id/tviDSO"
+                                    <ImageView
+                                        android:id="@+id/iviClose"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_below="@+id/pBar"
-                                        android:layout_centerHorizontal="true"
+                                        android:layout_alignParentRight="true"
+                                        android:padding="10dp"
+                                        android:tint="@color/color_value"
+                                        app:srcCompat="@drawable/ic_close_dialog" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toLeftOf="@+id/llClose"
+                                    android:orientation="vertical">
+
+                                    <RelativeLayout
+                                        android:id="@+id/rlR1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            android:id="@+id/tviR1Name"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginTop="10dp"
+                                            android:layout_marginRight="5dp"
+                                            android:text="Sagar Pushkarna"
+                                            android:textColor="@color/color_value"
+                                            android:textSize="14sp"
+                                            app:fontFamily="@font/roboto_bold" />
+
+                                        <ImageView
+                                            android:id="@+id/iviR1Close"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentRight="true"
+                                            android:padding="10dp"
+                                            android:tint="@color/color_value"
+                                            app:srcCompat="@drawable/ic_close_dialog" />
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/rlR2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            android:id="@+id/tviR2Name"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginTop="10dp"
+                                            android:layout_marginRight="5dp"
+                                            android:text="Sagar Pushkarna"
+                                            android:textColor="@color/color_value"
+                                            android:textSize="14sp"
+                                            app:fontFamily="@font/roboto_bold" />
+
+                                        <ImageView
+                                            android:id="@+id/iviR2Close"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentRight="true"
+                                            android:padding="10dp"
+                                            android:tint="@color/color_value"
+                                            app:srcCompat="@drawable/ic_close_dialog" />
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/rlR3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            android:id="@+id/tviR3Name"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginTop="10dp"
+                                            android:layout_marginRight="5dp"
+                                            android:text="Sagar Pushkarna"
+                                            android:textColor="@color/color_value"
+                                            android:textSize="14sp"
+                                            app:fontFamily="@font/roboto_bold" />
+
+                                        <ImageView
+                                            android:id="@+id/iviR3Close"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentRight="true"
+                                            android:padding="10dp"
+                                            android:tint="@color/color_value"
+                                            app:srcCompat="@drawable/ic_close_dialog" />
+                                    </RelativeLayout>
+                                </LinearLayout>
+                            </RelativeLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/llAmount"
+                                    android:layout_width="0dp"
+                                    android:layout_height="50dp"
+                                    android:layout_marginLeft="20dp"
+                                    android:layout_marginTop="14dp"
+                                    android:layout_marginRight="20dp"
+                                    android:layout_marginBottom="14dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/td_bg"
+                                    android:backgroundTint="@color/color_filter_amount"
+                                    android:orientation="vertical"
+                                    android:padding="7dp">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:text="Outstanding"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="12sp"
+                                        app:fontFamily="@font/roboto_medium" />
+
+                                    <TextView
+                                        android:id="@+id/tviAmount"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
                                         android:text="625.2"
                                         android:textColor="@color/color_value"
                                         android:textSize="14sp"
                                         app:fontFamily="@font/roboto_bold" />
+                                </LinearLayout>
 
-                                </RelativeLayout>
+                                <LinearLayout
+                                    android:id="@+id/llDSO"
+                                    android:layout_width="0dp"
+                                    android:layout_height="50dp"
+                                    android:layout_marginLeft="20dp"
+                                    android:layout_marginTop="14dp"
+                                    android:layout_marginRight="20dp"
+                                    android:layout_marginBottom="14dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/td_bg"
+                                    android:backgroundTint="@color/color_filter_amount"
+                                    android:orientation="vertical"
+                                    android:padding="1dp">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:text="DSO"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="12sp"
+                                        app:fontFamily="@font/roboto_medium" />
+
+                                    <RelativeLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="center">
+
+                                        <ProgressBar
+                                            android:id="@+id/pBar"
+                                            style="?android:attr/progressBarStyleHorizontal"
+                                            android:layout_width="55dp"
+                                            android:layout_height="10dp"
+                                            android:indeterminate="false"
+                                            android:max="100"
+                                            android:minWidth="200dp"
+                                            android:minHeight="10dp"
+                                            android:progress="0"
+                                            android:progressDrawable="@drawable/seekbar_drawable_progress" />
+
+                                        <TextView
+                                            android:id="@+id/tviDSO"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@+id/pBar"
+                                            android:layout_centerHorizontal="true"
+                                            android:text="625.2"
+                                            android:textColor="@color/color_value"
+                                            android:textSize="14sp"
+                                            app:fontFamily="@font/roboto_bold" />
+
+                                    </RelativeLayout>
+                                </LinearLayout>
+
                             </LinearLayout>
 
                         </LinearLayout>

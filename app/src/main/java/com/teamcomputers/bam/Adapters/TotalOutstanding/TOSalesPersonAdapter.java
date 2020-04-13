@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -24,16 +26,19 @@ import com.teamcomputers.bam.Utils.BAMUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TOSalesPersonAdapter extends RecyclerView.Adapter<TOSalesPersonAdapter.ViewHolder> {
+public class TOSalesPersonAdapter extends RecyclerView.Adapter<TOSalesPersonAdapter.ViewHolder> implements Filterable {
     private List<TORSMSalesModel> dataList;
+    private List<TORSMSalesModel> dataListFiltered;
     Activity mActivity;
     String type, level;
     boolean fromRSM, fromCustomer, fromProduct;
 
     public TOSalesPersonAdapter(DashboardActivity dashboardActivityContext, String type, String level, List<TORSMSalesModel> data, boolean fromRSM, boolean fromCustomer, boolean fromProduct) {
         this.dataList = data;
+        this.dataListFiltered = data;
         this.type = type;
         this.level = level;
         this.mActivity = dashboardActivityContext;
@@ -43,7 +48,42 @@ public class TOSalesPersonAdapter extends RecyclerView.Adapter<TOSalesPersonAdap
     }
 
     public void setItems(List<TORSMSalesModel> data) {
-        this.dataList = data;
+        this.dataListFiltered = data;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    dataListFiltered = dataList;
+                } else {
+                    List<TORSMSalesModel> filteredList = new ArrayList<>();
+                    for (TORSMSalesModel row : dataList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getName().contains(charSequence)) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    dataListFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = dataListFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults filterResults) {
+                dataListFiltered = (ArrayList<TORSMSalesModel>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -72,7 +112,7 @@ public class TOSalesPersonAdapter extends RecyclerView.Adapter<TOSalesPersonAdap
     }
 
     @Override
-    public void onBindViewHolder(TOSalesPersonAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         int bar = 0;
        /* if (position == 0) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_first_item_value));
@@ -86,9 +126,9 @@ public class TOSalesPersonAdapter extends RecyclerView.Adapter<TOSalesPersonAdap
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         }*/
         holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
-        holder.tviName.setText(position + 1 + ". " + dataList.get(position).getName());
-        holder.tviAmount.setText(BAMUtil.getRoundOffValue(dataList.get(position).getAmount()));
-        bar = (dataList.get(position).getDSO()).intValue();
+        holder.tviName.setText(position + 1 + ". " + dataListFiltered.get(position).getName());
+        holder.tviAmount.setText(BAMUtil.getRoundOffValue(dataListFiltered.get(position).getAmount()));
+        bar = (dataListFiltered.get(position).getDSO()).intValue();
         holder.tviDSO.setText(bar + " Days");
         holder.pBar.setProgress(bar);
         if (bar < 30) {
@@ -148,18 +188,18 @@ public class TOSalesPersonAdapter extends RecyclerView.Adapter<TOSalesPersonAdap
                         switch (item.getItemId()) {
                             case R.id.menu1:
                                 //handle menu1 click
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataList.get(position)));
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click
                                 break;
                             case R.id.menu3:
                                 //handle menu3 click
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataList.get(position)));
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu4:
                                 //handle menu3 click
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, dataList.get(position)));
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                         }
                         return false;
@@ -172,14 +212,14 @@ public class TOSalesPersonAdapter extends RecyclerView.Adapter<TOSalesPersonAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_CLICK, dataList.get(position)));
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_CLICK, dataListFiltered.get(position)));
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return dataListFiltered.size();
     }
 }
 

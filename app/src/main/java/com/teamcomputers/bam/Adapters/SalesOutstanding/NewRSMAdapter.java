@@ -1,11 +1,14 @@
 package com.teamcomputers.bam.Adapters.SalesOutstanding;
 
 import android.app.Activity;
+import android.app.SearchableInfo;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -23,16 +26,19 @@ import com.teamcomputers.bam.Utils.BAMUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder> {
+public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder> implements Filterable {
     private List<FullSalesModel> dataList;
+    private List<FullSalesModel> dataListFiltered;
     Activity mActivity;
     String type, level;
     boolean fromSP, fromCustomer, fromProduct;
 
     public NewRSMAdapter(DashboardActivity dashboardActivityContext, String type, String level, List<FullSalesModel> data, boolean fromSP, boolean fromCustomer, boolean fromProduct) {
         this.dataList = data;
+        this.dataListFiltered = data;
         this.type = type;
         this.level = level;
         this.mActivity = dashboardActivityContext;
@@ -42,7 +48,42 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
     }
 
     public void setItems(List<FullSalesModel> data) {
-        this.dataList = data;
+        this.dataListFiltered = data;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    dataListFiltered = dataList;
+                } else {
+                    List<FullSalesModel> filteredList = new ArrayList<>();
+                    for (FullSalesModel row : dataList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getName().contains(charSequence)) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    dataListFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = dataListFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults filterResults) {
+                dataListFiltered = (ArrayList<FullSalesModel>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -84,21 +125,21 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
         } else if (position % 2 == 1) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         }
-        holder.tviName.setText(position + 1 + ". " + dataList.get(position).getName());
+        holder.tviName.setText(position + 1 + ". " + dataListFiltered.get(position).getName());
         String target = "", actual = "";
         int bar = 0;
         if (type.equals("YTD")) {
-            target = BAMUtil.getRoundOffValue(dataList.get(position).getYTDTarget());
-            actual = BAMUtil.getRoundOffValue(dataList.get(position).getYTD());
-            bar = (dataList.get(position).getYTDPercentage()).intValue();
+            target = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getYTDTarget());
+            actual = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getYTD());
+            bar = (dataListFiltered.get(position).getYTDPercentage()).intValue();
         } else if (type.equals("QTD")) {
-            target = BAMUtil.getRoundOffValue(dataList.get(position).getQTDTarget());
-            actual = BAMUtil.getRoundOffValue(dataList.get(position).getQTD());
-            bar = (dataList.get(position).getQTDPercentage()).intValue();
+            target = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getQTDTarget());
+            actual = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getQTD());
+            bar = (dataListFiltered.get(position).getQTDPercentage()).intValue();
         } else if (type.equals("MTD")) {
-            target = BAMUtil.getRoundOffValue(dataList.get(position).getMTDTarget());
-            actual = BAMUtil.getRoundOffValue(dataList.get(position).getMTD());
-            bar = (dataList.get(position).getMTDPercentage()).intValue();
+            target = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getMTDTarget());
+            actual = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getMTD());
+            bar = (dataListFiltered.get(position).getMTDPercentage()).intValue();
         }
         holder.tviTarget.setText(target);
         holder.tviActual.setText(actual);
@@ -164,18 +205,18 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click
-                                dataList.get(position).setPosition(position);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, dataList.get(position)));
+                                dataListFiltered.get(position).setPosition(position);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu3:
                                 //handle menu3 click
-                                dataList.get(position).setPosition(position);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataList.get(position)));
+                                dataListFiltered.get(position).setPosition(position);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu4:
                                 //handle menu3 click
-                                dataList.get(position).setPosition(position);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, dataList.get(position)));
+                                dataListFiltered.get(position).setPosition(position);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                         }
                         return false;
@@ -189,15 +230,15 @@ public class NewRSMAdapter extends RecyclerView.Adapter<NewRSMAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 //EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, position));
-                dataList.get(position).setPosition(position);
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, dataList.get(position)));
+                dataListFiltered.get(position).setPosition(position);
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, dataListFiltered.get(position)));
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return dataListFiltered.size();
     }
 }
 

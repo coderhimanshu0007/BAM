@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -26,10 +28,12 @@ import com.teamcomputers.bam.Utils.BAMUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.ViewHolder> {
+public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.ViewHolder> implements Filterable {
     private List<SalesCustomerModel> dataList;
+    private List<SalesCustomerModel> dataListFiltered;
     Activity mActivity;
     DashboardActivity dashboardActivity;
     boolean fromRSM, fromSP, fromProduct;
@@ -41,6 +45,7 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
 
     public NewCustomerAdapter(DashboardActivity dashboardActivityContext, String userId, String level, List<SalesCustomerModel> data, boolean fromRSM, boolean fromSP, boolean fromProduct) {
         this.dataList = data;
+        this.dataListFiltered = data;
         this.mActivity = dashboardActivityContext;
         this.userId = userId;
         this.level = level;
@@ -51,7 +56,42 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
     }
 
     public void setItems(List<SalesCustomerModel> data) {
-        this.dataList = data;
+        this.dataListFiltered = data;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    dataListFiltered = dataList;
+                } else {
+                    List<SalesCustomerModel> filteredList = new ArrayList<>();
+                    for (SalesCustomerModel row : dataList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getCustomerName().toLowerCase().contains(charString.toLowerCase()) || row.getCustomerName().contains(charSequence)) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    dataListFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = dataListFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults filterResults) {
+                dataListFiltered = (ArrayList<SalesCustomerModel>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -87,7 +127,7 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
 
     @Override
     public void onBindViewHolder(NewCustomerAdapter.ViewHolder holder, final int position) {
-        dataList.get(position).setOpen(0);
+        dataListFiltered.get(position).setOpen(0);
         if (position == 0) {
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_first_item_value));
         } else if (position == 1) {
@@ -121,10 +161,10 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
         } else if (level.equals("R4")) {
             holder.iviOption.setVisibility(View.GONE);
         }
-        holder.tviName.setText(position + 1 + ". " + dataList.get(position).getCustomerName());
-        holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
-        holder.tviQTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getQTD()));
-        holder.tviMTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getMTD()));
+        holder.tviName.setText(position + 1 + ". " + dataListFiltered.get(position).getCustomerName());
+        holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataListFiltered.get(position).getYTD()));
+        holder.tviQTD.setText(BAMUtil.getRoundOffValue(dataListFiltered.get(position).getQTD()));
+        holder.tviMTD.setText(BAMUtil.getRoundOffValue(dataListFiltered.get(position).getMTD()));
 
         holder.iviOption.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,21 +211,21 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
                         switch (item.getItemId()) {
                             case R.id.menu1:
                                 //handle menu1 click
-                                dataList.get(position).setUserId(userId);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataList.get(position)));
+                                dataListFiltered.get(position).setUserId(userId);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click
-                                dataList.get(position).setUserId(userId);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, dataList.get(position)));
+                                dataListFiltered.get(position).setUserId(userId);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu3:
                                 //handle menu3 click
                                 break;
                             case R.id.menu4:
                                 //handle menu3 click
-                                dataList.get(position).setUserId(userId);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataList.get(position)));
+                                dataListFiltered.get(position).setUserId(userId);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataListFiltered.get(position)));
                                 break;
                         }
                         return false;
@@ -201,34 +241,34 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
             public void onClick(View v) {
                 //SharedPreferencesController.getInstance(mActivity).setFrom("2");
                 //SharedPreferencesController.getInstance(mActivity).setLocation(dataList.get(position).getCustName());
-                dataList.get(position).setUserId(userId);
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataList.get(position)));
+                dataListFiltered.get(position).setUserId(userId);
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataListFiltered.get(position)));
             }
         });
-        List<SalesCustomerModel.StateCodeWise> stateCodeWise = dataList.get(position).getStateCodeWise();
-        dataList.get(position).setPosition(position);
-        StateAdapter aa = new StateAdapter(dashboardActivity, userId, level, dataList.get(position), fromRSM, fromSP, fromProduct);
+        List<SalesCustomerModel.StateCodeWise> stateCodeWise = dataListFiltered.get(position).getStateCodeWise();
+        dataListFiltered.get(position).setPosition(position);
+        StateAdapter aa = new StateAdapter(dashboardActivity, userId, level, dataListFiltered.get(position), fromRSM, fromSP, fromProduct);
         layoutManager = new LinearLayoutManager(dashboardActivity);
         holder.rviStateCode.setLayoutManager(layoutManager);
         holder.rviStateCode.setAdapter(aa);
         holder.rlStateWise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (dataList.get(position).getOpen() == 0) {
+                if (dataListFiltered.get(position).getOpen() == 0) {
                     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_expand));
                     } else {
                         holder.llExpand.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.ic_expand));
                     }
-                    dataList.get(position).setOpen(1);
+                    dataListFiltered.get(position).setOpen(1);
                     holder.rviStateCode.setVisibility(View.VISIBLE);
-                } else if (dataList.get(position).getOpen() == 1) {
+                } else if (dataListFiltered.get(position).getOpen() == 1) {
                     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_colapse));
                     } else {
                         holder.llExpand.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.ic_colapse));
                     }
-                    dataList.get(position).setOpen(0);
+                    dataListFiltered.get(position).setOpen(0);
                     holder.rviStateCode.setVisibility(View.GONE);
                 }
             }
@@ -237,7 +277,7 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return dataListFiltered.size();
     }
 }
 
