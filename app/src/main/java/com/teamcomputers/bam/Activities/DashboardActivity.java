@@ -68,6 +68,7 @@ import com.teamcomputers.bam.Fragments.WSPages.WSProductFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSSalesPersonFragment;
 import com.teamcomputers.bam.Fragments.home.HomeFragment;
+import com.teamcomputers.bam.Models.FiscalYearModel;
 import com.teamcomputers.bam.Models.LoginModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
@@ -75,7 +76,6 @@ import com.teamcomputers.bam.Utils.CircularImageView;
 import com.teamcomputers.bam.Utils.WrapContentLinearLayoutManager;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
@@ -127,7 +127,9 @@ public class DashboardActivity extends BaseActivity {
     private Handler drawerHandler = new Handler();
     private AppBarConfiguration mAppBarConfiguration;
 
-    public String userId = "", level = "";
+    public FiscalYearModel fiscalYearModel;
+    public String userId = "", level = "", selectedFiscalYear = "";
+    public int selectedPosition = 0;
 
     @Override
     protected int getLayout() {
@@ -798,13 +800,14 @@ public class DashboardActivity extends BaseActivity {
                     fragmentTransaction.replace(R.id.dash_board_content, fragment, fragment.getFragmentName());
                     int backStackEntryCount = fragmentManager.getBackStackEntryCount();
                     if (bundle.getBoolean(IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED)) {
-                        if (backStackEntryCount < 6) {
+                        fragmentTransaction.addToBackStack(fragment.getFragmentName());
+                        /*if (backStackEntryCount < 6) {
                             fragmentTransaction.addToBackStack(fragment.getFragmentName());
                         }
                     } else {
                         if (backStackEntryCount < 2) {
                             fragmentTransaction.addToBackStack(fragment.getFragmentName());
-                        }
+                        }*/
                     }
                     fragmentTransaction.commitAllowingStateLoss();
                 } catch (Exception ignored) {
@@ -992,6 +995,7 @@ public class DashboardActivity extends BaseActivity {
         Bundle rsmDataBundle = new Bundle();
         rsmDataBundle.putString(WSRSMFragment.USER_ID, userId);
         rsmDataBundle.putString(WSRSMFragment.USER_LEVEL, level);
+        rsmDataBundle.putString(WSRSMFragment.FISCAL_YEAR, fiscalYearModel.getFascialYear().get(selectedPosition).getYear());
         rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
         dashboardActivityContext.replaceFragment(Fragments.WS_RSM_FRAGMENT, rsmDataBundle);
@@ -1003,6 +1007,7 @@ public class DashboardActivity extends BaseActivity {
         Bundle spDataBundle = new Bundle();
         spDataBundle.putString(WSSalesPersonFragment.USER_ID, userId);
         spDataBundle.putString(WSSalesPersonFragment.USER_LEVEL, level);
+        spDataBundle.putString(WSSalesPersonFragment.FISCAL_YEAR, fiscalYearModel.getFascialYear().get(selectedPosition).getYear());
         spDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
         dashboardActivityContext.replaceFragment(Fragments.WS_ACCOUNT_FRAGMENT, spDataBundle);
@@ -1014,6 +1019,7 @@ public class DashboardActivity extends BaseActivity {
         Bundle customerDataBundle = new Bundle();
         customerDataBundle.putString(WSCustomerFragment.USER_ID, userId);
         customerDataBundle.putString(WSCustomerFragment.USER_LEVEL, level);
+        customerDataBundle.putString(WSCustomerFragment.FISCAL_YEAR, fiscalYearModel.getFascialYear().get(selectedPosition).getYear());
         customerDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
         dashboardActivityContext.replaceFragment(Fragments.WS_CUSTOMER_FRAGMENT, customerDataBundle);
@@ -1025,6 +1031,7 @@ public class DashboardActivity extends BaseActivity {
         Bundle productDataBundle = new Bundle();
         productDataBundle.putString(WSProductFragment.USER_ID, userId);
         productDataBundle.putString(WSProductFragment.USER_LEVEL, level);
+        productDataBundle.putString(WSProductFragment.FISCAL_YEAR, fiscalYearModel.getFascialYear().get(selectedPosition).getYear());
         productDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
         dashboardActivityContext.replaceFragment(Fragments.WS_PRODUCT_FRAGMENT, productDataBundle);

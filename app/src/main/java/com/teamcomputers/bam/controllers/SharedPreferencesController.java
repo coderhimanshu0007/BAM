@@ -152,6 +152,14 @@ public class SharedPreferencesController implements BAMConstant {
         }
     }*/
 
+    public void setUserId(String userId) {
+        putString(Keys.USERID.getLabel(), BAMUtil.toJson(userId));
+    }
+
+    public String getUserId() {
+        return getString(Keys.USERID.getLabel(), "");
+    }
+
     public LoginModel getUserProfile() {
         String json = getString(Keys.USER_PROFILE.getLabel(), "");
         return (LoginModel) BAMUtil.fromJson(json, LoginModel.class);
@@ -335,6 +343,7 @@ public class SharedPreferencesController implements BAMConstant {
     }
 
     private enum Keys {
+        USERID("USERID"),
         USER_PROFILE("USER_PROFILE"),
         LOGGED_IN("LOGGED_IN"),
         ORDERPROCESSING_PAGENO("ORDERPROCESSING_PAGENO"),

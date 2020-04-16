@@ -194,13 +194,26 @@ public class TOCustomerAdapter extends RecyclerView.Adapter<TOCustomerAdapter.Vi
                         switch (item.getItemId()) {
                             case R.id.menu1:
                                 //handle menu1 click
-                                dataListFiltered.get(position).setUserId(userId);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataListFiltered.get(position)));
+                                //dataListFiltered.get(position).setUserId(userId);
+                                TOCustomerModel rsmCustomerModel = new TOCustomerModel();
+                                rsmCustomerModel.setUserId(userId);
+                                rsmCustomerModel.setCustomerName(dataListFiltered.get(position).getCustomerName());
+                                rsmCustomerModel.setAmount(dataListFiltered.get(position).getAmount());
+                                rsmCustomerModel.setPosition(dataListFiltered.get(position).getPosition());
+                                rsmCustomerModel.setOpen(dataListFiltered.get(position).getOpen());
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, rsmCustomerModel));
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click
-                                dataListFiltered.get(position).setUserId(userId);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, dataListFiltered.get(position)));
+                                //dataListFiltered.get(position).setUserId(userId);
+                                TOCustomerModel salesCustomerModel = new TOCustomerModel();
+                                salesCustomerModel.setUserId(userId);
+                                salesCustomerModel.setCustomerName(dataListFiltered.get(position).getCustomerName());
+                                salesCustomerModel.setAmount(dataListFiltered.get(position).getAmount());
+                                salesCustomerModel.setPosition(dataListFiltered.get(position).getPosition());
+                                salesCustomerModel.setOpen(dataListFiltered.get(position).getOpen());
+
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, salesCustomerModel));
                                 break;
                             case R.id.menu3:
                                 //handle menu3 click

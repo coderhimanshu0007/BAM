@@ -2,10 +2,19 @@ package com.teamcomputers.bam.Activities;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -18,6 +27,7 @@ import com.teamcomputers.bam.Requesters.AppVersionRequester;
 import com.teamcomputers.bam.Requesters.LoginRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.BAMUtil;
+import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -32,6 +42,13 @@ public class LoginActivity extends BaseActivity {
     EditText txtUserName;
     @BindView(R.id.txtPassword)
     EditText txtPassword;
+    @BindView(R.id.iviShowPassword)
+    ImageView iviShowPassword;
+    @BindView(R.id.iviSaveUserId)
+    ImageView iviSaveUserId;
+    @BindView(R.id.tviCurrentVersion)
+    TextView tviCurrentVersion;
+    boolean save = false, show = false;
 
     @Override
     protected int getLayout() {
@@ -94,6 +111,8 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void init() {
+        save = false;
+        show = false;
         Dexter.withActivity(this)
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -119,6 +138,40 @@ public class LoginActivity extends BaseActivity {
                 })
                 .onSameThread()
                 .check();
+
+        try {
+            PackageInfo pInfo = LoginActivity.this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+            //showToast(version);
+            tviCurrentVersion.setText("Current version " + version);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @OnClick(R.id.iviSaveUserId)
+    public void saveUserId() {
+        /*if (!save) {
+            //SharedPreferencesController.getInstance(LoginActivity.this).setUserId();
+            save = true;
+            iviSaveUserId.setColorFilter(ContextCompat.getColor(LoginActivity.this, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
+        } else if (save) {
+            save = false;
+            iviSaveUserId.setColorFilter(ContextCompat.getColor(LoginActivity.this, R.color.text_color_login), android.graphics.PorterDuff.Mode.SRC_IN);
+        }*/
+    }
+
+    @OnClick(R.id.iviShowPassword)
+    public void showPassword() {
+        /*if (!show) {
+            txtPassword.setTransformationMethod(null);
+            show = true;
+            iviShowPassword.setColorFilter(ContextCompat.getColor(LoginActivity.this, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
+        } else if (show) {
+            txtPassword.setTransformationMethod(new PasswordTransformationMethod());
+            show = false;
+            iviShowPassword.setColorFilter(ContextCompat.getColor(LoginActivity.this, R.color.text_color_login), android.graphics.PorterDuff.Mode.SRC_IN);
+        }*/
     }
 
     @OnClick(R.id.btn_login)

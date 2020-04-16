@@ -1,6 +1,7 @@
 package com.teamcomputers.bam.Interface.retrofit;
 
 import com.teamcomputers.bam.Models.AppVersionResponse;
+import com.teamcomputers.bam.Models.FiscalYearModel;
 import com.teamcomputers.bam.Models.LoginModel;
 
 import java.util.ArrayList;
@@ -8,9 +9,7 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 
 //Interface Used by Retrofit for API interaction With App
 public interface ApiInterface {
@@ -171,10 +170,34 @@ public interface ApiInterface {
                                  @Field("StateCode") String stateCode,
                                  @Field("Product") String product);
 
+    // Fiscal Sales List
+    @FormUrlEncoded
+    @POST("FiscalSalesList")
+    Call<Object> fiscalSalesList(@Field("UserId") String userId,
+                                 @Field("Level") String level,
+                                 @Field("Type") String type,
+                                 @Field("RSM") String RSM,
+                                 @Field("Sales") String sales,
+                                 @Field("Customer") String customer,
+                                 @Field("StateCode") String stateCode,
+                                 @Field("Product") String product,
+                                 @Field("FiscalYear") String fiscalYear);
+
     // YTD QTD
     @FormUrlEncoded
     @POST("YTDQTD")
     Call<Object> yTDQTD(@Field("UserId") String userId);
+
+    // YTD QTD
+    @FormUrlEncoded
+    @POST("SalesReceiveablesFiscal")
+    Call<Object> salesReceiveablesFiscal(@Field("UserId") String userId,
+                        @Field("FiscalYear") String fiscalYear);
+
+
+    // Fiscal year list
+    @POST("FiscalYearList")
+    Call<FiscalYearModel> fiscalYearList();
 
     // Open Sales Order List
     @FormUrlEncoded
@@ -186,7 +209,7 @@ public interface ApiInterface {
                                     @Field("Sales") String sales,
                                     @Field("Customer") String customer,
                                     @Field("StateCode") String stateCode,
-                                    @Field("Invoice")String invoice,
+                                    @Field("Invoice") String invoice,
                                     @Field("Product") String product);
 
     // Outstanding List

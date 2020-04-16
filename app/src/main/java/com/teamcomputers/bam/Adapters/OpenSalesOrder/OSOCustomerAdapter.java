@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Interface.BAMConstant;
+import com.teamcomputers.bam.Models.TotalOutstanding.TOCustomerModel;
 import com.teamcomputers.bam.Models.TotalSalesOrder.OSOCustomerModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
@@ -193,21 +194,46 @@ public class OSOCustomerAdapter extends RecyclerView.Adapter<OSOCustomerAdapter.
                         switch (item.getItemId()) {
                             case R.id.menu1:
                                 //handle menu1 click
-                                dataListFiltered.get(position).setUserId(userId);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataListFiltered.get(position)));
+                                //dataListFiltered.get(position).setUserId(userId);
+                                OSOCustomerModel rsmData = new OSOCustomerModel();
+                                rsmData.setCustomerName(dataListFiltered.get(position).getCustomerName());
+                                rsmData.setUserId(userId);
+                                rsmData.setSOAmount(dataListFiltered.get(position).getSOAmount());
+                                rsmData.setPosition(dataListFiltered.get(position).getPosition());
+                                //List<OSOCustomerModel.StateCodeWise> pSelected = new ArrayList<>();
+                                //pSelected.add(dataList.get(position));
+                                rsmData.setStateCodeWise(null);
+
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, rsmData));
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click
-                                dataListFiltered.get(position).setUserId(userId);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, dataListFiltered.get(position)));
+                                //dataListFiltered.get(position).setUserId(userId);
+                                OSOCustomerModel salesData = new OSOCustomerModel();
+                                salesData.setCustomerName(dataListFiltered.get(position).getCustomerName());
+                                salesData.setUserId(userId);
+                                salesData.setSOAmount(dataListFiltered.get(position).getSOAmount());
+                                salesData.setPosition(dataListFiltered.get(position).getPosition());
+                                //List<OSOCustomerModel.StateCodeWise> pSelected = new ArrayList<>();
+                                //pSelected.add(dataList.get(position));
+                                salesData.setStateCodeWise(null);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, salesData));
                                 break;
                             case R.id.menu3:
                                 //handle menu3 click
                                 break;
                             case R.id.menu4:
                                 //handle menu3 click
-                                dataListFiltered.get(position).setUserId(userId);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataListFiltered.get(position)));
+                                //dataListFiltered.get(position).setUserId(userId);
+                                OSOCustomerModel productData = new OSOCustomerModel();
+                                productData.setCustomerName(dataListFiltered.get(position).getCustomerName());
+                                productData.setUserId(userId);
+                                productData.setSOAmount(dataListFiltered.get(position).getSOAmount());
+                                productData.setPosition(dataListFiltered.get(position).getPosition());
+                                //List<OSOCustomerModel.StateCodeWise> pSelected = new ArrayList<>();
+                                //pSelected.add(dataList.get(position));
+                                productData.setStateCodeWise(null);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, productData));
                                 break;
                         }
                         return false;

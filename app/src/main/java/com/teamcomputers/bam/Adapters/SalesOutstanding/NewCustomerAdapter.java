@@ -187,7 +187,7 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
                     } else if (fromSP) {
                         popup.getMenu().getItem(1).setVisible(false);
                     } else if (fromProduct) {
-                        popup.getMenu().getItem(2).setVisible(false);
+                        popup.getMenu().getItem(3).setVisible(false);
                     } else if (fromRSM) {
                         popup.getMenu().getItem(0).setVisible(false);
                     }
@@ -211,21 +211,42 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
                         switch (item.getItemId()) {
                             case R.id.menu1:
                                 //handle menu1 click
-                                dataListFiltered.get(position).setUserId(userId);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataListFiltered.get(position)));
+                                //dataListFiltered.get(position).setUserId(userId);
+                                SalesCustomerModel rsmCustomerModel = new SalesCustomerModel();
+                                rsmCustomerModel.setUserId(dataListFiltered.get(position).getUserId());
+                                rsmCustomerModel.setCustomerName(dataListFiltered.get(position).getCustomerName());
+                                rsmCustomerModel.setYTD(dataListFiltered.get(position).getYTD());
+                                rsmCustomerModel.setQTD(dataListFiltered.get(position).getQTD());
+                                rsmCustomerModel.setMTD(dataListFiltered.get(position).getMTD());
+                                rsmCustomerModel.setPosition(dataListFiltered.get(position).getPosition());
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, rsmCustomerModel));
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click
-                                dataListFiltered.get(position).setUserId(userId);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, dataListFiltered.get(position)));
+                                //dataListFiltered.get(position).setUserId(userId);
+                                SalesCustomerModel salesCustomerModel = new SalesCustomerModel();
+                                salesCustomerModel.setUserId(dataListFiltered.get(position).getUserId());
+                                salesCustomerModel.setCustomerName(dataListFiltered.get(position).getCustomerName());
+                                salesCustomerModel.setYTD(dataListFiltered.get(position).getYTD());
+                                salesCustomerModel.setQTD(dataListFiltered.get(position).getQTD());
+                                salesCustomerModel.setMTD(dataListFiltered.get(position).getMTD());
+                                salesCustomerModel.setPosition(dataListFiltered.get(position).getPosition());
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, salesCustomerModel));
                                 break;
                             case R.id.menu3:
                                 //handle menu3 click
                                 break;
                             case R.id.menu4:
                                 //handle menu3 click
-                                dataListFiltered.get(position).setUserId(userId);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataListFiltered.get(position)));
+                                //dataListFiltered.get(position).setUserId(userId);
+                                SalesCustomerModel productCustomerModel = new SalesCustomerModel();
+                                productCustomerModel.setUserId(dataListFiltered.get(position).getUserId());
+                                productCustomerModel.setCustomerName(dataListFiltered.get(position).getCustomerName());
+                                productCustomerModel.setYTD(dataListFiltered.get(position).getYTD());
+                                productCustomerModel.setQTD(dataListFiltered.get(position).getQTD());
+                                productCustomerModel.setMTD(dataListFiltered.get(position).getMTD());
+                                productCustomerModel.setPosition(dataListFiltered.get(position).getPosition());
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, productCustomerModel));
                                 break;
                         }
                         return false;

@@ -68,5 +68,6 @@
     <color name="divider_color">#25434343</color>
     <color name="color_map">#25434343</color>
     <color name="color_filter_amount">#CABEF7</color>
+    <color name="text_color_login">#434343</color>
 
 </resources>

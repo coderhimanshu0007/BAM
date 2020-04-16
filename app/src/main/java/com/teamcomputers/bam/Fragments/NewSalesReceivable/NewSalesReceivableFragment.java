@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Adapters.SalesOutstanding.CustomSpinnerAdapter;
 import com.teamcomputers.bam.Adapters.SalesOutstanding.QMDialogAdapter;
 import com.teamcomputers.bam.BAMApplication;
 import com.teamcomputers.bam.CustomView.CircularSeekBar;
@@ -24,13 +26,15 @@ import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSCustomerFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSSalesPersonFragment;
+import com.teamcomputers.bam.Models.FiscalYearModel;
 import com.teamcomputers.bam.Models.LoginModel;
 import com.teamcomputers.bam.Models.NewYTDQTDModel;
 import com.teamcomputers.bam.Models.SalesReceivableModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
+import com.teamcomputers.bam.Requesters.SalesReceivable.FiscalYearRequester;
 import com.teamcomputers.bam.Requesters.SalesReceivable.SalesReceivableRequester;
-import com.teamcomputers.bam.Requesters.SalesReceivable.SalesRefreshRequester;
+import com.teamcomputers.bam.Requesters.SalesReceivable.SalesReceivablesFiscalRequester;
 import com.teamcomputers.bam.Requesters.SalesReceivable.YTDQTDRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
@@ -47,14 +51,17 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemSelected;
 import butterknife.Unbinder;
 
 public class NewSalesReceivableFragment extends BaseFragment {
     private View rootView;
     private Unbinder unbinder;
     private DashboardActivity dashboardActivityContext;
-    String toolbarTitle = "";
+    String toolbarTitle = "", fiscalYear = "";
 
+    @BindView(R.id.spinnYear)
+    Spinner spinnYear;
     @BindView(R.id.tviTargetYTD)
     TextView tviTargetYTD;
     @BindView(R.id.tviTargetQTD)
@@ -83,6 +90,8 @@ public class NewSalesReceivableFragment extends BaseFragment {
     TextProgressBar progressBarMTD;
     @BindView(R.id.progressBarQTD)
     TextProgressBar progressBarQTD;
+    FiscalYearModel fiscalYearModel = new FiscalYearModel();
+    CustomSpinnerAdapter customSpinnerAdapter;
 
     int days = 260;
     String type = null;
@@ -121,7 +130,8 @@ public class NewSalesReceivableFragment extends BaseFragment {
         dashboardActivityContext.hideOSOTab();
         dashboardActivityContext.hideTOSTab();
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new SalesRefreshRequester());
+        //BackgroundExecutor.getInstance().execute(new SalesRefreshRequester());
+        BackgroundExecutor.getInstance().execute(new FiscalYearRequester());
     }
 
     @Override
@@ -152,6 +162,23 @@ public class NewSalesReceivableFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
+                    case Events.GET_FISCAL_YEAR_LIST_SUCCESSFULL:
+                        //JSONObject jsonObject = new JSONObject(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                        fiscalYearModel = (FiscalYearModel) eventObject.getObject();
+                        //dashboardActivityContext.fiscalYearModel = fiscalYearModel;
+                        //dashboardActivityContext.selectedFiscalYear = fiscalYearModel.getFascialYear().get(0).getYear();
+                        //dashboardActivityContext.selectedPosition = 0;
+                        //dashboardActivityContext.updateDate(fiscalYearModel.getLastTimeRefreshed());
+                        //Creating the ArrayAdapter instance having the country list
+                        customSpinnerAdapter = new CustomSpinnerAdapter(dashboardActivityContext, fiscalYearModel);
+                        //Setting the ArrayAdapter data on the Spinner
+                        spinnYear.setAdapter(customSpinnerAdapter);
+                        BackgroundExecutor.getInstance().execute(new SalesReceivablesFiscalRequester(loginModel.getUserID(), fiscalYear));
+                        break;
+                    case Events.GET_FISCAL_YEAR_LIST_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
                     case Events.GET_RECEIVABLE_REFRESH_SUCCESSFULL:
                         dashboardActivityContext.updateDate(eventObject.getObject().toString());
                         dismissProgress();
@@ -160,7 +187,7 @@ public class NewSalesReceivableFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
-                    case Events.GET_SALES_RECEIVABLE_SUCCESSFULL:
+                    case Events.GET_SALES_RECEIVABLE_FISCAL_SUCCESSFULL:
                         dismissProgress();
                         SalesReceivableModel model = new SalesReceivableModel();
                         try {
@@ -245,7 +272,7 @@ public class NewSalesReceivableFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
-                    case Events.GET_SALES_RECEIVABLE_UNSUCCESSFULL:
+                    case Events.GET_SALES_RECEIVABLE_FISCAL_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
@@ -281,6 +308,15 @@ public class NewSalesReceivableFragment extends BaseFragment {
 
     AlertDialog alertDialog;
 
+    @OnItemSelected(R.id.spinnYear)
+    public void itemSelected(Spinner spinner, int position) {
+        fiscalYear = fiscalYearModel.getFascialYear().get(position).getYear();
+        dashboardActivityContext.selectedFiscalYear = fiscalYearModel.getFascialYear().get(position).getYear();
+        dashboardActivityContext.selectedPosition = position;
+        showProgress(ProgressDialogTexts.LOADING);
+        BackgroundExecutor.getInstance().execute(new SalesReceivablesFiscalRequester(loginModel.getUserID(), fiscalYear));
+    }
+
     @OnClick(R.id.llMonthly)
     public void MonthlyClick() {
         type = "MONTHLY";
@@ -301,6 +337,7 @@ public class NewSalesReceivableFragment extends BaseFragment {
             Bundle rsmDataBundle = new Bundle();
             rsmDataBundle.putString(NewRSMTabFragment.USER_ID, userId);
             rsmDataBundle.putString(WSRSMFragment.USER_LEVEL, level);
+            rsmDataBundle.putString(WSRSMFragment.FISCAL_YEAR, fiscalYear);
             rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
             //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
             dashboardActivityContext.replaceFragment(Fragments.WS_RSM_FRAGMENT, rsmDataBundle);
@@ -312,6 +349,7 @@ public class NewSalesReceivableFragment extends BaseFragment {
             Bundle rsmDataBundle = new Bundle();
             rsmDataBundle.putString(WSSalesPersonFragment.USER_ID, userId);
             rsmDataBundle.putString(WSSalesPersonFragment.USER_LEVEL, level);
+            rsmDataBundle.putString(WSSalesPersonFragment.FISCAL_YEAR, fiscalYear);
             rsmDataBundle.putParcelable(WSSalesPersonFragment.RSM_PROFILE, null);
             rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
             dashboardActivityContext.replaceFragment(Fragments.WS_ACCOUNT_FRAGMENT, rsmDataBundle);
@@ -323,6 +361,7 @@ public class NewSalesReceivableFragment extends BaseFragment {
             Bundle spDataBundle = new Bundle();
             spDataBundle.putString(WSCustomerFragment.USER_ID, userId);
             spDataBundle.putString(WSCustomerFragment.USER_LEVEL, level);
+            spDataBundle.putString(WSCustomerFragment.FISCAL_YEAR, fiscalYear);
             spDataBundle.putBoolean(WSCustomerFragment.FROM_RSM, false);
             spDataBundle.putBoolean(WSCustomerFragment.FROM_SP, false);
             spDataBundle.putBoolean(WSCustomerFragment.FROM_PRODUCT, false);

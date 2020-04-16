@@ -28,13 +28,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight=".4"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="right"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <Spinner
+                        android:id="@+id/spinnYear"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/spinner_background"
+                        android:popupBackground="@color/start_home_color_bg"
+                        android:visibility="visible" />
+                </LinearLayout>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
@@ -823,7 +842,6 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
                                     android:text="DSO"
                                     android:textColor="@color/login_bg"
                                     android:textSize="14sp"
@@ -844,6 +862,7 @@
                                     android:layout_alignParentRight="true"
                                     android:layout_marginTop="10dp"
                                     android:layout_marginRight="14dp"
+                                    android:visibility="gone"
                                     android:background="@drawable/login_btn_bg"
                                     android:backgroundTint="@color/color_white"
                                     android:orientation="horizontal">

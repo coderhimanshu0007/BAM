@@ -15,12 +15,25 @@
         android:background="@null"
         android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/tviFiscalYear"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:popupBackground="@color/start_home_color_bg"
+            android:textColor="@color/color_white"
+            android:textSize="14sp"
+            app:fontFamily="@font/roboto_medium" />
+
         <ImageView
             android:id="@+id/iviSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tviFiscalYear"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             app:srcCompat="@drawable/ic_search_black_24dp" />
@@ -133,6 +146,25 @@
                 android:background="@color/color_white"
                 android:visibility="invisible" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_marginRight="20dp"
+            android:gravity="right"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <Spinner
+                android:id="@+id/spinnYear"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/spinner_background"
+                android:popupBackground="@color/start_home_color_bg"
+                android:visibility="invisible" />
         </LinearLayout>
     </LinearLayout>
 

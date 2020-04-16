@@ -1,7 +1,5 @@
 package com.teamcomputers.bam.Fragments.WSPages;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -20,14 +19,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Adapters.SalesOutstanding.CustomSpinnerAdapter;
 import com.teamcomputers.bam.Adapters.SalesOutstanding.NewRSMAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
 import com.teamcomputers.bam.Models.FullSalesModel;
 import com.teamcomputers.bam.Models.SalesCustomerModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.SalesReceivable.FilterSalesListRequester;
+import com.teamcomputers.bam.Requesters.SalesReceivable.FiscalSalesListRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 
@@ -49,6 +48,7 @@ import butterknife.Unbinder;
 public class WSRSMFragment extends BaseFragment {
     public static final String USER_ID = "USER_ID";
     public static final String USER_LEVEL = "USER_LEVEL";
+    public static final String FISCAL_YEAR = "FISCAL_YEAR";
     public static final String RSM_POSITION = "RSM_POSITION";
     public static final String CUSTOMER_PROFILE = "CUSTOMER_PROFILE";
     public static final String PRODUCT_PROFILE = "PRODUCT_PROFILE";
@@ -66,9 +66,13 @@ public class WSRSMFragment extends BaseFragment {
 
     String toolbarTitle = "";
 
-    String userId = "", level = "";
+    String userId = "", level = "", fiscalYear = "";
     @BindView(R.id.txtSearch)
     EditText txtSearch;
+    @BindView(R.id.spinnYear)
+    Spinner spinnYear;
+    @BindView(R.id.tviFiscalYear)
+    TextView tviFiscalYear;
     @BindView(R.id.llRSMLayout)
     LinearLayout llRSMLayout;
     @BindView(R.id.cviRSMHeading)
@@ -109,13 +113,13 @@ public class WSRSMFragment extends BaseFragment {
     RecyclerView rviRSM;
     private NewRSMAdapter rsmAdapter;
     private int type = 0, pos = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0;
-    boolean fromSP, fromCustomer, fromProduct, search = false;
+    boolean fromSP, fromCustomer, fromProduct, search = false, selectYear = false;
 
     FullSalesModel spData;
     List<FullSalesModel> rsmDataList = new ArrayList<>();
-    ArrayList<FullSalesModel> spDataList = new ArrayList<>();
     SalesCustomerModel customerProfile;
     FullSalesModel spProfile, productProfile;
+    CustomSpinnerAdapter customSpinnerAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -131,6 +135,7 @@ public class WSRSMFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, rootView);
         userId = getArguments().getString(USER_ID);
         level = getArguments().getString(USER_LEVEL);
+        fiscalYear = getArguments().getString(FISCAL_YEAR);
         fromSP = getArguments().getBoolean(FROM_SP);
         fromCustomer = getArguments().getBoolean(FROM_CUSTOMER);
         fromProduct = getArguments().getBoolean(FROM_PRODUCT);
@@ -143,74 +148,44 @@ public class WSRSMFragment extends BaseFragment {
         customerProfile = getArguments().getParcelable(CUSTOMER_PROFILE);
         productProfile = getArguments().getParcelable(PRODUCT_PROFILE);
 
-        /*if (null != spProfile) {
-            cviRSMHeading.setVisibility(View.VISIBLE);
-            *//*tviTargetHeading.setText("Target");
-            tviActualHeading.setText("Actual");
-            tviAchHeading.setText("Ach");*//*
-            pos = spProfile.getPosition();
-            if (pos == 0) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
-            } else if (pos == 1) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
-            } else if (pos == 2) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
-            } else if (pos % 2 == 0) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
-            } else if (pos % 2 == 1) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
-            tviR1Name.setText(spProfile.getName());
-            tviTarget.setText(BAMUtil.getRoundOffValue(spProfile.getYTDTarget()));
-            tviActual.setText(BAMUtil.getRoundOffValue(spProfile.getYTD()));
-            tviAch.setText(spProfile.getYTDPercentage().intValue() + "%");
-        } else if (null != customerProfile) {
-            cviRSMHeading.setVisibility(View.VISIBLE);
-            *//*tviTargetHeading.setText("YTD");
-            tviActualHeading.setText("QTD");
-            tviAchHeading.setText("MTD");*//*
-            pos = customerProfile.getPosition();
-            if (pos == 0) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
-            } else if (pos == 1) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
-            } else if (pos == 2) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
-            } else if (pos % 2 == 0) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
-            } else if (pos % 2 == 1) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
-            tviR1Name.setText(customerProfile.getCustomerName());
-            tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
-            tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
-            tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
-        } else if (null != productProfile) {
-            cviRSMHeading.setVisibility(View.VISIBLE);
-            pos = productProfile.getPosition();
-            if (pos == 0) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
-            } else if (pos == 1) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
-            } else if (pos == 2) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
-            } else if (pos % 2 == 0) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
-            } else if (pos % 2 == 1) {
-                llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
-            tviR1Name.setText(productProfile.getName());
-            tviTarget.setText(BAMUtil.getRoundOffValue(productProfile.getYTDTarget()));
-            tviActual.setText(BAMUtil.getRoundOffValue(productProfile.getYTD()));
-            tviAch.setText(productProfile.getYTDPercentage().intValue() + "%");
-        }*/
-
         toolbarTitle = getString(R.string.Heading_RSM);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
 
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviRSM.setLayoutManager(layoutManager);
 
+        tviFiscalYear.setText(fiscalYear.substring(0, 4));
+        /*//Creating the ArrayAdapter instance having the country list
+        customSpinnerAdapter = new CustomSpinnerAdapter(dashboardActivityContext, dashboardActivityContext.fiscalYearModel);
+        //Setting the ArrayAdapter data on the Spinner
+        spinnYear.setAdapter(customSpinnerAdapter);
+
+        tviFiscalYear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinnYear.performClick();
+            }
+        });*/
+        //spinnYear.setSelection(dashboardActivityContext.selectedPosition, false);
+
+        /*spinnYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!selectYear) {
+                    selectYear = true;
+                } else {
+                    dashboardActivityContext.selectedFiscalYear = dashboardActivityContext.fiscalYearModel.getFascialYear().get(position).getYear();
+                    dashboardActivityContext.selectedPosition = position;
+                    rowsDisplay();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+*/
         rowsDisplay();
 
         return rootView;
@@ -231,6 +206,7 @@ public class WSRSMFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        selectYear = false;
         dashboardActivityContext.showTab(level);
         dashboardActivityContext.rSMClick(level);
     }
@@ -281,6 +257,7 @@ public class WSRSMFragment extends BaseFragment {
                         Bundle rsmDataBundle = new Bundle();
                         rsmDataBundle.putString(WSSalesPersonFragment.USER_ID, userId);
                         rsmDataBundle.putString(WSSalesPersonFragment.USER_LEVEL, level);
+                        rsmDataBundle.putString(WSSalesPersonFragment.FISCAL_YEAR, fiscalYear);
                         rsmDataBundle.putBoolean(WSSalesPersonFragment.FROM_RSM, true);
                         rsmDataBundle.putBoolean(WSSalesPersonFragment.FROM_CUSTOMER, fromCustomer);
                         rsmDataBundle.putBoolean(WSSalesPersonFragment.FROM_PRODUCT, fromProduct);
@@ -301,6 +278,7 @@ public class WSRSMFragment extends BaseFragment {
                         Bundle customerDataBundle = new Bundle();
                         customerDataBundle.putString(WSCustomerFragment.USER_ID, userId);
                         customerDataBundle.putString(WSCustomerFragment.USER_LEVEL, level);
+                        customerDataBundle.putString(WSCustomerFragment.FISCAL_YEAR, fiscalYear);
 
                         rsmPos = spPos + pPos + 1;
                         customerDataBundle.putInt(WSCustomerFragment.RSM_POS, rsmPos);
@@ -321,6 +299,7 @@ public class WSRSMFragment extends BaseFragment {
                         Bundle productDataBundle = new Bundle();
                         productDataBundle.putString(WSProductFragment.USER_ID, userId);
                         productDataBundle.putString(WSProductFragment.USER_LEVEL, level);
+                        productDataBundle.putString(WSProductFragment.FISCAL_YEAR, fiscalYear);
                         productDataBundle.putBoolean(WSProductFragment.FROM_RSM, true);
                         productDataBundle.putBoolean(WSProductFragment.FROM_CUSTOMER, fromCustomer);
 
@@ -354,7 +333,7 @@ public class WSRSMFragment extends BaseFragment {
     }
 
     @OnClick(R.id.iviSearch)
-    public void Search(){
+    public void Search() {
         if (!search) {
             txtSearch.setVisibility(View.VISIBLE);
             search = true;
@@ -445,7 +424,7 @@ public class WSRSMFragment extends BaseFragment {
         cviRSMHeading.setVisibility(View.GONE);
         type = 1;
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FilterSalesListRequester(userId, level, "RSM", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new FiscalSalesListRequester(userId, level, "RSM", "", "", "", "", "", fiscalYear));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -580,7 +559,7 @@ public class WSRSMFragment extends BaseFragment {
             product = productProfile.getCode();
 
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FilterSalesListRequester(userId, level, "RSM", "", sales, customer, "", product));
+        BackgroundExecutor.getInstance().execute(new FiscalSalesListRequester(userId, level, "RSM", "", sales, customer, "", product, fiscalYear));
     }
 
     private void row1Display() {
@@ -617,7 +596,7 @@ public class WSRSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(customerProfile.getCustomerName());
-            if (customerProfile.getStateCodeWise().size() == 1) {
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
@@ -680,7 +659,7 @@ public class WSRSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(customerProfile.getCustomerName());
-            if (customerProfile.getStateCodeWise().size() == 1) {
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 tviR2StateName.setVisibility(View.VISIBLE);
                 tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
@@ -711,7 +690,7 @@ public class WSRSMFragment extends BaseFragment {
             tviR1Name.setText(spProfile.getName());
         } else if (cPos == 1) {
             tviR1Name.setText(customerProfile.getCustomerName());
-            if (customerProfile.getStateCodeWise().size() == 1) {
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
@@ -755,7 +734,7 @@ public class WSRSMFragment extends BaseFragment {
                 llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(customerProfile.getCustomerName());
-            if (customerProfile.getStateCodeWise().size() == 1) {
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 tviR3StateName.setVisibility(View.VISIBLE);
                 tviR3StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
@@ -787,7 +766,7 @@ public class WSRSMFragment extends BaseFragment {
             tviR2Name.setText(spProfile.getName());
         } else if (cPos == 2) {
             tviR2Name.setText(customerProfile.getCustomerName());
-            if (customerProfile.getStateCodeWise().size() == 1) {
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 tviR2StateName.setVisibility(View.VISIBLE);
                 tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
@@ -800,7 +779,7 @@ public class WSRSMFragment extends BaseFragment {
             tviR1Name.setText(spProfile.getName());
         } else if (cPos == 1) {
             tviR1Name.setText(customerProfile.getCustomerName());
-            if (customerProfile.getStateCodeWise().size() == 1) {
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());

@@ -476,7 +476,7 @@ public class OSORSMFragment extends BaseFragment {
             }
             tviR1Name.setText(customerProfile.getCustomerName());
             tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
-            if (customerProfile.getStateCodeWise().size() == 1) {
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
@@ -542,7 +542,7 @@ public class OSORSMFragment extends BaseFragment {
             }
             tviR2Name.setText(customerProfile.getCustomerName());
             tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
-            if (customerProfile.getStateCodeWise().size() == 1) {
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 tviR2StateName.setVisibility(View.VISIBLE);
                 tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
@@ -576,7 +576,7 @@ public class OSORSMFragment extends BaseFragment {
         } else if (cPos == 1) {
             tviR1Name.setText(customerProfile.getCustomerName());
             //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
-            if (customerProfile.getStateCodeWise().size() == 1) {
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
@@ -623,7 +623,7 @@ public class OSORSMFragment extends BaseFragment {
             }
             tviR3Name.setText(customerProfile.getCustomerName());
             tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
-            if (customerProfile.getStateCodeWise().size() == 1) {
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 tviR3StateName.setVisibility(View.VISIBLE);
                 tviR3StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
@@ -658,7 +658,7 @@ public class OSORSMFragment extends BaseFragment {
         } else if (cPos == 2) {
             tviR2Name.setText(customerProfile.getCustomerName());
             //tviR2SOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
-            if (customerProfile.getStateCodeWise().size() == 1) {
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 tviR2StateName.setVisibility(View.VISIBLE);
                 tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
@@ -674,7 +674,7 @@ public class OSORSMFragment extends BaseFragment {
         } else if (cPos == 1) {
             tviR1Name.setText(customerProfile.getCustomerName());
             //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
-            if (customerProfile.getStateCodeWise().size() == 1) {
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());

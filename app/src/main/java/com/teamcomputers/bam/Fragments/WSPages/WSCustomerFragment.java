@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -18,15 +19,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Adapters.SalesOutstanding.CustomSpinnerAdapter;
 import com.teamcomputers.bam.Adapters.SalesOutstanding.NewCustomerAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
 import com.teamcomputers.bam.Models.FullSalesModel;
 import com.teamcomputers.bam.Models.SalesCustomerModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.SalesReceivable.FilterSalesListRequester;
+import com.teamcomputers.bam.Requesters.SalesReceivable.FiscalSalesListRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 
@@ -48,6 +49,7 @@ import butterknife.Unbinder;
 public class WSCustomerFragment extends BaseFragment {
     public static final String USER_ID = "USER_ID";
     public static final String USER_LEVEL = "USER_LEVEL";
+    public static final String FISCAL_YEAR = "FISCAL_YEAR";
     public static final String RSM_PROFILE = "RSM_PROFILE";
     public static final String SP_PROFILE = "SP_PROFILE";
     public static final String PRODUCT_PROFILE = "PRODUCT_PROFILE";
@@ -64,11 +66,15 @@ public class WSCustomerFragment extends BaseFragment {
 
     FullSalesModel rsmProfile, salesProfile, productProfile;
 
-    boolean fromRSM, fromSP, fromProduct, search = false;
+    boolean fromRSM, fromSP, fromProduct, search = false, selectYear = false;
     String toolbarTitle = "";
-    String userId = "", level = "";
+    String userId = "", level = "", fiscalYear = "";
     @BindView(R.id.txtSearch)
     EditText txtSearch;
+    @BindView(R.id.spinnYear)
+    Spinner spinnYear;
+    @BindView(R.id.tviFiscalYear)
+    TextView tviFiscalYear;
     @BindView(R.id.cviSPHeading)
     CardView cviSPHeading;
     @BindView(R.id.llSPLayout)
@@ -99,6 +105,7 @@ public class WSCustomerFragment extends BaseFragment {
     private int position = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0;
 
     List<SalesCustomerModel> model = new ArrayList<>();
+    CustomSpinnerAdapter customSpinnerAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,71 +130,50 @@ public class WSCustomerFragment extends BaseFragment {
 
         userId = getArguments().getString(USER_ID);
         level = getArguments().getString(USER_LEVEL);
+        fiscalYear = getArguments().getString(FISCAL_YEAR);
         rsmProfile = getArguments().getParcelable(RSM_PROFILE);
         salesProfile = getArguments().getParcelable(SP_PROFILE);
         productProfile = getArguments().getParcelable(PRODUCT_PROFILE);
-
-        /*if (null != rsmProfile) {
-            cviSPHeading.setVisibility(View.VISIBLE);
-            position = rsmProfile.getPosition();
-            if (position == 0) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
-            } else if (position == 1) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
-            } else if (position == 2) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
-            } else if (position % 2 == 0) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
-            } else if (position % 2 == 1) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
-            tviR1Name.setText(rsmProfile.getName());
-            tviYTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getYTD()));
-            tviQTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getQTD()));
-            tviMTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getMTD()));
-        } else if (null != salesProfile) {
-            cviSPHeading.setVisibility(View.VISIBLE);
-            position = salesProfile.getPosition();
-            if (position == 0) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
-            } else if (position == 1) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
-            } else if (position == 2) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
-            } else if (position % 2 == 0) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
-            } else if (position % 2 == 1) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
-            tviR1Name.setText(salesProfile.getName());
-            tviYTD.setText(BAMUtil.getRoundOffValue(salesProfile.getYTD()));
-            tviQTD.setText(BAMUtil.getRoundOffValue(salesProfile.getQTD()));
-            tviMTD.setText(BAMUtil.getRoundOffValue(salesProfile.getMTD()));
-        } else if (null != productProfile) {
-            cviSPHeading.setVisibility(View.VISIBLE);
-            position = productProfile.getPosition();
-            if (position == 0) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
-            } else if (position == 1) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
-            } else if (position == 2) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
-            } else if (position % 2 == 0) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
-            } else if (position % 2 == 1) {
-                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            }
-            tviR1Name.setText(productProfile.getName());
-            tviYTD.setText(BAMUtil.getRoundOffValue(productProfile.getYTD()));
-            tviQTD.setText(BAMUtil.getRoundOffValue(productProfile.getQTD()));
-            tviMTD.setText(BAMUtil.getRoundOffValue(productProfile.getMTD()));
-        }*/
 
         toolbarTitle = getString(R.string.Customer);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
 
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviRSM.setLayoutManager(layoutManager);
+
+        tviFiscalYear.setText(fiscalYear.substring(0, 4));
+
+        /*//Creating the ArrayAdapter instance having the country list
+        customSpinnerAdapter = new CustomSpinnerAdapter(dashboardActivityContext, dashboardActivityContext.fiscalYearModel);
+        //Setting the ArrayAdapter data on the Spinner
+        spinnYear.setAdapter(customSpinnerAdapter);
+
+        tviFiscalYear.setText(dashboardActivityContext.selectedFiscalYear.substring(0, 4));
+        *//*tviFiscalYear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinnYear.performClick();
+            }
+        });*//*
+        //spinnYear.setSelection(dashboardActivityContext.selectedPosition, false);
+
+        spinnYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!selectYear) {
+                    selectYear = true;
+                } else {
+                    dashboardActivityContext.selectedFiscalYear = dashboardActivityContext.fiscalYearModel.getFascialYear().get(position).getYear();
+                    dashboardActivityContext.selectedPosition = position;
+                    rowsDisplay();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });*/
 
         rowsDisplay();
 
@@ -209,6 +195,7 @@ public class WSCustomerFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        selectYear = false;
         dashboardActivityContext.showTab(level);
         dashboardActivityContext.customerClick(level);
     }
@@ -271,6 +258,7 @@ public class WSCustomerFragment extends BaseFragment {
                             Bundle customerBundle = new Bundle();
                             customerBundle.putString(WSProductFragment.USER_ID, userId);
                             customerBundle.putString(WSProductFragment.USER_LEVEL, level);
+                            customerBundle.putString(WSProductFragment.FISCAL_YEAR, fiscalYear);
 
                             cPos = rsmPos + spPos + 1;
                             customerBundle.putInt(WSProductFragment.RSM_POS, rsmPos);
@@ -294,6 +282,7 @@ public class WSCustomerFragment extends BaseFragment {
                             SalesCustomerModel salesCustomerModel = (SalesCustomerModel) eventObject.getObject();
                             productStateBundle.putString(WSProductFragment.USER_ID, userId);
                             productStateBundle.putString(WSProductFragment.USER_LEVEL, level);
+                            productStateBundle.putString(WSProductFragment.FISCAL_YEAR, fiscalYear);
 
                             cPos = rsmPos + spPos + 1;
                             productStateBundle.putInt(WSProductFragment.RSM_POS, rsmPos);
@@ -317,6 +306,7 @@ public class WSCustomerFragment extends BaseFragment {
                         Bundle rsmBundle = new Bundle();
                         rsmBundle.putString(WSRSMFragment.USER_ID, userId);
                         rsmBundle.putString(WSRSMFragment.USER_LEVEL, level);
+                        rsmBundle.putString(WSRSMFragment.FISCAL_YEAR, fiscalYear);
 
                         cPos = spPos + pPos + 1;
                         rsmBundle.putInt(WSRSMFragment.SP_POS, spPos);
@@ -338,6 +328,7 @@ public class WSCustomerFragment extends BaseFragment {
                         Bundle customerBundle = new Bundle();
                         customerBundle.putString(WSSalesPersonFragment.USER_ID, userId);
                         customerBundle.putString(WSSalesPersonFragment.USER_LEVEL, level);
+                        customerBundle.putString(WSSalesPersonFragment.FISCAL_YEAR, fiscalYear);
 
                         cPos = rsmPos + pPos + 1;
                         customerBundle.putInt(WSSalesPersonFragment.RSM_POS, rsmPos);
@@ -372,7 +363,7 @@ public class WSCustomerFragment extends BaseFragment {
     }
 
     @OnClick(R.id.iviSearch)
-    public void Search(){
+    public void Search() {
         if (!search) {
             txtSearch.setVisibility(View.VISIBLE);
             search = true;
@@ -393,9 +384,10 @@ public class WSCustomerFragment extends BaseFragment {
         rsmPos = 0;
         spPos = 0;
         pPos = 0;
+        fiscalYear = dashboardActivityContext.selectedFiscalYear;
         cviSPHeading.setVisibility(View.GONE);
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FilterSalesListRequester(userId, level, "Customer", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new FiscalSalesListRequester(userId, level, "Customer", "", "", "", "", "", fiscalYear));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -522,8 +514,13 @@ public class WSCustomerFragment extends BaseFragment {
             sales = salesProfile.getTMC();
         if (null != productProfile)
             product = productProfile.getCode();
+
+        tviFiscalYear.setText(dashboardActivityContext.selectedFiscalYear.substring(0, 4));
+
+        fiscalYear = dashboardActivityContext.selectedFiscalYear;
+
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FilterSalesListRequester(userId, level, "Customer", rsm, sales, "", "", product));
+        BackgroundExecutor.getInstance().execute(new FiscalSalesListRequester(userId, level, "Customer", rsm, sales, "", "", product, fiscalYear));
 
     }
 
