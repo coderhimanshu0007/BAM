@@ -34,25 +34,27 @@
                     android:id="@+id/header_user_profile"
                     layout="@layout/nav_header_main" />
 
-                <androidx.cardview.widget.CardView
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="120dp"
+                    android:layout_marginTop="130dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="10dp"
-                    android:elevation="@dimen/cardview_compat_inset_shadow"
-                    app:cardCornerRadius="3dp">
+                    android:orientation="vertical">
 
-                    <RelativeLayout
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cviHome"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:elevation="@dimen/cardview_compat_inset_shadow"
+                        app:cardCornerRadius="3dp">
 
                         <LinearLayout
                             android:id="@+id/ll_home"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                            android:layout_height="55dp"
                             android:clickable="true"
                             android:gravity="center"
                             android:orientation="horizontal">
@@ -67,7 +69,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:padding="5dp"
-                                    app:srcCompat="@drawable/ic_home" />
+                                    app:srcCompat="@drawable/ic_group_menu_home" />
 
                             </LinearLayout>
 
@@ -75,25 +77,36 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
+                                android:fontFamily="@font/roboto_medium"
                                 android:gravity="start|center"
                                 android:text="Home"
-                                android:textColor="@color/color_parent_list_item"
-                                android:textSize="14sp" />
+                                android:textColor="@color/text_color_login"
+                                android:textSize="10sp" />
 
                         </LinearLayout>
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recycler_view_nav_item"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_below="@+id/ll_home"
-                            android:scrollbars="none" />
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_nav_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/cviHome"
+                        android:scrollbars="none" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cviSR"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/recycler_view_nav_item"
+                        android:layout_margin="3dp"
+                        android:elevation="@dimen/cardview_compat_inset_shadow"
+                        app:cardCornerRadius="3dp">
 
                         <LinearLayout
                             android:id="@+id/ll_SR"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_below="@+id/recycler_view_nav_item"
+                            android:layout_height="55dp"
                             android:clickable="true"
                             android:gravity="center"
                             android:orientation="horizontal">
@@ -108,7 +121,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:padding="5dp"
-                                    app:srcCompat="@drawable/ic_menu_others" />
+                                    app:srcCompat="@drawable/ic_group_menu_sr" />
 
                             </LinearLayout>
 
@@ -116,14 +129,16 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
+                                android:fontFamily="@font/roboto_medium"
                                 android:gravity="start|center"
                                 android:text="@string/SalesReceivable"
-                                android:textColor="@color/color_parent_list_item"
-                                android:textSize="14sp" />
+                                android:textColor="@color/text_color_login"
+                                android:textSize="10sp" />
 
                         </LinearLayout>
-                    </RelativeLayout>
-                </androidx.cardview.widget.CardView>
+
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
             </RelativeLayout>
 
             <LinearLayout
@@ -144,7 +159,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        app:srcCompat="@drawable/ic_favorites" />
+                        app:srcCompat="@drawable/ic_group_menu_favourits" />
 
                 </LinearLayout>
 
@@ -152,10 +167,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/roboto"
                     android:gravity="start|center"
                     android:text="Favourits"
-                    android:textColor="@color/color_user_hint"
-                    android:textSize="14sp" />
+                    android:textColor="@color/text_color_login"
+                    android:textSize="10sp" />
 
             </LinearLayout>
 
@@ -176,7 +192,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        app:srcCompat="@drawable/ic_feedback" />
+                        app:srcCompat="@drawable/ic_group_menu_feedback" />
 
                 </LinearLayout>
 
@@ -184,10 +200,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/roboto"
                     android:gravity="start|center"
                     android:text="Feedback"
-                    android:textColor="@color/color_user_hint"
-                    android:textSize="14sp" />
+                    android:textColor="@color/text_color_login"
+                    android:textSize="10sp" />
 
             </LinearLayout>
 
@@ -208,17 +225,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        app:srcCompat="@drawable/ic_logout" />
+                        app:srcCompat="@drawable/ic_group_menu_logout" />
                 </LinearLayout>
 
                 <com.teamcomputers.bam.CustomView.TextViewCustom
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/roboto"
                     android:gravity="start|center"
                     android:text="@string/logout"
-                    android:textColor="@color/color_user_hint"
-                    android:textSize="14sp" />
+                    android:textColor="@color/text_color_login"
+                    android:textSize="10sp" />
 
             </LinearLayout>
 

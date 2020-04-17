@@ -260,10 +260,15 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //SharedPreferencesController.getInstance(mActivity).setFrom("2");
-                //SharedPreferencesController.getInstance(mActivity).setLocation(dataList.get(position).getCustName());
-                dataListFiltered.get(position).setUserId(userId);
-                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataListFiltered.get(position)));
+                SalesCustomerModel salesCustomerModel = new SalesCustomerModel();
+                salesCustomerModel.setUserId(dataListFiltered.get(position).getUserId());
+                salesCustomerModel.setCustomerName(dataListFiltered.get(position).getCustomerName());
+                salesCustomerModel.setYTD(dataListFiltered.get(position).getYTD());
+                salesCustomerModel.setQTD(dataListFiltered.get(position).getQTD());
+                salesCustomerModel.setMTD(dataListFiltered.get(position).getMTD());
+                salesCustomerModel.setPosition(dataListFiltered.get(position).getPosition());
+                //dataListFiltered.get(position).setUserId(userId);
+                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, salesCustomerModel));
             }
         });
         List<SalesCustomerModel.StateCodeWise> stateCodeWise = dataListFiltered.get(position).getStateCodeWise();

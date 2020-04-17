@@ -190,6 +190,12 @@ public interface ApiInterface {
 
     // YTD QTD
     @FormUrlEncoded
+    @POST("YTDQTDFiscal")
+    Call<Object> fiscalYTDQTD(@Field("UserId") String userId,
+                              @Field("FiscalYear") String fiscalYear);
+
+    // YTD QTD
+    @FormUrlEncoded
     @POST("SalesReceiveablesFiscal")
     Call<Object> salesReceiveablesFiscal(@Field("UserId") String userId,
                         @Field("FiscalYear") String fiscalYear);

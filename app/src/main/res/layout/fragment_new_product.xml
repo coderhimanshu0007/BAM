@@ -148,24 +148,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:layout_marginRight="20dp"
-            android:gravity="right"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <Spinner
-                android:id="@+id/spinnYear"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/spinner_background"
-                android:popupBackground="@color/start_home_color_bg"
-                android:visibility="invisible" />
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

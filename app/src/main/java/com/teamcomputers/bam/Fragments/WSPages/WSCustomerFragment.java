@@ -71,8 +71,6 @@ public class WSCustomerFragment extends BaseFragment {
     String userId = "", level = "", fiscalYear = "";
     @BindView(R.id.txtSearch)
     EditText txtSearch;
-    @BindView(R.id.spinnYear)
-    Spinner spinnYear;
     @BindView(R.id.tviFiscalYear)
     TextView tviFiscalYear;
     @BindView(R.id.cviSPHeading)

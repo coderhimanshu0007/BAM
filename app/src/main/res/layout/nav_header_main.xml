@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/gradient_login_bg"
+    android:foreground="@drawable/ic_mask_group_home"
     android:orientation="horizontal"
-    android:foreground="@drawable/ic_map"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -23,6 +23,7 @@
             android:id="@+id/iv_employee_profile"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_alignParentRight="true"
             android:background="@drawable/ic_profile"
             android:paddingTop="@dimen/nav_header_vertical_spacing" />
 
@@ -32,19 +33,21 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="17dp"
-            android:layout_toRightOf="@+id/iv_employee_profile"
-            android:fontFamily="@font/roboto_medium"
+            android:fontFamily="@font/roboto"
             android:text="@string/user_name"
             android:textColor="@android:color/white"
-            android:textSize="25sp" />
+            android:textSize="18sp" />
 
         <com.teamcomputers.bam.CustomView.TextViewCustom
             android:id="@+id/tv_employee_email_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/user_email"
+            android:layout_marginLeft="17dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="Hello"
             android:textColor="@android:color/white"
-            android:visibility="gone" />
+            android:textSize="18dp"
+            android:visibility="visible" />
 
         <ImageView
             android:id="@+id/iviEditProfile"
@@ -53,7 +56,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/tv_employee_name"
-            app:srcCompat="@drawable/ic_edit" />
+            app:srcCompat="@drawable/ic_group_edit_profile" />
     </RelativeLayout>
 
 </LinearLayout>

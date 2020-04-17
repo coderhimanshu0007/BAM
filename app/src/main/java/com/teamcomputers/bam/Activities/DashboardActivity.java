@@ -68,7 +68,6 @@ import com.teamcomputers.bam.Fragments.WSPages.WSProductFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSSalesPersonFragment;
 import com.teamcomputers.bam.Fragments.home.HomeFragment;
-import com.teamcomputers.bam.Models.FiscalYearModel;
 import com.teamcomputers.bam.Models.LoginModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
@@ -127,7 +126,6 @@ public class DashboardActivity extends BaseActivity {
     private Handler drawerHandler = new Handler();
     private AppBarConfiguration mAppBarConfiguration;
 
-    public FiscalYearModel fiscalYearModel;
     public String userId = "", level = "", selectedFiscalYear = "";
     public int selectedPosition = 0;
 
@@ -338,7 +336,7 @@ public class DashboardActivity extends BaseActivity {
             iviToolbarLogo.setVisibility(View.VISIBLE);
             tvToolBarTitle.setVisibility(View.GONE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                claMain.setBackground(getResources().getDrawable(R.drawable.gradient_drawable));
+                //claMain.setBackground(getResources().getDrawable(R.drawable.gradient_drawable));
             }
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -403,27 +401,27 @@ public class DashboardActivity extends BaseActivity {
         navigationSR.add(new NavigationItem(new SpannableStringBuilder(getString(R.string.SalsReceivable2)), Fragments.SR_FRAGMENTS2));
 
         NavigationItemParentModel navigationOrderProcessingParent = new NavigationItemParentModel();
-        navigationOrderProcessingParent.setNavImageParent(R.drawable.ic_menu_order_processing);
+        navigationOrderProcessingParent.setNavImageParent(R.drawable.ic_group_menu_order_processing);
         navigationOrderProcessingParent.setNavTitleParent(getString(R.string.OrderProcessing));
         navigationOrderProcessingParent.setNavigationItems(navigationOrderProcessing);
 
         NavigationItemParentModel navigationPurchaseParent = new NavigationItemParentModel();
-        navigationPurchaseParent.setNavImageParent(R.drawable.ic_menu_purchase);
+        navigationPurchaseParent.setNavImageParent(R.drawable.ic_group_menu_purchase);
         navigationPurchaseParent.setNavTitleParent(getString(R.string.Purchanse));
         navigationPurchaseParent.setNavigationItems(navigationPurchase);
 
         NavigationItemParentModel navigationLogisticsParent = new NavigationItemParentModel();
-        navigationLogisticsParent.setNavImageParent(R.drawable.ic_menu_logistic);
+        navigationLogisticsParent.setNavImageParent(R.drawable.ic_group_menu_logistics);
         navigationLogisticsParent.setNavTitleParent(getString(R.string.Logistics));
         navigationLogisticsParent.setNavigationItems(navigationLogistics);
 
         NavigationItemParentModel navigationInstallationParent = new NavigationItemParentModel();
-        navigationInstallationParent.setNavImageParent(R.drawable.ic_menu_installation);
+        navigationInstallationParent.setNavImageParent(R.drawable.ic_group_menu_installation);
         navigationInstallationParent.setNavTitleParent(getString(R.string.Installation));
         navigationInstallationParent.setNavigationItems(navigationInstallation);
 
         NavigationItemParentModel navigationCollectionParent = new NavigationItemParentModel();
-        navigationCollectionParent.setNavImageParent(R.drawable.ic_menu_collection);
+        navigationCollectionParent.setNavImageParent(R.drawable.ic_group_menu_collection);
         navigationCollectionParent.setNavTitleParent(getString(R.string.Collection));
         navigationCollectionParent.setNavigationItems(navigationCollection);
 
@@ -995,7 +993,7 @@ public class DashboardActivity extends BaseActivity {
         Bundle rsmDataBundle = new Bundle();
         rsmDataBundle.putString(WSRSMFragment.USER_ID, userId);
         rsmDataBundle.putString(WSRSMFragment.USER_LEVEL, level);
-        rsmDataBundle.putString(WSRSMFragment.FISCAL_YEAR, fiscalYearModel.getFascialYear().get(selectedPosition).getYear());
+        rsmDataBundle.putString(WSRSMFragment.FISCAL_YEAR, selectedFiscalYear);
         rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
         dashboardActivityContext.replaceFragment(Fragments.WS_RSM_FRAGMENT, rsmDataBundle);
@@ -1007,7 +1005,7 @@ public class DashboardActivity extends BaseActivity {
         Bundle spDataBundle = new Bundle();
         spDataBundle.putString(WSSalesPersonFragment.USER_ID, userId);
         spDataBundle.putString(WSSalesPersonFragment.USER_LEVEL, level);
-        spDataBundle.putString(WSSalesPersonFragment.FISCAL_YEAR, fiscalYearModel.getFascialYear().get(selectedPosition).getYear());
+        spDataBundle.putString(WSSalesPersonFragment.FISCAL_YEAR, selectedFiscalYear);
         spDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
         dashboardActivityContext.replaceFragment(Fragments.WS_ACCOUNT_FRAGMENT, spDataBundle);
@@ -1019,7 +1017,7 @@ public class DashboardActivity extends BaseActivity {
         Bundle customerDataBundle = new Bundle();
         customerDataBundle.putString(WSCustomerFragment.USER_ID, userId);
         customerDataBundle.putString(WSCustomerFragment.USER_LEVEL, level);
-        customerDataBundle.putString(WSCustomerFragment.FISCAL_YEAR, fiscalYearModel.getFascialYear().get(selectedPosition).getYear());
+        customerDataBundle.putString(WSCustomerFragment.FISCAL_YEAR, selectedFiscalYear);
         customerDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
         dashboardActivityContext.replaceFragment(Fragments.WS_CUSTOMER_FRAGMENT, customerDataBundle);
@@ -1031,7 +1029,7 @@ public class DashboardActivity extends BaseActivity {
         Bundle productDataBundle = new Bundle();
         productDataBundle.putString(WSProductFragment.USER_ID, userId);
         productDataBundle.putString(WSProductFragment.USER_LEVEL, level);
-        productDataBundle.putString(WSProductFragment.FISCAL_YEAR, fiscalYearModel.getFascialYear().get(selectedPosition).getYear());
+        productDataBundle.putString(WSProductFragment.FISCAL_YEAR, selectedFiscalYear);
         productDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
         dashboardActivityContext.replaceFragment(Fragments.WS_PRODUCT_FRAGMENT, productDataBundle);

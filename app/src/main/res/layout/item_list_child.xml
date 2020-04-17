@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ll_child_root"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="30dp"
     android:background="@color/material_gray_100"
     android:clickable="true"
     android:gravity="center"
@@ -21,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:src="@drawable/ic_drawer_cake_blue"
+            app:srcCompat="@drawable/ic_drawer_cake_blue"
             android:visibility="invisible" />
 
     </LinearLayout>
@@ -34,7 +35,7 @@
         android:fontFamily="@font/roboto"
         android:gravity="start|center"
         android:text="@string/user_name"
-        android:textColor="@color/color_chield_list_item"
-        android:textSize="12sp" />
+        android:textColor="@color/text_color_login"
+        android:textSize="10sp" />
 
 </LinearLayout>

@@ -18,6 +18,7 @@
             android:fillViewport="true"
             android:orientation="vertical">
 
+
             <RelativeLayout
                 android:id="@+id/rlName"
                 android:layout_width="match_parent"
@@ -31,12 +32,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:layout_centerInParent="true"
                     android:layout_marginEnd="16dp"
                     android:textColor="@color/color_white"
-                    android:textSize="18sp"
+                    android:textSize="46sp"
                     android:textStyle="bold"
                     app:fontFamily="@font/roboto_bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tviLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/color_white"
+                    android:textColor="@color/color_white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -49,9 +63,9 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:textColor="@color/color_white"
-                    android:textSize="18sp"
-                    android:text="Welcome Kockpit!"
-                    app:fontFamily="@font/roboto"
+                    android:textSize="34sp"
+                    android:textStyle="bold"
+                    app:fontFamily="@font/roboto_bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -99,9 +113,9 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="12dp"
                                 android:text="Order Processing"
-                                android:textColor="@color/text_color_login"
+                                android:textColor="@color/text_color"
                                 android:textStyle="normal"
-                                app:fontFamily="@font/roboto_medium" />
+                                app:fontFamily="@font/roboto" />
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -112,7 +126,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
-                                    app:srcCompat="@drawable/ic_group_order_processing"
+                                    app:srcCompat="@drawable/ic_order_processing"
                                     tools:ignore="VectorDrawableCompat" />
                             </RelativeLayout>
 
@@ -146,9 +160,9 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="12dp"
                                 android:text="Purchase"
-                                android:textColor="@color/text_color_login"
+                                android:textColor="@color/text_color"
                                 android:textStyle="normal"
-                                app:fontFamily="@font/roboto_medium" />
+                                app:fontFamily="@font/roboto" />
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -159,7 +173,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
-                                    app:srcCompat="@drawable/ic_group_purchase"
+                                    app:srcCompat="@drawable/ic_purchase"
                                     tools:ignore="VectorDrawableCompat" />
                             </RelativeLayout>
 
@@ -200,9 +214,9 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="12dp"
                                 android:text="Logistics"
-                                android:textColor="@color/text_color_login"
+                                android:textColor="@color/text_color"
                                 android:textStyle="normal"
-                                app:fontFamily="@font/roboto_medium" />
+                                app:fontFamily="@font/roboto" />
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -213,7 +227,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
-                                    app:srcCompat="@drawable/ic_group_logistics"
+                                    app:srcCompat="@drawable/ic_logistics"
                                     tools:ignore="VectorDrawableCompat" />
                             </RelativeLayout>
                         </RelativeLayout>
@@ -244,9 +258,9 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="12dp"
                                 android:text="Installation"
-                                android:textColor="@color/text_color_login"
+                                android:textColor="@color/text_color"
                                 android:textStyle="normal"
-                                app:fontFamily="@font/roboto_medium" />
+                                app:fontFamily="@font/roboto" />
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -257,7 +271,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
-                                    app:srcCompat="@drawable/ic_group_installation"
+                                    app:srcCompat="@drawable/ic_installation"
                                     tools:ignore="VectorDrawableCompat" />
                             </RelativeLayout>
                         </RelativeLayout>
@@ -297,9 +311,9 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="12dp"
                                 android:text="Collection"
-                                android:textColor="@color/text_color_login"
+                                android:textColor="@color/text_color"
                                 android:textStyle="normal"
-                                app:fontFamily="@font/roboto_medium" />
+                                app:fontFamily="@font/roboto" />
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -310,7 +324,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
-                                    app:srcCompat="@drawable/ic_group_collection"
+                                    app:srcCompat="@drawable/ic_collection"
                                     tools:ignore="VectorDrawableCompat" />
                             </RelativeLayout>
                         </RelativeLayout>
@@ -341,10 +355,10 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="12dp"
                                 android:text="@string/SalesReceivable"
-                                android:textColor="@color/text_color_login"
+                                android:textColor="@color/text_color"
                                 android:textSize="14sp"
                                 android:textStyle="normal"
-                                app:fontFamily="@font/roboto_medium" />
+                                app:fontFamily="@font/roboto" />
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -355,7 +369,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
-                                    app:srcCompat="@drawable/ic_group_sales_receivable"
+                                    app:srcCompat="@drawable/ic_others"
                                     tools:ignore="VectorDrawableCompat" />
 
                             </RelativeLayout>
@@ -385,7 +399,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="12dp"
                                 android:text="Others"
-                                android:textColor="@color/text_color_login"
+                                android:textColor="@color/text_color"
                                 android:textSize="14sp"
                                 android:textStyle="normal"
                                 app:fontFamily="@font/roboto" />

@@ -164,6 +164,10 @@ public class HTTPOperationController implements BAMConstant {
         return ConnectionUtil.execute(getApiInterface().yTDQTD(userId));
     }
 
+    public static ApiResponse fiscalYTDQTD(String userId, String fiscalYear) {
+        return ConnectionUtil.execute(getApiInterface().fiscalYTDQTD(userId, fiscalYear));
+    }
+
     public static ApiResponse fiscalYear() {
         return ConnectionUtil.execute(getApiInterface().fiscalYearList());
     }

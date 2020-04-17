@@ -57,7 +57,7 @@ public class HomeFragment extends BaseFragment {
         homeViewModel.getText().observe(this, new Observer<LoginModel>() {
             @Override
             public void onChanged(LoginModel loginModel) {
-                text_hello.setText("Hello,");
+                //text_hello.setText("Hello,");
                 String name = null;
                 if (loginModel.getMemberName().split(" ").length > 2) {
                     name = loginModel.getMemberName().split(" ")[0]
@@ -66,7 +66,7 @@ public class HomeFragment extends BaseFragment {
                 } else if (loginModel.getMemberName().split(" ").length <= 2) {
                     name = loginModel.getMemberName();
                 }
-                text_name.setText(name);
+                text_hello.setText("Hello " + name);
             }
         });
 

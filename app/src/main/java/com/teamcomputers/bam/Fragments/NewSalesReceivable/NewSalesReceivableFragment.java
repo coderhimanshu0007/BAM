@@ -35,7 +35,7 @@ import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.SalesReceivable.FiscalYearRequester;
 import com.teamcomputers.bam.Requesters.SalesReceivable.SalesReceivableRequester;
 import com.teamcomputers.bam.Requesters.SalesReceivable.SalesReceivablesFiscalRequester;
-import com.teamcomputers.bam.Requesters.SalesReceivable.YTDQTDRequester;
+import com.teamcomputers.bam.Requesters.SalesReceivable.YTDQTDFiscalRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
@@ -164,11 +164,12 @@ public class NewSalesReceivableFragment extends BaseFragment {
                         break;
                     case Events.GET_FISCAL_YEAR_LIST_SUCCESSFULL:
                         //JSONObject jsonObject = new JSONObject(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
-                        fiscalYearModel = (FiscalYearModel) eventObject.getObject();
+                        //fiscalYearModel = (FiscalYearModel) eventObject.getObject();
                         //dashboardActivityContext.fiscalYearModel = fiscalYearModel;
                         //dashboardActivityContext.selectedFiscalYear = fiscalYearModel.getFascialYear().get(0).getYear();
                         //dashboardActivityContext.selectedPosition = 0;
-                        //dashboardActivityContext.updateDate(fiscalYearModel.getLastTimeRefreshed());
+                        fiscalYearModel = (FiscalYearModel) eventObject.getObject();
+                        dashboardActivityContext.updateDate(fiscalYearModel.getLastTimeRefreshed());
                         //Creating the ArrayAdapter instance having the country list
                         customSpinnerAdapter = new CustomSpinnerAdapter(dashboardActivityContext, fiscalYearModel);
                         //Setting the ArrayAdapter data on the Spinner
@@ -321,14 +322,14 @@ public class NewSalesReceivableFragment extends BaseFragment {
     public void MonthlyClick() {
         type = "MONTHLY";
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new YTDQTDRequester(userId));
+        BackgroundExecutor.getInstance().execute(new YTDQTDFiscalRequester(userId, fiscalYear));
     }
 
     @OnClick(R.id.llQuarterly)
     public void QuarterlyClick() {
         type = "QUARTERLY";
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new YTDQTDRequester(userId));
+        BackgroundExecutor.getInstance().execute(new YTDQTDFiscalRequester(userId, fiscalYear));
     }
 
     @OnClick(R.id.txtSalesAnalysis)

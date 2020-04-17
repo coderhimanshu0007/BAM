@@ -70,8 +70,6 @@ public class WSProductFragment extends BaseFragment {
     String toolbarTitle = "";
     @BindView(R.id.txtSearch)
     EditText txtSearch;
-    @BindView(R.id.spinnYear)
-    Spinner spinnYear;
     @BindView(R.id.tviFiscalYear)
     TextView tviFiscalYear;
     @BindView(R.id.llTabHeading)

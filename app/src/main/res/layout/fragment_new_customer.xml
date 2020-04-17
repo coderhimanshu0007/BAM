@@ -28,22 +28,12 @@
             android:textSize="14sp"
             app:fontFamily="@font/roboto_medium" />
 
-        <Spinner
-            android:id="@+id/spinnYear"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tviFiscalYear"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/spinner_background"
-            android:popupBackground="@color/start_home_color_bg"
-            android:visibility="gone" />
-
         <ImageView
             android:id="@+id/iviSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/spinnYear"
+            android:layout_toLeftOf="@+id/tviFiscalYear"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             app:srcCompat="@drawable/ic_search_black_24dp" />
@@ -53,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
-            android:layout_toLeftOf="@+id/iviSearch"
+            android:layout_toLeftOf="@+id/tviFiscalYear"
             android:background="@drawable/border_bg_search"
             android:hint="Search here"
             android:inputType="textPersonName"
