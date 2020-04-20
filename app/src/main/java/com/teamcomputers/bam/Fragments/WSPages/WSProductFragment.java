@@ -535,8 +535,6 @@ public class WSProductFragment extends BaseFragment {
             state = customerProfile.getStateCodeWise().get(0).getStateCode();
         //tviR3StateName.setText(state);
 
-        tviFiscalYear.setText(dashboardActivityContext.selectedFiscalYear.substring(0, 4));
-
         fiscalYear = dashboardActivityContext.selectedFiscalYear;
 
         showProgress(ProgressDialogTexts.LOADING);

@@ -44,7 +44,7 @@ public class DispatchAdapter extends RecyclerView.Adapter<DispatchAdapter.ViewHo
 
     @Override
     public DispatchAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.dispatch_recyclerview_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.logistics_dispatch_recyclerview_layout, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;

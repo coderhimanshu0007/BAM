@@ -97,8 +97,8 @@ public class DashboardActivity extends BaseActivity {
     LinearLayout llOSOTabs;
     @BindView(R.id.llTOSTabs)
     LinearLayout llTOSTabs;
-    @BindView(R.id.claMain)
-    CoordinatorLayout claMain;
+    /*@BindView(R.id.claMain)
+    CoordinatorLayout claMain;*/
     @BindView(R.id.iviToolbarLogo)
     ImageView iviToolbarLogo;
     @BindView(R.id.toolbar_title)
@@ -335,13 +335,13 @@ public class DashboardActivity extends BaseActivity {
         if (title.equals(getString(R.string.Heading_Home))) {
             iviToolbarLogo.setVisibility(View.VISIBLE);
             tvToolBarTitle.setVisibility(View.GONE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                //claMain.setBackground(getResources().getDrawable(R.drawable.gradient_drawable));
-            }
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                claMain.setBackground(getResources().getDrawable(R.drawable.gradient_drawable));
+            }*/
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 claMain.setBackground(getResources().getDrawable(R.drawable.gradient_login_bg));
-            }
+            }*/
             iviToolbarLogo.setVisibility(View.GONE);
             tvToolBarTitle.setVisibility(View.VISIBLE);
         }

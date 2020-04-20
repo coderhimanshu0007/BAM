@@ -513,8 +513,6 @@ public class WSCustomerFragment extends BaseFragment {
         if (null != productProfile)
             product = productProfile.getCode();
 
-        tviFiscalYear.setText(dashboardActivityContext.selectedFiscalYear.substring(0, 4));
-
         fiscalYear = dashboardActivityContext.selectedFiscalYear;
 
         showProgress(ProgressDialogTexts.LOADING);
