@@ -41,7 +41,7 @@ public class CustomSpinnerAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup parent) {
         view = inflter.inflate(R.layout.custom_spinner_items, null);
         TextView iviFiscalYear = (TextView) view.findViewById(R.id.iviFiscalYear);
-        iviFiscalYear.setText(fiscalYearModel.getFascialYear().get(position).getYear().substring(0, 4));
+        iviFiscalYear.setText("FY" + fiscalYearModel.getFascialYear().get(position).getYear().substring(0, 4));
         return view;
     }
 }

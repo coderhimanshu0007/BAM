@@ -63,6 +63,8 @@
     <color name="color_progress_start">#F01414</color>
     <color name="color_progress_mid">#E69C38</color>
     <color name="color_progress_end">#6DB371</color>
+    <color name="color_amber">#FFBF00</color>
+    <color name="color_orange">#FF4500</color>
 
     <color name="shader">#33000000</color>
     <color name="divider_color">#25434343</color>

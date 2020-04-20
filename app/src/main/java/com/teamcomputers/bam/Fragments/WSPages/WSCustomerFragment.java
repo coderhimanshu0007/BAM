@@ -139,7 +139,7 @@ public class WSCustomerFragment extends BaseFragment {
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviRSM.setLayoutManager(layoutManager);
 
-        tviFiscalYear.setText(fiscalYear.substring(0, 4));
+        tviFiscalYear.setText("FY" + fiscalYear.substring(0, 4));
 
         /*//Creating the ArrayAdapter instance having the country list
         customSpinnerAdapter = new CustomSpinnerAdapter(dashboardActivityContext, dashboardActivityContext.fiscalYearModel);
