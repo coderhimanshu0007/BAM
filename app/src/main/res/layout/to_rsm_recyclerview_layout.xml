@@ -33,19 +33,43 @@
                 android:textSize="14sp"
                 app:fontFamily="@font/roboto_bold" />
 
-            <ImageView
-                android:id="@+id/iviOption"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/llOption"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:padding="10dp"
-                android:tint="@color/color_value"
-                app:srcCompat="@drawable/ic_more_vert_black" />
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviOption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:padding="10dp"
+                    android:tint="@color/color_value"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_more_vert_black" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tviOutstanding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_toLeftOf="@+id/llOption"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_horizontal"
+                android:text="123.44"
+                android:textColor="@color/color_value"
+                android:textSize="14sp"
+                app:fontFamily="@font/roboto_medium" />
 
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/llAmountDSO"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -64,6 +88,7 @@
                 android:textColor="@color/color_value"
                 android:textSize="14sp"
                 app:fontFamily="@font/roboto_medium" />
+
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

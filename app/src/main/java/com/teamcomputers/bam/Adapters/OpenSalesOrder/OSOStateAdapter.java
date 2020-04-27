@@ -104,7 +104,7 @@ public class OSOStateAdapter extends RecyclerView.Adapter<OSOStateAdapter.ViewHo
                 PopupMenu popup = new PopupMenu(mActivity, holder.iviOption);
                 //inflating menu from xml resource
                 popup.inflate(R.menu.options_menu);
-                popup.getMenu().getItem(3).setTitle("Invoice");
+                popup.getMenu().getItem(3).setTitle("SO");
                 if (level.equals("R1")) {
                     popup.getMenu().getItem(2).setVisible(false);
                     if (fromSP && fromProduct) {

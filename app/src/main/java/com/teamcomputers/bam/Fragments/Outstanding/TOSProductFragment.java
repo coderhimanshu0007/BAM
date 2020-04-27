@@ -124,7 +124,7 @@ public class TOSProductFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_to_product, container, false);
+        rootView = inflater.inflate(R.layout.fragment_to_product_progress, container, false);
         dashboardActivityContext = (DashboardActivity) context;
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
@@ -151,6 +151,8 @@ public class TOSProductFragment extends BaseFragment {
         rviRSM.setLayoutManager(layoutManager);
 
         rowsDisplay();
+
+        dashboardActivityContext.fragmentView = rootView;
 
         return rootView;
     }
@@ -451,8 +453,8 @@ public class TOSProductFragment extends BaseFragment {
         if (stateCode == 1)
             state = customerProfile.getStateCodeWise().get(0).getStateCode();
         //tviR3StateName.setText(state);
-        showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Product", rsm, sales, customer, state, ""));
+        //showProgress(ProgressDialogTexts.LOADING);
+        //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Product", rsm, sales, customer, state, ""));
     }
 
     private void row1Display() {
@@ -618,10 +620,12 @@ public class TOSProductFragment extends BaseFragment {
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 tviR2StateName.setVisibility(View.VISIBLE);
                 tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
+                tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getAmount()));
             } else {
                 tviR2StateName.setVisibility(View.GONE);
+                tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
             }
-            tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
+
             llDSO.setVisibility(View.GONE);
             //tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             //tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
@@ -718,10 +722,12 @@ public class TOSProductFragment extends BaseFragment {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR3StateName.setVisibility(View.VISIBLE);
                 tviR3StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
+                tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getAmount()));
             } else {
                 tviR3StateName.setVisibility(View.GONE);
+                tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
             }
-            tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
+
             llDSO.setVisibility(View.GONE);
             //tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             //tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));

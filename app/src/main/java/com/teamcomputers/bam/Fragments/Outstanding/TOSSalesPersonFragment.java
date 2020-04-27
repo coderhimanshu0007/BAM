@@ -105,6 +105,14 @@ public class TOSSalesPersonFragment extends BaseFragment {
     ProgressBar pBar;
     @BindView(R.id.llDSO)
     LinearLayout llDSO;
+
+    @BindView(R.id.tviOutstandingHeading)
+    TextView tviOutstandingHeading;
+    @BindView(R.id.tviEmpty)
+    TextView tviEmpty;
+    @BindView(R.id.tviDSOHeading)
+    TextView tviDSOHeading;
+
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
     private TOSalesPersonAdapter adapter;
@@ -150,6 +158,8 @@ public class TOSSalesPersonFragment extends BaseFragment {
         rviRSM.setLayoutManager(layoutManager);
 
         rowsDisplay();
+
+        dashboardActivityContext.fragmentView = rootView;
 
         return rootView;
     }
@@ -243,7 +253,7 @@ public class TOSSalesPersonFragment extends BaseFragment {
                         rsmMenuDataBundle.putString(WSRSMFragment.USER_ID, userId);
                         rsmMenuDataBundle.putString(WSRSMFragment.USER_LEVEL, level);
 
-                        spPos = rsmPos + pPos + 1;
+                        spPos = cPos + pPos + 1;
                         rsmMenuDataBundle.putInt(WSRSMFragment.SP_POS, spPos);
                         rsmMenuDataBundle.putInt(WSRSMFragment.PRODUCT_POS, pPos);
                         rsmMenuDataBundle.putInt(WSRSMFragment.CUSTOMER_POS, cPos);
@@ -501,7 +511,11 @@ public class TOSSalesPersonFragment extends BaseFragment {
             llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR1Name.setText(rsmProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
-            llDSO.setVisibility(View.VISIBLE);
+            if(fromCustomer){
+                llDSO.setVisibility(View.GONE);
+            } else {
+                llDSO.setVisibility(View.VISIBLE);
+            }
             bar = (rsmProfile.getDSO()).intValue();
             tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
@@ -577,7 +591,11 @@ public class TOSSalesPersonFragment extends BaseFragment {
             llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR2Name.setText(rsmProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
-            llDSO.setVisibility(View.VISIBLE);
+            if(fromCustomer){
+                llDSO.setVisibility(View.GONE);
+            } else {
+                llDSO.setVisibility(View.VISIBLE);
+            }
             bar = (rsmProfile.getDSO()).intValue();
             tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
@@ -666,7 +684,11 @@ public class TOSSalesPersonFragment extends BaseFragment {
             llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR3Name.setText(rsmProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
-            llDSO.setVisibility(View.VISIBLE);
+            if(fromCustomer){
+                llDSO.setVisibility(View.GONE);
+            } else {
+                llDSO.setVisibility(View.VISIBLE);
+            }
             bar = (rsmProfile.getDSO()).intValue();
             tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
@@ -753,6 +775,15 @@ public class TOSSalesPersonFragment extends BaseFragment {
     }
 
     private void initData(String type) {
+        if(fromCustomer){
+            tviOutstandingHeading.setText("CUSTOMER NAME");
+            tviEmpty.setVisibility(View.VISIBLE);
+            tviDSOHeading.setText("OUTSTANDING");
+        } else {
+            tviOutstandingHeading.setText("OUTSTANDING");
+            tviEmpty.setVisibility(View.GONE);
+            tviDSOHeading.setText("DSO");
+        }
         adapter = new TOSalesPersonAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromProduct);
         rviRSM.setAdapter(adapter);
     }

@@ -39,7 +39,7 @@
     <string name="Heading_Logistics">Logistics</string>
     <string name="Heading_Installation">Installation</string>
     <string name="Heading_Collection">Collection</string>
-    <string name="Heading_Sales_Receivable">Sales/Receivable</string>
+    <string name="Heading_Sales_Receivable">Sales &amp; Receivable</string>
     <string name="Heading_Feedback">Feedback</string>
     <string name="Heading_Edit_Profile">Edit Profile</string>
 
@@ -117,14 +117,14 @@
     <string name="Others3">-HoldDelivery</string>
     <string name="Others4">-Acknowledgment</string>
 
-    <string name="SalesReceivable">Sales/Receivable</string>
+    <string name="SalesReceivable">Sales &amp; Receivable</string>
     <string name="SalsReceivable1">-Sales</string>
     <string name="SalsReceivable2">-Receivable</string>
 
     <string name="Sales">Sales Person</string>
     <string name="Customer">Customer</string>
     <string name="Product">Product</string>
-    <string name="Invoice">Invoice</string>
+    <string name="Invoice">SO</string>
 
     <string name="user_name">User Name</string>
     <string name="user_email">user@teamcomputers.com</string>

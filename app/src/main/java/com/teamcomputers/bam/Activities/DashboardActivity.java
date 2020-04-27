@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -126,6 +124,8 @@ public class DashboardActivity extends BaseActivity {
     private Handler drawerHandler = new Handler();
     private AppBarConfiguration mAppBarConfiguration;
 
+    public View fragmentView;
+
     public String userId = "", level = "", selectedFiscalYear = "";
     public int selectedPosition = 0;
 
@@ -215,7 +215,6 @@ public class DashboardActivity extends BaseActivity {
             if (userProfile.getMemberName().split(" ").length > 2) {
                 name = userProfile.getMemberName().split(" ")[0]
                         + " " + userProfile.getMemberName().split(" ")[userProfile.getMemberName().split(" ").length - 1];
-                ;
             } else if (userProfile.getMemberName().split(" ").length <= 2) {
                 name = userProfile.getMemberName();
             }
@@ -791,8 +790,9 @@ public class DashboardActivity extends BaseActivity {
                         fragment = new HomeFragment();
                         break;
                 }
-                fragment.setArguments(bundle);
+
                 try {
+                    fragment.setArguments(bundle);
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.setCustomAnimations(R.anim.left_to_right, R.anim.right_to_left);
                     fragmentTransaction.replace(R.id.dash_board_content, fragment, fragment.getFragmentName());
@@ -848,12 +848,12 @@ public class DashboardActivity extends BaseActivity {
         Date now = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss", Locale.getDefault());
         String refreshDate = sdf.format(now);
-        View v = fragment.getView();
+        //View v = fragment.getView();
         //View v = dashboardActivityContext.getWindow().getCurrentFocus();
         //View v = findViewById(android.R.id.content).getRootView();
-        if (null != v) {
-            v.setDrawingCacheEnabled(true);
-            Bitmap b = v.getDrawingCache();
+        if (null != fragmentView) {
+            fragmentView.setDrawingCacheEnabled(true);
+            Bitmap b = fragmentView.getDrawingCache();
             String mPath = Environment.getExternalStorageDirectory().toString() + "/" + refreshDate + ".jpeg";
             File myPath = null;
             myPath = new File(mPath);

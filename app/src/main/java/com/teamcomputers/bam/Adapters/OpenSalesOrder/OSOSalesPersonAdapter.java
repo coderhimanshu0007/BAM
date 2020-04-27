@@ -133,7 +133,7 @@ public class OSOSalesPersonAdapter extends RecyclerView.Adapter<OSOSalesPersonAd
                 PopupMenu popup = new PopupMenu(mActivity, holder.iviOption);
                 //inflating menu from xml resource
                 popup.inflate(R.menu.options_menu);
-                popup.getMenu().getItem(3).setTitle("Invoice");
+                popup.getMenu().getItem(3).setTitle("SO");
                 if (level.equals("R1")) {
                     popup.getMenu().getItem(1).setVisible(false);
                     if (fromRSM && fromCustomer) {
@@ -168,11 +168,11 @@ public class OSOSalesPersonAdapter extends RecyclerView.Adapter<OSOSalesPersonAd
                         switch (item.getItemId()) {
                             case R.id.menu1:
                                 //handle menu1 click
+                                dataListFiltered.get(position).setPosition(position);
+                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu2:
                                 //handle menu2 click
-                                dataListFiltered.get(position).setPosition(position);
-                                EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, dataListFiltered.get(position)));
                                 break;
                             case R.id.menu3:
                                 //handle menu3 click

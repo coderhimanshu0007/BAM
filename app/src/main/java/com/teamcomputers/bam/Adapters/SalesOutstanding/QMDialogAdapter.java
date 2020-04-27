@@ -69,13 +69,16 @@ public class QMDialogAdapter extends RecyclerView.Adapter<QMDialogAdapter.ViewHo
         DecimalFormat df2 = new DecimalFormat("#.##");
         holder.tviPercent.setText(df2.format(dataList.get(position).getPercentage()) + "%");
         int bar = dataList.get(position).getPercentage().intValue();
-        if (bar < 35) {
+        if (bar < 49) {
             holder.tviPercent.setTextColor(mActivity.getResources().getColor(R.color.color_progress_start));
-        } else if (bar >= 35 && bar < 70) {
-            holder.tviPercent.setTextColor(mActivity.getResources().getColor(R.color.color_progress_mid));
-        } else if (bar >= 70) {
+        } else if (bar >= 49 && bar < 79) {
+            holder.tviPercent.setTextColor(mActivity.getResources().getColor(R.color.color_orange));
+        } else if (bar >= 79 && bar < 99) {
+            holder.tviPercent.setTextColor(mActivity.getResources().getColor(R.color.color_amber));
+        } else if (bar >= 99) {
             holder.tviPercent.setTextColor(mActivity.getResources().getColor(R.color.color_progress_end));
         }
+
         /*holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

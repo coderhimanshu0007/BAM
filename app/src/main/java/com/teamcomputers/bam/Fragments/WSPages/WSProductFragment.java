@@ -1,5 +1,6 @@
 package com.teamcomputers.bam.Fragments.WSPages;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -98,12 +100,20 @@ public class WSProductFragment extends BaseFragment {
     TextView tviR2StateName;
     @BindView(R.id.tviR3StateName)
     TextView tviR3StateName;
+    @BindView(R.id.tviTargetHeading)
+    TextView tviTargetHeading;
+    @BindView(R.id.tviActualHeading)
+    TextView tviActualHeading;
+    @BindView(R.id.tviAchHeading)
+    TextView tviAchHeading;
     @BindView(R.id.tviTarget)
     TextView tviTarget;
     @BindView(R.id.tviActual)
     TextView tviActual;
     @BindView(R.id.tviAch)
     TextView tviAch;
+    @BindView(R.id.pBar)
+    ProgressBar pBar;
     @BindView(R.id.tviYtdHeading)
     TextView tviYtdHeading;
     @BindView(R.id.tviQtdHeading)
@@ -119,7 +129,7 @@ public class WSProductFragment extends BaseFragment {
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
     private NewProductAdapter adapter;
-    private int position = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0;
+    private int position = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0, bar = 0;
     SalesCustomerModel customerProfile;
     FullSalesModel rsmProfile, spProfile;
     List<FullSalesModel> model = new ArrayList<>();
@@ -195,6 +205,8 @@ public class WSProductFragment extends BaseFragment {
         });*/
 
         rowsDisplay();
+
+        dashboardActivityContext.fragmentView = rootView;
 
         return rootView;
     }
@@ -356,8 +368,37 @@ public class WSProductFragment extends BaseFragment {
         viYTD.setVisibility(View.VISIBLE);
         viQTD.setVisibility(View.INVISIBLE);
         viMTD.setVisibility(View.INVISIBLE);
+        YTDDisplay();
         initData("YTD");
         adapter.notifyDataSetChanged();
+    }
+
+    public void YTDDisplay() {
+        if (fromRSM && !fromSP & !fromCustomer) {
+            tviTargetHeading.setText("TARGET");
+            tviActualHeading.setText("ACTUAL");
+            tviAchHeading.setText("ACH%");
+            tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getYTDTarget()));
+            tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getYTD()));
+            pBar.setVisibility(View.VISIBLE);
+            bar = (rsmProfile.getYTDPercentage()).intValue();
+            tviAch.setText(bar + "%");
+            pBar.setProgress(bar);
+            if (bar < 50) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+            } else if (bar >= 50 && bar < 80) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
+            } else if (bar >= 80 && bar < 99) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
+            } else if (bar >= 99) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            }
+        } else {
+            tviTargetHeading.setText("YTD");
+            tviActualHeading.setText("QTD");
+            tviAchHeading.setText("MTD");
+            pBar.setVisibility(View.GONE);
+        }
     }
 
     @OnClick(R.id.tviQTD)
@@ -365,8 +406,37 @@ public class WSProductFragment extends BaseFragment {
         viYTD.setVisibility(View.INVISIBLE);
         viQTD.setVisibility(View.VISIBLE);
         viMTD.setVisibility(View.INVISIBLE);
+        QTDDisplay();
         initData("QTD");
         adapter.notifyDataSetChanged();
+    }
+
+    public void QTDDisplay() {
+        if (fromRSM && !fromSP & !fromCustomer) {
+            tviTargetHeading.setText("TARGET");
+            tviActualHeading.setText("ACTUAL");
+            tviAchHeading.setText("ACH%");
+            tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getQTDTarget()));
+            tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getQTD()));
+            pBar.setVisibility(View.VISIBLE);
+            bar = (rsmProfile.getQTDPercentage()).intValue();
+            tviAch.setText(bar + "%");
+            pBar.setProgress(bar);
+            if (bar < 50) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+            } else if (bar >= 50 && bar < 80) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
+            } else if (bar >= 80 && bar < 99) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
+            } else if (bar >= 99) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            }
+        } else {
+            tviTargetHeading.setText("YTD");
+            tviActualHeading.setText("QTD");
+            tviAchHeading.setText("MTD");
+            pBar.setVisibility(View.GONE);
+        }
     }
 
     @OnClick(R.id.tviMTD)
@@ -374,8 +444,37 @@ public class WSProductFragment extends BaseFragment {
         viYTD.setVisibility(View.INVISIBLE);
         viQTD.setVisibility(View.INVISIBLE);
         viMTD.setVisibility(View.VISIBLE);
+        MTDDisplay();
         initData("MTD");
         adapter.notifyDataSetChanged();
+    }
+
+    public void MTDDisplay() {
+        if (fromRSM && !fromSP & !fromCustomer) {
+            tviTargetHeading.setText("TARGET");
+            tviActualHeading.setText("ACTUAL");
+            tviAchHeading.setText("ACH%");
+            tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getMTDTarget()));
+            tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getMTD()));
+            pBar.setVisibility(View.VISIBLE);
+            bar = (rsmProfile.getMTDPercentage()).intValue();
+            tviAch.setText(bar + "%");
+            pBar.setProgress(bar);
+            if (bar < 50) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+            } else if (bar >= 50 && bar < 80) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
+            } else if (bar >= 80 && bar < 99) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
+            } else if (bar >= 99) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            }
+        } else {
+            tviTargetHeading.setText("YTD");
+            tviActualHeading.setText("QTD");
+            tviAchHeading.setText("MTD");
+            pBar.setVisibility(View.GONE);
+        }
     }
 
     @OnClick(R.id.iviClose)
@@ -394,7 +493,7 @@ public class WSProductFragment extends BaseFragment {
         cviProductHeading.setVisibility(View.GONE);
         tviYtdHeading.setText("TARGET");
         tviQtdHeading.setText("ACTUAL");
-        tviMtdHeading.setText("ACHIEVEMENT");
+        tviMtdHeading.setText("ACH%");
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new FiscalSalesListRequester(userId, level, "Product", "", "", "", "", "", fiscalYear));
     }
@@ -545,10 +644,14 @@ public class WSProductFragment extends BaseFragment {
         rlR2.setVisibility(View.GONE);
         rlR3.setVisibility(View.GONE);
         if (rsmPos == 1) {
-            llTabHeading.setVisibility(View.GONE);
+            /*llTabHeading.setVisibility(View.GONE);
             tviYtdHeading.setText("YTD");
             tviQtdHeading.setText("QTD");
-            tviMtdHeading.setText("MTD");
+            tviMtdHeading.setText("MTD");*/
+            llTabHeading.setVisibility(View.VISIBLE);
+            tviYtdHeading.setText("TARGET");
+            tviQtdHeading.setText("ACTUAL");
+            tviMtdHeading.setText("ACH%");
 
             position = rsmProfile.getPosition();
             if (position == 0) {
@@ -563,9 +666,27 @@ public class WSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(rsmProfile.getName());
-            tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getYTD()));
+            /*tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getYTD()));
             tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getQTD()));
-            tviAch.setText(BAMUtil.getRoundOffValue(rsmProfile.getMTD()));
+            tviAch.setText(BAMUtil.getRoundOffValue(rsmProfile.getMTD()));*/
+            tviTargetHeading.setText("TARGET");
+            tviActualHeading.setText("ACTUAL");
+            tviAchHeading.setText("ACH%");
+            tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getYTDTarget()));
+            tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getYTD()));
+            pBar.setVisibility(View.VISIBLE);
+            bar = (rsmProfile.getYTDPercentage()).intValue();
+            tviAch.setText(bar + "%");
+            pBar.setProgress(bar);
+            if (bar < 50) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+            } else if (bar >= 50 && bar < 80) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
+            } else if (bar >= 80 && bar < 99) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
+            } else if (bar >= 99) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            }
         } else if (spPos == 1) {
             llTabHeading.setVisibility(View.GONE);
             cviProductHeading.setVisibility(View.VISIBLE);
@@ -586,9 +707,13 @@ public class WSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(spProfile.getName());
+            tviTargetHeading.setText("YTD");
+            tviActualHeading.setText("QTD");
+            tviAchHeading.setText("MTD");
             tviTarget.setText(BAMUtil.getRoundOffValue(spProfile.getYTD()));
             tviActual.setText(BAMUtil.getRoundOffValue(spProfile.getQTD()));
             tviAch.setText(BAMUtil.getRoundOffValue(spProfile.getMTD()));
+            pBar.setVisibility(View.GONE);
         } else if (cPos == 1) {
             llTabHeading.setVisibility(View.GONE);
             cviProductHeading.setVisibility(View.VISIBLE);
@@ -609,16 +734,25 @@ public class WSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(customerProfile.getCustomerName());
+            tviTargetHeading.setText("YTD");
+            tviActualHeading.setText("QTD");
+            tviAchHeading.setText("MTD");
+            pBar.setVisibility(View.GONE);
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
+
+                tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getYTD()));
+                tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getQTD()));
+                tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getMTD()));
             } else {
                 tviR1StateName.setVisibility(View.GONE);
+
+                tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
+                tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
+                tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
             }
-            tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
-            tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
-            tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
         }
     }
 
@@ -643,9 +777,13 @@ public class WSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(rsmProfile.getName());
+            tviTargetHeading.setText("YTD");
+            tviActualHeading.setText("QTD");
+            tviAchHeading.setText("MTD");
             tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getYTD()));
             tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getQTD()));
             tviAch.setText(BAMUtil.getRoundOffValue(rsmProfile.getMTD()));
+            pBar.setVisibility(View.GONE);
         } else if (spPos == 2) {
             llTabHeading.setVisibility(View.GONE);
             cviProductHeading.setVisibility(View.VISIBLE);
@@ -666,9 +804,13 @@ public class WSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(spProfile.getName());
+            tviTargetHeading.setText("YTD");
+            tviActualHeading.setText("QTD");
+            tviAchHeading.setText("MTD");
             tviTarget.setText(BAMUtil.getRoundOffValue(spProfile.getYTD()));
             tviActual.setText(BAMUtil.getRoundOffValue(spProfile.getQTD()));
             tviAch.setText(BAMUtil.getRoundOffValue(spProfile.getMTD()));
+            pBar.setVisibility(View.GONE);
         } else if (cPos == 2) {
             llTabHeading.setVisibility(View.GONE);
             cviProductHeading.setVisibility(View.VISIBLE);
@@ -689,15 +831,37 @@ public class WSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(customerProfile.getCustomerName());
+            tviTargetHeading.setText("YTD");
+            tviActualHeading.setText("QTD");
+            tviAchHeading.setText("MTD");
+            pBar.setVisibility(View.GONE);
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
+                tviR2StateName.setVisibility(View.VISIBLE);
+                tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
+
+                tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getYTD()));
+                tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getQTD()));
+                tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getMTD()));
+            } else {
+                tviR2StateName.setVisibility(View.GONE);
+
+                tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
+                tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
+                tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
+            }
+            /*if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 tviR2StateName.setVisibility(View.VISIBLE);
                 tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR2StateName.setVisibility(View.GONE);
             }
+            tviTargetHeading.setText("YTD");
+            tviActualHeading.setText("QTD");
+            tviAchHeading.setText("MTD");
             tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
             tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
+            pBar.setVisibility(View.GONE);*/
         }
         if (rsmPos == 1) {
             tviR1Name.setText(rsmProfile.getName());
@@ -735,9 +899,13 @@ public class WSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(rsmProfile.getName());
+            tviTargetHeading.setText("YTD");
+            tviActualHeading.setText("QTD");
+            tviAchHeading.setText("MTD");
             tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getYTD()));
             tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getQTD()));
             tviAch.setText(BAMUtil.getRoundOffValue(rsmProfile.getMTD()));
+            pBar.setVisibility(View.GONE);
         } else if (spPos == 4) {
             llTabHeading.setVisibility(View.GONE);
             cviProductHeading.setVisibility(View.VISIBLE);
@@ -758,9 +926,13 @@ public class WSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(spProfile.getName());
+            tviTargetHeading.setText("YTD");
+            tviActualHeading.setText("QTD");
+            tviAchHeading.setText("MTD");
             tviTarget.setText(BAMUtil.getRoundOffValue(spProfile.getYTD()));
             tviActual.setText(BAMUtil.getRoundOffValue(spProfile.getQTD()));
             tviAch.setText(BAMUtil.getRoundOffValue(spProfile.getMTD()));
+            pBar.setVisibility(View.GONE);
         } else if (cPos == 4) {
             llTabHeading.setVisibility(View.GONE);
             cviProductHeading.setVisibility(View.VISIBLE);
@@ -781,16 +953,39 @@ public class WSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(customerProfile.getCustomerName());
+            tviTargetHeading.setText("YTD");
+            tviActualHeading.setText("QTD");
+            tviAchHeading.setText("MTD");
+            pBar.setVisibility(View.GONE);
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
+                iviR1Close.setVisibility(View.VISIBLE);
+                tviR3StateName.setVisibility(View.VISIBLE);
+                tviR3StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
+
+                tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getYTD()));
+                tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getQTD()));
+                tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getMTD()));
+            } else {
+                tviR3StateName.setVisibility(View.GONE);
+
+                tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
+                tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
+                tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
+            }
+            /*if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR3StateName.setVisibility(View.VISIBLE);
                 tviR3StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR3StateName.setVisibility(View.GONE);
             }
+            tviTargetHeading.setText("YTD");
+            tviActualHeading.setText("QTD");
+            tviAchHeading.setText("MTD");
             tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
             tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
+            pBar.setVisibility(View.GONE);*/
         }
 
         if (rsmPos == 2) {

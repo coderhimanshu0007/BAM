@@ -140,6 +140,8 @@ public class OSOCustomerFragment extends BaseFragment {
 
         rowsDisplay();
 
+        dashboardActivityContext.fragmentView = rootView;
+
         return rootView;
     }
 

@@ -72,4 +72,7 @@
     <color name="color_filter_amount">#CABEF7</color>
     <color name="text_color_login">#434343</color>
 
+    <color name="text_color_courier">#FC674C</color>
+    <color name="text_color_reason">#DFBA69</color>
+
 </resources>

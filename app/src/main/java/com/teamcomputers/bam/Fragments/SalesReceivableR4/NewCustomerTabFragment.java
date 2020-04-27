@@ -33,7 +33,6 @@ import com.teamcomputers.bam.controllers.SharedPreferencesController;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 

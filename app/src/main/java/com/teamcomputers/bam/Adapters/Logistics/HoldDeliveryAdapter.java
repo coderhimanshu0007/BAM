@@ -28,26 +28,29 @@ public class HoldDeliveryAdapter extends RecyclerView.Adapter<HoldDeliveryAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tviInvoiceNo, tviCustomerName, tviFromCity, tviToCity, tviCourier, tviDays, tviReason, tviCount, tviValue;
-        ;
+        TextView tviInvoice, tviCustomer, tviFromCity, tviToCity, tviCourier, tviDaysCountHeading, tviDaysCount,
+                tviReasonHeading, tviCourierHeading, tviReason, tviValue;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.tviInvoiceNo = (TextView) itemView.findViewById(R.id.tviInvoiceNo);
-            this.tviCustomerName = (TextView) itemView.findViewById(R.id.tviCustomerName);
+            this.tviInvoice = (TextView) itemView.findViewById(R.id.tviInvoice);
+            this.tviCustomer = (TextView) itemView.findViewById(R.id.tviCustomer);
             this.tviFromCity = (TextView) itemView.findViewById(R.id.tviFromCity);
             this.tviToCity = (TextView) itemView.findViewById(R.id.tviToCity);
+            this.tviReasonHeading = (TextView) itemView.findViewById(R.id.tviReasonHeading);
+            this.tviCourierHeading = (TextView) itemView.findViewById(R.id.tviCourierHeading);
             this.tviCourier = (TextView) itemView.findViewById(R.id.tviCourier);
-            this.tviDays = (TextView) itemView.findViewById(R.id.tviDays);
+            this.tviDaysCountHeading = (TextView) itemView.findViewById(R.id.tviDaysCountHeading);
+            this.tviDaysCount = (TextView) itemView.findViewById(R.id.tviDaysCount);
             this.tviReason = (TextView) itemView.findViewById(R.id.tviReason);
-            this.tviCount = (TextView) itemView.findViewById(R.id.tviCount);
+            //this.tviCount = (TextView) itemView.findViewById(R.id.tviCount);
             this.tviValue = (TextView) itemView.findViewById(R.id.tviValue);
         }
     }
 
     @Override
     public HoldDeliveryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.intransit_recyclerview_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.logistics_recyclerview_layout, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -55,14 +58,16 @@ public class HoldDeliveryAdapter extends RecyclerView.Adapter<HoldDeliveryAdapte
 
     @Override
     public void onBindViewHolder(HoldDeliveryAdapter.ViewHolder holder, final int position) {
-        holder.tviInvoiceNo.setText(dataList.get(position).getInvoiceNo());
-        holder.tviCustomerName.setText(dataList.get(position).getCustomerName());
+        holder.tviInvoice.setText(dataList.get(position).getInvoiceNo());
+        holder.tviCustomer.setText(dataList.get(position).getCustomerName());
         holder.tviFromCity.setText(dataList.get(position).getFromCity());
         holder.tviToCity.setText(dataList.get(position).getToCity());
+        holder.tviCourierHeading.setText("Account Manager");
         holder.tviCourier.setText(dataList.get(position).getAccountManager());
-        holder.tviDays.setText(String.valueOf(dataList.get(position).getDays()));
+        holder.tviDaysCountHeading.setText("Days");
+        holder.tviDaysCount.setText(String.valueOf(dataList.get(position).getDays()));
         holder.tviReason.setText(dataList.get(position).getReason());
-        holder.tviCount.setVisibility(View.GONE);
+        //holder.tviCount.setVisibility(View.GONE);
         holder.tviValue.setText(String.valueOf(dataList.get(position).getValue()));
     }
 

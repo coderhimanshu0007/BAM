@@ -142,6 +142,8 @@ public class OSOSalesPersonFragment extends BaseFragment {
 
         rowsDisplay();
 
+        dashboardActivityContext.fragmentView = rootView;
+
         return rootView;
     }
 
@@ -234,7 +236,7 @@ public class OSOSalesPersonFragment extends BaseFragment {
                         rsmMenuDataBundle.putString(OSORSMFragment.USER_ID, userId);
                         rsmMenuDataBundle.putString(OSORSMFragment.USER_LEVEL, level);
 
-                        spPos = rsmPos + iPos + 1;
+                        spPos = cPos + iPos + 1;
                         rsmMenuDataBundle.putInt(OSORSMFragment.SP_POS, spPos);
                         rsmMenuDataBundle.putInt(OSORSMFragment.INVOICE_POS, iPos);
                         rsmMenuDataBundle.putInt(OSORSMFragment.CUSTOMER_POS, cPos);
@@ -509,6 +511,13 @@ public class OSOSalesPersonFragment extends BaseFragment {
             }
             tviR1Name.setText(customerProfile.getCustomerName());
             tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
+                iviR1Close.setVisibility(View.VISIBLE);
+                tviR1StateName.setVisibility(View.VISIBLE);
+                tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
+            } else {
+                tviR1StateName.setVisibility(View.GONE);
+            }
             //tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             //tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
             //tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));

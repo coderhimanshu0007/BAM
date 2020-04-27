@@ -86,15 +86,17 @@ public class TORSMAdapter extends RecyclerView.Adapter<TORSMAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout llRSMLayout;
-        TextView tviName, tviAmount, tviDSO;
+        LinearLayout llRSMLayout, llAmountDSO;
+        TextView tviName, tviAmount, tviOutstanding, tviDSO;
         ImageView iviOption;
         ProgressBar pBar;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            llRSMLayout = (LinearLayout) itemView.findViewById(R.id.llRSMLayout);
+            this.llRSMLayout = (LinearLayout) itemView.findViewById(R.id.llRSMLayout);
+            this.llAmountDSO = (LinearLayout) itemView.findViewById(R.id.llAmountDSO);
             this.tviName = (TextView) itemView.findViewById(R.id.tviName);
+            this.tviOutstanding = (TextView) itemView.findViewById(R.id.tviOutstanding);
             this.iviOption = (ImageView) itemView.findViewById(R.id.iviOption);
             this.tviAmount = (TextView) itemView.findViewById(R.id.tviAmount);
             this.tviDSO = (TextView) itemView.findViewById(R.id.tviDSO);
@@ -134,6 +136,14 @@ public class TORSMAdapter extends RecyclerView.Adapter<TORSMAdapter.ViewHolder> 
             holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
         } else {
             holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+        }
+
+        if (fromCustomer) {
+            holder.llAmountDSO.setVisibility(View.GONE);
+            holder.tviOutstanding.setText(BAMUtil.getRoundOffValue(dataListFiltered.get(position).getAmount()));
+        } else {
+            holder.llAmountDSO.setVisibility(View.VISIBLE);
+            holder.tviOutstanding.setVisibility(View.GONE);
         }
 
         if (level.equals("R1")) {

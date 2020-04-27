@@ -76,6 +76,8 @@ public class DOAIRFragment extends BaseFragment {
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviData.setLayoutManager(layoutManager);
 
+        dashboardActivityContext.fragmentView = rootView;
+
         return rootView;
     }
 

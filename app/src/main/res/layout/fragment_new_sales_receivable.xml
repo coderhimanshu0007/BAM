@@ -207,7 +207,7 @@
                                     android:layout_gravity="center"
                                     android:layout_weight=".2"
                                     android:paddingLeft="10dp"
-                                    android:text="SALES"
+                                    android:text="PERIOD"
                                     android:textColor="@color/login_bg"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
@@ -242,6 +242,7 @@
                                     android:layout_gravity="center"
                                     android:layout_marginLeft="10dp"
                                     android:layout_weight=".3"
+                                    android:text="ACH%"
                                     android:gravity="center"
                                     android:textColor="@color/login_bg"
                                     android:textSize="12sp"
@@ -276,7 +277,7 @@
                                     android:backgroundTint="@color/color_td"
                                     android:gravity="center_vertical"
                                     android:paddingLeft="10dp"
-                                    android:text="YTD"
+                                    android:text="CY"
                                     android:textColor="@color/login_bg"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
@@ -357,7 +358,7 @@
                                     android:backgroundTint="@color/color_td"
                                     android:gravity="center_vertical"
                                     android:paddingLeft="10dp"
-                                    android:text="QTD"
+                                    android:text="CQ"
                                     android:textColor="@color/login_bg"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
@@ -431,7 +432,7 @@
                                     android:backgroundTint="@color/color_td"
                                     android:gravity="center_vertical"
                                     android:paddingLeft="10dp"
-                                    android:text="MTD"
+                                    android:text="CM"
                                     android:textColor="@color/login_bg"
                                     android:textSize="12sp"
                                     app:fontFamily="@font/roboto_medium" />
@@ -537,7 +538,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="15dp"
                                     android:layout_marginTop="8dp"
-                                    android:text="Open Sales Order"
+                                    android:text="Pending Sales Order"
                                     android:textColor="@color/color_value"
                                     android:textSize="10sp"
                                     app:fontFamily="@font/roboto_medium" />
@@ -634,7 +635,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="15dp"
                                     android:layout_marginTop="8dp"
-                                    android:text="Outstanding"
+                                    android:text="Net Receivables"
                                     android:textColor="@color/color_value"
                                     android:textSize="10sp"
                                     app:fontFamily="@font/roboto_medium" />

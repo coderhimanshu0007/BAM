@@ -109,7 +109,7 @@ public class NewSalesReceivableFragment extends BaseFragment {
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
 
         loginModel = SharedPreferencesController.getInstance(BAMApplication.getInstance()).getUserProfile();
-
+        dashboardActivityContext.fragmentView = rootView;
         return rootView;
     }
 
@@ -214,22 +214,40 @@ public class NewSalesReceivableFragment extends BaseFragment {
                                 int progressYtd = (model.getYTDPercentage()).intValue();
                                 progressBarYTD.setProgress(progressYtd);
                                 progressBarYTD.setText(progressYtd + "%");
-                                if (progressYtd < 35) {
+                                /*if (progressYtd < 35) {
                                     progressBarYTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
                                 } else if (progressYtd >= 35 && progressYtd < 70) {
                                     progressBarYTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
                                 } else if (progressYtd >= 70) {
+                                    progressBarYTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+                                }*/
+                                if (progressYtd < 49) {
+                                    progressBarYTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+                                } else if (progressYtd >= 49 && progressYtd < 79) {
+                                    progressBarYTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
+                                } else if (progressYtd >= 79 && progressYtd < 99) {
+                                    progressBarYTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
+                                } else if (progressYtd >= 99) {
                                     progressBarYTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
                                 }
 
                                 int progressQtd = (model.getQTDPercentage()).intValue();
                                 progressBarQTD.setProgress(progressQtd);
                                 progressBarQTD.setText(progressQtd + "%");
-                                if (progressQtd < 35) {
+                                /*if (progressQtd < 35) {
                                     progressBarQTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
                                 } else if (progressQtd >= 35 && progressQtd < 70) {
                                     progressBarQTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
                                 } else if (progressQtd >= 70) {
+                                    progressBarQTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+                                }*/
+                                if (progressQtd < 49) {
+                                    progressBarQTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+                                } else if (progressQtd >= 49 && progressQtd < 79) {
+                                    progressBarQTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
+                                } else if (progressQtd >= 79 && progressQtd < 99) {
+                                    progressBarQTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
+                                } else if (progressQtd >= 99) {
                                     progressBarQTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
                                 }
                                 //progressBarQTD.setProgressDrawable();
@@ -237,11 +255,20 @@ public class NewSalesReceivableFragment extends BaseFragment {
                                 int progressMtd = (model.getMTDPercentage()).intValue();
                                 progressBarMTD.setProgress(progressMtd);
                                 progressBarMTD.setText(progressMtd + "%");
-                                if (progressMtd < 35) {
+                                /*if (progressMtd < 35) {
                                     progressBarMTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
                                 } else if (progressMtd >= 35 && progressMtd < 70) {
                                     progressBarMTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
                                 } else if (progressMtd >= 70) {
+                                    progressBarMTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+                                }*/
+                                if (progressMtd < 49) {
+                                    progressBarMTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+                                } else if (progressMtd >= 49 && progressMtd < 79) {
+                                    progressBarMTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
+                                } else if (progressMtd >= 79 && progressMtd < 99) {
+                                    progressBarMTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
+                                } else if (progressMtd >= 99) {
                                     progressBarMTD.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
                                 }
 
@@ -484,7 +511,7 @@ public class NewSalesReceivableFragment extends BaseFragment {
         tviDialogType.setText(type);
 
         if (type.equals("QUARTERLY")) {
-            tviQTDHeading.setText("QUARTERLY");
+            tviQTDHeading.setText("QUARTERS");
             //llQTD.setVisibility(View.GONE);
             //llYTD.setVisibility(View.VISIBLE);
             List<NewYTDQTDModel.QTD> qtd = ytdqtdModel.getQTD();

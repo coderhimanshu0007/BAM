@@ -145,6 +145,8 @@ public class OSOInvoiceFragment extends BaseFragment {
 
         rowsDisplay();
 
+        dashboardActivityContext.fragmentView = rootView;
+
         return rootView;
     }
 
@@ -307,7 +309,7 @@ public class OSOInvoiceFragment extends BaseFragment {
         cviProductHeading.setVisibility(View.GONE);
         /*tviYtdHeading.setText("TARGET");
         tviQtdHeading.setText("ACTUAL");
-        tviMtdHeading.setText("ACHIEVEMENT");*/
+        tviMtdHeading.setText("ACH%");*/
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Invoice", "", "", "", "", "", ""));
     }

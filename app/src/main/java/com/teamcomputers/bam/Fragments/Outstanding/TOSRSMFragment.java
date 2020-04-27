@@ -101,6 +101,14 @@ public class TOSRSMFragment extends BaseFragment {
     TextView tviAmount;
     @BindView(R.id.tviDSO)
     TextView tviDSO;
+
+    @BindView(R.id.tviOutstandingHeading)
+    TextView tviOutstandingHeading;
+    @BindView(R.id.tviEmpty)
+    TextView tviEmpty;
+    @BindView(R.id.tviDSOHeading)
+    TextView tviDSOHeading;
+
     @BindView(R.id.pBar)
     ProgressBar pBar;
     @BindView(R.id.llDSO)
@@ -151,6 +159,8 @@ public class TOSRSMFragment extends BaseFragment {
         rviRSM.setLayoutManager(layoutManager);
 
         rowsDisplay();
+
+        dashboardActivityContext.fragmentView = rootView;
 
         return rootView;
     }
@@ -469,7 +479,11 @@ public class TOSRSMFragment extends BaseFragment {
             llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR1Name.setText(spProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
-            llDSO.setVisibility(View.VISIBLE);
+            if(fromCustomer){
+                llDSO.setVisibility(View.GONE);
+            } else {
+                llDSO.setVisibility(View.VISIBLE);
+            }
             bar = (spProfile.getDSO()).intValue();
             tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
@@ -495,6 +509,13 @@ public class TOSRSMFragment extends BaseFragment {
             tviR1Name.setText(customerProfile.getCustomerName());
             tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
             llDSO.setVisibility(View.GONE);
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
+                iviR1Close.setVisibility(View.VISIBLE);
+                tviR1StateName.setVisibility(View.VISIBLE);
+                tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
+            } else {
+                tviR1StateName.setVisibility(View.GONE);
+            }
             //tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             //tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
             //tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
@@ -539,7 +560,11 @@ public class TOSRSMFragment extends BaseFragment {
             llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR2Name.setText(spProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
-            llDSO.setVisibility(View.VISIBLE);
+            if(fromCustomer){
+                llDSO.setVisibility(View.GONE);
+            } else {
+                llDSO.setVisibility(View.VISIBLE);
+            }
             bar = (spProfile.getDSO()).intValue();
             tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
@@ -565,6 +590,12 @@ public class TOSRSMFragment extends BaseFragment {
             tviR2Name.setText(customerProfile.getCustomerName());
             tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
             llDSO.setVisibility(View.GONE);
+            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
+                tviR2StateName.setVisibility(View.VISIBLE);
+                tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
+            } else {
+                tviR2StateName.setVisibility(View.GONE);
+            }
             //tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             //tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
             //tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
@@ -622,7 +653,11 @@ public class TOSRSMFragment extends BaseFragment {
             llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR3Name.setText(spProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
-            llDSO.setVisibility(View.VISIBLE);
+            if(fromCustomer){
+                llDSO.setVisibility(View.GONE);
+            } else {
+                llDSO.setVisibility(View.VISIBLE);
+            }
             bar = (spProfile.getDSO()).intValue();
             tviDSO.setText(bar + " Days");
             pBar.setProgress(bar);
@@ -712,6 +747,15 @@ public class TOSRSMFragment extends BaseFragment {
     }
 
     private void initRSMData(String type) {
+        if(fromCustomer){
+            tviOutstandingHeading.setText("CUSTOMER NAME");
+            tviEmpty.setVisibility(View.VISIBLE);
+            tviDSOHeading.setText("OUTSTANDING");
+        } else {
+            tviOutstandingHeading.setText("OUTSTANDING");
+            tviEmpty.setVisibility(View.GONE);
+            tviDSOHeading.setText("DSO");
+        }
         rsmAdapter = new TORSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
         rviRSM.setAdapter(rsmAdapter);
     }

@@ -125,7 +125,7 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
             holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg));
         }
         holder.tviName.setText(position + 1 + ". " + dataListFiltered.get(position).getName());
-        if (fromRSM || fromSP || fromCustomer) {
+        if (fromSP || fromCustomer) {
             holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataListFiltered.get(position).getYTD()));
             holder.tviQTD.setText(BAMUtil.getRoundOffValue(dataListFiltered.get(position).getQTD()));
             holder.tviMTD.setText(BAMUtil.getRoundOffValue(dataListFiltered.get(position).getMTD()));
@@ -136,15 +136,15 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
             if (type.equals("YTD")) {
                 target = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getYTDTarget());
                 actual = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getYTD());
-                //bar = (dataList.get(position).getYTDPercentage()).intValue();
+                bar = (dataList.get(position).getYTDPercentage()).intValue();
             } else if (type.equals("QTD")) {
                 target = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getQTDTarget());
                 actual = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getQTD());
-                //bar = (dataList.get(position).getQTDPercentage()).intValue();
+                bar = (dataList.get(position).getQTDPercentage()).intValue();
             } else if (type.equals("MTD")) {
                 target = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getMTDTarget());
                 actual = BAMUtil.getRoundOffValue(dataListFiltered.get(position).getMTD());
-                //bar = (dataList.get(position).getMTDPercentage()).intValue();
+                bar = (dataList.get(position).getMTDPercentage()).intValue();
             }
 
             //holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
@@ -153,7 +153,7 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
             holder.tviYTD.setText(target);
             holder.tviQTD.setText(actual);
 
-            bar = (dataListFiltered.get(position).getYTDPercentage()).intValue();
+            //bar = (dataListFiltered.get(position).getYTDPercentage()).intValue();
             holder.tviMTD.setText(bar + "%");
             holder.pBar.setProgress(bar);
 

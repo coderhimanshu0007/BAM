@@ -175,6 +175,8 @@ public class WSCustomerFragment extends BaseFragment {
 
         rowsDisplay();
 
+        dashboardActivityContext.fragmentView = rootView;
+
         return rootView;
     }
 

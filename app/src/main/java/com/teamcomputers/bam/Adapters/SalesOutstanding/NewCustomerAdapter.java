@@ -143,11 +143,20 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
         bar = progress * (position + 1);
         holder.pBar.setProgress(bar);
 
-        if (bar < 35) {
+        /*if (bar < 35) {
             holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
         } else if (bar >= 35 && bar < 70) {
             holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_mid), PorterDuff.Mode.SRC_IN);
         } else if (bar >= 70) {
+            holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+        }*/
+        if (bar < 50) {
+            holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+        } else if (bar >= 50 && bar < 80) {
+            holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
+        } else if (bar >= 80 && bar < 99) {
+            holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
+        } else if (bar >= 99) {
             holder.pBar.getProgressDrawable().setColorFilter(mActivity.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
         }
         if (level.equals("R1")) {

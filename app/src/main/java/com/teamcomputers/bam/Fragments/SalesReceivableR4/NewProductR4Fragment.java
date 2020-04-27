@@ -289,7 +289,7 @@ public class NewProductR4Fragment extends BaseFragment {
         cviProductHeading.setVisibility(View.GONE);
         tviYtdHeading.setText("TARGET");
         tviQtdHeading.setText("ACTUAL");
-        tviMtdHeading.setText("ACHIEVEMENT");
+        tviMtdHeading.setText("ACH%");
         showProgress(ProgressDialogTexts.LOADING);
         BackgroundExecutor.getInstance().execute(new FullProductListRequester(userId, "R4", "Product", "", ""));
     }

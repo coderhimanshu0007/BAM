@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:drawableLeft="@drawable/ic_customer"
+                android:drawableLeft="@drawable/ic_customer_new"
                 android:drawablePadding="5dp"
                 android:text="Customer"
                 android:textColor="@color/color_value"
@@ -115,18 +115,19 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tviDaysCountHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:drawableLeft="@drawable/ic_group_hrs_days"
                     android:drawablePadding="5dp"
-                    android:text="Hrs/Days"
+                    android:text="Days/Count"
                     android:textColor="@color/color_value"
                     android:textSize="10sp"
                     app:fontFamily="@font/roboto_medium" />
 
                 <TextView
-                    android:id="@+id/tviHrsDays"
+                    android:id="@+id/tviDaysCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="18dp"
@@ -158,17 +159,18 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tviCourierHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:drawablePadding="5dp"
-                    android:text="Dispatch Pending"
-                    android:textColor="@color/color_value"
+                    android:text="Courier"
+                    android:textColor="@color/text_color_courier"
                     android:textSize="10sp"
                     app:fontFamily="@font/roboto_medium" />
 
                 <TextView
-                    android:id="@+id/tviDispatchPending"
+                    android:id="@+id/tviCourier"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -186,17 +188,18 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tviReasonHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:drawablePadding="5dp"
-                    android:text="Dispatch Pending Value"
-                    android:textColor="@color/color_value"
+                    android:text="Reason"
+                    android:textColor="@color/text_color_reason"
                     android:textSize="10sp"
                     app:fontFamily="@font/roboto_medium" />
 
                 <TextView
-                    android:id="@+id/tviDispatchPendingValue"
+                    android:id="@+id/tviReason"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -211,29 +214,66 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:drawableLeft="@drawable/ic_forma_invoice"
-                android:drawableTint="@color/end_header_color_bg"
-                android:drawablePadding="5dp"
-                android:text="Invoice"
-                android:textColor="@color/color_value"
-                android:textSize="12sp"
-                app:fontFamily="@font/roboto_medium" />
+                android:layout_weight=".32"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tviInvoice"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:drawableLeft="@drawable/ic_forma_invoice"
+                    android:drawablePadding="5dp"
+                    android:drawableTint="@color/end_header_color_bg"
+                    android:text="Invoice"
+                    android:textColor="@color/color_value"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+                <TextView
+                    android:id="@+id/tviInvoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:text=""
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llValue"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:text=""
-                android:textColor="@color/color_value"
-                android:textSize="10sp"
-                app:fontFamily="@font/roboto" />
+                android:layout_marginLeft="10dp"
+                android:layout_weight=".67"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:drawableLeft="@drawable/ic_group_value"
+                    android:drawablePadding="5dp"
+                    android:text="Value"
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+                <TextView
+                    android:id="@+id/tviValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:text=""
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto" />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

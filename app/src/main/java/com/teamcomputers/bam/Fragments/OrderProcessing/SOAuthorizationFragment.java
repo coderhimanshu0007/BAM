@@ -71,6 +71,8 @@ public class SOAuthorizationFragment extends BaseFragment {
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviData.setLayoutManager(layoutManager);
 
+        dashboardActivityContext.fragmentView = rootView;
+
         return rootView;
     }
 
