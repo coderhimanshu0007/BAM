@@ -536,12 +536,12 @@ public class OSOSalesPersonFragment extends BaseFragment {
             }
             tviR1Name.setText(invoiceProfile.getInvoiceNo());
             tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
-            if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
+            /*if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
             } else {
                 tviR1StateName.setVisibility(View.GONE);
-            }
+            }*/
             //tviTarget.setText(BAMUtil.getRoundOffValue(invoiceProfile.getYTDTarget()));
             //tviActual.setText(BAMUtil.getRoundOffValue(invoiceProfile.getYTD()));
             //tviAch.setText(invoiceProfile.getYTDPercentage().intValue() + "%");
