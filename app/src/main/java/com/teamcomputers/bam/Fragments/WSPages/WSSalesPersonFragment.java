@@ -54,6 +54,7 @@ public class WSSalesPersonFragment extends BaseFragment {
     public static final String RSM_PROFILE = "RSM_PROFILE";
     public static final String PRODUCT_PROFILE = "PRODUCT_PROFILE";
     public static final String RSM_POSITION = "RSM_POSITION";
+    public static final String STATE_CODE = "STATE_CODE";
     public static final String FROM_RSM = "FROM_RSM";
     public static final String FROM_CUSTOMER = "FROM_CUSTOMER";
     public static final String FROM_PRODUCT = "FROM_PRODUCT";
@@ -120,7 +121,7 @@ public class WSSalesPersonFragment extends BaseFragment {
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
     private NewSalesPersonAdapter adapter;
-    private int type = 0, pos = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0;
+    private int type = 0, pos = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0;
     boolean fromRSM, fromCustomer, fromProduct, search = false, selectYear = false;
 
     List<FullSalesModel> spDataList = new ArrayList<>();
@@ -153,6 +154,7 @@ public class WSSalesPersonFragment extends BaseFragment {
         customerProfile = getArguments().getParcelable(CUSTOMER_PROFILE);
         rsmProfile = getArguments().getParcelable(RSM_PROFILE);
         productProfile = getArguments().getParcelable(PRODUCT_PROFILE);
+        stateCode = getArguments().getInt(STATE_CODE);
 
         toolbarTitle = getString(R.string.Sales);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
@@ -533,6 +535,8 @@ public class WSSalesPersonFragment extends BaseFragment {
             customerProfile = null;
             tviR1StateName.setText("");
             cPos = 0;
+            if (stateCode == 1)
+                stateCode = 0;
             if (rsmPos == 2) {
                 rsmPos = 1;
             } else if (rsmPos == 4) {
@@ -578,6 +582,9 @@ public class WSSalesPersonFragment extends BaseFragment {
             customerProfile = null;
             tviR2StateName.setText("");
             cPos = 0;
+            if (stateCode == 1)
+                stateCode = 0;
+
             if (rsmPos == 4) {
                 rsmPos = 2;
             }
@@ -609,6 +616,8 @@ public class WSSalesPersonFragment extends BaseFragment {
             customerProfile = null;
             tviR3StateName.setText("");
             cPos = 0;
+            if (stateCode == 1)
+                stateCode = 0;
         } else if (pPos == 4) {
             fromProduct = false;
             productProfile = null;
@@ -635,7 +644,7 @@ public class WSSalesPersonFragment extends BaseFragment {
             row1Display();
         }
 
-        String rsm = "", customer = "", product = "";
+        String rsm = "", customer = "", product = "", state = "";
 
         if (null != rsmProfile)
             rsm = rsmProfile.getTMC();
@@ -645,11 +654,13 @@ public class WSSalesPersonFragment extends BaseFragment {
         if (null != productProfile) {
             product = productProfile.getCode();
         }
+        if (stateCode == 1)
+            state = customerProfile.getStateCodeWise().get(0).getStateCode();
 
         fiscalYear = dashboardActivityContext.selectedFiscalYear;
 
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FiscalSalesListRequester(userId, level, "Sales", rsm, "", customer, "", product, fiscalYear));
+        BackgroundExecutor.getInstance().execute(new FiscalSalesListRequester(userId, level, "Sales", rsm, "", customer, state, product, fiscalYear));
     }
 
     private void row1Display() {
@@ -693,6 +704,7 @@ public class WSSalesPersonFragment extends BaseFragment {
             }
             tviR1Name.setText(customerProfile.getCustomerName());
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
+                iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
                 tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getYTD()));

@@ -31,7 +31,7 @@
 
             <ImageView
                 android:id="@+id/iviToolbarLogo"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_kockpit_logo_mask" />
 

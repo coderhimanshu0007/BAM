@@ -272,6 +272,11 @@ public class WSCustomerFragment extends BaseFragment {
                             customerBundle.putParcelable(WSProductFragment.CUSTOMER_PROFILE, customerList);
                             customerBundle.putParcelable(WSProductFragment.RSM_PROFILE, rsmProfile);
                             customerBundle.putParcelable(WSProductFragment.SP_PROFILE, salesProfile);
+                            if (null != customerList.getStateCodeWise()) {
+                                customerBundle.putInt(WSProductFragment.STATE_CODE, 1);
+                            } else {
+                                customerBundle.putInt(WSProductFragment.STATE_CODE, 0);
+                            }
                             customerBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                             dashboardActivityContext.replaceFragment(Fragments.WS_PRODUCT_FRAGMENT, customerBundle);
                         }
@@ -296,7 +301,11 @@ public class WSCustomerFragment extends BaseFragment {
                             productStateBundle.putParcelable(WSProductFragment.CUSTOMER_PROFILE, salesCustomerModel);
                             productStateBundle.putParcelable(WSProductFragment.RSM_PROFILE, rsmProfile);
                             productStateBundle.putParcelable(WSProductFragment.SP_PROFILE, salesProfile);
-                            productStateBundle.putInt(WSProductFragment.STATE_CODE, 1);
+                            if (null != salesCustomerModel.getStateCodeWise()) {
+                                productStateBundle.putInt(WSProductFragment.STATE_CODE, 1);
+                            } else {
+                                productStateBundle.putInt(WSProductFragment.STATE_CODE, 0);
+                            }
                             productStateBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                             dashboardActivityContext.replaceFragment(Fragments.WS_PRODUCT_FRAGMENT, productStateBundle);
                         }
@@ -320,6 +329,11 @@ public class WSCustomerFragment extends BaseFragment {
                         rsmBundle.putParcelable(WSRSMFragment.CUSTOMER_PROFILE, selectedCustomerList);
                         rsmBundle.putParcelable(WSRSMFragment.PRODUCT_PROFILE, productProfile);
                         rsmBundle.putParcelable(WSRSMFragment.SP_PROFILE, salesProfile);
+                        if (null != selectedCustomerList.getStateCodeWise()) {
+                            rsmBundle.putInt(WSRSMFragment.STATE_CODE, 1);
+                        } else {
+                            rsmBundle.putInt(WSRSMFragment.STATE_CODE, 0);
+                        }
                         rsmBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.WS_RSM_FRAGMENT, rsmBundle);
                         break;
@@ -342,6 +356,11 @@ public class WSCustomerFragment extends BaseFragment {
                         customerBundle.putParcelable(WSSalesPersonFragment.CUSTOMER_PROFILE, customerList);
                         customerBundle.putParcelable(WSSalesPersonFragment.RSM_PROFILE, rsmProfile);
                         customerBundle.putParcelable(WSSalesPersonFragment.PRODUCT_PROFILE, productProfile);
+                        if (null != customerList.getStateCodeWise()) {
+                            customerBundle.putInt(WSRSMFragment.STATE_CODE, 1);
+                        } else {
+                            customerBundle.putInt(WSRSMFragment.STATE_CODE, 0);
+                        }
                         customerBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.WS_ACCOUNT_FRAGMENT, customerBundle);
                         break;

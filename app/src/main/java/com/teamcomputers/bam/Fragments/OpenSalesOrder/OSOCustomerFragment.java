@@ -235,6 +235,11 @@ public class OSOCustomerFragment extends BaseFragment {
                             customerBundle.putParcelable(OSOInvoiceFragment.CUSTOMER_PROFILE, customerList);
                             customerBundle.putParcelable(OSOInvoiceFragment.RSM_PROFILE, rsmProfile);
                             customerBundle.putParcelable(OSOInvoiceFragment.SP_PROFILE, salesProfile);
+                            if(null!=customerList.getStateCodeWise()) {
+                                customerBundle.putInt(OSOInvoiceFragment.STATE_CODE, 1);
+                            } else {
+                                customerBundle.putInt(OSOInvoiceFragment.STATE_CODE, 0);
+                            }
                             customerBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                             dashboardActivityContext.replaceFragment(Fragments.OSO_INVOICE_FRAGMENT, customerBundle);
                         }
@@ -258,7 +263,11 @@ public class OSOCustomerFragment extends BaseFragment {
                             productStateBundle.putParcelable(OSOInvoiceFragment.CUSTOMER_PROFILE, salesCustomerModel);
                             productStateBundle.putParcelable(OSOInvoiceFragment.RSM_PROFILE, rsmProfile);
                             productStateBundle.putParcelable(OSOInvoiceFragment.SP_PROFILE, salesProfile);
-                            productStateBundle.putInt(OSOInvoiceFragment.STATE_CODE, 1);
+                            if(null!=salesCustomerModel.getStateCodeWise()) {
+                                productStateBundle.putInt(OSOInvoiceFragment.STATE_CODE, 1);
+                            } else {
+                                productStateBundle.putInt(OSOInvoiceFragment.STATE_CODE, 0);
+                            }
                             productStateBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                             dashboardActivityContext.replaceFragment(Fragments.OSO_INVOICE_FRAGMENT, productStateBundle);
                         }
@@ -281,6 +290,11 @@ public class OSOCustomerFragment extends BaseFragment {
                         rsmBundle.putParcelable(OSORSMFragment.CUSTOMER_PROFILE, selectedCustomerList);
                         rsmBundle.putParcelable(OSORSMFragment.INVOICE_PROFILE, invoiceProfile);
                         rsmBundle.putParcelable(OSORSMFragment.SP_PROFILE, salesProfile);
+                        if(null!=selectedCustomerList.getStateCodeWise()) {
+                            rsmBundle.putInt(OSORSMFragment.STATE_CODE, 1);
+                        } else {
+                            rsmBundle.putInt(OSORSMFragment.STATE_CODE, 0);
+                        }
                         rsmBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.OSO_RSM_FRAGMENT, rsmBundle);
                         break;
@@ -302,6 +316,11 @@ public class OSOCustomerFragment extends BaseFragment {
                         customerBundle.putParcelable(OSOSalesPersonFragment.CUSTOMER_PROFILE, customerList);
                         customerBundle.putParcelable(OSOSalesPersonFragment.RSM_PROFILE, rsmProfile);
                         customerBundle.putParcelable(OSOSalesPersonFragment.INVOICE_PROFILE, invoiceProfile);
+                        if(null!=customerList.getStateCodeWise()) {
+                            customerBundle.putInt(OSOSalesPersonFragment.STATE_CODE, 1);
+                        } else {
+                            customerBundle.putInt(OSOSalesPersonFragment.STATE_CODE, 0);
+                        }
                         customerBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.OSO_ACCOUNT_FRAGMENT, customerBundle);
                         break;

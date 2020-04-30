@@ -505,13 +505,14 @@ public class OSOInvoiceFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(customerProfile.getCustomerName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
+                tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getSOAmount()));
             } else {
                 tviR1StateName.setVisibility(View.GONE);
+                tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
             }
         }
     }
@@ -576,12 +577,13 @@ public class OSOInvoiceFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(customerProfile.getCustomerName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 tviR2StateName.setVisibility(View.VISIBLE);
                 tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
+                tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getSOAmount()));
             } else {
                 tviR2StateName.setVisibility(View.GONE);
+                tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
             }
         }
         if (rsmPos == 1) {
@@ -653,13 +655,14 @@ public class OSOInvoiceFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(customerProfile.getCustomerName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR3StateName.setVisibility(View.VISIBLE);
                 tviR3StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
+                tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getSOAmount()));
             } else {
                 tviR3StateName.setVisibility(View.GONE);
+                tviSOAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getSOAmount()));
             }
         }
 

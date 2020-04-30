@@ -53,6 +53,7 @@ public class WSRSMFragment extends BaseFragment {
     public static final String CUSTOMER_PROFILE = "CUSTOMER_PROFILE";
     public static final String PRODUCT_PROFILE = "PRODUCT_PROFILE";
     public static final String SP_PROFILE = "SP_PROFILE";
+    public static final String STATE_CODE = "STATE_CODE";
     public static final String FROM_SP = "FROM_SP";
     public static final String FROM_CUSTOMER = "FROM_CUSTOMER";
     public static final String FROM_PRODUCT = "FROM_PRODUCT";
@@ -116,7 +117,7 @@ public class WSRSMFragment extends BaseFragment {
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
     private NewRSMAdapter rsmAdapter;
-    private int type = 0, pos = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0;
+    private int type = 0, pos = 0, stateCode = 0,rsmPos = 0, spPos = 0, cPos = 0, pPos = 0;
     boolean fromSP, fromCustomer, fromProduct, search = false, selectYear = false;
 
     FullSalesModel spData;
@@ -151,6 +152,7 @@ public class WSRSMFragment extends BaseFragment {
         spProfile = getArguments().getParcelable(SP_PROFILE);
         customerProfile = getArguments().getParcelable(CUSTOMER_PROFILE);
         productProfile = getArguments().getParcelable(PRODUCT_PROFILE);
+        stateCode = getArguments().getInt(STATE_CODE);
 
         toolbarTitle = getString(R.string.Heading_RSM);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
@@ -454,6 +456,8 @@ public class WSRSMFragment extends BaseFragment {
             customerProfile = null;
             tviR1StateName.setText("");
             cPos = 0;
+            if (stateCode == 1)
+                stateCode = 0;
             if (spPos == 2) {
                 spPos = 1;
             } else if (spPos == 4) {
@@ -499,6 +503,9 @@ public class WSRSMFragment extends BaseFragment {
             customerProfile = null;
             tviR2StateName.setText("");
             cPos = 0;
+            if (stateCode == 1)
+                stateCode = 0;
+
             if (spPos == 4) {
                 spPos = 2;
             }
@@ -530,6 +537,8 @@ public class WSRSMFragment extends BaseFragment {
             customerProfile = null;
             tviR3StateName.setText("");
             cPos = 0;
+            if (stateCode == 1)
+                stateCode = 0;
         } else if (pPos == 4) {
             fromProduct = false;
             productProfile = null;
@@ -556,16 +565,18 @@ public class WSRSMFragment extends BaseFragment {
             row1Display();
         }
 
-        String sales = "", customer = "", product = "";
+        String sales = "", customer = "", product = "", state = "";
         if (null != spProfile)
             sales = spProfile.getTMC();
         if (null != customerProfile)
             customer = customerProfile.getCustomerName();
         if (null != productProfile)
             product = productProfile.getCode();
+        if (stateCode == 1)
+            state = customerProfile.getStateCodeWise().get(0).getStateCode();
 
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FiscalSalesListRequester(userId, level, "RSM", "", sales, customer, "", product, fiscalYear));
+        BackgroundExecutor.getInstance().execute(new FiscalSalesListRequester(userId, level, "RSM", "", sales, customer, state, product, fiscalYear));
     }
 
     private void row1Display() {

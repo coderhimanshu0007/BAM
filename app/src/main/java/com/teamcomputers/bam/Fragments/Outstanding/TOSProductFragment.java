@@ -530,14 +530,15 @@ public class TOSProductFragment extends BaseFragment {
             }*/
             llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR1Name.setText(customerProfile.getCustomerName());
-            tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
             llDSO.setVisibility(View.GONE);
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
+                tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getAmount()));
             } else {
                 tviR1StateName.setVisibility(View.GONE);
+                tviAmount.setText(BAMUtil.getRoundOffValue(customerProfile.getAmount()));
             }
             //tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
             //tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
