@@ -18,14 +18,9 @@ import com.google.android.material.tabs.TabLayout;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.CustomView.CustomViewPager;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Fragments.Logistics.AcknowledgementFragment;
-import com.teamcomputers.bam.Fragments.Logistics.DispatchFragment;
-import com.teamcomputers.bam.Fragments.Logistics.HoldDeliveryFragment;
-import com.teamcomputers.bam.Fragments.Logistics.InTransitFragment;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.Installation.InstallationRefreshRequester;
-import com.teamcomputers.bam.Requesters.Logistics.LogisticsRefreshRequester;
+import com.teamcomputers.bam.Requesters.Installation.KIRefreshRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
@@ -114,7 +109,8 @@ public class InstallationFragment extends BaseFragment {
         });
 
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new InstallationRefreshRequester());
+        //BackgroundExecutor.getInstance().execute(new InstallationRefreshRequester());
+        BackgroundExecutor.getInstance().execute(new KIRefreshRequester());
         int position = SharedPreferencesController.getInstance(dashboardActivityContext).getInstallationPageNo();
         tabLayout.getTabAt(position).select();
         SharedPreferencesController.getInstance(dashboardActivityContext).setInstallationPageNo(0);

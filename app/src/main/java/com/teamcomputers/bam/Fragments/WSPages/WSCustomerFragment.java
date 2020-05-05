@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -20,24 +19,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.SalesOutstanding.CustomSpinnerAdapter;
-import com.teamcomputers.bam.Adapters.SalesOutstanding.NewCustomerAdapter;
+import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesCustomerAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
-import com.teamcomputers.bam.Models.FullSalesModel;
-import com.teamcomputers.bam.Models.SalesCustomerModel;
+import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesCustomerModel;
+import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesProductModel;
+import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesRSMModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.SalesReceivable.FiscalSalesListRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KSalesListAprRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -64,7 +63,7 @@ public class WSCustomerFragment extends BaseFragment {
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
 
-    FullSalesModel rsmProfile, salesProfile, productProfile;
+    //FullSalesModel rsmProfile, salesProfile, productProfile;
 
     boolean fromRSM, fromSP, fromProduct, search = false, selectYear = false;
     String toolbarTitle = "";
@@ -99,10 +98,17 @@ public class WSCustomerFragment extends BaseFragment {
     TextView tviMTD;
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
-    private NewCustomerAdapter adapter;
+    //private NewCustomerAdapter adapter;
+    private KSalesCustomerAdapter adapter;
     private int position = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0;
 
-    List<SalesCustomerModel> model = new ArrayList<>();
+    //List<SalesCustomerModel> model = new ArrayList<>();
+    KSalesCustomerModel customerData;
+    KSalesRSMModel.Data rsmProfile, salesProfile;
+    KSalesProductModel.Data productProfile;
+    KSalesCustomerModel.Data selectedCustomerData;
+    KSalesCustomerModel.Filter customerFilterData;
+    List<KSalesCustomerModel.Data> customerDataList = new ArrayList<>();
     CustomSpinnerAdapter customSpinnerAdapter;
 
     @Override
@@ -227,9 +233,16 @@ public class WSCustomerFragment extends BaseFragment {
                     case Events.GET_CUSTOMER_LIST_SUCCESSFULL:
                         dismissProgress();
                         try {
-                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            /*JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
                             SalesCustomerModel[] data = (SalesCustomerModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), SalesCustomerModel[].class);
-                            model = new ArrayList<SalesCustomerModel>(Arrays.asList(data));
+                            model = new ArrayList<SalesCustomerModel>(Arrays.asList(data));*/
+                            JSONObject jsonObject = new JSONObject(BAMUtil.replaceWSDataResponse(eventObject.getObject().toString()));
+                            customerData = (KSalesCustomerModel) BAMUtil.fromJson(String.valueOf(jsonObject), KSalesCustomerModel.class);
+                            customerDataList = customerData.getData();
+                            customerFilterData = customerData.getFilter();
+                            tviYTD.setText(BAMUtil.getRoundOffValue(customerFilterData.getYtd()));
+                            tviQTD.setText(BAMUtil.getRoundOffValue(customerFilterData.getQtd()));
+                            tviMTD.setText(BAMUtil.getRoundOffValue(customerFilterData.getMtd()));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -243,7 +256,7 @@ public class WSCustomerFragment extends BaseFragment {
                     case ClickEvents.ACCOUNT_ITEM:
                         int position = (int) eventObject.getObject();
                         Bundle acctDataBundle = new Bundle();
-                        acctDataBundle.putParcelable(CustomerFragment.ACCT_PROFILE, model.get(position));
+                        acctDataBundle.putParcelable(CustomerFragment.ACCT_PROFILE, customerDataList.get(position));
                         acctDataBundle.putInt(CustomerFragment.ACCT_POSITION, position);
                         acctDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.CUSTOMER_FRAGMENT, acctDataBundle);
@@ -254,7 +267,8 @@ public class WSCustomerFragment extends BaseFragment {
                         break;
                     case ClickEvents.CUSTOMER_SELECT:
                         if (!fromProduct) {
-                            SalesCustomerModel customerList = (SalesCustomerModel) eventObject.getObject();
+                            //SalesCustomerModel customerList = (SalesCustomerModel) eventObject.getObject();
+                            selectedCustomerData = (KSalesCustomerModel.Data) eventObject.getObject();
                             Bundle customerBundle = new Bundle();
                             customerBundle.putString(WSProductFragment.USER_ID, userId);
                             customerBundle.putString(WSProductFragment.USER_LEVEL, level);
@@ -269,10 +283,10 @@ public class WSCustomerFragment extends BaseFragment {
                             customerBundle.putBoolean(WSProductFragment.FROM_SP, fromSP);
                             customerBundle.putBoolean(WSProductFragment.FROM_CUSTOMER, true);
 
-                            customerBundle.putParcelable(WSProductFragment.CUSTOMER_PROFILE, customerList);
+                            customerBundle.putParcelable(WSProductFragment.CUSTOMER_PROFILE, selectedCustomerData);
                             customerBundle.putParcelable(WSProductFragment.RSM_PROFILE, rsmProfile);
                             customerBundle.putParcelable(WSProductFragment.SP_PROFILE, salesProfile);
-                            if (null != customerList.getStateCodeWise()) {
+                            if (null != selectedCustomerData.getStateCodeWise()) {
                                 customerBundle.putInt(WSProductFragment.STATE_CODE, 1);
                             } else {
                                 customerBundle.putInt(WSProductFragment.STATE_CODE, 0);
@@ -284,7 +298,8 @@ public class WSCustomerFragment extends BaseFragment {
                     case ClickEvents.STATE_ITEM:
                         if (!fromProduct) {
                             Bundle productStateBundle = new Bundle();
-                            SalesCustomerModel salesCustomerModel = (SalesCustomerModel) eventObject.getObject();
+                            //SalesCustomerModel salesCustomerModel = (SalesCustomerModel) eventObject.getObject();
+                            selectedCustomerData = (KSalesCustomerModel.Data) eventObject.getObject();
                             productStateBundle.putString(WSProductFragment.USER_ID, userId);
                             productStateBundle.putString(WSProductFragment.USER_LEVEL, level);
                             productStateBundle.putString(WSProductFragment.FISCAL_YEAR, fiscalYear);
@@ -298,10 +313,10 @@ public class WSCustomerFragment extends BaseFragment {
                             productStateBundle.putBoolean(WSProductFragment.FROM_SP, fromSP);
                             productStateBundle.putBoolean(WSProductFragment.FROM_CUSTOMER, true);
 
-                            productStateBundle.putParcelable(WSProductFragment.CUSTOMER_PROFILE, salesCustomerModel);
+                            productStateBundle.putParcelable(WSProductFragment.CUSTOMER_PROFILE, selectedCustomerData);
                             productStateBundle.putParcelable(WSProductFragment.RSM_PROFILE, rsmProfile);
                             productStateBundle.putParcelable(WSProductFragment.SP_PROFILE, salesProfile);
-                            if (null != salesCustomerModel.getStateCodeWise()) {
+                            if (null != selectedCustomerData.getStateCodeWise()) {
                                 productStateBundle.putInt(WSProductFragment.STATE_CODE, 1);
                             } else {
                                 productStateBundle.putInt(WSProductFragment.STATE_CODE, 0);
@@ -311,7 +326,8 @@ public class WSCustomerFragment extends BaseFragment {
                         }
                         break;
                     case ClickEvents.RSM_MENU_SELECT:
-                        SalesCustomerModel selectedCustomerList = (SalesCustomerModel) eventObject.getObject();
+                        //SalesCustomerModel selectedCustomerList = (SalesCustomerModel) eventObject.getObject();
+                        selectedCustomerData = (KSalesCustomerModel.Data) eventObject.getObject();
                         Bundle rsmBundle = new Bundle();
                         rsmBundle.putString(WSRSMFragment.USER_ID, userId);
                         rsmBundle.putString(WSRSMFragment.USER_LEVEL, level);
@@ -326,10 +342,10 @@ public class WSCustomerFragment extends BaseFragment {
                         rsmBundle.putBoolean(WSRSMFragment.FROM_SP, fromSP);
                         rsmBundle.putBoolean(WSRSMFragment.FROM_CUSTOMER, true);
 
-                        rsmBundle.putParcelable(WSRSMFragment.CUSTOMER_PROFILE, selectedCustomerList);
+                        rsmBundle.putParcelable(WSRSMFragment.CUSTOMER_PROFILE, selectedCustomerData);
                         rsmBundle.putParcelable(WSRSMFragment.PRODUCT_PROFILE, productProfile);
                         rsmBundle.putParcelable(WSRSMFragment.SP_PROFILE, salesProfile);
-                        if (null != selectedCustomerList.getStateCodeWise()) {
+                        if (null != selectedCustomerData.getStateCodeWise()) {
                             rsmBundle.putInt(WSRSMFragment.STATE_CODE, 1);
                         } else {
                             rsmBundle.putInt(WSRSMFragment.STATE_CODE, 0);
@@ -338,7 +354,8 @@ public class WSCustomerFragment extends BaseFragment {
                         dashboardActivityContext.replaceFragment(Fragments.WS_RSM_FRAGMENT, rsmBundle);
                         break;
                     case ClickEvents.SP_MENU_SELECT:
-                        SalesCustomerModel customerList = (SalesCustomerModel) eventObject.getObject();
+                        //SalesCustomerModel customerList = (SalesCustomerModel) eventObject.getObject();
+                        selectedCustomerData = (KSalesCustomerModel.Data) eventObject.getObject();
                         Bundle customerBundle = new Bundle();
                         customerBundle.putString(WSSalesPersonFragment.USER_ID, userId);
                         customerBundle.putString(WSSalesPersonFragment.USER_LEVEL, level);
@@ -353,10 +370,10 @@ public class WSCustomerFragment extends BaseFragment {
                         customerBundle.putBoolean(WSSalesPersonFragment.FROM_PRODUCT, fromProduct);
                         customerBundle.putBoolean(WSSalesPersonFragment.FROM_CUSTOMER, true);
 
-                        customerBundle.putParcelable(WSSalesPersonFragment.CUSTOMER_PROFILE, customerList);
+                        customerBundle.putParcelable(WSSalesPersonFragment.CUSTOMER_PROFILE, selectedCustomerData);
                         customerBundle.putParcelable(WSSalesPersonFragment.RSM_PROFILE, rsmProfile);
                         customerBundle.putParcelable(WSSalesPersonFragment.PRODUCT_PROFILE, productProfile);
-                        if (null != customerList.getStateCodeWise()) {
+                        if (null != selectedCustomerData.getStateCodeWise()) {
                             customerBundle.putInt(WSRSMFragment.STATE_CODE, 1);
                         } else {
                             customerBundle.putInt(WSRSMFragment.STATE_CODE, 0);
@@ -406,7 +423,8 @@ public class WSCustomerFragment extends BaseFragment {
         fiscalYear = dashboardActivityContext.selectedFiscalYear;
         cviSPHeading.setVisibility(View.GONE);
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FiscalSalesListRequester(userId, level, "Customer", "", "", "", "", "", fiscalYear));
+        //BackgroundExecutor.getInstance().execute(new FiscalSalesListRequester(userId, level, "Customer", "", "", "", "", "", fiscalYear));
+        BackgroundExecutor.getInstance().execute(new KSalesListAprRequester(userId, level, "Customer", "", "", "", "", "", fiscalYear));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -528,17 +546,17 @@ public class WSCustomerFragment extends BaseFragment {
         }
         String rsm = "", sales = "", product = "";
         if (null != rsmProfile)
-            rsm = rsmProfile.getTMC();
+            rsm = rsmProfile.getTmc();
         if (null != salesProfile)
-            sales = salesProfile.getTMC();
+            sales = salesProfile.getTmc();
         if (null != productProfile)
             product = productProfile.getCode();
 
         fiscalYear = dashboardActivityContext.selectedFiscalYear;
 
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new FiscalSalesListRequester(userId, level, "Customer", rsm, sales, "", "", product, fiscalYear));
-
+        //BackgroundExecutor.getInstance().execute(new FiscalSalesListRequester(userId, level, "Customer", rsm, sales, "", "", product, fiscalYear));
+        BackgroundExecutor.getInstance().execute(new KSalesListAprRequester(userId, level, "Customer", rsm, sales, "", "", product, fiscalYear));
     }
 
     private void row1Display() {
@@ -558,9 +576,9 @@ public class WSCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(rsmProfile.getName());
-            tviYTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getYTD()));
-            tviQTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getQTD()));
-            tviMTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getMTD()));
+            tviYTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getYtd()));
+            tviQTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getQtd()));
+            tviMTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getMtd()));
         } else if (pPos == 1) {
             position = productProfile.getPosition();
             if (position == 0) {
@@ -575,9 +593,9 @@ public class WSCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(productProfile.getName());
-            tviYTD.setText(BAMUtil.getRoundOffValue(productProfile.getYTD()));
-            tviQTD.setText(BAMUtil.getRoundOffValue(productProfile.getQTD()));
-            tviMTD.setText(BAMUtil.getRoundOffValue(productProfile.getMTD()));
+            tviYTD.setText(BAMUtil.getRoundOffValue(productProfile.getYtd()));
+            tviQTD.setText(BAMUtil.getRoundOffValue(productProfile.getQtd()));
+            tviMTD.setText(BAMUtil.getRoundOffValue(productProfile.getMtd()));
         } else if (spPos == 1) {
             position = salesProfile.getPosition();
             if (position == 0) {
@@ -592,9 +610,9 @@ public class WSCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(salesProfile.getName());
-            tviYTD.setText(BAMUtil.getRoundOffValue(salesProfile.getYTD()));
-            tviQTD.setText(BAMUtil.getRoundOffValue(salesProfile.getQTD()));
-            tviMTD.setText(BAMUtil.getRoundOffValue(salesProfile.getMTD()));
+            tviYTD.setText(BAMUtil.getRoundOffValue(salesProfile.getYtd()));
+            tviQTD.setText(BAMUtil.getRoundOffValue(salesProfile.getQtd()));
+            tviMTD.setText(BAMUtil.getRoundOffValue(salesProfile.getMtd()));
         }
     }
 
@@ -614,9 +632,9 @@ public class WSCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(rsmProfile.getName());
-            tviYTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getYTD()));
-            tviQTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getQTD()));
-            tviMTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getMTD()));
+            tviYTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getYtd()));
+            tviQTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getQtd()));
+            tviMTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getMtd()));
         } else if (spPos == 2) {
             position = salesProfile.getPosition();
             if (position == 0) {
@@ -631,9 +649,9 @@ public class WSCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(salesProfile.getName());
-            tviYTD.setText(BAMUtil.getRoundOffValue(salesProfile.getYTD()));
-            tviQTD.setText(BAMUtil.getRoundOffValue(salesProfile.getQTD()));
-            tviMTD.setText(BAMUtil.getRoundOffValue(salesProfile.getMTD()));
+            tviYTD.setText(BAMUtil.getRoundOffValue(salesProfile.getYtd()));
+            tviQTD.setText(BAMUtil.getRoundOffValue(salesProfile.getQtd()));
+            tviMTD.setText(BAMUtil.getRoundOffValue(salesProfile.getMtd()));
         } else if (pPos == 2) {
             position = productProfile.getPosition();
             if (position == 0) {
@@ -648,9 +666,9 @@ public class WSCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(productProfile.getName());
-            tviYTD.setText(BAMUtil.getRoundOffValue(productProfile.getYTD()));
-            tviQTD.setText(BAMUtil.getRoundOffValue(productProfile.getQTD()));
-            tviMTD.setText(BAMUtil.getRoundOffValue(productProfile.getMTD()));
+            tviYTD.setText(BAMUtil.getRoundOffValue(productProfile.getYtd()));
+            tviQTD.setText(BAMUtil.getRoundOffValue(productProfile.getQtd()));
+            tviMTD.setText(BAMUtil.getRoundOffValue(productProfile.getMtd()));
         }
         if (rsmPos == 1) {
             tviR1Name.setText(rsmProfile.getName());
@@ -676,9 +694,9 @@ public class WSCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(rsmProfile.getName());
-            tviYTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getYTD()));
-            tviQTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getQTD()));
-            tviMTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getMTD()));
+            tviYTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getYtd()));
+            tviQTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getQtd()));
+            tviMTD.setText(BAMUtil.getRoundOffValue(rsmProfile.getMtd()));
         } else if (spPos == 4) {
             position = salesProfile.getPosition();
             if (position == 0) {
@@ -693,9 +711,9 @@ public class WSCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(salesProfile.getName());
-            tviYTD.setText(BAMUtil.getRoundOffValue(salesProfile.getYTD()));
-            tviQTD.setText(BAMUtil.getRoundOffValue(salesProfile.getQTD()));
-            tviMTD.setText(BAMUtil.getRoundOffValue(salesProfile.getMTD()));
+            tviYTD.setText(BAMUtil.getRoundOffValue(salesProfile.getYtd()));
+            tviQTD.setText(BAMUtil.getRoundOffValue(salesProfile.getQtd()));
+            tviMTD.setText(BAMUtil.getRoundOffValue(salesProfile.getMtd()));
         } else if (pPos == 4) {
             position = productProfile.getPosition();
             if (position == 0) {
@@ -710,9 +728,9 @@ public class WSCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(productProfile.getName());
-            tviYTD.setText(BAMUtil.getRoundOffValue(productProfile.getYTD()));
-            tviQTD.setText(BAMUtil.getRoundOffValue(productProfile.getQTD()));
-            tviMTD.setText(BAMUtil.getRoundOffValue(productProfile.getMTD()));
+            tviYTD.setText(BAMUtil.getRoundOffValue(productProfile.getYtd()));
+            tviQTD.setText(BAMUtil.getRoundOffValue(productProfile.getQtd()));
+            tviMTD.setText(BAMUtil.getRoundOffValue(productProfile.getMtd()));
         }
 
         if (rsmPos == 2) {
@@ -732,7 +750,8 @@ public class WSCustomerFragment extends BaseFragment {
     }
 
     private void initData() {
-        adapter = new NewCustomerAdapter(dashboardActivityContext, userId, level, model, fromRSM, fromSP, fromProduct);
+        //adapter = new NewCustomerAdapter(dashboardActivityContext, userId, level, model, fromRSM, fromSP, fromProduct);
+        adapter = new KSalesCustomerAdapter(dashboardActivityContext, userId, level, customerDataList, fromRSM, fromSP, fromProduct);
         rviRSM.setAdapter(adapter);
     }
 }

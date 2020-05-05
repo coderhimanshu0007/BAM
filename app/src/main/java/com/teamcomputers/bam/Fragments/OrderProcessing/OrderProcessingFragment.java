@@ -20,7 +20,7 @@ import com.teamcomputers.bam.CustomView.CustomViewPager;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.OrderProcessing.OrderProcessingRefreshRequester;
+import com.teamcomputers.bam.Requesters.OrderProcessing.KOPRefreshRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
@@ -108,7 +108,8 @@ public class OrderProcessingFragment extends BaseFragment {
             }
         });
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new OrderProcessingRefreshRequester());
+        //BackgroundExecutor.getInstance().execute(new OrderProcessingRefreshRequester());
+        BackgroundExecutor.getInstance().execute(new KOPRefreshRequester());
         int position = SharedPreferencesController.getInstance(dashboardActivityContext).getOPPageNo();
         tabLayout.getTabAt(position).select();
         SharedPreferencesController.getInstance(dashboardActivityContext).setOPPageNo(0);

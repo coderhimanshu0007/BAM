@@ -18,6 +18,7 @@ import com.teamcomputers.bam.Models.LowMarginModel;
 import com.teamcomputers.bam.Models.SPCSModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
+import com.teamcomputers.bam.Requesters.OrderProcessing.KOPLowMarginRequester;
 import com.teamcomputers.bam.Requesters.OrderProcessing.OrderProcessingLowMarginRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
@@ -91,7 +92,8 @@ public class LowMarginFragment extends BaseFragment {
             rviData.setAdapter(mAdapter);
         }
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new OrderProcessingLowMarginRequester());
+        //BackgroundExecutor.getInstance().execute(new OrderProcessingLowMarginRequester());
+        BackgroundExecutor.getInstance().execute(new KOPLowMarginRequester());
     }
 
     @Override

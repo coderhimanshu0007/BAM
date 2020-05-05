@@ -18,6 +18,7 @@ import com.teamcomputers.bam.Models.FAModel;
 import com.teamcomputers.bam.Models.SOAModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
+import com.teamcomputers.bam.Requesters.OrderProcessing.KOPSOAuthorizationRequester;
 import com.teamcomputers.bam.Requesters.OrderProcessing.OrderProcessingSOAuthorizationRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
@@ -87,7 +88,8 @@ public class SOAuthorizationFragment extends BaseFragment {
             rviData.setAdapter(mAdapter);
         }
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new OrderProcessingSOAuthorizationRequester());
+        //BackgroundExecutor.getInstance().execute(new OrderProcessingSOAuthorizationRequester());
+        BackgroundExecutor.getInstance().execute(new KOPSOAuthorizationRequester());
     }
 
     @Override

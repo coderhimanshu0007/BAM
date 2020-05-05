@@ -126,7 +126,7 @@ public class BAMUtil implements BAMConstant {
     }
 
     public static String getStringInNoFormat(Double amount) {
-        int value = (int)Math.round(amount);
+        int value = (int) Math.round(amount);
         return String.valueOf(value);
     }
 
@@ -137,8 +137,16 @@ public class BAMUtil implements BAMConstant {
         return df.format(amount);
     }
 
-    public static String replaceDataResponse(String response){
+    public static String replaceDataResponse(String response) {
         return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}");
+    }
+
+    public static String replaceWSDataOldResponse(String response) {
+        return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}").replace("\"}]\", \"Filter\": \"", "\"}], \"Filter\": ").replace("\"}\"", "\"}");
+    }
+
+    public static String replaceWSDataResponse(String response) {
+        return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}").replace("]\", \"Filter\": \"", "], \"Filter\": ").replace("\"}\"", "\"}");
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

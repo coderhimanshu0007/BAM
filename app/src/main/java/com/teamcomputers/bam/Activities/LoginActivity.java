@@ -4,17 +4,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -23,11 +18,11 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.teamcomputers.bam.Models.AppVersionResponse;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.AppVersionRequester;
+import com.teamcomputers.bam.Requesters.KAppVersionRequester;
+import com.teamcomputers.bam.Requesters.KLoginRequester;
 import com.teamcomputers.bam.Requesters.LoginRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
-import com.teamcomputers.bam.Utils.BAMUtil;
-import com.teamcomputers.bam.controllers.SharedPreferencesController;
+import com.teamcomputers.bam.Utils.KBAMUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -80,8 +75,9 @@ public class LoginActivity extends BaseActivity {
                         break;
                     case Events.YOU_ARE_USING_OLDER_VERSION_OF_APP:
                         dismissProgress();
-                        appUrl = ((AppVersionResponse) eventObject.getObject()).getAppVersionUrl();
-                        showVersionCheck();
+                        getVersionInfo((AppVersionResponse) eventObject.getObject());
+                        //appUrl = ((AppVersionResponse) eventObject.getObject()).getAppVersionUrl();
+                        //showVersionCheck();
                         break;
                     case Events.YOU_ARE_USING_CURRENT_VERSION_OF_APP:
                         //showProgress(ProgressDialogTexts.AUTHENTICATING);
@@ -176,14 +172,15 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.btn_login)
     public void submit() {
-        BAMUtil.hideSoftKeyboard(this);
+        new KBAMUtils().hideSoftKeyboard(this);
         if (!validate()) {
             return;
         }
         showProgress(ProgressDialogTexts.AUTHENTICATING);
-        BackgroundExecutor.getInstance().execute(new AppVersionRequester());
+        BackgroundExecutor.getInstance().execute(new KAppVersionRequester());
+        //BackgroundExecutor.getInstance().execute(new AppVersionRequester());
         //showProgress(ProgressDialogTexts.AUTHENTICATING);
-        //BackgroundExecutor.getInstance().execute(new LoginRequester(txtUserName.getText().toString(), txtPassword.getText().toString()));
+        //BackgroundExecutor.getInstance().execute(new KLoginRequester(txtUserName.getText().toString(), txtPassword.getText().toString()));
     }
 
     public boolean validate() {
@@ -208,4 +205,26 @@ public class LoginActivity extends BaseActivity {
 
         return valid;
     }
+
+    private void getVersionInfo(AppVersionResponse object) {
+        String versionName = "";
+        int versionCode = -1;
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionName = packageInfo.versionName;
+            versionCode = packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (Float.parseFloat(object.getAppVersionID()) > Float.parseFloat(versionName)) {
+            showVersionCheck();
+        } else {
+            BackgroundExecutor.getInstance().execute(new KLoginRequester(txtUserName.getText().toString(), txtPassword.getText().toString()));
+        }
+
+        //TextView textViewVersionInfo = (TextView) findViewById(R.id.textview_version_info);
+        //textViewVersionInfo.setText(String.format("Version name = %s \nVersion code = %d", versionName, versionCode));
+    }
+
+
 }

@@ -32,10 +32,10 @@ import com.teamcomputers.bam.Models.NewYTDQTDModel;
 import com.teamcomputers.bam.Models.SalesReceivableModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.SalesReceivable.FiscalYearRequester;
 import com.teamcomputers.bam.Requesters.SalesReceivable.SalesReceivableRequester;
-import com.teamcomputers.bam.Requesters.SalesReceivable.SalesReceivablesFiscalRequester;
-import com.teamcomputers.bam.Requesters.SalesReceivable.YTDQTDFiscalRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KFiscalYearRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KSalesReceivablesFiscalRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KYTDQTDFiscalRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
@@ -131,7 +131,8 @@ public class NewSalesReceivableFragment extends BaseFragment {
         dashboardActivityContext.hideTOSTab();
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new SalesRefreshRequester());
-        BackgroundExecutor.getInstance().execute(new FiscalYearRequester());
+        //BackgroundExecutor.getInstance().execute(new FiscalYearRequester());
+        BackgroundExecutor.getInstance().execute(new KFiscalYearRequester());
     }
 
     @Override
@@ -174,7 +175,8 @@ public class NewSalesReceivableFragment extends BaseFragment {
                         customSpinnerAdapter = new CustomSpinnerAdapter(dashboardActivityContext, fiscalYearModel);
                         //Setting the ArrayAdapter data on the Spinner
                         spinnYear.setAdapter(customSpinnerAdapter);
-                        BackgroundExecutor.getInstance().execute(new SalesReceivablesFiscalRequester(loginModel.getUserID(), fiscalYear));
+                        //BackgroundExecutor.getInstance().execute(new SalesReceivablesFiscalRequester(loginModel.getUserID(), fiscalYear));
+                        BackgroundExecutor.getInstance().execute(new KSalesReceivablesFiscalRequester(loginModel.getUserID(), fiscalYear));
                         break;
                     case Events.GET_FISCAL_YEAR_LIST_UNSUCCESSFULL:
                         dismissProgress();
@@ -342,21 +344,24 @@ public class NewSalesReceivableFragment extends BaseFragment {
         dashboardActivityContext.selectedFiscalYear = fiscalYearModel.getFascialYear().get(position).getYear();
         dashboardActivityContext.selectedPosition = position;
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new SalesReceivablesFiscalRequester(loginModel.getUserID(), fiscalYear));
+        //BackgroundExecutor.getInstance().execute(new SalesReceivablesFiscalRequester(loginModel.getUserID(), fiscalYear));
+        BackgroundExecutor.getInstance().execute(new KSalesReceivablesFiscalRequester(loginModel.getUserID(), fiscalYear));
     }
 
     @OnClick(R.id.llMonthly)
     public void MonthlyClick() {
         type = "MONTHLY";
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new YTDQTDFiscalRequester(userId, fiscalYear));
+        //BackgroundExecutor.getInstance().execute(new YTDQTDFiscalRequester(userId, fiscalYear));
+        BackgroundExecutor.getInstance().execute(new KYTDQTDFiscalRequester(userId, fiscalYear));
     }
 
     @OnClick(R.id.llQuarterly)
     public void QuarterlyClick() {
         type = "QUARTERLY";
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new YTDQTDFiscalRequester(userId, fiscalYear));
+        //BackgroundExecutor.getInstance().execute(new YTDQTDFiscalRequester(userId, fiscalYear));
+        BackgroundExecutor.getInstance().execute(new KYTDQTDFiscalRequester(userId, fiscalYear));
     }
 
     @OnClick(R.id.txtSalesAnalysis)

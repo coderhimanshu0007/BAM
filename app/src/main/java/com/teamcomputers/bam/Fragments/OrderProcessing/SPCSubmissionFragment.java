@@ -17,6 +17,7 @@ import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.SPCSModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
+import com.teamcomputers.bam.Requesters.OrderProcessing.KOPSPCSubmissionRequester;
 import com.teamcomputers.bam.Requesters.OrderProcessing.OrderProcessingSPCSubmissionRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
@@ -96,7 +97,8 @@ public class SPCSubmissionFragment extends BaseFragment {
             rviData.setAdapter(mAdapter);
         }
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new OrderProcessingSPCSubmissionRequester());
+        //BackgroundExecutor.getInstance().execute(new OrderProcessingSPCSubmissionRequester());
+        BackgroundExecutor.getInstance().execute(new KOPSPCSubmissionRequester());
     }
 
     @Override

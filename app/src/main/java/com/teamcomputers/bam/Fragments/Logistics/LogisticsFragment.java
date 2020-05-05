@@ -20,7 +20,7 @@ import com.teamcomputers.bam.CustomView.CustomViewPager;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.Logistics.LogisticsRefreshRequester;
+import com.teamcomputers.bam.Requesters.Logistics.KLRefreshRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
@@ -108,7 +108,8 @@ public class LogisticsFragment extends BaseFragment {
             }
         });
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new LogisticsRefreshRequester());
+        //BackgroundExecutor.getInstance().execute(new LogisticsRefreshRequester());
+        BackgroundExecutor.getInstance().execute(new KLRefreshRequester());
         int position = SharedPreferencesController.getInstance(dashboardActivityContext).getLogisticPageNo();
         tabLayout.getTabAt(position).select();
         SharedPreferencesController.getInstance(dashboardActivityContext).setLogisticPageNo(0);

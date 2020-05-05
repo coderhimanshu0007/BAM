@@ -6,6 +6,7 @@ import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 import com.teamcomputers.bam.Interface.BAMConstant;
+import com.teamcomputers.bam.Interface.KBAMConstant;
 import com.teamcomputers.bam.Models.AcknowledgemantModel;
 import com.teamcomputers.bam.Models.DOAIRModel;
 import com.teamcomputers.bam.Models.DispatchModel;
@@ -22,8 +23,12 @@ import com.teamcomputers.bam.Models.SalesDataModel;
 import com.teamcomputers.bam.Models.WIPModel;
 import com.teamcomputers.bam.Utils.BAMUtil;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.regex.Pattern;
+
 //Controller for storing and retrieving data from Shared Preferences
-public class SharedPreferencesController implements BAMConstant {
+public class SharedPreferencesController implements KBAMConstant {
 
     public static final String TAG = SharedPreferencesController.class.getName();
     public static final String SHARED_PREF_NAME = "team_work_preferences";
@@ -341,6 +346,27 @@ public class SharedPreferencesController implements BAMConstant {
     public void setSalesReceivablePageNo(Integer pageNo) {
         putInt(Keys.SALES_PAGENO.getLabel(), pageNo);
     }
+
+    @Override
+    public int getDELAY_MILLIS() {
+        return 2000;
+    }
+
+    @NotNull
+    @Override
+    public Pattern getEMAIL_VALIDATION_PATTERN() {
+        Pattern compile = Pattern.compile(
+                "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                        "\\@" +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                        "(" +
+                        "\\." +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                        ")+"
+        );
+        return compile;
+    }
+
 
     private enum Keys {
         USERID("USERID"),

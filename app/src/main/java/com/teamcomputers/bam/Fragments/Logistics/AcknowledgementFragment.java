@@ -16,7 +16,7 @@ import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.AcknowledgemantModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.Logistics.LogisticsAcknowledgementRequester;
+import com.teamcomputers.bam.Requesters.Logistics.KLAcknowledgementRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
@@ -86,7 +86,8 @@ public class AcknowledgementFragment extends BaseFragment {
             rviData.setAdapter(mAdapter);
         }
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new LogisticsAcknowledgementRequester());
+        //BackgroundExecutor.getInstance().execute(new LogisticsAcknowledgementRequester());
+        BackgroundExecutor.getInstance().execute(new KLAcknowledgementRequester());
     }
 
     @Override

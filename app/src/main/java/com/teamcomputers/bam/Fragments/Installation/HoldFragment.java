@@ -17,7 +17,7 @@ import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.HoldModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.Installation.InstallationHoldRequester;
+import com.teamcomputers.bam.Requesters.Installation.KIHoldRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
@@ -96,7 +96,8 @@ public class HoldFragment extends BaseFragment {
             rviData.setAdapter(mAdapter);
         }
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new InstallationHoldRequester());
+        //BackgroundExecutor.getInstance().execute(new InstallationHoldRequester());
+        BackgroundExecutor.getInstance().execute(new KIHoldRequester());
     }
 
     @Override

@@ -16,7 +16,7 @@ import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.WIPModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.Installation.InstallationWIPRequester;
+import com.teamcomputers.bam.Requesters.Installation.KIWIPRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
@@ -88,7 +88,8 @@ public class WIPFragment extends BaseFragment {
             rviData.setAdapter(mAdapter);
         }
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new InstallationWIPRequester());
+        //BackgroundExecutor.getInstance().execute(new InstallationWIPRequester());
+        BackgroundExecutor.getInstance().execute(new KIWIPRequester());
     }
 
     @Override

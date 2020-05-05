@@ -413,7 +413,7 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="50dp"
+                                    android:layout_height="match_parent"
                                     android:layout_marginLeft="20dp"
                                     android:layout_marginTop="14dp"
                                     android:layout_marginRight="20dp"
@@ -422,7 +422,7 @@
                                     android:background="@drawable/td_bg"
                                     android:backgroundTint="@color/text"
                                     android:orientation="vertical"
-                                    android:padding="7dp">
+                                    android:padding="5dp">
 
                                     <TextView
                                         android:id="@+id/tviAchHeading"
@@ -430,21 +430,45 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
                                         android:gravity="center"
-                                        android:text="ACH%"
+                                        android:text="MTD"
                                         android:textColor="@color/color_value"
                                         android:textSize="12sp"
                                         app:fontFamily="@font/roboto_medium" />
 
-                                    <TextView
-                                        android:id="@+id/tviAch"
+                                    <RelativeLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="match_parent"
                                         android:layout_gravity="center"
+                                        android:layout_weight="1"
                                         android:gravity="center"
-                                        android:text="66.25%"
-                                        android:textColor="@color/color_value"
-                                        android:textSize="14sp"
-                                        app:fontFamily="@font/roboto_bold" />
+                                        android:orientation="vertical">
+
+                                        <ProgressBar
+                                            android:id="@+id/pBar"
+                                            style="?android:attr/progressBarStyleHorizontal"
+                                            android:layout_width="55dp"
+                                            android:layout_height="10dp"
+                                            android:indeterminate="false"
+                                            android:max="100"
+                                            android:minWidth="200dp"
+                                            android:minHeight="10dp"
+                                            android:progress="0"
+                                            android:progressDrawable="@drawable/seekbar_drawable_progress"
+                                            android:visibility="visible" />
+
+                                        <TextView
+                                            android:id="@+id/tviAch"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@+id/pBar"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginRight="5dp"
+                                            android:gravity="center_horizontal"
+                                            android:text="123.33"
+                                            android:textColor="@color/color_value"
+                                            android:textSize="14sp"
+                                            app:fontFamily="@font/roboto_bold" />
+                                    </RelativeLayout>
                                 </LinearLayout>
 
                             </LinearLayout>
