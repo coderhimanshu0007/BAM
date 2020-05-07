@@ -29,6 +29,8 @@ class KSalesOpenOrderAprRequester(userId: String, level: String, type: String, R
                         EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_SALES_OSO_LIST_SUCCESSFULL, apiResponse.response))
                     } else if (type == "Customer") {
                         EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_CUSTOMER_OSO_LIST_SUCCESSFULL, apiResponse.response))
+                    } else if (type == "SONumber") {
+                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_INVOICE_OSO_LIST_SUCCESSFULL, apiResponse.response))
                     } else if (type == "Invoice") {
                         EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_INVOICE_OSO_LIST_SUCCESSFULL, apiResponse.response))
                     }

@@ -32,6 +32,7 @@ import com.teamcomputers.bam.Models.TotalOutstanding.TORSMSalesModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.SalesReceivable.OutstandingRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesAprRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 
@@ -326,7 +327,9 @@ public class TOSRSMFragment extends BaseFragment {
         cviRSMHeading.setVisibility(View.GONE);
         type = 1;
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "RSM", "", "", "", "", ""));
+        //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "RSM", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "RSM", "", "", "", "", ""));
+
     }
 
     @OnClick(R.id.iviR1Close)
@@ -467,7 +470,8 @@ public class TOSRSMFragment extends BaseFragment {
             state = customerProfile.getStateCodeWise().get(0).getStateCode();
 
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "RSM", "", sales, customer, state, product));
+        //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "RSM", "", sales, customer, state, product));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "RSM", "", sales, customer, state, product));
     }
 
     private void row1Display() {

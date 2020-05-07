@@ -28,8 +28,9 @@ import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesRSMModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.WSRequesters.KSalesListAprRequester;
-import com.teamcomputers.bam.Utils.BAMUtil;
+import com.teamcomputers.bam.Utils.KBAMUtils;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.Utils.KBAMUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -260,12 +261,17 @@ public class WSProductFragment extends BaseFragment {
                     case Events.GET_PRODUCT_LIST_SUCCESSFULL:
                         dismissProgress();
                         try {
-                            /*JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
-                            FullSalesModel[] data = (FullSalesModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), FullSalesModel[].class);
+                            /*JSONArray jsonArray = new JSONArray(KBAMUtils.replaceDataResponse(eventObject.getObject().toString()));
+                            FullSalesModel[] data = (FullSalesModel[]) KBAMUtils.fromJson(String.valueOf(jsonArray), FullSalesModel[].class);
                             model = new ArrayList<FullSalesModel>(Arrays.asList(data));*/
-                            JSONObject jsonArray = new JSONObject(BAMUtil.replaceWSDataResponse(eventObject.getObject().toString()));
-                            productData = (KSalesProductModel) BAMUtil.fromJson(String.valueOf(jsonArray), KSalesProductModel.class);
+                            JSONObject jsonArray = new JSONObject(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
+                            productData = (KSalesProductModel) KBAMUtils.fromJson(String.valueOf(jsonArray), KSalesProductModel.class);
                             productDataList = productData.getData();
+                            for(int i = 0; i<productDataList.size();i++){
+                                if(productDataList.get(i).getName().equals("")||productDataList.get(i).getName().equals("null")){
+                                    productDataList.remove(i);
+                                }
+                            }
                             productFilterData = productData.getFilter();
                             YTDDisplay();
                         } catch (JSONException e) {
@@ -389,11 +395,11 @@ public class WSProductFragment extends BaseFragment {
             tviTargetHeading.setText("TARGET");
             tviActualHeading.setText("ACTUAL");
             tviAchHeading.setText("ACH%");
-            /*tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getTargetYTD()));
-            tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getYtd()));
+            /*tviTarget.setText(KBAMUtils.getRoundOffValue(rsmProfile.getTargetYTD()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(rsmProfile.getYtd()));
             bar = (rsmProfile.getYtdPercentage()).intValue();*/
-            tviTarget.setText(BAMUtil.getRoundOffValue(productFilterData.getTargetYTD()));
-            tviActual.setText(BAMUtil.getRoundOffValue(productFilterData.getYtd()));
+            tviTarget.setText(KBAMUtils.getRoundOffValue(productFilterData.getTargetYTD()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(productFilterData.getYtd()));
             bar = (productFilterData.getYtdPercentage()).intValue();
             pBar.setVisibility(View.VISIBLE);
             tviAch.setText(bar + "%");
@@ -430,11 +436,11 @@ public class WSProductFragment extends BaseFragment {
             tviTargetHeading.setText("TARGET");
             tviActualHeading.setText("ACTUAL");
             tviAchHeading.setText("ACH%");
-            /*tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getTargetQTD()));
-            tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getQtd()));
+            /*tviTarget.setText(KBAMUtils.getRoundOffValue(rsmProfile.getTargetQTD()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(rsmProfile.getQtd()));
             bar = (rsmProfile.getQtdPercentage()).intValue();*/
-            tviTarget.setText(BAMUtil.getRoundOffValue(productFilterData.getTargetQTD()));
-            tviActual.setText(BAMUtil.getRoundOffValue(productFilterData.getQtd()));
+            tviTarget.setText(KBAMUtils.getRoundOffValue(productFilterData.getTargetQTD()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(productFilterData.getQtd()));
             bar = (productFilterData.getQtdPercentage()).intValue();
             pBar.setVisibility(View.VISIBLE);
             tviAch.setText(bar + "%");
@@ -471,11 +477,11 @@ public class WSProductFragment extends BaseFragment {
             tviTargetHeading.setText("TARGET");
             tviActualHeading.setText("ACTUAL");
             tviAchHeading.setText("ACH%");
-            /*tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getTargetMTD()));
-            tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getMtd()));
+            /*tviTarget.setText(KBAMUtils.getRoundOffValue(rsmProfile.getTargetMTD()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(rsmProfile.getMtd()));
             bar = (rsmProfile.getMtdPercentage()).intValue();*/
-            tviTarget.setText(BAMUtil.getRoundOffValue(productFilterData.getTargetMTD()));
-            tviActual.setText(BAMUtil.getRoundOffValue(productFilterData.getMtd()));
+            tviTarget.setText(KBAMUtils.getRoundOffValue(productFilterData.getTargetMTD()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(productFilterData.getMtd()));
             bar = (productFilterData.getMtdPercentage()).intValue();
             pBar.setVisibility(View.VISIBLE);
             tviAch.setText(bar + "%");
@@ -705,14 +711,14 @@ public class WSProductFragment extends BaseFragment {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(rsmProfile.getName());
-            /*tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getYTD()));
-            tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getQTD()));
-            tviAch.setText(BAMUtil.getRoundOffValue(rsmProfile.getMTD()));
+            /*tviTarget.setText(KBAMUtils.getRoundOffValue(rsmProfile.getYTD()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(rsmProfile.getQTD()));
+            tviAch.setText(KBAMUtils.getRoundOffValue(rsmProfile.getMTD()));
             tviTargetHeading.setText("TARGET");
             tviActualHeading.setText("ACTUAL");
             tviAchHeading.setText("ACH%");*/
-            tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getTargetYTD()));
-            tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getYtd()));
+            tviTarget.setText(KBAMUtils.getRoundOffValue(rsmProfile.getTargetYTD()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(rsmProfile.getYtd()));
             pBar.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getYtdPercentage()).intValue();
             tviAch.setText(bar + "%");
@@ -749,9 +755,9 @@ public class WSProductFragment extends BaseFragment {
             /*tviTargetHeading.setText("YTD");
             tviActualHeading.setText("QTD");
             tviAchHeading.setText("MTD");*/
-            tviTarget.setText(BAMUtil.getRoundOffValue(spProfile.getYtd()));
-            tviActual.setText(BAMUtil.getRoundOffValue(spProfile.getQtd()));
-            tviAch.setText(BAMUtil.getRoundOffValue(spProfile.getMtd()));
+            tviTarget.setText(KBAMUtils.getRoundOffValue(spProfile.getYtd()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(spProfile.getQtd()));
+            tviAch.setText(KBAMUtils.getRoundOffValue(spProfile.getMtd()));
             pBar.setVisibility(View.GONE);
         } else if (cPos == 1) {
             cviProductHeading.setVisibility(View.VISIBLE);
@@ -782,15 +788,15 @@ public class WSProductFragment extends BaseFragment {
                 tviR1StateName.setVisibility(View.VISIBLE);
                 tviR1StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
 
-                tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getYtd()));
-                tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getQtd()));
-                tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getMtd()));
+                tviTarget.setText(KBAMUtils.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getYtd()));
+                tviActual.setText(KBAMUtils.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getQtd()));
+                tviAch.setText(KBAMUtils.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getMtd()));
             } else {
                 tviR1StateName.setVisibility(View.GONE);
 
-                tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYtd()));
-                tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQtd()));
-                tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMtd()));
+                tviTarget.setText(KBAMUtils.getRoundOffValue(customerProfile.getYtd()));
+                tviActual.setText(KBAMUtils.getRoundOffValue(customerProfile.getQtd()));
+                tviAch.setText(KBAMUtils.getRoundOffValue(customerProfile.getMtd()));
             }
         }
     }
@@ -819,9 +825,9 @@ public class WSProductFragment extends BaseFragment {
             /*tviTargetHeading.setText("YTD");
             tviActualHeading.setText("QTD");
             tviAchHeading.setText("MTD");*/
-            tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getYtd()));
-            tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getQtd()));
-            tviAch.setText(BAMUtil.getRoundOffValue(rsmProfile.getMtd()));
+            tviTarget.setText(KBAMUtils.getRoundOffValue(rsmProfile.getYtd()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(rsmProfile.getQtd()));
+            tviAch.setText(KBAMUtils.getRoundOffValue(rsmProfile.getMtd()));
             pBar.setVisibility(View.GONE);
         } else if (spPos == 2) {
             cviProductHeading.setVisibility(View.VISIBLE);
@@ -846,9 +852,9 @@ public class WSProductFragment extends BaseFragment {
             /*tviTargetHeading.setText("YTD");
             tviActualHeading.setText("QTD");
             tviAchHeading.setText("MTD");*/
-            tviTarget.setText(BAMUtil.getRoundOffValue(spProfile.getYtd()));
-            tviActual.setText(BAMUtil.getRoundOffValue(spProfile.getQtd()));
-            tviAch.setText(BAMUtil.getRoundOffValue(spProfile.getMtd()));
+            tviTarget.setText(KBAMUtils.getRoundOffValue(spProfile.getYtd()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(spProfile.getQtd()));
+            tviAch.setText(KBAMUtils.getRoundOffValue(spProfile.getMtd()));
             pBar.setVisibility(View.GONE);
         } else if (cPos == 2) {
             cviProductHeading.setVisibility(View.VISIBLE);
@@ -878,15 +884,15 @@ public class WSProductFragment extends BaseFragment {
                 tviR2StateName.setVisibility(View.VISIBLE);
                 tviR2StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
 
-                tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getYtd()));
-                tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getQtd()));
-                tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getMtd()));
+                tviTarget.setText(KBAMUtils.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getYtd()));
+                tviActual.setText(KBAMUtils.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getQtd()));
+                tviAch.setText(KBAMUtils.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getMtd()));
             } else {
                 tviR2StateName.setVisibility(View.GONE);
 
-                tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYtd()));
-                tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQtd()));
-                tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMtd()));
+                tviTarget.setText(KBAMUtils.getRoundOffValue(customerProfile.getYtd()));
+                tviActual.setText(KBAMUtils.getRoundOffValue(customerProfile.getQtd()));
+                tviAch.setText(KBAMUtils.getRoundOffValue(customerProfile.getMtd()));
             }
             /*if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 tviR2StateName.setVisibility(View.VISIBLE);
@@ -897,9 +903,9 @@ public class WSProductFragment extends BaseFragment {
             tviTargetHeading.setText("YTD");
             tviActualHeading.setText("QTD");
             tviAchHeading.setText("MTD");
-            tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
-            tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
-            tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
+            tviTarget.setText(KBAMUtils.getRoundOffValue(customerProfile.getYTD()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(customerProfile.getQTD()));
+            tviAch.setText(KBAMUtils.getRoundOffValue(customerProfile.getMTD()));
             pBar.setVisibility(View.GONE);*/
         }
         if (rsmPos == 1) {
@@ -941,9 +947,9 @@ public class WSProductFragment extends BaseFragment {
             /*tviTargetHeading.setText("YTD");
             tviActualHeading.setText("QTD");
             tviAchHeading.setText("MTD");*/
-            tviTarget.setText(BAMUtil.getRoundOffValue(rsmProfile.getYtd()));
-            tviActual.setText(BAMUtil.getRoundOffValue(rsmProfile.getQtd()));
-            tviAch.setText(BAMUtil.getRoundOffValue(rsmProfile.getMtd()));
+            tviTarget.setText(KBAMUtils.getRoundOffValue(rsmProfile.getYtd()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(rsmProfile.getQtd()));
+            tviAch.setText(KBAMUtils.getRoundOffValue(rsmProfile.getMtd()));
             pBar.setVisibility(View.GONE);
         } else if (spPos == 4) {
             cviProductHeading.setVisibility(View.VISIBLE);
@@ -968,9 +974,9 @@ public class WSProductFragment extends BaseFragment {
             /*tviTargetHeading.setText("YTD");
             tviActualHeading.setText("QTD");
             tviAchHeading.setText("MTD");*/
-            tviTarget.setText(BAMUtil.getRoundOffValue(spProfile.getYtd()));
-            tviActual.setText(BAMUtil.getRoundOffValue(spProfile.getQtd()));
-            tviAch.setText(BAMUtil.getRoundOffValue(spProfile.getMtd()));
+            tviTarget.setText(KBAMUtils.getRoundOffValue(spProfile.getYtd()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(spProfile.getQtd()));
+            tviAch.setText(KBAMUtils.getRoundOffValue(spProfile.getMtd()));
             pBar.setVisibility(View.GONE);
         } else if (cPos == 4) {
             cviProductHeading.setVisibility(View.VISIBLE);
@@ -1001,15 +1007,15 @@ public class WSProductFragment extends BaseFragment {
                 tviR3StateName.setVisibility(View.VISIBLE);
                 tviR3StateName.setText(customerProfile.getStateCodeWise().get(0).getStateCode());
 
-                tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getYtd()));
-                tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getQtd()));
-                tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getMtd()));
+                tviTarget.setText(KBAMUtils.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getYtd()));
+                tviActual.setText(KBAMUtils.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getQtd()));
+                tviAch.setText(KBAMUtils.getRoundOffValue(customerProfile.getStateCodeWise().get(0).getMtd()));
             } else {
                 tviR3StateName.setVisibility(View.GONE);
 
-                tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYtd()));
-                tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQtd()));
-                tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMtd()));
+                tviTarget.setText(KBAMUtils.getRoundOffValue(customerProfile.getYtd()));
+                tviActual.setText(KBAMUtils.getRoundOffValue(customerProfile.getQtd()));
+                tviAch.setText(KBAMUtils.getRoundOffValue(customerProfile.getMtd()));
             }
             /*if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
                 iviR1Close.setVisibility(View.VISIBLE);
@@ -1021,9 +1027,9 @@ public class WSProductFragment extends BaseFragment {
             tviTargetHeading.setText("YTD");
             tviActualHeading.setText("QTD");
             tviAchHeading.setText("MTD");
-            tviTarget.setText(BAMUtil.getRoundOffValue(customerProfile.getYTD()));
-            tviActual.setText(BAMUtil.getRoundOffValue(customerProfile.getQTD()));
-            tviAch.setText(BAMUtil.getRoundOffValue(customerProfile.getMTD()));
+            tviTarget.setText(KBAMUtils.getRoundOffValue(customerProfile.getYTD()));
+            tviActual.setText(KBAMUtils.getRoundOffValue(customerProfile.getQTD()));
+            tviAch.setText(KBAMUtils.getRoundOffValue(customerProfile.getMTD()));
             pBar.setVisibility(View.GONE);*/
         }
 

@@ -280,8 +280,9 @@ public interface BAMConstant {
         int CUSTOMER_MENU_SELECT = 210;
         int SP_MENU_SELECT = 211;
         int PRODUCT_MENU_SELECT = 212;
+        int SO_MENU_SELECT = 213;
 
-        int WS_RSM_SEARCH = 213;
+        //int WS_RSM_SEARCH = 213;
         int WS_SP_SEARCH = 214;
         int WS_CUSTOMER_SEARCH = 215;
         int WS_PRODUCT_SEARCH = 216;

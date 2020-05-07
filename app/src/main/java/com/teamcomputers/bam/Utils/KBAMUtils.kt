@@ -44,111 +44,116 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class KBAMUtils : KBAMApplication() {
-    private val TAG = BAMUtil::class.java.name
-    private val FILE_NAME = "draw_state.ser"
+    companion object {
+        val TAG = BAMUtil::class.java.name
+        val FILE_NAME = "draw_state.ser"
+        @JvmStatic
+        fun fromJson(responseString: String, listType: Type): Any? {
+            try {
+                val gson = Gson()
+                return gson.fromJson<Any>(responseString, listType)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error In Converting JsonToModel", e)
+            }
 
-    fun fromJson(responseString: String, listType: Type): Any? {
-        try {
-            val gson = Gson()
-            return gson.fromJson<Any>(responseString, listType)
-        } catch (e: Exception) {
-            Log.e(TAG, "Error In Converting JsonToModel", e)
+            return null
         }
 
-        return null
-    }
+        fun toJson(`object`: Any): String? {
+            try {
+                val gson = Gson()
+                return gson.toJson(`object`)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error In Converting ModelToJson", e)
+            }
 
-    fun toJson(`object`: Any): String? {
-        try {
-            val gson = Gson()
-            return gson.toJson(`object`)
-        } catch (e: Exception) {
-            Log.e(TAG, "Error In Converting ModelToJson", e)
+            return null
         }
 
-        return null
-    }
-
-    fun hideSoftKeyboard(activity: Activity) {
-        val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (activity.currentFocus != null) {
-            inputMethodManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
+        @JvmStatic
+        fun hideSoftKeyboard(activity: Activity) {
+            val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (activity.currentFocus != null) {
+                inputMethodManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
+            }
         }
-    }
 
-    fun showSoftKeyboard(activity: Activity) {
-        val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (activity.currentFocus != null) {
-            inputMethodManager.showSoftInput(activity.currentFocus, InputMethodManager.SHOW_FORCED)
+        fun showSoftKeyboard(activity: Activity) {
+            val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (activity.currentFocus != null) {
+                inputMethodManager.showSoftInput(activity.currentFocus, InputMethodManager.SHOW_FORCED)
+            }
         }
-    }
 
-    fun generateRandomInteger(min: Int, max: Int): Int {
-        val rand = SecureRandom()
-        rand.setSeed(Date().time)
-        return rand.nextInt(max - min + 1) + min
-    }
+        fun generateRandomInteger(min: Int, max: Int): Int {
+            val rand = SecureRandom()
+            rand.setSeed(Date().time)
+            return rand.nextInt(max - min + 1) + min
+        }
 
-    /*public static boolean isValidEmail(CharSequence email) {
+        /*public static boolean isValidEmail(CharSequence email) {
         return email != null && EMAIL_VALIDATION_PATTERN.matcher(email).matches();
     }*/
 
-    fun isConnected(context: Context): Boolean {
-        val connMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connMgr.activeNetworkInfo
-        return networkInfo != null && networkInfo!!.isConnected
-    }
-
-    fun isWifiConnected(context: Context): Boolean {
-        return isConnected(context, ConnectivityManager.TYPE_WIFI)
-    }
-
-    fun isMobileConnected(context: Context): Boolean {
-        return isConnected(context, ConnectivityManager.TYPE_MOBILE)
-    }
-
-    private fun isConnected(context: Context, type: Int): Boolean {
-        val connMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            val networkInfo = connMgr.getNetworkInfo(type)
-            return networkInfo != null && networkInfo.isConnected
-        } else {
-            return isConnected(connMgr, type)
+        fun isConnected(context: Context): Boolean {
+            val connMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = connMgr.activeNetworkInfo
+            return networkInfo != null && networkInfo!!.isConnected
         }
-    }
 
-    fun getStringInNoFormat(amount: Double?): String {
-        val value = Math.round(amount!!).toInt()
-        return value.toString()
-    }
+        fun isWifiConnected(context: Context): Boolean {
+            return isConnected(context, ConnectivityManager.TYPE_WIFI)
+        }
 
-    fun getRoundOffValue(amount: Double): String {
-        var amount = amount
-        amount = amount / 100000
-        val df = DecimalFormat("0.00")
-        df.roundingMode = RoundingMode.UP
-        return df.format(amount)
-    }
+        fun isMobileConnected(context: Context): Boolean {
+            return isConnected(context, ConnectivityManager.TYPE_MOBILE)
+        }
 
-    fun replaceDataResponse(response: String): String {
-        return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}")
-    }
-
-    fun replaceWSDataResponse(response: String): String {
-        return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}").replace("]\", \"Filter\": \"", "], \"Filter\": ").replace("\"}\"", "\"}")
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun isConnected(connMgr: ConnectivityManager, type: Int): Boolean {
-        val networks = connMgr.allNetworks
-        var networkInfo: NetworkInfo?
-        for (mNetwork in networks) {
-            networkInfo = connMgr.getNetworkInfo(mNetwork)
-            if (networkInfo != null && networkInfo.type == type && networkInfo.isConnected) {
-                return true
+        private fun isConnected(context: Context, type: Int): Boolean {
+            val connMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                val networkInfo = connMgr.getNetworkInfo(type)
+                return networkInfo != null && networkInfo.isConnected
+            } else {
+                return isConnected(connMgr, type)
             }
         }
-        return false
+
+        fun getStringInNoFormat(amount: Double?): String {
+            val value = Math.round(amount!!).toInt()
+            return value.toString()
+        }
+
+        @JvmStatic
+        fun getRoundOffValue(amount: Double): String {
+            var amount = amount
+            amount = amount / 100000
+            val df = DecimalFormat("0.00")
+            df.roundingMode = RoundingMode.UP
+            return df.format(amount)
+        }
+
+        fun replaceDataResponse(response: String): String {
+            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}")
+        }
+
+        @JvmStatic
+        fun replaceWSDataResponse(response: String): String {
+            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}").replace("]\", \"Filter\": \"", "], \"Filter\": ").replace("\"}\"", "\"}")
+        }
+
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        private fun isConnected(connMgr: ConnectivityManager, type: Int): Boolean {
+            val networks = connMgr.allNetworks
+            var networkInfo: NetworkInfo?
+            for (mNetwork in networks) {
+                networkInfo = connMgr.getNetworkInfo(mNetwork)
+                if (networkInfo != null && networkInfo.type == type && networkInfo.isConnected) {
+                    return true
+                }
+            }
+            return false
+        }
     }
 
     /*public static String getFormattedDate(String dateFormat, Date date) {
@@ -321,7 +326,7 @@ class KBAMUtils : KBAMApplication() {
         return java.lang.Float.parseFloat(versionName)
     }
 
-    fun getVersionCode(): Float{
+    fun getVersionCode(): Float {
         val manager = this.packageManager
         val info = manager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
         /*toast("PackageName = " + info.packageName + "\nVersionCode = "

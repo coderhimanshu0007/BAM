@@ -18,27 +18,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.OpenSalesOrder.OSOCustomerAdapter;
+import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOCustomerAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
-import com.teamcomputers.bam.Models.TotalOutstanding.TOCustomerModel;
 import com.teamcomputers.bam.Models.TotalSalesOrder.OSOCustomerModel;
 import com.teamcomputers.bam.Models.TotalSalesOrder.OSOInvoiceModel;
-import com.teamcomputers.bam.Models.TotalSalesOrder.OSORSMSalesModel;
+import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel;
+import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSORSMModel;
+import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOSOModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.SalesReceivable.OpenSalesOrderRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderAprRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.Utils.KBAMUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -63,9 +63,6 @@ public class OSOCustomerFragment extends BaseFragment {
     private Unbinder unbinder;
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
-
-    OSORSMSalesModel rsmProfile, salesProfile;
-    OSOInvoiceModel invoiceProfile;
 
     boolean fromRSM, fromSP, fromInvoice, search = false;
     String toolbarTitle = "";
@@ -100,10 +97,16 @@ public class OSOCustomerFragment extends BaseFragment {
     ImageView iviR1Close;
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
-    private OSOCustomerAdapter adapter;
+    private KPSOCustomerAdapter adapter;
     private int position = 0, rsmPos = 0, spPos = 0, cPos = 0, iPos = 0;
 
-    List<OSOCustomerModel> model = new ArrayList<>();
+    KPSOCustomerModel customerData;
+    KPSOCustomerModel.Datum selectedCustomerData;
+    List<KPSOCustomerModel.Datum> customerDataList = new ArrayList<>();
+    KPSOCustomerModel.Filter customerFilterData;
+
+    KPSORSMModel.Datum rsmProfile, salesProfile;
+    KPSOSOModel.Datum invoiceProfile;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -191,9 +194,13 @@ public class OSOCustomerFragment extends BaseFragment {
                     case Events.GET_CUSTOMER_OSO_LIST_SUCCESSFULL:
                         dismissProgress();
                         try {
-                            JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
+                            /*JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
                             OSOCustomerModel[] data = (OSOCustomerModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), OSOCustomerModel[].class);
-                            model = new ArrayList<OSOCustomerModel>(Arrays.asList(data));
+                            model = new ArrayList<OSOCustomerModel>(Arrays.asList(data));*/
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
+                            customerData = (KPSOCustomerModel) BAMUtil.fromJson(String.valueOf(jsonObject), KPSOCustomerModel.class);
+                            customerDataList = customerData.getData();
+                            customerFilterData = customerData.getFilter();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -207,7 +214,7 @@ public class OSOCustomerFragment extends BaseFragment {
                     case ClickEvents.ACCOUNT_ITEM:
                         int position = (int) eventObject.getObject();
                         Bundle acctDataBundle = new Bundle();
-                        acctDataBundle.putParcelable(CustomerFragment.ACCT_PROFILE, model.get(position));
+                        acctDataBundle.putParcelable(CustomerFragment.ACCT_PROFILE, customerDataList.get(position));
                         acctDataBundle.putInt(CustomerFragment.ACCT_POSITION, position);
                         acctDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.OSO_CUSTOMER_FRAGMENT, acctDataBundle);
@@ -218,7 +225,7 @@ public class OSOCustomerFragment extends BaseFragment {
                         break;
                     case ClickEvents.CUSTOMER_SELECT:
                         if (!fromInvoice) {
-                            OSOCustomerModel customerList = (OSOCustomerModel) eventObject.getObject();
+                            selectedCustomerData = (KPSOCustomerModel.Datum) eventObject.getObject();
                             Bundle customerBundle = new Bundle();
                             customerBundle.putString(OSOInvoiceFragment.USER_ID, userId);
                             customerBundle.putString(OSOInvoiceFragment.USER_LEVEL, level);
@@ -232,10 +239,10 @@ public class OSOCustomerFragment extends BaseFragment {
                             customerBundle.putBoolean(OSOInvoiceFragment.FROM_SP, fromSP);
                             customerBundle.putBoolean(OSOInvoiceFragment.FROM_CUSTOMER, true);
 
-                            customerBundle.putParcelable(OSOInvoiceFragment.CUSTOMER_PROFILE, customerList);
+                            customerBundle.putParcelable(OSOInvoiceFragment.CUSTOMER_PROFILE, selectedCustomerData);
                             customerBundle.putParcelable(OSOInvoiceFragment.RSM_PROFILE, rsmProfile);
                             customerBundle.putParcelable(OSOInvoiceFragment.SP_PROFILE, salesProfile);
-                            if(null!=customerList.getStateCodeWise()) {
+                            if (null != selectedCustomerData.getStateCodeWise()) {
                                 customerBundle.putInt(OSOInvoiceFragment.STATE_CODE, 1);
                             } else {
                                 customerBundle.putInt(OSOInvoiceFragment.STATE_CODE, 0);
@@ -244,36 +251,36 @@ public class OSOCustomerFragment extends BaseFragment {
                             dashboardActivityContext.replaceFragment(Fragments.OSO_INVOICE_FRAGMENT, customerBundle);
                         }
                         break;
-                    case ClickEvents.STATE_ITEM:
-                        if (!fromInvoice) {
-                            Bundle productStateBundle = new Bundle();
-                            OSOCustomerModel salesCustomerModel = (OSOCustomerModel) eventObject.getObject();
-                            productStateBundle.putString(OSOInvoiceFragment.USER_ID, userId);
-                            productStateBundle.putString(OSOInvoiceFragment.USER_LEVEL, level);
+                    case ClickEvents.CUSTOMER_ITEM:
+                        //if (!fromInvoice) {
+                        Bundle productStateBundle = new Bundle();
+                        selectedCustomerData = (KPSOCustomerModel.Datum) eventObject.getObject();
+                        productStateBundle.putString(OSOInvoiceFragment.USER_ID, userId);
+                        productStateBundle.putString(OSOInvoiceFragment.USER_LEVEL, level);
 
-                            cPos = rsmPos + spPos + 1;
-                            productStateBundle.putInt(OSOInvoiceFragment.RSM_POS, rsmPos);
-                            productStateBundle.putInt(OSOInvoiceFragment.SP_POS, spPos);
-                            productStateBundle.putInt(OSOInvoiceFragment.CUSTOMER_POS, cPos);
+                        cPos = rsmPos + spPos + 1;
+                        productStateBundle.putInt(OSOInvoiceFragment.RSM_POS, rsmPos);
+                        productStateBundle.putInt(OSOInvoiceFragment.SP_POS, spPos);
+                        productStateBundle.putInt(OSOInvoiceFragment.CUSTOMER_POS, cPos);
 
-                            productStateBundle.putBoolean(OSOInvoiceFragment.FROM_RSM, fromRSM);
-                            productStateBundle.putBoolean(OSOInvoiceFragment.FROM_SP, fromSP);
-                            productStateBundle.putBoolean(OSOInvoiceFragment.FROM_CUSTOMER, true);
+                        productStateBundle.putBoolean(OSOInvoiceFragment.FROM_RSM, fromRSM);
+                        productStateBundle.putBoolean(OSOInvoiceFragment.FROM_SP, fromSP);
+                        productStateBundle.putBoolean(OSOInvoiceFragment.FROM_CUSTOMER, true);
 
-                            productStateBundle.putParcelable(OSOInvoiceFragment.CUSTOMER_PROFILE, salesCustomerModel);
-                            productStateBundle.putParcelable(OSOInvoiceFragment.RSM_PROFILE, rsmProfile);
-                            productStateBundle.putParcelable(OSOInvoiceFragment.SP_PROFILE, salesProfile);
-                            if(null!=salesCustomerModel.getStateCodeWise()) {
-                                productStateBundle.putInt(OSOInvoiceFragment.STATE_CODE, 1);
-                            } else {
-                                productStateBundle.putInt(OSOInvoiceFragment.STATE_CODE, 0);
-                            }
-                            productStateBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-                            dashboardActivityContext.replaceFragment(Fragments.OSO_INVOICE_FRAGMENT, productStateBundle);
+                        productStateBundle.putParcelable(OSOInvoiceFragment.CUSTOMER_PROFILE, selectedCustomerData);
+                        productStateBundle.putParcelable(OSOInvoiceFragment.RSM_PROFILE, rsmProfile);
+                        productStateBundle.putParcelable(OSOInvoiceFragment.SP_PROFILE, salesProfile);
+                        if (null != selectedCustomerData.getStateCodeWise()) {
+                            productStateBundle.putInt(OSOInvoiceFragment.STATE_CODE, 1);
+                        } else {
+                            productStateBundle.putInt(OSOInvoiceFragment.STATE_CODE, 0);
                         }
+                        productStateBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        dashboardActivityContext.replaceFragment(Fragments.OSO_INVOICE_FRAGMENT, productStateBundle);
+                        //}
                         break;
                     case ClickEvents.RSM_MENU_SELECT:
-                        OSOCustomerModel selectedCustomerList = (OSOCustomerModel) eventObject.getObject();
+                        selectedCustomerData = (KPSOCustomerModel.Datum) eventObject.getObject();
                         Bundle rsmBundle = new Bundle();
                         rsmBundle.putString(OSORSMFragment.USER_ID, userId);
                         rsmBundle.putString(OSORSMFragment.USER_LEVEL, level);
@@ -287,10 +294,10 @@ public class OSOCustomerFragment extends BaseFragment {
                         rsmBundle.putBoolean(OSORSMFragment.FROM_SP, fromSP);
                         rsmBundle.putBoolean(OSORSMFragment.FROM_CUSTOMER, true);
 
-                        rsmBundle.putParcelable(OSORSMFragment.CUSTOMER_PROFILE, selectedCustomerList);
+                        rsmBundle.putParcelable(OSORSMFragment.CUSTOMER_PROFILE, selectedCustomerData);
                         rsmBundle.putParcelable(OSORSMFragment.INVOICE_PROFILE, invoiceProfile);
                         rsmBundle.putParcelable(OSORSMFragment.SP_PROFILE, salesProfile);
-                        if(null!=selectedCustomerList.getStateCodeWise()) {
+                        if (null != selectedCustomerData.getStateCodeWise()) {
                             rsmBundle.putInt(OSORSMFragment.STATE_CODE, 1);
                         } else {
                             rsmBundle.putInt(OSORSMFragment.STATE_CODE, 0);
@@ -299,7 +306,7 @@ public class OSOCustomerFragment extends BaseFragment {
                         dashboardActivityContext.replaceFragment(Fragments.OSO_RSM_FRAGMENT, rsmBundle);
                         break;
                     case ClickEvents.SP_MENU_SELECT:
-                        OSOCustomerModel customerList = (OSOCustomerModel) eventObject.getObject();
+                        selectedCustomerData = (KPSOCustomerModel.Datum) eventObject.getObject();
                         Bundle customerBundle = new Bundle();
                         customerBundle.putString(OSOSalesPersonFragment.USER_ID, userId);
                         customerBundle.putString(OSOSalesPersonFragment.USER_LEVEL, level);
@@ -313,10 +320,10 @@ public class OSOCustomerFragment extends BaseFragment {
                         customerBundle.putBoolean(OSOSalesPersonFragment.FROM_INVOICE, fromInvoice);
                         customerBundle.putBoolean(OSOSalesPersonFragment.FROM_CUSTOMER, true);
 
-                        customerBundle.putParcelable(OSOSalesPersonFragment.CUSTOMER_PROFILE, customerList);
+                        customerBundle.putParcelable(OSOSalesPersonFragment.CUSTOMER_PROFILE, selectedCustomerData);
                         customerBundle.putParcelable(OSOSalesPersonFragment.RSM_PROFILE, rsmProfile);
                         customerBundle.putParcelable(OSOSalesPersonFragment.INVOICE_PROFILE, invoiceProfile);
-                        if(null!=customerList.getStateCodeWise()) {
+                        if (null != selectedCustomerData.getStateCodeWise()) {
                             customerBundle.putInt(OSOSalesPersonFragment.STATE_CODE, 1);
                         } else {
                             customerBundle.putInt(OSOSalesPersonFragment.STATE_CODE, 0);
@@ -342,7 +349,7 @@ public class OSOCustomerFragment extends BaseFragment {
     }
 
     @OnClick(R.id.iviSearch)
-    public void Search(){
+    public void Search() {
         if (!search) {
             txtSearch.setVisibility(View.VISIBLE);
             search = true;
@@ -365,7 +372,8 @@ public class OSOCustomerFragment extends BaseFragment {
         iPos = 0;
         cviSPHeading.setVisibility(View.GONE);
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Customer", "", "", "", "", "", ""));
+        //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Customer", "", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Customer", "", "", "", "", "", ""));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -487,13 +495,14 @@ public class OSOCustomerFragment extends BaseFragment {
         }
         String rsm = "", sales = "", invoiceNo = "";
         if (null != rsmProfile)
-            rsm = rsmProfile.getTMC();
+            rsm = rsmProfile.getTmc();
         if (null != salesProfile)
-            sales = salesProfile.getTMC();
+            sales = salesProfile.getTmc();
         if (null != invoiceProfile)
-            invoiceNo = invoiceProfile.getInvoiceNo();
+            invoiceNo = invoiceProfile.getSoNumber();
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Customer", rsm, sales, "", "", invoiceNo, ""));
+        //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Customer", rsm, sales, "", "", invoiceNo, ""));
+        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Customer", rsm, sales, "", "", invoiceNo, ""));
 
     }
 
@@ -514,7 +523,7 @@ public class OSOCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(rsmProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getSOAmount()));
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getSoAmount()));
         } else if (iPos == 1) {
             position = invoiceProfile.getPosition();
             if (position == 0) {
@@ -528,8 +537,8 @@ public class OSOCustomerFragment extends BaseFragment {
             } else if (position % 2 == 1) {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
-            tviR1Name.setText(invoiceProfile.getInvoiceNo());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
+            tviR1Name.setText(invoiceProfile.getSoNumber());
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSoAmount()));
         } else if (spPos == 1) {
             position = salesProfile.getPosition();
             if (position == 0) {
@@ -544,7 +553,7 @@ public class OSOCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(salesProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSOAmount()));
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSoAmount()));
         }
     }
 
@@ -564,7 +573,7 @@ public class OSOCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(rsmProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getSOAmount()));
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getSoAmount()));
         } else if (spPos == 2) {
             position = salesProfile.getPosition();
             if (position == 0) {
@@ -579,7 +588,7 @@ public class OSOCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(salesProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSOAmount()));
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSoAmount()));
         } else if (iPos == 2) {
             position = invoiceProfile.getPosition();
             if (position == 0) {
@@ -593,8 +602,8 @@ public class OSOCustomerFragment extends BaseFragment {
             } else if (position % 2 == 1) {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
-            tviR2Name.setText(invoiceProfile.getInvoiceNo());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
+            tviR2Name.setText(invoiceProfile.getSoNumber());
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSoAmount()));
         }
         if (rsmPos == 1) {
             tviR1Name.setText(rsmProfile.getName());
@@ -603,7 +612,7 @@ public class OSOCustomerFragment extends BaseFragment {
             tviR1Name.setText(salesProfile.getName());
             //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSOAmount()));
         } else if (iPos == 1) {
-            tviR1Name.setText(invoiceProfile.getInvoiceNo());
+            tviR1Name.setText(invoiceProfile.getSoNumber());
             //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
         }
     }
@@ -637,7 +646,7 @@ public class OSOCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(salesProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSOAmount()));
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSoAmount()));
         } else if (iPos == 4) {
             position = invoiceProfile.getPosition();
             if (position == 0) {
@@ -651,19 +660,19 @@ public class OSOCustomerFragment extends BaseFragment {
             } else if (position % 2 == 1) {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
-            tviR3Name.setText(invoiceProfile.getInvoiceNo());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
+            tviR3Name.setText(invoiceProfile.getSoNumber());
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSoAmount()));
         }
 
         if (rsmPos == 2) {
             tviR2Name.setText(rsmProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getSOAmount()));
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getSoAmount()));
         } else if (spPos == 2) {
             tviR2Name.setText(salesProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSOAmount()));
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSoAmount()));
         } else if (iPos == 2) {
-            tviR2Name.setText(invoiceProfile.getInvoiceNo());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
+            tviR2Name.setText(invoiceProfile.getSoNumber());
+            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSoAmount()));
         }
         if (rsmPos == 1) {
             tviR1Name.setText(rsmProfile.getName());
@@ -672,13 +681,14 @@ public class OSOCustomerFragment extends BaseFragment {
             tviR1Name.setText(salesProfile.getName());
             //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSOAmount()));
         } else if (iPos == 1) {
-            tviR1Name.setText(invoiceProfile.getInvoiceNo());
+            tviR1Name.setText(invoiceProfile.getSoNumber());
             //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
         }
     }
 
     private void initData() {
-        adapter = new OSOCustomerAdapter(dashboardActivityContext, userId, level, model, fromRSM, fromSP, fromInvoice);
+        //adapter = new OSOCustomerAdapter(dashboardActivityContext, userId, level, model, fromRSM, fromSP, fromInvoice);
+        adapter = new KPSOCustomerAdapter(dashboardActivityContext, level, customerDataList, fromRSM, fromSP, fromInvoice);
         rviRSM.setAdapter(adapter);
     }
 }

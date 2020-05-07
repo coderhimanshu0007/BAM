@@ -267,6 +267,11 @@ public class WSSalesPersonFragment extends BaseFragment {
                             JSONObject jsonObject = new JSONObject(BAMUtil.replaceWSDataResponse(eventObject.getObject().toString()));
                             spData = (KSalesRSMModel) BAMUtil.fromJson(String.valueOf(jsonObject), KSalesRSMModel.class);
                             spDataList = spData.getData();
+                            for(int i = 0; i<spDataList.size();i++){
+                                if(spDataList.get(i).getName().equals("")){
+                                    spDataList.remove(i);
+                                }
+                            }
                             spFilterData = spData.getFilter();
                             tviTarget.setText(BAMUtil.getRoundOffValue(spFilterData.getTargetYTD()));
                             tviActual.setText(BAMUtil.getRoundOffValue(spFilterData.getYtd()));

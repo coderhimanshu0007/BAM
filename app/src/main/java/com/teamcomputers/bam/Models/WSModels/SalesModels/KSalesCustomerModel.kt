@@ -114,7 +114,7 @@ class KSalesCustomerModel {
         }
 
         override fun describeContents(): Int {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            return 0
         }
 
         @SerializedName("UserId")

@@ -33,6 +33,7 @@ import com.teamcomputers.bam.Models.TotalOutstanding.TORSMSalesModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.SalesReceivable.OutstandingRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesAprRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 
@@ -369,7 +370,8 @@ public class TOSCustomerFragment extends BaseFragment {
         pPos = 0;
         cviSPHeading.setVisibility(View.GONE);
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Customer", "", "", "", "", ""));
+        //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Customer", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Customer", "", "", "", "", ""));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -497,7 +499,8 @@ public class TOSCustomerFragment extends BaseFragment {
         if (null != productProfile)
             product = productProfile.getCode();
         showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Customer", rsm, sales, "", "", product));
+        //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Customer", rsm, sales, "", "", product));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Customer", rsm, sales, "", "", product));
 
     }
 
