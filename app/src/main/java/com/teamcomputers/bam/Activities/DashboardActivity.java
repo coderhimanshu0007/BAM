@@ -463,7 +463,7 @@ public class DashboardActivity extends BaseActivity {
         notificationManager.cancelAll();
         SharedPreferencesController.getInstance(BAMApplication.getInstance()).clear();
         ActivityCompat.finishAffinity(DashboardActivity.this);
-        Intent intent = new Intent(DashboardActivity.this, SplashActivity.class);
+        Intent intent = new Intent(DashboardActivity.this, KSplashActivity.class);
         intent.putExtra(Constants.FINISH, true);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

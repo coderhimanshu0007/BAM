@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.*
 import com.teamcomputers.bam.Activities.DashboardActivity
 import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOCustomerAdapter
-import com.teamcomputers.bam.Fragments.BaseFragment
+import com.teamcomputers.bam.Fragments.KBaseFragment
 import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment
 import com.teamcomputers.bam.Interface.KBAMConstant
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel
@@ -31,7 +31,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
-class KPSOProductFragment : BaseFragment() {
+class KPSOProductFragment : KBaseFragment() {
     val USER_ID = "USER_ID"
     val USER_LEVEL = "USER_LEVEL"
     val RSM_PROFILE = "RSM_PROFILE"

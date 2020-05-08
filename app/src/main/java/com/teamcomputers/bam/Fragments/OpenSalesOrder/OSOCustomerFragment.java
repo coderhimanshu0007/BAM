@@ -21,15 +21,12 @@ import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOCustomerAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
-import com.teamcomputers.bam.Models.TotalSalesOrder.OSOCustomerModel;
-import com.teamcomputers.bam.Models.TotalSalesOrder.OSOInvoiceModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSORSMModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOSOModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderAprRequester;
-import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
 
@@ -194,13 +191,14 @@ public class OSOCustomerFragment extends BaseFragment {
                     case Events.GET_CUSTOMER_OSO_LIST_SUCCESSFULL:
                         dismissProgress();
                         try {
-                            /*JSONArray jsonArray = new JSONArray(BAMUtil.replaceDataResponse(eventObject.getObject().toString()));
-                            OSOCustomerModel[] data = (OSOCustomerModel[]) BAMUtil.fromJson(String.valueOf(jsonArray), OSOCustomerModel[].class);
+                            /*JSONArray jsonArray = new JSONArray(KBAMUtils.replaceDataResponse(eventObject.getObject().toString()));
+                            OSOCustomerModel[] data = (OSOCustomerModel[]) KBAMUtils.fromJson(String.valueOf(jsonArray), OSOCustomerModel[].class);
                             model = new ArrayList<OSOCustomerModel>(Arrays.asList(data));*/
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
-                            customerData = (KPSOCustomerModel) BAMUtil.fromJson(String.valueOf(jsonObject), KPSOCustomerModel.class);
+                            customerData = (KPSOCustomerModel) KBAMUtils.fromJson(String.valueOf(jsonObject), KPSOCustomerModel.class);
                             customerDataList = customerData.getData();
                             customerFilterData = customerData.getFilter();
+                            tviSOAmount.setText(KBAMUtils.getRoundOffValue(customerFilterData.getSoAmount()));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -523,7 +521,7 @@ public class OSOCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(rsmProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getSoAmount()));
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getSoAmount()));
         } else if (iPos == 1) {
             position = invoiceProfile.getPosition();
             if (position == 0) {
@@ -538,7 +536,7 @@ public class OSOCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(invoiceProfile.getSoNumber());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSoAmount()));
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(invoiceProfile.getSoAmount()));
         } else if (spPos == 1) {
             position = salesProfile.getPosition();
             if (position == 0) {
@@ -553,7 +551,7 @@ public class OSOCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(salesProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSoAmount()));
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(salesProfile.getSoAmount()));
         }
     }
 
@@ -573,7 +571,7 @@ public class OSOCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(rsmProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getSoAmount()));
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getSoAmount()));
         } else if (spPos == 2) {
             position = salesProfile.getPosition();
             if (position == 0) {
@@ -588,7 +586,7 @@ public class OSOCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(salesProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSoAmount()));
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(salesProfile.getSoAmount()));
         } else if (iPos == 2) {
             position = invoiceProfile.getPosition();
             if (position == 0) {
@@ -603,17 +601,17 @@ public class OSOCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(invoiceProfile.getSoNumber());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSoAmount()));
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(invoiceProfile.getSoAmount()));
         }
         if (rsmPos == 1) {
             tviR1Name.setText(rsmProfile.getName());
-            //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getSOAmount()));
+            //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getSOAmount()));
         } else if (spPos == 1) {
             tviR1Name.setText(salesProfile.getName());
-            //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSOAmount()));
+            //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(salesProfile.getSOAmount()));
         } else if (iPos == 1) {
             tviR1Name.setText(invoiceProfile.getSoNumber());
-            //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
+            //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(invoiceProfile.getSOAmount()));
         }
     }
 
@@ -646,7 +644,7 @@ public class OSOCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(salesProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSoAmount()));
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(salesProfile.getSoAmount()));
         } else if (iPos == 4) {
             position = invoiceProfile.getPosition();
             if (position == 0) {
@@ -661,28 +659,28 @@ public class OSOCustomerFragment extends BaseFragment {
                 llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(invoiceProfile.getSoNumber());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSoAmount()));
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(invoiceProfile.getSoAmount()));
         }
 
         if (rsmPos == 2) {
             tviR2Name.setText(rsmProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getSoAmount()));
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getSoAmount()));
         } else if (spPos == 2) {
             tviR2Name.setText(salesProfile.getName());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSoAmount()));
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(salesProfile.getSoAmount()));
         } else if (iPos == 2) {
             tviR2Name.setText(invoiceProfile.getSoNumber());
-            tviSOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSoAmount()));
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(invoiceProfile.getSoAmount()));
         }
         if (rsmPos == 1) {
             tviR1Name.setText(rsmProfile.getName());
-            //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getSOAmount()));
+            //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getSOAmount()));
         } else if (spPos == 1) {
             tviR1Name.setText(salesProfile.getName());
-            //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(salesProfile.getSOAmount()));
+            //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(salesProfile.getSOAmount()));
         } else if (iPos == 1) {
             tviR1Name.setText(invoiceProfile.getSoNumber());
-            //tviR1SOAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getSOAmount()));
+            //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(invoiceProfile.getSOAmount()));
         }
     }
 
