@@ -117,6 +117,8 @@ public class WSSalesPersonFragment extends BaseFragment {
     TextView tviAch;
     @BindView(R.id.pBar)
     ProgressBar pBar;
+    @BindView(R.id.tviPSO)
+    TextView tviPSO;
     @BindView(R.id.viYTD)
     View viYTD;
     @BindView(R.id.viQTD)
@@ -267,8 +269,8 @@ public class WSSalesPersonFragment extends BaseFragment {
                             JSONObject jsonObject = new JSONObject(BAMUtil.replaceWSDataResponse(eventObject.getObject().toString()));
                             spData = (KSalesRSMModel) BAMUtil.fromJson(String.valueOf(jsonObject), KSalesRSMModel.class);
                             spDataList = spData.getData();
-                            for(int i = 0; i<spDataList.size();i++){
-                                if(spDataList.get(i).getName().equals("")){
+                            for (int i = 0; i < spDataList.size(); i++) {
+                                if (spDataList.get(i).getName().equals("")) {
                                     spDataList.remove(i);
                                 }
                             }
@@ -278,6 +280,7 @@ public class WSSalesPersonFragment extends BaseFragment {
                             bar = (spFilterData.getYtdPercentage()).intValue();
                             pBar.setVisibility(View.VISIBLE);
                             tviAch.setText(bar + "%");
+                            tviPSO.setText(BAMUtil.getRoundOffValue(spFilterData.getSoAmount()));
                             pBar.setProgress(bar);
                             if (bar < 50) {
                                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);

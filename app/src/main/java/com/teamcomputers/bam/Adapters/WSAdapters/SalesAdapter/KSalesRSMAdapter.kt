@@ -13,7 +13,7 @@ import com.teamcomputers.bam.Interface.BAMConstant
 import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesRSMModel
 import com.teamcomputers.bam.Models.common.EventObject
 import com.teamcomputers.bam.R
-import com.teamcomputers.bam.Utils.BAMUtil
+import com.teamcomputers.bam.Utils.KBAMUtils
 import org.greenrobot.eventbus.EventBus
 import java.util.*
 
@@ -22,10 +22,10 @@ class KSalesRSMAdapter(dashboardActivityContext: DashboardActivity, type: String
     private var dataListFiltered: List<KSalesRSMModel.Data> = data
     internal var mActivity: Activity = dashboardActivityContext
     internal var type: String = type
-    internal var level:String = level
+    internal var level: String = level
     internal var fromSP: Boolean = fromSP
-    internal var fromCustomer:Boolean = fromCustomer
-    internal var fromProduct:Boolean = fromProduct
+    internal var fromCustomer: Boolean = fromCustomer
+    internal var fromProduct: Boolean = fromProduct
 
     /*fun setItems(data: List<KSalesRSMModel.Data>) {
         this.dataListFiltered = data
@@ -71,6 +71,7 @@ class KSalesRSMAdapter(dashboardActivityContext: DashboardActivity, type: String
         internal var tviACH: TextView
         internal var pBar: ProgressBar
         internal var iviOption: ImageView
+        internal var tviSOAmount: TextView
 
         init {
             llRSMLayout = itemView.findViewById<View>(R.id.llRSMLayout) as LinearLayout
@@ -80,6 +81,7 @@ class KSalesRSMAdapter(dashboardActivityContext: DashboardActivity, type: String
             this.tviActual = itemView.findViewById<View>(R.id.tviActual) as TextView
             this.tviACH = itemView.findViewById<View>(R.id.tviACH) as TextView
             this.pBar = itemView.findViewById<View>(R.id.pBar) as ProgressBar
+            this.tviSOAmount = itemView.findViewById<View>(R.id.tviSOAmount) as TextView
         }
     }
 
@@ -106,21 +108,21 @@ class KSalesRSMAdapter(dashboardActivityContext: DashboardActivity, type: String
         var actual = ""
         var bar = 0
         if (type == "YTD") {
-            target = BAMUtil.getRoundOffValue(dataListFiltered!![position].targetYTD!!)
-            actual = BAMUtil.getRoundOffValue(dataListFiltered!![position].ytd!!)
-            bar = dataListFiltered!![position].ytdPercentage?.toInt() !!
+            target = KBAMUtils.getRoundOffValue(dataListFiltered!![position].targetYTD!!)
+            actual = KBAMUtils.getRoundOffValue(dataListFiltered!![position].ytd!!)
+            bar = dataListFiltered!![position].ytdPercentage?.toInt()!!
         } else if (type == "QTD") {
-            target = BAMUtil.getRoundOffValue(dataListFiltered!![position].targetQTD!!)
-            actual = BAMUtil.getRoundOffValue(dataListFiltered!![position].qtd!!)
-            bar = dataListFiltered!![position].qtdPercentage?.toInt() !!
+            target = KBAMUtils.getRoundOffValue(dataListFiltered!![position].targetQTD!!)
+            actual = KBAMUtils.getRoundOffValue(dataListFiltered!![position].qtd!!)
+            bar = dataListFiltered!![position].qtdPercentage?.toInt()!!
         } else if (type == "MTD") {
-            target = BAMUtil.getRoundOffValue(dataListFiltered!![position].targetMTD!!)
-            actual = BAMUtil.getRoundOffValue(dataListFiltered!![position].mtd!!)
+            target = KBAMUtils.getRoundOffValue(dataListFiltered!![position].targetMTD!!)
+            actual = KBAMUtils.getRoundOffValue(dataListFiltered!![position].mtd!!)
             bar = dataListFiltered!![position].mtdPercentage?.toInt()!!
         }
         holder.tviTarget.text = target
         holder.tviActual.text = actual
-
+        holder.tviSOAmount.text = KBAMUtils.getRoundOffValue(dataListFiltered!![position].soAmount!!)
 
         holder.tviACH.text = "$bar%"
         holder.pBar.progress = bar

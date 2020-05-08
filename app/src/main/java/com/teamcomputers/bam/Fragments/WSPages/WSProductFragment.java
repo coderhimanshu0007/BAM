@@ -113,6 +113,8 @@ public class WSProductFragment extends BaseFragment {
     TextView tviAch;
     @BindView(R.id.pBar)
     ProgressBar pBar;
+    @BindView(R.id.tviPSO)
+    TextView tviPSO;
     @BindView(R.id.tviYtdHeading)
     TextView tviYtdHeading;
     @BindView(R.id.tviQtdHeading)
@@ -139,6 +141,7 @@ public class WSProductFragment extends BaseFragment {
     KSalesProductModel.Data selectedProductData;
     KSalesProductModel.Filter productFilterData;
     List<KSalesProductModel.Data> productDataList = new ArrayList<>();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -267,12 +270,13 @@ public class WSProductFragment extends BaseFragment {
                             JSONObject jsonArray = new JSONObject(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
                             productData = (KSalesProductModel) KBAMUtils.fromJson(String.valueOf(jsonArray), KSalesProductModel.class);
                             productDataList = productData.getData();
-                            for(int i = 0; i<productDataList.size();i++){
-                                if(productDataList.get(i).getName().equals("")||productDataList.get(i).getName().equals("null")){
+                            for (int i = 0; i < productDataList.size(); i++) {
+                                if (productDataList.get(i).getName().equals("") || productDataList.get(i).getName().equals("null")) {
                                     productDataList.remove(i);
                                 }
                             }
                             productFilterData = productData.getFilter();
+                            tviPSO.setText(KBAMUtils.getRoundOffValue(productFilterData.getSoAmount()));
                             YTDDisplay();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -392,27 +396,27 @@ public class WSProductFragment extends BaseFragment {
 
     public void YTDDisplay() {
         //if (fromRSM && fromSP & !fromCustomer) {
-            tviTargetHeading.setText("TARGET");
-            tviActualHeading.setText("ACTUAL");
-            tviAchHeading.setText("ACH%");
+        tviTargetHeading.setText("TARGET");
+        tviActualHeading.setText("ACTUAL");
+        tviAchHeading.setText("ACH%");
             /*tviTarget.setText(KBAMUtils.getRoundOffValue(rsmProfile.getTargetYTD()));
             tviActual.setText(KBAMUtils.getRoundOffValue(rsmProfile.getYtd()));
             bar = (rsmProfile.getYtdPercentage()).intValue();*/
-            tviTarget.setText(KBAMUtils.getRoundOffValue(productFilterData.getTargetYTD()));
-            tviActual.setText(KBAMUtils.getRoundOffValue(productFilterData.getYtd()));
-            bar = (productFilterData.getYtdPercentage()).intValue();
-            pBar.setVisibility(View.VISIBLE);
-            tviAch.setText(bar + "%");
-            pBar.setProgress(bar);
-            if (bar < 50) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 50 && bar < 80) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 80 && bar < 99) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 99) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
-            }
+        tviTarget.setText(KBAMUtils.getRoundOffValue(productFilterData.getTargetYTD()));
+        tviActual.setText(KBAMUtils.getRoundOffValue(productFilterData.getYtd()));
+        bar = (productFilterData.getYtdPercentage()).intValue();
+        pBar.setVisibility(View.VISIBLE);
+        tviAch.setText(bar + "%");
+        pBar.setProgress(bar);
+        if (bar < 50) {
+            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+        } else if (bar >= 50 && bar < 80) {
+            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
+        } else if (bar >= 80 && bar < 99) {
+            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
+        } else if (bar >= 99) {
+            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+        }
         /*} else {
             tviTargetHeading.setText("YTD");
             tviActualHeading.setText("QTD");
@@ -433,27 +437,27 @@ public class WSProductFragment extends BaseFragment {
 
     public void QTDDisplay() {
         //if (fromRSM && fromSP & !fromCustomer) {
-            tviTargetHeading.setText("TARGET");
-            tviActualHeading.setText("ACTUAL");
-            tviAchHeading.setText("ACH%");
+        tviTargetHeading.setText("TARGET");
+        tviActualHeading.setText("ACTUAL");
+        tviAchHeading.setText("ACH%");
             /*tviTarget.setText(KBAMUtils.getRoundOffValue(rsmProfile.getTargetQTD()));
             tviActual.setText(KBAMUtils.getRoundOffValue(rsmProfile.getQtd()));
             bar = (rsmProfile.getQtdPercentage()).intValue();*/
-            tviTarget.setText(KBAMUtils.getRoundOffValue(productFilterData.getTargetQTD()));
-            tviActual.setText(KBAMUtils.getRoundOffValue(productFilterData.getQtd()));
-            bar = (productFilterData.getQtdPercentage()).intValue();
-            pBar.setVisibility(View.VISIBLE);
-            tviAch.setText(bar + "%");
-            pBar.setProgress(bar);
-            if (bar < 50) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 50 && bar < 80) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 80 && bar < 99) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 99) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
-            }
+        tviTarget.setText(KBAMUtils.getRoundOffValue(productFilterData.getTargetQTD()));
+        tviActual.setText(KBAMUtils.getRoundOffValue(productFilterData.getQtd()));
+        bar = (productFilterData.getQtdPercentage()).intValue();
+        pBar.setVisibility(View.VISIBLE);
+        tviAch.setText(bar + "%");
+        pBar.setProgress(bar);
+        if (bar < 50) {
+            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+        } else if (bar >= 50 && bar < 80) {
+            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
+        } else if (bar >= 80 && bar < 99) {
+            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
+        } else if (bar >= 99) {
+            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+        }
         /*} else {
             tviTargetHeading.setText("YTD");
             tviActualHeading.setText("QTD");
@@ -474,27 +478,27 @@ public class WSProductFragment extends BaseFragment {
 
     public void MTDDisplay() {
         //if (fromRSM && fromSP & !fromCustomer) {
-            tviTargetHeading.setText("TARGET");
-            tviActualHeading.setText("ACTUAL");
-            tviAchHeading.setText("ACH%");
+        tviTargetHeading.setText("TARGET");
+        tviActualHeading.setText("ACTUAL");
+        tviAchHeading.setText("ACH%");
             /*tviTarget.setText(KBAMUtils.getRoundOffValue(rsmProfile.getTargetMTD()));
             tviActual.setText(KBAMUtils.getRoundOffValue(rsmProfile.getMtd()));
             bar = (rsmProfile.getMtdPercentage()).intValue();*/
-            tviTarget.setText(KBAMUtils.getRoundOffValue(productFilterData.getTargetMTD()));
-            tviActual.setText(KBAMUtils.getRoundOffValue(productFilterData.getMtd()));
-            bar = (productFilterData.getMtdPercentage()).intValue();
-            pBar.setVisibility(View.VISIBLE);
-            tviAch.setText(bar + "%");
-            pBar.setProgress(bar);
-            if (bar < 50) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 50 && bar < 80) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 80 && bar < 99) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
-            } else if (bar >= 99) {
-                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
-            }
+        tviTarget.setText(KBAMUtils.getRoundOffValue(productFilterData.getTargetMTD()));
+        tviActual.setText(KBAMUtils.getRoundOffValue(productFilterData.getMtd()));
+        bar = (productFilterData.getMtdPercentage()).intValue();
+        pBar.setVisibility(View.VISIBLE);
+        tviAch.setText(bar + "%");
+        pBar.setProgress(bar);
+        if (bar < 50) {
+            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+        } else if (bar >= 50 && bar < 80) {
+            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_orange), PorterDuff.Mode.SRC_IN);
+        } else if (bar >= 80 && bar < 99) {
+            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_amber), PorterDuff.Mode.SRC_IN);
+        } else if (bar >= 99) {
+            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+        }
         /*} else {
             tviTargetHeading.setText("YTD");
             tviActualHeading.setText("QTD");
@@ -639,7 +643,7 @@ public class WSProductFragment extends BaseFragment {
         } else {
             cviProductHeading.setVisibility(View.GONE);
         }
-        if(fromCustomer){
+        if (fromCustomer) {
             llTabHeading.setVisibility(View.GONE);
             tviYtdHeading.setText("YTD");
             tviQtdHeading.setText("QTD");
@@ -647,7 +651,7 @@ public class WSProductFragment extends BaseFragment {
             tviTargetHeading.setText("YTD");
             tviActualHeading.setText("QTD");
             tviAchHeading.setText("MTD");
-        } else if(!fromCustomer){
+        } else if (!fromCustomer) {
             llTabHeading.setVisibility(View.VISIBLE);
             tviYtdHeading.setText("TARGET");
             tviQtdHeading.setText("ACTUAL");

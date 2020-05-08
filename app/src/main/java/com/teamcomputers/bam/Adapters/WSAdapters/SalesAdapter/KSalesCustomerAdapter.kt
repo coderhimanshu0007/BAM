@@ -16,6 +16,7 @@ import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesCustomerModel
 import com.teamcomputers.bam.Models.common.EventObject
 import com.teamcomputers.bam.R
 import com.teamcomputers.bam.Utils.BAMUtil
+import com.teamcomputers.bam.Utils.KBAMUtils
 import org.greenrobot.eventbus.EventBus
 import java.util.*
 
@@ -42,6 +43,7 @@ class KSalesCustomerAdapter(dashboardActivityContext: DashboardActivity, userId:
         internal var tviYTD: TextView
         internal var tviQTD: TextView
         internal var tviMTD: TextView
+        internal var tviSOAmount : TextView
         internal var rviStateCode: RecyclerView
         internal var pBar: ProgressBar
         internal var iviOption: ImageView
@@ -54,6 +56,7 @@ class KSalesCustomerAdapter(dashboardActivityContext: DashboardActivity, userId:
             this.tviYTD = itemView.findViewById<View>(R.id.tviYTD) as TextView
             this.tviQTD = itemView.findViewById<View>(R.id.tviQTD) as TextView
             this.tviMTD = itemView.findViewById<View>(R.id.tviMTD) as TextView
+            this.tviSOAmount = itemView.findViewById<View>(R.id.tviSOAmount) as TextView
             this.llExpand = itemView.findViewById<View>(R.id.llExpand) as LinearLayout
             this.rviStateCode = itemView.findViewById<View>(R.id.rviStateCode) as RecyclerView
             this.pBar = itemView.findViewById<View>(R.id.pBar) as ProgressBar
@@ -108,9 +111,10 @@ class KSalesCustomerAdapter(dashboardActivityContext: DashboardActivity, userId:
             holder.iviOption.visibility = View.GONE
         }
         holder.tviName.text = (position + 1).toString() + ". " + dataListFiltered[position].customerName
-        holder.tviYTD.text = BAMUtil.getRoundOffValue(dataListFiltered[position].ytd!!)
-        holder.tviQTD.text = BAMUtil.getRoundOffValue(dataListFiltered[position].qtd!!)
-        holder.tviMTD.text = BAMUtil.getRoundOffValue(dataListFiltered[position].mtd!!)
+        holder.tviYTD.text = KBAMUtils.getRoundOffValue(dataListFiltered[position].ytd!!)
+        holder.tviQTD.text = KBAMUtils.getRoundOffValue(dataListFiltered[position].qtd!!)
+        holder.tviMTD.text = KBAMUtils.getRoundOffValue(dataListFiltered[position].mtd!!)
+        holder.tviSOAmount.text = KBAMUtils.getRoundOffValue(dataListFiltered[position].soAmount!!)
 
         holder.iviOption.setOnClickListener {
             //creating a popup menu

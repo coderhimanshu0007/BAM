@@ -110,6 +110,8 @@ public class WSRSMFragment extends BaseFragment {
     TextView tviAch;
     @BindView(R.id.pBar)
     ProgressBar pBar;
+    @BindView(R.id.tviPSO)
+    TextView tviPSO;
     @BindView(R.id.viYTD)
     View viYTD;
     @BindView(R.id.viQTD)
@@ -237,6 +239,7 @@ public class WSRSMFragment extends BaseFragment {
                             pBar.setVisibility(View.VISIBLE);
                             tviAch.setText(bar + "%");
                             pBar.setProgress(bar);
+                            tviPSO.setText(BAMUtil.getRoundOffValue(rsmFilterData.getSoAmount()));
                             if (bar < 50) {
                                 pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
                             } else if (bar >= 50 && bar < 80) {

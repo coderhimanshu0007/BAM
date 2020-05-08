@@ -96,6 +96,8 @@ public class WSCustomerFragment extends BaseFragment {
     TextView tviQTD;
     @BindView(R.id.tviMTD)
     TextView tviMTD;
+    @BindView(R.id.tviPSO)
+    TextView tviPSO;
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
     //private NewCustomerAdapter adapter;
@@ -243,6 +245,7 @@ public class WSCustomerFragment extends BaseFragment {
                             tviYTD.setText(BAMUtil.getRoundOffValue(customerFilterData.getYtd()));
                             tviQTD.setText(BAMUtil.getRoundOffValue(customerFilterData.getQtd()));
                             tviMTD.setText(BAMUtil.getRoundOffValue(customerFilterData.getMtd()));
+                            tviPSO.setText(BAMUtil.getRoundOffValue(customerFilterData.getSoAmount()));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

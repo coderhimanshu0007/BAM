@@ -3,7 +3,6 @@ package com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter
 import android.app.Activity
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -12,12 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamcomputers.bam.Activities.DashboardActivity
 import com.teamcomputers.bam.Interface.BAMConstant
 import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesProductModel
-import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesRSMModel
 import com.teamcomputers.bam.Models.common.EventObject
 import com.teamcomputers.bam.R
-import com.teamcomputers.bam.Utils.BAMUtil
+import com.teamcomputers.bam.Utils.KBAMUtils
 import org.greenrobot.eventbus.EventBus
-import java.util.ArrayList
+import java.util.*
 
 class KSalesProductAdapter(dashboardActivityContext: DashboardActivity, level: String, type: String, data: List<KSalesProductModel.Data>, fromRSM: Boolean, fromSP: Boolean, fromCustomer: Boolean) : RecyclerView.Adapter<KSalesProductAdapter.ViewHolder>(), Filterable {
     private var dataList: List<KSalesProductModel.Data> = data
@@ -37,6 +35,7 @@ class KSalesProductAdapter(dashboardActivityContext: DashboardActivity, level: S
         internal var tviMTD: TextView
         internal var pBar: ProgressBar
         internal var iviOption: ImageView
+        internal var tviSOAmount: TextView
 
         init {
             llRSMLayout = itemView.findViewById<View>(R.id.llRSMLayout) as LinearLayout
@@ -46,6 +45,7 @@ class KSalesProductAdapter(dashboardActivityContext: DashboardActivity, level: S
             this.tviQTD = itemView.findViewById<View>(R.id.tviQTD) as TextView
             this.tviMTD = itemView.findViewById<View>(R.id.tviMTD) as TextView
             this.pBar = itemView.findViewById<View>(R.id.pBar) as ProgressBar
+            this.tviSOAmount = itemView.findViewById<View>(R.id.tviSOAmount) as TextView
         }
     }
 
@@ -74,33 +74,34 @@ class KSalesProductAdapter(dashboardActivityContext: DashboardActivity, level: S
         holder.tviName.text = (position + 1).toString() + ". " + dataListFiltered!![position].name
         //if (fromSP || fromCustomer) {
         if (fromCustomer) {
-            holder.tviYTD.text = BAMUtil.getRoundOffValue(dataListFiltered!![position].ytd!!)
-            holder.tviQTD.text = BAMUtil.getRoundOffValue(dataListFiltered!![position].qtd!!)
-            holder.tviMTD.text = BAMUtil.getRoundOffValue(dataListFiltered!![position].mtd!!)
+            holder.tviYTD.text = KBAMUtils.getRoundOffValue(dataListFiltered!![position].ytd!!)
+            holder.tviQTD.text = KBAMUtils.getRoundOffValue(dataListFiltered!![position].qtd!!)
+            holder.tviMTD.text = KBAMUtils.getRoundOffValue(dataListFiltered!![position].mtd!!)
             holder.pBar.visibility = View.GONE
         } else {
             var target = ""
             var actual = ""
             var bar = 0
             if (type == "YTD") {
-                target = BAMUtil.getRoundOffValue(dataListFiltered!![position].targetYTD!!)
-                actual = BAMUtil.getRoundOffValue(dataListFiltered!![position].ytd!!)
-                bar = dataList!![position].ytdPercentage?.toInt() !!
+                target = KBAMUtils.getRoundOffValue(dataListFiltered!![position].targetYTD!!)
+                actual = KBAMUtils.getRoundOffValue(dataListFiltered!![position].ytd!!)
+                bar = dataList!![position].ytdPercentage?.toInt()!!
             } else if (type == "QTD") {
-                target = BAMUtil.getRoundOffValue(dataListFiltered!![position].targetQTD!!)
-                actual = BAMUtil.getRoundOffValue(dataListFiltered!![position].qtd!!)
+                target = KBAMUtils.getRoundOffValue(dataListFiltered!![position].targetQTD!!)
+                actual = KBAMUtils.getRoundOffValue(dataListFiltered!![position].qtd!!)
                 bar = dataList!![position].qtdPercentage?.toInt()!!
             } else if (type == "MTD") {
-                target = BAMUtil.getRoundOffValue(dataListFiltered!![position].targetMTD!!)
-                actual = BAMUtil.getRoundOffValue(dataListFiltered!![position].mtd!!)
+                target = KBAMUtils.getRoundOffValue(dataListFiltered!![position].targetMTD!!)
+                actual = KBAMUtils.getRoundOffValue(dataListFiltered!![position].mtd!!)
                 bar = dataList!![position].mtdPercentage?.toInt()!!
             }
 
-            //holder.tviYTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getYTD()));
-            //holder.tviQTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getQTD()));
-            //holder.tviMTD.setText(BAMUtil.getRoundOffValue(dataList.get(position).getMTD()));
+            //holder.tviYTD.setText(KBAMUtils.getRoundOffValue(dataList.get(position).getYTD()));
+            //holder.tviQTD.setText(KBAMUtils.getRoundOffValue(dataList.get(position).getQTD()));
+            //holder.tviMTD.setText(KBAMUtils.getRoundOffValue(dataList.get(position).getMTD()));
             holder.tviYTD.text = target
             holder.tviQTD.text = actual
+            holder.tviSOAmount.text = KBAMUtils.getRoundOffValue(dataListFiltered!![position].soAmount!!)
 
             //bar = (dataListFiltered.get(position).getYTDPercentage()).intValue();
             holder.tviMTD.text = "$bar%"

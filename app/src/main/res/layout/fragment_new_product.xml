@@ -345,7 +345,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_marginLeft="20dp"
                                     android:layout_marginTop="14dp"
-                                    android:layout_marginRight="20dp"
+                                    android:layout_marginRight="10dp"
                                     android:layout_marginBottom="14dp"
                                     android:layout_weight="1"
                                     android:background="@drawable/td_bg"
@@ -380,9 +380,9 @@
                                     android:id="@+id/llActual"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="20dp"
+                                    android:layout_marginLeft="10dp"
                                     android:layout_marginTop="14dp"
-                                    android:layout_marginRight="20dp"
+                                    android:layout_marginRight="10dp"
                                     android:layout_marginBottom="14dp"
                                     android:layout_weight="1"
                                     android:background="@drawable/td_bg"
@@ -416,9 +416,9 @@
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="20dp"
+                                    android:layout_marginLeft="10dp"
                                     android:layout_marginTop="14dp"
-                                    android:layout_marginRight="20dp"
+                                    android:layout_marginRight="10dp"
                                     android:layout_marginBottom="14dp"
                                     android:layout_weight="1"
                                     android:background="@drawable/td_bg"
@@ -472,6 +472,41 @@
                                             app:fontFamily="@font/roboto_bold" />
                                     </RelativeLayout>
 
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="50dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="14dp"
+                                    android:layout_marginRight="20dp"
+                                    android:layout_marginBottom="14dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/td_bg"
+                                    android:backgroundTint="@color/text"
+                                    android:orientation="vertical"
+                                    android:padding="7dp">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:text="PSO"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="12sp"
+                                        app:fontFamily="@font/roboto_medium" />
+
+                                    <TextView
+                                        android:id="@+id/tviPSO"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:text="625.2"
+                                        android:textColor="@color/color_value"
+                                        android:textSize="14sp"
+                                        app:fontFamily="@font/roboto_bold" />
                                 </LinearLayout>
 
                             </LinearLayout>
@@ -539,6 +574,20 @@
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
                             android:text="ACH%"
+                            android:textColor="@color/color_value"
+                            android:textSize="12sp"
+                            app:fontFamily="@font/roboto_bold" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="PSO"
                             android:textColor="@color/color_value"
                             android:textSize="12sp"
                             app:fontFamily="@font/roboto_bold" />

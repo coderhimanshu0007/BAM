@@ -13,11 +13,11 @@ import com.teamcomputers.bam.Interface.BAMConstant
 import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesRSMModel
 import com.teamcomputers.bam.Models.common.EventObject
 import com.teamcomputers.bam.R
-import com.teamcomputers.bam.Utils.BAMUtil
+import com.teamcomputers.bam.Utils.KBAMUtils
 import org.greenrobot.eventbus.EventBus
-import java.util.ArrayList
+import java.util.*
 
-class KSalesSPAdapter(dashboardActivityContext: DashboardActivity, type: String, level: String, data: List<KSalesRSMModel.Data>, fromRSM: Boolean, fromCustomer: Boolean, fromProduct: Boolean):RecyclerView.Adapter<KSalesSPAdapter.ViewHolder>() ,  Filterable {
+class KSalesSPAdapter(dashboardActivityContext: DashboardActivity, type: String, level: String, data: List<KSalesRSMModel.Data>, fromRSM: Boolean, fromCustomer: Boolean, fromProduct: Boolean) : RecyclerView.Adapter<KSalesSPAdapter.ViewHolder>(), Filterable {
     private var mActivity: Activity = dashboardActivityContext
     private var type: String = type
     private var level: String = level
@@ -54,22 +54,23 @@ class KSalesSPAdapter(dashboardActivityContext: DashboardActivity, type: String,
         var actual = ""
         var bar = 0
         if (type == "YTD") {
-            target = BAMUtil.getRoundOffValue(dataListFiltered!![position].targetYTD!!)
-            actual = BAMUtil.getRoundOffValue(dataListFiltered!![position].ytd!!)
+            target = KBAMUtils.getRoundOffValue(dataListFiltered!![position].targetYTD!!)
+            actual = KBAMUtils.getRoundOffValue(dataListFiltered!![position].ytd!!)
             //bar = (dataList.get(position).getYTDPercentage()).intValue();
         } else if (type == "QTD") {
-            target = BAMUtil.getRoundOffValue(dataListFiltered!![position].targetQTD!!)
-            actual = BAMUtil.getRoundOffValue(dataListFiltered!![position].qtd!!)
+            target = KBAMUtils.getRoundOffValue(dataListFiltered!![position].targetQTD!!)
+            actual = KBAMUtils.getRoundOffValue(dataListFiltered!![position].qtd!!)
             //bar = (dataList.get(position).getQTDPercentage()).intValue();
         } else if (type == "MTD") {
-            target = BAMUtil.getRoundOffValue(dataListFiltered!![position].targetMTD!!)
-            actual = BAMUtil.getRoundOffValue(dataListFiltered!![position].mtd!!)
+            target = KBAMUtils.getRoundOffValue(dataListFiltered!![position].targetMTD!!)
+            actual = KBAMUtils.getRoundOffValue(dataListFiltered!![position].mtd!!)
             //bar = (dataList.get(position).getMTDPercentage()).intValue();
         }
         holder.tviTarget.text = target
         holder.tviActual.text = actual
+        holder.tviSOAmount.text = KBAMUtils.getRoundOffValue(dataListFiltered!![position].soAmount!!)
 
-        bar = dataListFiltered!![position].ytdPercentage?.toInt() !!
+        bar = dataListFiltered!![position].ytdPercentage?.toInt()!!
         holder.tviACH.text = "$bar%"
         holder.pBar.progress = bar
 
@@ -182,7 +183,7 @@ class KSalesSPAdapter(dashboardActivityContext: DashboardActivity, type: String,
         }
     }
 
-    class ViewHolder(itemView : View):RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal var llRSMLayout: LinearLayout
         internal var tviName: TextView
         internal var tviTarget: TextView
@@ -190,6 +191,7 @@ class KSalesSPAdapter(dashboardActivityContext: DashboardActivity, type: String,
         internal var tviACH: TextView
         internal var pBar: ProgressBar
         internal var iviOption: ImageView
+        internal var tviSOAmount: TextView
 
         init {
             llRSMLayout = itemView.findViewById<View>(R.id.llRSMLayout) as LinearLayout
@@ -199,6 +201,7 @@ class KSalesSPAdapter(dashboardActivityContext: DashboardActivity, type: String,
             this.tviActual = itemView.findViewById<View>(R.id.tviActual) as TextView
             this.tviACH = itemView.findViewById<View>(R.id.tviACH) as TextView
             this.pBar = itemView.findViewById<View>(R.id.pBar) as ProgressBar
+            this.tviSOAmount = itemView.findViewById<View>(R.id.tviSOAmount) as TextView
         }
     }
 }
