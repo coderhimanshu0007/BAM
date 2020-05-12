@@ -1,4 +1,4 @@
-package com.teamcomputers.bam.Models.WSModels.PSOModels
+package com.teamcomputers.bam.Models.WSModels.NRModels
 
 import android.annotation.SuppressLint
 import android.os.Parcel
@@ -7,13 +7,13 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 
-class KPSOCustomerModel {
+class KNRCustomerModel {
     @SerializedName("Data")
     @Expose
     private var data: List<Datum>? = null
     @SerializedName("Filter")
     @Expose
-    private var filter: PSOFilter? = null
+    private var filter: Filter? = null
 
     fun getData(): List<Datum>? {
         return data
@@ -23,19 +23,19 @@ class KPSOCustomerModel {
         this.data = data
     }
 
-    fun getFilter(): PSOFilter? {
+    fun getFilter(): Filter? {
         return filter
     }
 
-    fun setFilter(filter: PSOFilter) {
+    fun setFilter(filter: Filter) {
         this.filter = filter
     }
 
     @SuppressLint("ParcelCreator")
-    inner class Datum : Parcelable {
+    inner class Datum :Parcelable{
         override fun writeToParcel(dest: Parcel?, flags: Int) {
             this.customerName?.let { dest?.writeString(it) }
-            this.sOAmount?.let { dest?.writeDouble(it) }
+            this.amount?.let { dest?.writeDouble(it) }
             this.position?.let { dest?.writeInt(it) }
             this.open?.let { dest?.writeInt(it) }
         }
@@ -47,31 +47,33 @@ class KPSOCustomerModel {
         @SerializedName("CustomerName")
         @Expose
         var customerName: String? = null
-        @SerializedName("SOAmount")
+        @SerializedName("Amount")
         @Expose
-        var sOAmount: Double? = null
+        var amount: Double? = null
         @SerializedName("Position")
         @Expose
         var position: Int? = 0
         @SerializedName("open")
         @Expose
         var open: Int = 0
-        @SerializedName("StateCodeWise")
+        @SerializedName("DocumentNo")
         @Expose
-        var stateCodeWise: List<StateCodeWise>? = null
+        var documentNo: List<DocumentNo>? = null
     }
 
-    inner class StateCodeWise {
+    inner class DocumentNo {
 
-        @SerializedName("StateCode")
+        @SerializedName("DocumentNo")
         @Expose
-        var stateCode: String? = null
-        @SerializedName("SOAmount")
+        var documentNo: String? = null
+        @SerializedName("Amount")
         @Expose
-        var soAmount: Double? = null
+        var amount: Double? = null
+        @SerializedName("NOD")
+        @Expose
+        var nod: Int? = null
 
     }
-
 
 }
 

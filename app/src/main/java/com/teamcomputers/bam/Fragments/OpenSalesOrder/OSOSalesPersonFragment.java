@@ -25,6 +25,7 @@ import com.teamcomputers.bam.Fragments.WSPages.WSProductFragment;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSORSMModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOSOModel;
+import com.teamcomputers.bam.Models.WSModels.PSOModels.PSOFilter;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderAprRequester;
@@ -105,7 +106,7 @@ public class OSOSalesPersonFragment extends BaseFragment {
     KPSORSMModel spData;
     KPSORSMModel.Datum selectedSPData;
     List<KPSORSMModel.Datum> spDataList = new ArrayList<>();
-    KPSORSMModel.Filter spFilterData;
+    PSOFilter spFilterData;
     KPSOCustomerModel.Datum customerProfile;
     KPSORSMModel.Datum rsmProfile;
     KPSOSOModel.Datum invoiceProfile;
@@ -203,6 +204,11 @@ public class OSOSalesPersonFragment extends BaseFragment {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
                             spData = (KPSORSMModel) KBAMUtils.fromJson(String.valueOf(jsonObject), KPSORSMModel.class);
                             spDataList = spData.getData();
+                            for (int i = 0; i < spDataList.size(); i++) {
+                                if (spDataList.get(i).getName().equals("") || spDataList.get(i).getName().equals("null")) {
+                                    spDataList.remove(i);
+                                }
+                            }
                             spFilterData = spData.getFilter();
                             tviSOAmount.setText(KBAMUtils.getRoundOffValue(spFilterData.getSoAmount()));
                         } catch (JSONException e) {
@@ -339,6 +345,9 @@ public class OSOSalesPersonFragment extends BaseFragment {
 
     @OnClick(R.id.iviClose)
     public void filterClose() {
+        rsmPos = 0;
+        cPos = 0;
+        iPos = 0;
         fromRSM = false;
         fromCustomer = false;
         fromInvoice = false;

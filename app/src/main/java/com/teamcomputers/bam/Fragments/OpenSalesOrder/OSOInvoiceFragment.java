@@ -23,6 +23,7 @@ import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSORSMModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOSOModel;
+import com.teamcomputers.bam.Models.WSModels.PSOModels.PSOFilter;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderAprRequester;
@@ -106,7 +107,7 @@ public class OSOInvoiceFragment extends BaseFragment {
 
     KPSOSOModel sOData;
     KPSOSOModel.Datum selectedSOData;
-    KPSOSOModel.Filter sOFilterData;
+    PSOFilter sOFilterData;
     List<KPSOSOModel.Datum> sODataList = new ArrayList<>();
     KPSOCustomerModel.Datum customerProfile;
     KPSORSMModel.Datum rsmProfile, spProfile;
@@ -203,6 +204,11 @@ public class OSOInvoiceFragment extends BaseFragment {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
                             sOData = (KPSOSOModel) KBAMUtils.fromJson(String.valueOf(jsonObject), KPSOSOModel.class);
                             sODataList = sOData.getData();
+                            for (int i = 0; i < sODataList.size(); i++) {
+                                if (sODataList.get(i).getSoNumber().equals("") || sODataList.get(i).getSoNumber().equals("null")) {
+                                    sODataList.remove(i);
+                                }
+                            }
                             sOFilterData = sOData.getFilter();
                             tviSOAmount.setText(KBAMUtils.getRoundOffValue(sOFilterData.getSoAmount()));
                         } catch (JSONException e) {
@@ -307,6 +313,9 @@ public class OSOInvoiceFragment extends BaseFragment {
 
     @OnClick(R.id.iviClose)
     public void filterClose() {
+        rsmPos = 0;
+        spPos = 0;
+        cPos = 0;
         fromRSM = false;
         fromSP = false;
         fromCustomer = false;

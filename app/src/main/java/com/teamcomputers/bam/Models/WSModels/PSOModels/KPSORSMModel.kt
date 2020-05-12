@@ -14,7 +14,7 @@ class KPSORSMModel {
     private var data: List<Datum>? = null
     @SerializedName("Filter")
     @Expose
-    private var filter: Filter? = null
+    private var filter: PSOFilter? = null
 
     fun getData(): List<Datum>? {
         return data
@@ -24,44 +24,13 @@ class KPSORSMModel {
         this.data = data
     }
 
-    fun getFilter(): Filter? {
+    fun getFilter(): PSOFilter? {
         return filter
     }
 
-    fun setFilter(filter: Filter) {
+    fun setFilter(filter: PSOFilter) {
         this.filter = filter
     }
-
-    /*@SuppressLint("ParcelCreator")
-    inner class Datum :Parcelable{
-        override fun writeToParcel(dest: Parcel?, flags: Int) {
-            this.name?.let { dest?.writeString(it) }
-            this.tmc?.let { dest?.writeString(it) }
-            this.dso?.let { dest?.writeDouble(it) }
-            this.amount?.let { dest?.writeDouble(it) }
-            this.position?.let { dest?.writeInt(it) }
-        }
-
-        override fun describeContents(): Int {
-            return 0
-        }
-
-        @SerializedName("Name")
-        @Expose
-        var name: String? = null
-        @SerializedName("TMC")
-        @Expose
-        var tmc: String? = null
-        @SerializedName("DSO")
-        @Expose
-        var dso: Double? = null
-        @SerializedName("Amount")
-        @Expose
-        var amount: Double? = null
-        @SerializedName("Position")
-        @Expose
-        var position: Int = 0
-    }*/
 
     @SuppressLint("ParcelCreator")
     inner class Datum :Parcelable{
@@ -90,50 +59,4 @@ class KPSORSMModel {
         var position: Int = 0
     }
 
-    inner class Filter {
-
-        @SerializedName("BUHead")
-        @Expose
-        var buHead: String? = null
-        @SerializedName("BUHead_TMC")
-        @Expose
-        var buHeadTMC: String? = null
-        @SerializedName("RSM")
-        @Expose
-        var rsm: String? = null
-        @SerializedName("RSM_TMC")
-        @Expose
-        var rsmtmc: String? = null
-        @SerializedName("Account_Manager")
-        @Expose
-        var accountManager: String? = null
-        @SerializedName("AM_TMC")
-        @Expose
-        var amtmc: String? = null
-        @SerializedName("Sales_Person")
-        @Expose
-        var salesPerson: String? = null
-        @SerializedName("SP_TMC")
-        @Expose
-        var sptmc: String? = null
-        @SerializedName("CustomerGroupName")
-        @Expose
-        var customerGroupName: String? = null
-        @SerializedName("StateCode")
-        @Expose
-        var stateCode: String? = null
-        @SerializedName("SONumber")
-        @Expose
-        var soNumber: String? = null
-        @SerializedName("Link_TARGETPROD")
-        @Expose
-        var linkTARGETPROD: String? = null
-        @SerializedName("ProductName")
-        @Expose
-        var productName: String? = null
-        @SerializedName("SOAmount")
-        @Expose
-        var soAmount: Double? = null
-
-    }
 }

@@ -1,20 +1,20 @@
-package com.teamcomputers.bam.Models.WSModels.PSOModels
+package com.teamcomputers.bam.Models.WSModels.NRModels
 
 import android.annotation.SuppressLint
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 
-class KPSOSOModel {
+
+class KNRRSMModel {
     @SerializedName("Data")
     @Expose
     private var data: List<Datum>? = null
     @SerializedName("Filter")
     @Expose
-    private var filter: PSOFilter? = null
+    private var filter: Filter? = null
 
     fun getData(): List<Datum>? {
         return data
@@ -24,35 +24,43 @@ class KPSOSOModel {
         this.data = data
     }
 
-    fun getFilter(): PSOFilter? {
+    fun getFilter(): Filter? {
         return filter
     }
 
+    fun setFilter(filter: Filter) {
+        this.filter = filter
+    }
+
     @SuppressLint("ParcelCreator")
-    inner class Datum :Parcelable{
+    inner class Datum : Parcelable{
         override fun writeToParcel(dest: Parcel?, flags: Int) {
-            this.soNumber?.let { dest?.writeString(it) }
-            this.soAmount?.let { dest?.writeDouble(it) }
+            this.name.let { dest?.writeString(it) }
+            this.tmc.let { dest?.writeString(it) }
+            this.dso?.let { dest?.writeDouble(it) }
+            this.amount?.let { dest?.writeDouble(it) }
             this.position?.let { dest?.writeInt(it) }
         }
 
         override fun describeContents(): Int {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            return 0
         }
 
-        @SerializedName("SONumber")
+        @SerializedName("Name")
         @Expose
-        var soNumber: String? = null
-        @SerializedName("SOAmount")
+        var name: String? = null
+        @SerializedName("TMC")
         @Expose
-        var soAmount: Double? = null
+        var tmc: String? = null
+        @SerializedName("DSO")
+        @Expose
+        var dso: Double? = null
+        @SerializedName("Amount")
+        @Expose
+        var amount: Double? = null
         @SerializedName("Position")
         @Expose
         var position: Int? = 0
-    }
-
-    fun setFilter(filter: PSOFilter) {
-        this.filter = filter
     }
 
 }

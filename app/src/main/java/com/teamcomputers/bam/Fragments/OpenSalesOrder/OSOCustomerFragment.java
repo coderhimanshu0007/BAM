@@ -24,6 +24,7 @@ import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSORSMModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOSOModel;
+import com.teamcomputers.bam.Models.WSModels.PSOModels.PSOFilter;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderAprRequester;
@@ -100,7 +101,7 @@ public class OSOCustomerFragment extends BaseFragment {
     KPSOCustomerModel customerData;
     KPSOCustomerModel.Datum selectedCustomerData;
     List<KPSOCustomerModel.Datum> customerDataList = new ArrayList<>();
-    KPSOCustomerModel.Filter customerFilterData;
+    PSOFilter customerFilterData;
 
     KPSORSMModel.Datum rsmProfile, salesProfile;
     KPSOSOModel.Datum invoiceProfile;
@@ -197,6 +198,11 @@ public class OSOCustomerFragment extends BaseFragment {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
                             customerData = (KPSOCustomerModel) KBAMUtils.fromJson(String.valueOf(jsonObject), KPSOCustomerModel.class);
                             customerDataList = customerData.getData();
+                            for (int i = 0; i < customerDataList.size(); i++) {
+                                if (customerDataList.get(i).getCustomerName().equals("") || customerDataList.get(i).getCustomerName().equals("null")) {
+                                    customerDataList.remove(i);
+                                }
+                            }
                             customerFilterData = customerData.getFilter();
                             tviSOAmount.setText(KBAMUtils.getRoundOffValue(customerFilterData.getSoAmount()));
                         } catch (JSONException e) {
@@ -359,15 +365,15 @@ public class OSOCustomerFragment extends BaseFragment {
 
     @OnClick(R.id.iviClose)
     public void filterClose() {
+        rsmPos = 0;
+        spPos = 0;
+        iPos = 0;
         fromRSM = false;
         fromSP = false;
         fromInvoice = false;
         rsmProfile = null;
         salesProfile = null;
         invoiceProfile = null;
-        rsmPos = 0;
-        spPos = 0;
-        iPos = 0;
         cviSPHeading.setVisibility(View.GONE);
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Customer", "", "", "", "", "", ""));

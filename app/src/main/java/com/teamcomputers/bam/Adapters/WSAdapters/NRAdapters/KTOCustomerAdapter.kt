@@ -1,6 +1,5 @@
-package com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters
+package com.teamcomputers.bam.Adapters.WSAdapters.NRAdapters
 
-import android.app.Activity
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -12,47 +11,56 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.teamcomputers.bam.Activities.DashboardActivity
 import com.teamcomputers.bam.Interface.BAMConstant
-import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel
+import com.teamcomputers.bam.Models.WSModels.NRModels.KNRCustomerModel
 import com.teamcomputers.bam.Models.common.EventObject
 import com.teamcomputers.bam.R
-import com.teamcomputers.bam.Utils.BAMUtil
+import com.teamcomputers.bam.Utils.KBAMUtils
+import kotlinx.android.synthetic.main.to_customer_recyclerview_layout.view.*
 import org.greenrobot.eventbus.EventBus
+import java.util.*
 
-class KPSOCustomerAdapter(dashboardActivityContext: DashboardActivity, level: String, data: List<KPSOCustomerModel.Datum>, fromRSM: Boolean, fromSP: Boolean, fromSO: Boolean) : RecyclerView.Adapter<KPSOCustomerAdapter.ViewHolder>(), Filterable {
-    private val dataList: List<KPSOCustomerModel.Datum> = data
-    private var dataListFiltered: List<KPSOCustomerModel.Datum>? = data
-    internal var level: String = level
-    internal var mActivity: Activity = dashboardActivityContext
-    internal var dashboardActivity: DashboardActivity = dashboardActivityContext
-    internal var fromRSM: Boolean = fromRSM
-    internal var fromSP: Boolean = fromSP
-    internal var fromSO: Boolean = fromSO
+class KTOCustomerAdapter(val mContext: DashboardActivity, val userId: String, val level: String, val dataList: List<KNRCustomerModel.Datum>, val fromRSM: Boolean, val fromSP: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KTOCustomerAdapter.ViewHolder>(), Filterable {
+    private var dataListFiltered: List<KNRCustomerModel.Datum>? = dataList
     private var layoutManager: LinearLayoutManager? = null
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var currentDataItem: KNRCustomerModel.Datum? = null
+        var currentPosition: Int = 0
+
         internal var llRSMLayout: LinearLayout
         internal var llExpand: LinearLayout
         internal var rlStateWise: RelativeLayout
-        internal var tviName: TextView
-        internal var tviSOAmount: TextView
-        internal var tviStateWise: TextView
         internal var rviStateCode: RecyclerView
         internal var iviOption: ImageView
 
         init {
             llRSMLayout = itemView.findViewById<View>(R.id.llRSMLayout) as LinearLayout
             rlStateWise = itemView.findViewById<View>(R.id.rlStateWise) as RelativeLayout
-            this.tviName = itemView.findViewById<View>(R.id.tviName) as TextView
             this.iviOption = itemView.findViewById<View>(R.id.iviOption) as ImageView
-            this.tviSOAmount = itemView.findViewById<View>(R.id.tviSOAmount) as TextView
-            this.tviStateWise = itemView.findViewById<View>(R.id.tviStateWise) as TextView
             this.llExpand = itemView.findViewById<View>(R.id.llExpand) as LinearLayout
             this.rviStateCode = itemView.findViewById<View>(R.id.rviStateCode) as RecyclerView
+
+            itemView.setOnClickListener {
+                val toCustomerModel = KNRCustomerModel().Datum()
+                toCustomerModel.customerName = currentDataItem?.customerName
+                toCustomerModel.amount = currentDataItem?.amount
+                toCustomerModel.position = currentDataItem?.position!!
+                toCustomerModel.open = currentDataItem?.open!!
+                EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, toCustomerModel))
+            }
+        }
+
+        fun setData(filterDataList: KNRCustomerModel.Datum?, pos: Int) {
+            itemView.tviName.text = (position + 1).toString() + ". " + filterDataList?.customerName
+            itemView.tviAmount.text = KBAMUtils.getRoundOffValue(filterDataList?.amount!!)
+
+            currentDataItem = filterDataList
+            currentPosition = pos
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.oso_customer_recyclerview_layout, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KTOCustomerAdapter.ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.to_customer_recyclerview_layout, parent, false)
 
         return ViewHolder(view)
     }
@@ -62,56 +70,42 @@ class KPSOCustomerAdapter(dashboardActivityContext: DashboardActivity, level: St
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (position == 0) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_first_item_value))
-        } else if (position == 1) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_second_item_value))
-        } else if (position == 2) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_third_item_value))
-        } else if (position % 2 == 0) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_white))
-        } else if (position % 2 == 1) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg))
-        }
-        holder.tviName.text = (position + 1).toString() + ". " + dataListFiltered?.get(position)?.customerName
-
-        holder.tviSOAmount.text = BAMUtil.getRoundOffValue(dataListFiltered?.get(position)?.sOAmount!!)
+        dataListFiltered?.get(position)?.open = 0
+        holder.llRSMLayout.setBackgroundColor(mContext.resources.getColor(R.color.login_bg))
+        holder.setData(dataListFiltered?.get(position), position)
 
         if (level == "R1") {
-            if (fromRSM && fromSP && fromSO) {
+            if (fromRSM && fromSP && fromProduct) {
                 holder.iviOption.visibility = View.GONE
             }
         } else if (level == "R2" || level == "R3") {
-            if (fromSP && fromSO) {
+            if (fromSP && fromProduct) {
                 holder.iviOption.visibility = View.GONE
             }
-        } else if (level == "R4" && fromSO) {
+        } else if (level == "R4") {
             holder.iviOption.visibility = View.GONE
-        } else if (level == "R4" && !fromSO) {
-            holder.iviOption.visibility = View.VISIBLE
         }
 
         holder.iviOption.setOnClickListener {
             //creating a popup menu
-            val popup = PopupMenu(mActivity, holder.iviOption)
+            val popup = PopupMenu(mContext, holder.iviOption)
             //inflating menu from xml resource
             popup.inflate(R.menu.options_menu)
-            popup.menu.getItem(3).title = "SO"
             if (level == "R1") {
                 popup.menu.getItem(2).isVisible = false
-                if (fromSP && fromSO) {
+                if (fromSP && fromProduct) {
                     popup.menu.getItem(1).isVisible = false
                     popup.menu.getItem(3).isVisible = false
                 } else if (fromSP && fromRSM) {
                     popup.menu.getItem(0).isVisible = false
                     popup.menu.getItem(1).isVisible = false
-                } else if (fromSO && fromRSM) {
+                } else if (fromProduct && fromRSM) {
                     popup.menu.getItem(0).isVisible = false
                     popup.menu.getItem(3).isVisible = false
                 } else if (fromSP) {
                     popup.menu.getItem(1).isVisible = false
-                } else if (fromSO) {
-                    popup.menu.getItem(3).isVisible = false
+                } else if (fromProduct) {
+                    popup.menu.getItem(2).isVisible = false
                 } else if (fromRSM) {
                     popup.menu.getItem(0).isVisible = false
                 }
@@ -120,7 +114,7 @@ class KPSOCustomerAdapter(dashboardActivityContext: DashboardActivity, level: St
                 popup.menu.getItem(2).isVisible = false
                 if (fromSP) {
                     popup.menu.getItem(1).isVisible = false
-                } else if (fromSO) {
+                } else if (fromProduct) {
                     popup.menu.getItem(3).isVisible = false
                 }
             } else if (level == "R4") {
@@ -133,27 +127,38 @@ class KPSOCustomerAdapter(dashboardActivityContext: DashboardActivity, level: St
                 when (item.itemId) {
                     R.id.menu1 -> {
                         //handle menu1 click
-                        val productCustomerModel = KPSOCustomerModel().Datum()
-                        productCustomerModel.customerName = dataListFiltered?.get(position)?.customerName
-                        productCustomerModel.sOAmount = dataListFiltered?.get(position)?.sOAmount
-                        productCustomerModel.position = dataListFiltered?.get(position)?.position
-                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, productCustomerModel))
+                        //dataListFiltered.get(position).setUserId(userId);
+                        val rsmCustomerModel = KNRCustomerModel().Datum()
+                        //rsmCustomerModel.userId = userId
+                        rsmCustomerModel.customerName = dataListFiltered?.get(position)?.customerName
+                        rsmCustomerModel.amount = dataListFiltered?.get(position)?.amount
+                        rsmCustomerModel.position = dataListFiltered?.get(position)?.position!!
+                        rsmCustomerModel.open = dataListFiltered?.get(position)?.open!!
+                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, rsmCustomerModel))
                     }
                     R.id.menu2 -> {
                         //handle menu2 click
-                        val productCustomerModel = KPSOCustomerModel().Datum()
-                        productCustomerModel.customerName = dataListFiltered?.get(position)?.customerName
-                        productCustomerModel.sOAmount = dataListFiltered?.get(position)?.sOAmount
-                        productCustomerModel.position = dataListFiltered?.get(position)?.position
-                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, productCustomerModel))
+                        //dataListFiltered.get(position).setUserId(userId);
+                        val salesCustomerModel = KNRCustomerModel().Datum()
+                        //salesCustomerModel.userId = userId
+                        salesCustomerModel.customerName = dataListFiltered?.get(position)?.customerName
+                        salesCustomerModel.amount = dataListFiltered?.get(position)?.amount
+                        salesCustomerModel.position = dataListFiltered?.get(position)?.position!!
+                        salesCustomerModel.open = dataListFiltered?.get(position)?.open!!
+
+                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, salesCustomerModel))
+                    }
+                    R.id.menu3 -> {
                     }
                     R.id.menu4 -> {
                         //handle menu3 click
-                        val productCustomerModel = KPSOCustomerModel().Datum()
-                        productCustomerModel.customerName = dataListFiltered?.get(position)?.customerName
-                        productCustomerModel.sOAmount = dataListFiltered?.get(position)?.sOAmount
-                        productCustomerModel.position = dataListFiltered?.get(position)?.position
-                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_ITEM, productCustomerModel))
+                        val toCustomerModel = KNRCustomerModel().Datum()
+                        //toCustomerModel.userId = userId
+                        toCustomerModel.customerName = dataListFiltered?.get(position)?.customerName
+                        toCustomerModel.amount = dataListFiltered?.get(position)?.amount
+                        toCustomerModel.position = dataListFiltered?.get(position)?.position!!
+                        toCustomerModel.open = dataListFiltered?.get(position)?.open!!
+                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, toCustomerModel))
                     }
                 }//handle menu3 click
                 false
@@ -162,32 +167,25 @@ class KPSOCustomerAdapter(dashboardActivityContext: DashboardActivity, level: St
             popup.show()
         }
 
-        holder.itemView.setOnClickListener {
-            val productCustomerModel = KPSOCustomerModel().Datum()
-            productCustomerModel.customerName = dataListFiltered?.get(position)?.customerName
-            productCustomerModel.sOAmount = dataListFiltered?.get(position)?.sOAmount
-            productCustomerModel.position = dataListFiltered?.get(position)?.position
-            EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_ITEM, productCustomerModel));
-        }
         dataListFiltered?.get(position)?.position = position
-        val aa = KPSOStateAdapter(dashboardActivity, level, dataListFiltered?.get(position)!!, fromRSM, fromSP, fromSO)
-        layoutManager = LinearLayoutManager(dashboardActivity)
+        val aa = KTODocumentAdapter(mContext, level, dataListFiltered!!.get(position), fromRSM, fromSP, fromProduct)
+        layoutManager = LinearLayoutManager(mContext)
         holder.rviStateCode.layoutManager = layoutManager
         holder.rviStateCode.adapter = aa
         holder.rlStateWise.setOnClickListener {
             if (dataListFiltered?.get(position)?.open == 0) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_expand))
+                    holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_expand))
                 } else {
-                    holder.llExpand.background = ContextCompat.getDrawable(mActivity, R.drawable.ic_expand)
+                    holder.llExpand.background = ContextCompat.getDrawable(mContext, R.drawable.ic_expand)
                 }
                 dataListFiltered?.get(position)?.open = 1
                 holder.rviStateCode.visibility = View.VISIBLE
             } else if (dataListFiltered?.get(position)?.open == 1) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_colapse))
+                    holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_colapse))
                 } else {
-                    holder.llExpand.background = ContextCompat.getDrawable(mActivity, R.drawable.ic_colapse)
+                    holder.llExpand.background = ContextCompat.getDrawable(mContext, R.drawable.ic_colapse)
                 }
                 dataListFiltered?.get(position)?.open = 0
                 holder.rviStateCode.visibility = View.GONE
@@ -202,7 +200,7 @@ class KPSOCustomerAdapter(dashboardActivityContext: DashboardActivity, level: St
                 if (charString.isEmpty()) {
                     dataListFiltered = dataList
                 } else {
-                    val filteredList = ArrayList<KPSOCustomerModel.Datum>()
+                    val filteredList = ArrayList<KNRCustomerModel.Datum>()
                     for (row in dataList) {
 
                         // name match condition. this might differ depending on your requirement
@@ -221,10 +219,9 @@ class KPSOCustomerAdapter(dashboardActivityContext: DashboardActivity, level: St
             }
 
             override fun publishResults(constraint: CharSequence, filterResults: Filter.FilterResults) {
-                dataListFiltered = filterResults.values as ArrayList<KPSOCustomerModel.Datum>
+                dataListFiltered = filterResults.values as ArrayList<KNRCustomerModel.Datum>
                 notifyDataSetChanged()
             }
         }
     }
-
 }

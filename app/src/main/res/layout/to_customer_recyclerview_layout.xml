@@ -91,7 +91,7 @@
                     android:id="@+id/tviStateWise"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="State Wise"
+                    android:text="Document Wise"
                     android:textColor="@color/color_value"
                     android:textSize="14sp"
                     app:fontFamily="@font/roboto_medium" />

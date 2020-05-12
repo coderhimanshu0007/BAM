@@ -20,6 +20,7 @@ import com.teamcomputers.bam.Interface.KBAMConstant
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSORSMModel
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOSOModel
+import com.teamcomputers.bam.Models.WSModels.PSOModels.PSOFilter
 import com.teamcomputers.bam.Models.common.EventObject
 import com.teamcomputers.bam.R
 import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderAprRequester
@@ -64,7 +65,7 @@ class KPSOProductFragment : KBaseFragment() {
     internal var customerData: KPSOCustomerModel? = null
     internal var selectedCustomerData: KPSOCustomerModel.Datum? = null
     internal var customerDataList: List<KPSOCustomerModel.Datum> = ArrayList()
-    internal var customerFilterData: KPSOCustomerModel.Filter? = null
+    internal var customerFilterData: PSOFilter? = null
 
     internal var invoiceProfile: KPSOSOModel.Datum? = null
     internal var rsmProfile: KPSORSMModel.Datum? = null
