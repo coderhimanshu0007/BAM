@@ -235,6 +235,44 @@
 
                                     </RelativeLayout>
 
+                                    <RelativeLayout
+                                        android:id="@+id/rlR4"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            android:id="@+id/tviR4Name"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginTop="10dp"
+                                            android:layout_marginRight="5dp"
+                                            android:text="Sagar Pushkarna"
+                                            android:textColor="@color/color_value"
+                                            android:textSize="14sp"
+                                            app:fontFamily="@font/roboto_bold" />
+
+                                        <ImageView
+                                            android:id="@+id/iviR4Close"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentRight="true"
+                                            android:padding="10dp"
+                                            android:tint="@color/color_value"
+                                            app:srcCompat="@drawable/ic_close_dialog" />
+
+                                        <TextView
+                                            android:id="@+id/tviR4StateName"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginTop="10dp"
+                                            android:layout_toLeftOf="@+id/iviR4Close"
+                                            android:textColor="@color/color_value"
+                                            android:textSize="14sp"
+                                            app:fontFamily="@font/roboto_bold" />
+                                    </RelativeLayout>
+
                                 </LinearLayout>
                             </RelativeLayout>
 

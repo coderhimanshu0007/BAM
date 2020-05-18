@@ -37,20 +37,20 @@ class KPSOProductFragment : KBaseFragment() {
     val USER_LEVEL = "USER_LEVEL"
     val RSM_PROFILE = "RSM_PROFILE"
     val SP_PROFILE = "SP_PROFILE"
-    val INVOICE_PROFILE = "INVOICE_PROFILE"
+    val SO_PROFILE = "SO_PROFILE"
     val FROM_RSM = "FROM_RSM"
     val FROM_SP = "FROM_SP"
-    val FROM_INVOICE = "FROM_INVOICE"
+    val FROM_SO = "FROM_SO"
     val RSM_POS = "RSM_POS"
     val SP_POS = "SP_POS"
-    val INVOICE_POS = "INVOICE_POS"
+    val SO_POS = "SO_POS"
     private var layoutManager: LinearLayoutManager? = null
     var dashboardActivityContext: DashboardActivity = null!!
     private var adapter: KPSOCustomerAdapter? = null
 
     internal var fromRSM: Boolean = false
     internal var fromSP: Boolean = false
-    internal var fromInvoice: Boolean = false
+    internal var fromSO: Boolean = false
     internal var search = false
     internal var toolbarTitle = ""
     internal var userId: String = ""
@@ -122,17 +122,17 @@ class KPSOProductFragment : KBaseFragment() {
 
         fromRSM = arguments!!.getBoolean(FROM_RSM)
         fromSP = arguments!!.getBoolean(FROM_SP)
-        fromInvoice = arguments!!.getBoolean(FROM_INVOICE)
+        fromSO = arguments!!.getBoolean(FROM_SO)
 
         rsmPos = arguments!!.getInt(RSM_POS)
         spPos = arguments!!.getInt(SP_POS)
-        iPos = arguments!!.getInt(INVOICE_POS)
+        iPos = arguments!!.getInt(SO_POS)
 
         userId = arguments!!.getString(USER_ID)
         level = arguments!!.getString(USER_LEVEL)
         rsmProfile = arguments!!.getParcelable<KPSORSMModel.Datum>(RSM_PROFILE)
         salesProfile = arguments!!.getParcelable<KPSORSMModel.Datum>(SP_PROFILE)
-        sOProfile = arguments!!.getParcelable<KPSOSOModel.Datum>(INVOICE_PROFILE)
+        sOProfile = arguments!!.getParcelable<KPSOSOModel.Datum>(SO_PROFILE)
 
         toolbarTitle = getString(R.string.Customer)
         dashboardActivityContext?.setToolBarTitle(toolbarTitle)
@@ -224,7 +224,7 @@ class KPSOProductFragment : KBaseFragment() {
                     acctDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true)
                     dashboardActivityContext?.replaceFragment(KBAMConstant.Fragments.OSO_CUSTOMER_FRAGMENT, acctDataBundle)
                 }
-                KBAMConstant.ClickEvents.CUSTOMER_SELECT -> if (!fromInvoice) {
+                KBAMConstant.ClickEvents.CUSTOMER_SELECT -> if (!fromSO) {
                     selectedCustomerData = eventObject.getObject() as KPSOCustomerModel.Datum
                     val customerBundle = Bundle()
                     customerBundle.putString(OSOInvoiceFragment.USER_ID, userId)
@@ -251,7 +251,7 @@ class KPSOProductFragment : KBaseFragment() {
                     dashboardActivityContext?.replaceFragment(KBAMConstant.Fragments.OSO_INVOICE_FRAGMENT, customerBundle)
                 }
                 KBAMConstant.ClickEvents.CUSTOMER_ITEM -> {
-                    //if (!fromInvoice) {
+                    //if (!fromSO) {
                     val productStateBundle = Bundle()
                     selectedCustomerData = eventObject.getObject() as KPSOCustomerModel.Datum
                     productStateBundle.putString(OSOInvoiceFragment.USER_ID, userId)
@@ -285,15 +285,15 @@ class KPSOProductFragment : KBaseFragment() {
 
                     cPos = spPos + iPos + 1
                     rsmBundle.putInt(OSORSMFragment.SP_POS, spPos)
-                    rsmBundle.putInt(OSORSMFragment.INVOICE_POS, iPos)
+                    rsmBundle.putInt(OSORSMFragment.SO_POS, iPos)
                     rsmBundle.putInt(OSORSMFragment.CUSTOMER_POS, cPos)
 
-                    rsmBundle.putBoolean(OSORSMFragment.FROM_INVOICE, fromInvoice)
+                    rsmBundle.putBoolean(OSORSMFragment.FROM_SO, fromSO)
                     rsmBundle.putBoolean(OSORSMFragment.FROM_SP, fromSP)
                     rsmBundle.putBoolean(OSORSMFragment.FROM_CUSTOMER, true)
 
                     rsmBundle.putParcelable(OSORSMFragment.CUSTOMER_PROFILE, selectedCustomerData)
-                    rsmBundle.putParcelable(OSORSMFragment.INVOICE_PROFILE, invoiceProfile)
+                    rsmBundle.putParcelable(OSORSMFragment.SO_PROFILE, invoiceProfile)
                     rsmBundle.putParcelable(OSORSMFragment.SP_PROFILE, salesProfile)
                     if (null != selectedCustomerData?.stateCodeWise) {
                         rsmBundle.putInt(OSORSMFragment.STATE_CODE, 1)
@@ -312,15 +312,15 @@ class KPSOProductFragment : KBaseFragment() {
                     cPos = rsmPos + iPos + 1
                     customerBundle.putInt(OSOSalesPersonFragment.RSM_POS, rsmPos)
                     customerBundle.putInt(OSOSalesPersonFragment.CUSTOMER_POS, cPos)
-                    customerBundle.putInt(OSOSalesPersonFragment.INVOICE_POS, iPos)
+                    customerBundle.putInt(OSOSalesPersonFragment.SO_POS, iPos)
 
                     customerBundle.putBoolean(OSOSalesPersonFragment.FROM_RSM, fromRSM)
-                    customerBundle.putBoolean(OSOSalesPersonFragment.FROM_INVOICE, fromInvoice)
+                    customerBundle.putBoolean(OSOSalesPersonFragment.FROM_SO, fromSO)
                     customerBundle.putBoolean(OSOSalesPersonFragment.FROM_CUSTOMER, true)
 
                     customerBundle.putParcelable(OSOSalesPersonFragment.CUSTOMER_PROFILE, selectedCustomerData)
                     customerBundle.putParcelable(OSOSalesPersonFragment.RSM_PROFILE, rsmProfile)
-                    customerBundle.putParcelable(OSOSalesPersonFragment.INVOICE_PROFILE, invoiceProfile)
+                    customerBundle.putParcelable(OSOSalesPersonFragment.SO_PROFILE, invoiceProfile)
                     if (null != selectedCustomerData?.stateCodeWise) {
                         customerBundle.putInt(OSOSalesPersonFragment.STATE_CODE, 1)
                     } else {
@@ -362,7 +362,7 @@ class KPSOProductFragment : KBaseFragment() {
     fun filterClose() {
         fromRSM = false
         fromSP = false
-        fromInvoice = false
+        fromSO = false
         rsmProfile = null
         salesProfile = null
         invoiceProfile = null
@@ -406,7 +406,7 @@ class KPSOProductFragment : KBaseFragment() {
                 iPos = 2
             }
         } else if (iPos == 1) {
-            fromInvoice = false
+            fromSO = false
             invoiceProfile = null
             iPos = 0
             if (rsmPos == 2) {
@@ -446,7 +446,7 @@ class KPSOProductFragment : KBaseFragment() {
                 iPos = 2
             }
         } else if (iPos == 2) {
-            fromInvoice = false
+            fromSO = false
             invoiceProfile = null
             iPos = 0
             if (rsmPos == 4) {
@@ -470,7 +470,7 @@ class KPSOProductFragment : KBaseFragment() {
             salesProfile = null
             spPos = 0
         } else if (iPos == 4) {
-            fromInvoice = false
+            fromSO = false
             invoiceProfile = null
             iPos = 0
         }
@@ -478,7 +478,7 @@ class KPSOProductFragment : KBaseFragment() {
     }
 
     private fun rowsDisplay() {
-        if (fromRSM || fromSP || fromInvoice) {
+        if (fromRSM || fromSP || fromSO) {
             cviSPHeading!!.setVisibility(View.VISIBLE)
         }
 
@@ -688,8 +688,8 @@ class KPSOProductFragment : KBaseFragment() {
     }
 
     private fun initData() {
-        //adapter = new OSOCustomerAdapter(dashboardActivityContext, userId, level, model, fromRSM, fromSP, fromInvoice);
-        adapter = KPSOCustomerAdapter(dashboardActivityContext, level, customerDataList, fromRSM, fromSP, fromInvoice)
+        //adapter = new OSOCustomerAdapter(dashboardActivityContext, userId, level, model, fromRSM, fromSP, fromSO);
+        adapter = KPSOCustomerAdapter(dashboardActivityContext, level, customerDataList, fromRSM, fromSP, fromSO, false)
         rviRSM!!.setAdapter(adapter)
     }
 }

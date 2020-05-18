@@ -19,6 +19,7 @@ import com.teamcomputers.bam.Models.common.EventObject
 import com.teamcomputers.bam.R
 import com.teamcomputers.bam.controllers.SharedPreferencesController
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import org.greenrobot.eventbus.EventBus
 
 class KHomeFragment : KBaseFragment() {
@@ -59,13 +60,13 @@ class KHomeFragment : KBaseFragment() {
             text_hello.text = "Hello " + name!!
         })
 
-        rlaOrderProcessing.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.ORDER_PROCESSING, null)) })
-        rlaPurchase.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.PURCHASE, null)) })
-        rlaLogistics.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.LOGISTICS, null)) })
-        rlaInstallation.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.INSTALLATION, null)) })
-        rlaCollection.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.COLLECTION, null))})
-        rlaWS.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.WS, null))})
-        rlaOthers.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.OTHERS, null)) })
+        rootView?.rlaOrderProcessing?.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.ORDER_PROCESSING, null)) })
+        rootView?.rlaPurchase?.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.PURCHASE, null)) })
+        rootView?.rlaLogistics?.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.LOGISTICS, null)) })
+        rootView?.rlaInstallation?.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.INSTALLATION, null)) })
+        rootView?.rlaCollection?.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.COLLECTION, null))})
+        rootView?.rlaWS?.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.WS, null))})
+        rootView?.rlaOthers?.setOnClickListener(View.OnClickListener { EventBus.getDefault().post(EventObject(KBAMConstant.Events.OTHERS, null)) })
 
         return rootView
     }

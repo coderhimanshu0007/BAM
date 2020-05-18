@@ -18,15 +18,8 @@ import com.teamcomputers.bam.R
 import com.teamcomputers.bam.Utils.BAMUtil
 import org.greenrobot.eventbus.EventBus
 
-class KPSOCustomerAdapter(dashboardActivityContext: DashboardActivity, level: String, data: List<KPSOCustomerModel.Datum>, fromRSM: Boolean, fromSP: Boolean, fromSO: Boolean) : RecyclerView.Adapter<KPSOCustomerAdapter.ViewHolder>(), Filterable {
-    private val dataList: List<KPSOCustomerModel.Datum> = data
-    private var dataListFiltered: List<KPSOCustomerModel.Datum>? = data
-    internal var level: String = level
-    internal var mActivity: Activity = dashboardActivityContext
-    internal var dashboardActivity: DashboardActivity = dashboardActivityContext
-    internal var fromRSM: Boolean = fromRSM
-    internal var fromSP: Boolean = fromSP
-    internal var fromSO: Boolean = fromSO
+class KPSOCustomerAdapter(val mContext: DashboardActivity, val level: String, val dataList: List<KPSOCustomerModel.Datum>, val fromRSM: Boolean, val fromSP: Boolean, val fromSO: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KPSOCustomerAdapter.ViewHolder>(), Filterable {
+    private var dataListFiltered: List<KPSOCustomerModel.Datum>? = dataList
     private var layoutManager: LinearLayoutManager? = null
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -63,15 +56,15 @@ class KPSOCustomerAdapter(dashboardActivityContext: DashboardActivity, level: St
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position == 0) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_first_item_value))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_first_item_value))
         } else if (position == 1) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_second_item_value))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_second_item_value))
         } else if (position == 2) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_third_item_value))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_third_item_value))
         } else if (position % 2 == 0) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.color_white))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_white))
         } else if (position % 2 == 1) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.login_bg))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.login_bg))
         }
         holder.tviName.text = (position + 1).toString() + ". " + dataListFiltered?.get(position)?.customerName
 
@@ -93,40 +86,30 @@ class KPSOCustomerAdapter(dashboardActivityContext: DashboardActivity, level: St
 
         holder.iviOption.setOnClickListener {
             //creating a popup menu
-            val popup = PopupMenu(mActivity, holder.iviOption)
+            val popup = PopupMenu(mContext, holder.iviOption)
             //inflating menu from xml resource
-            popup.inflate(R.menu.options_menu)
+            popup.inflate(R.menu.pso_options_menu)
             popup.menu.getItem(3).title = "SO"
-            if (level == "R1") {
-                popup.menu.getItem(2).isVisible = false
-                if (fromSP && fromSO) {
-                    popup.menu.getItem(1).isVisible = false
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromSP && fromRSM) {
-                    popup.menu.getItem(0).isVisible = false
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromSO && fromRSM) {
-                    popup.menu.getItem(0).isVisible = false
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromSP) {
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromSO) {
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromRSM) {
-                    popup.menu.getItem(0).isVisible = false
-                }
-            } else if (level == "R2" || level == "R3") {
+            if (level == "R2" || level == "R3") {
                 popup.menu.getItem(0).isVisible = false
                 popup.menu.getItem(2).isVisible = false
-                if (fromSP) {
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromSO) {
-                    popup.menu.getItem(3).isVisible = false
-                }
             } else if (level == "R4") {
                 popup.menu.getItem(0).isVisible = false
                 popup.menu.getItem(1).isVisible = false
                 popup.menu.getItem(2).isVisible = false
+            }
+            popup.menu.getItem(2).isVisible = false
+            if (fromRSM) {
+                popup.menu.getItem(0).isVisible = false
+            }
+            if (fromSP) {
+                popup.menu.getItem(1).isVisible = false
+            }
+            if (fromSO) {
+                popup.menu.getItem(3).isVisible = false
+            }
+            if (fromProduct) {
+                popup.menu.getItem(4).isVisible = false
             }
             //adding click listener
             popup.setOnMenuItemClickListener { item ->
@@ -155,6 +138,13 @@ class KPSOCustomerAdapter(dashboardActivityContext: DashboardActivity, level: St
                         productCustomerModel.position = dataListFiltered?.get(position)?.position
                         EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_ITEM, productCustomerModel))
                     }
+                    R.id.menu5 -> {
+                        val productCustomerModel = KPSOCustomerModel().Datum()
+                        productCustomerModel.customerName = dataListFiltered?.get(position)?.customerName
+                        productCustomerModel.sOAmount = dataListFiltered?.get(position)?.sOAmount
+                        productCustomerModel.position = dataListFiltered?.get(position)?.position
+                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SO_ITEM_SELECT, productCustomerModel));
+                    }
                 }//handle menu3 click
                 false
             }
@@ -170,24 +160,24 @@ class KPSOCustomerAdapter(dashboardActivityContext: DashboardActivity, level: St
             EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_ITEM, productCustomerModel));
         }
         dataListFiltered?.get(position)?.position = position
-        val aa = KPSOStateAdapter(dashboardActivity, level, dataListFiltered?.get(position)!!, fromRSM, fromSP, fromSO)
-        layoutManager = LinearLayoutManager(dashboardActivity)
+        val aa = KPSOStateAdapter(mContext, level, dataListFiltered?.get(position)!!, fromRSM, fromSP, fromSO)
+        layoutManager = LinearLayoutManager(mContext)
         holder.rviStateCode.layoutManager = layoutManager
         holder.rviStateCode.adapter = aa
         holder.rlStateWise.setOnClickListener {
             if (dataListFiltered?.get(position)?.open == 0) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_expand))
+                    holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_expand))
                 } else {
-                    holder.llExpand.background = ContextCompat.getDrawable(mActivity, R.drawable.ic_expand)
+                    holder.llExpand.background = ContextCompat.getDrawable(mContext, R.drawable.ic_expand)
                 }
                 dataListFiltered?.get(position)?.open = 1
                 holder.rviStateCode.visibility = View.VISIBLE
             } else if (dataListFiltered?.get(position)?.open == 1) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_colapse))
+                    holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_colapse))
                 } else {
-                    holder.llExpand.background = ContextCompat.getDrawable(mActivity, R.drawable.ic_colapse)
+                    holder.llExpand.background = ContextCompat.getDrawable(mContext, R.drawable.ic_colapse)
                 }
                 dataListFiltered?.get(position)?.open = 0
                 holder.rviStateCode.visibility = View.GONE

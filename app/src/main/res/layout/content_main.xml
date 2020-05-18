@@ -182,6 +182,35 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/llOSOHome_Nav_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_weight=".5"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviOSOHomeNav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/end_header_color_bg"
+                    app:srcCompat="@drawable/ic_home_black" />
+
+                <TextView
+                    android:id="@+id/tviOSOHome_Nav_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@android:color/black"
+                    android:text="Home"
+                    android:textColor="@color/end_header_color_bg"
+                    android:textSize="11sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/llOSORSM_Nav_tab"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -297,6 +326,35 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/llOSOProduct_Nav_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviOSOProduct_Nav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/color_value_54"
+                    app:srcCompat="@drawable/ic_product" />
+
+                <TextView
+                    android:id="@+id/tviOSOProduct_Nav_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@android:color/black"
+                    android:text="Product"
+                    android:textColor="@color/color_value_54"
+                    android:textSize="11sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 
@@ -324,6 +382,35 @@
             android:background="@color/color_white"
             android:gravity="center"
             android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/llTOSHome_Nav_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight=".5"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviTOSHomeNav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/end_header_color_bg"
+                    app:srcCompat="@drawable/ic_home_black" />
+
+                <TextView
+                    android:id="@+id/tviTOSHome_Nav_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@android:color/black"
+                    android:text="Home"
+                    android:textColor="@color/end_header_color_bg"
+                    android:textSize="11sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/llTOSRSM_Nav_tab"
@@ -435,6 +522,35 @@
                     android:layout_height="wrap_content"
                     android:shadowColor="@android:color/black"
                     android:text="Product"
+                    android:textColor="@color/color_value_54"
+                    android:textSize="11sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llTOSInvoice_Nav_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviTOSInvoice_Nav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/color_value_54"
+                    app:srcCompat="@drawable/ic_invoice" />
+
+                <TextView
+                    android:id="@+id/tviTOSInvoice_Nav_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@android:color/black"
+                    android:text="@string/Invoice"
                     android:textColor="@color/color_value_54"
                     android:textSize="11sp"
                     app:fontFamily="@font/roboto_medium" />

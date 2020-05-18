@@ -6,9 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
-import androidx.annotation.IntDef
 import androidx.fragment.app.Fragment
-import com.teamcomputers.bam.Activities.BaseActivity
+import com.teamcomputers.bam.Activities.KBaseActivity
 import com.teamcomputers.bam.Interface.KBAMConstant
 
 abstract class KBaseFragment:Fragment(),KBAMConstant {
@@ -271,15 +270,15 @@ abstract class KBaseFragment:Fragment(),KBAMConstant {
     abstract fun getFragmentName(): String
 
     fun showToast(toastMessage: String) {
-        (context as BaseActivity).showToast(toastMessage)
+        (context as KBaseActivity).showToast(toastMessage)
     }
 
     fun showProgress(progressMessage: String) {
-        (context as BaseActivity).showProgress(progressMessage)
+        (context as KBaseActivity).showProgress(progressMessage)
     }
 
     fun dismissProgress() {
-        (context as BaseActivity).dismissProgress()
+        (context as KBaseActivity).dismissProgress()
     }
 
     /*@IntDef(MOVE, CUBE, FLIP, PUSHPULL, SIDES, CUBEMOVE, MOVECUBE, PUSHMOVE, MOVEPULL, FLIPMOVE, MOVEFLIP, FLIPCUBE, CUBEFLIP)

@@ -79,8 +79,7 @@ class KPSOStateAdapter(dashboardActivityContext: DashboardActivity, level: Strin
             //creating a popup menu
             val popup = PopupMenu(mActivity, holder.iviOption)
             //inflating menu from xml resource
-            popup.inflate(R.menu.options_menu)
-            popup.menu.getItem(3).title = "SO"
+            popup.inflate(R.menu.pso_options_menu)
             if (level == "R1") {
                 popup.menu.getItem(2).isVisible = false
                 if (fromSP && fromProduct) {

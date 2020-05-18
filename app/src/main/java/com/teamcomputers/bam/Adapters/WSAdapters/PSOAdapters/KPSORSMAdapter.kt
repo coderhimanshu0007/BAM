@@ -1,11 +1,11 @@
 package com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters
 
-import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.teamcomputers.bam.Activities.DashboardActivity
 import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSORSMAdapter.ViewHolder
@@ -17,15 +17,8 @@ import com.teamcomputers.bam.Utils.BAMUtil
 import org.greenrobot.eventbus.EventBus
 import java.util.*
 
-class KPSORSMAdapter(dashboardActivityContext: DashboardActivity, type: String, level: String, data: List<KPSORSMModel.Datum>, fromSP: Boolean, fromCustomer: Boolean, fromProduct: Boolean) : RecyclerView.Adapter<ViewHolder>(), Filterable {
-    val dataList: List<KPSORSMModel.Datum> = data
-    var dataListFiltered: List<KPSORSMModel.Datum>? = data
-    var mActivity: Activity = dashboardActivityContext
-    var type: String = type
-    var level: String = level
-    var fromSP: Boolean = fromSP
-    var fromCustomer: Boolean = fromCustomer
-    var fromProduct: Boolean = fromProduct
+class KPSORSMAdapter(val mContext: DashboardActivity, val type: String, val level: String, val dataList: List<KPSORSMModel.Datum>, val fromSP: Boolean, val fromCustomer: Boolean, val fromSO: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<ViewHolder>(), Filterable {
+    var dataListFiltered: List<KPSORSMModel.Datum>? = dataList
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var llRSMLayout: LinearLayout
@@ -53,49 +46,30 @@ class KPSORSMAdapter(dashboardActivityContext: DashboardActivity, type: String, 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position == 0) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.resources.getColor(R.color.color_first_item_value))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_first_item_value))
         } else if (position == 1) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.resources.getColor(R.color.color_second_item_value))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_second_item_value))
         } else if (position == 2) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.resources.getColor(R.color.color_third_item_value))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_third_item_value))
         } else if (position % 2 == 0) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.resources.getColor(R.color.color_white))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_white))
         } else if (position % 2 == 1) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.resources.getColor(R.color.login_bg))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.login_bg))
         }
         holder.tviName.text = (position + 1).toString() + ". " + dataListFiltered?.get(position)?.name
         holder.tviSOAmount.text = dataListFiltered?.get(position)?.soAmount?.let { BAMUtil.getRoundOffValue(it) }
         if (level == "R1") {
-            if (fromSP && fromCustomer && fromProduct) {
+            if (fromSP && fromCustomer && fromSO && fromProduct) {
                 holder.iviOption.visibility = View.GONE
             }
         }
 
         holder.iviOption.setOnClickListener {
             //creating a popup menu
-            val popup = PopupMenu(mActivity, holder.iviOption)
+            val popup = PopupMenu(mContext, holder.iviOption)
             //inflating menu from xml resource
-            popup.inflate(R.menu.options_menu)
-            popup.menu.getItem(3).title = "SO"
-            if (level == "R1") {
-                popup.menu.getItem(0).isVisible = false
-                if (fromSP && fromCustomer) {
-                    popup.menu.getItem(1).isVisible = false
-                    popup.menu.getItem(2).isVisible = false
-                } else if (fromSP && fromProduct) {
-                    popup.menu.getItem(1).isVisible = false
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromCustomer && fromProduct) {
-                    popup.menu.getItem(2).isVisible = false
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromSP) {
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromCustomer) {
-                    popup.menu.getItem(2).isVisible = false
-                } else if (fromProduct) {
-                    popup.menu.getItem(3).isVisible = false
-                }
-            } else if (level == "R2" || level == "R3") {
+            popup.inflate(R.menu.pso_options_menu)
+            /*if (level == "R2" || level == "R3") {
                 popup.menu.getItem(0).isVisible = false
                 popup.menu.getItem(1).isVisible = false
                 if (fromCustomer) {
@@ -103,6 +77,19 @@ class KPSORSMAdapter(dashboardActivityContext: DashboardActivity, type: String, 
                 } else if (fromProduct) {
                     popup.menu.getItem(3).isVisible = false
                 }
+            }*/
+            popup.menu.getItem(0).isVisible = false
+            if (fromSP) {
+                popup.menu.getItem(1).isVisible = false
+            }
+            if (fromCustomer) {
+                popup.menu.getItem(2).isVisible = false
+            }
+            if (fromSO) {
+                popup.menu.getItem(3).isVisible = false
+            }
+            if (fromProduct) {
+                popup.menu.getItem(4).isVisible = false
             }
             //adding click listener
             popup.setOnMenuItemClickListener { item ->
@@ -111,18 +98,22 @@ class KPSORSMAdapter(dashboardActivityContext: DashboardActivity, type: String, 
                     }
                     R.id.menu2 -> {
                         //handle menu2 click
-                        dataListFiltered!![position].position=position
+                        dataListFiltered!![position].position = position
                         EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.RSM_CLICK, dataListFiltered?.get(position)))
                     }
                     R.id.menu3 -> {
                         //handle menu3 click
-                        dataListFiltered!![position].position=position
+                        dataListFiltered!![position].position = position
                         EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataListFiltered?.get(position)))
                     }
                     R.id.menu4 -> {
                         //handle menu3 click
-                        dataListFiltered!![position].position=position
+                        dataListFiltered!![position].position = position
                         EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, dataListFiltered?.get(position)))
+                    }
+                    R.id.menu5 -> {
+                        dataListFiltered!![position].position = position
+                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SO_ITEM_SELECT, dataListFiltered?.get(position)));
                     }
                 }//handle menu1 click
                 false
@@ -132,7 +123,7 @@ class KPSORSMAdapter(dashboardActivityContext: DashboardActivity, type: String, 
         }
         holder.itemView.setOnClickListener {
             //EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.RSM_CLICK, position));
-            dataListFiltered!![position].position=position
+            dataListFiltered!![position].position = position
             EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.RSM_CLICK, dataListFiltered?.get(position)))
         }
     }

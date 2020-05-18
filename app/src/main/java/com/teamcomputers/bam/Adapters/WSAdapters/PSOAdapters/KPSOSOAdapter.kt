@@ -1,9 +1,7 @@
 package com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters
 
 import android.app.Activity
-import android.os.Build
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -12,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.teamcomputers.bam.Activities.DashboardActivity
-import com.teamcomputers.bam.Adapters.OpenSalesOrder.OSOProductAdapter
 import com.teamcomputers.bam.Interface.BAMConstant
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOSOModel
 import com.teamcomputers.bam.Models.common.EventObject
@@ -20,17 +17,11 @@ import com.teamcomputers.bam.R
 import com.teamcomputers.bam.Utils.BAMUtil
 import org.greenrobot.eventbus.EventBus
 
-class KPSOSOAdapter(dashboardActivityContext: DashboardActivity, level: String, type: String, data: List<KPSOSOModel.Datum>, fromRSM: Boolean, fromSP: Boolean, fromCustomer: Boolean) : RecyclerView.Adapter<KPSOSOAdapter.ViewHolder>(), Filterable {
+class KPSOSOAdapter(val mContext: DashboardActivity, level: String, type: String, data: List<KPSOSOModel.Datum>, val fromRSM: Boolean, val fromSP: Boolean, val fromCustomer: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KPSOSOAdapter.ViewHolder>(), Filterable {
     private val dataList: List<KPSOSOModel.Datum> = data
     private var dataListFiltered: List<KPSOSOModel.Datum>? = data
     internal var level: String = level
     internal var type: String = type
-    internal var mActivity: Activity = dashboardActivityContext
-    internal var dashboardActivity: DashboardActivity = dashboardActivityContext
-    internal var fromRSM: Boolean = fromRSM
-    internal var fromSP: Boolean = fromSP
-    internal var fromCustomer: Boolean = fromCustomer
-    private var layoutManager: LinearLayoutManager? = null
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal var llRSMLayout: LinearLayout
@@ -58,22 +49,22 @@ class KPSOSOAdapter(dashboardActivityContext: DashboardActivity, level: String, 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position == 0) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.resources.getColor(R.color.color_first_item_value))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext,R.color.color_first_item_value))
         } else if (position == 1) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.resources.getColor(R.color.color_second_item_value))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext,R.color.color_second_item_value))
         } else if (position == 2) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.resources.getColor(R.color.color_third_item_value))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext,R.color.color_third_item_value))
         } else if (position % 2 == 0) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.resources.getColor(R.color.color_white))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext,R.color.color_white))
         } else if (position % 2 == 1) {
-            holder.llRSMLayout.setBackgroundColor(mActivity.resources.getColor(R.color.login_bg))
+            holder.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext,R.color.login_bg))
         }
         holder.tviName.setText((position + 1).toString() + ". " + dataListFiltered?.get(position)?.soNumber)
 
         holder.tviSOAmount.setText(BAMUtil.getRoundOffValue(dataListFiltered?.get(position)?.soAmount!!))
 
         if (level == "R1") {
-            if (fromRSM && fromSP && fromCustomer) {
+            if (fromRSM && fromSP && fromCustomer && fromProduct) {
                 holder.iviOption.setVisibility(View.GONE)
             }
         } else if (level == "R2" || level == "R3") {
@@ -88,39 +79,29 @@ class KPSOSOAdapter(dashboardActivityContext: DashboardActivity, level: String, 
 
         holder.iviOption.setOnClickListener(View.OnClickListener {
             //creating a popup menu
-            val popup = PopupMenu(mActivity, holder.iviOption)
+            val popup = PopupMenu(mContext, holder.iviOption)
             //inflating menu from xml resource
-            popup.inflate(R.menu.options_menu)
-            if (level == "R1") {
-                popup.menu.getItem(3).isVisible = false
-                if (fromSP && fromCustomer) {
-                    popup.menu.getItem(1).isVisible = false
-                    popup.menu.getItem(2).isVisible = false
-                } else if (fromSP && fromRSM) {
-                    popup.menu.getItem(0).isVisible = false
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromCustomer && fromRSM) {
-                    popup.menu.getItem(0).isVisible = false
-                    popup.menu.getItem(2).isVisible = false
-                } else if (fromSP) {
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromCustomer) {
-                    popup.menu.getItem(2).isVisible = false
-                } else if (fromRSM) {
-                    popup.menu.getItem(0).isVisible = false
-                }
-            } else if (level == "R2" || level == "R3") {
+            popup.inflate(R.menu.pso_options_menu)
+            if (level == "R2" || level == "R3") {
                 popup.menu.getItem(0).isVisible = false
                 popup.menu.getItem(3).isVisible = false
-                if (fromSP) {
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromCustomer) {
-                    popup.menu.getItem(2).isVisible = false
-                }
             } else if (level == "R4") {
                 popup.menu.getItem(0).isVisible = false
                 popup.menu.getItem(1).isVisible = false
                 popup.menu.getItem(3).isVisible = false
+            }
+            popup.menu.getItem(3).isVisible = false
+            if (fromRSM) {
+                popup.menu.getItem(0).isVisible = false
+            }
+            if (fromSP) {
+                popup.menu.getItem(1).isVisible = false
+            }
+            if (fromCustomer) {
+                popup.menu.getItem(2).isVisible = false
+            }
+            if (fromProduct) {
+                popup.menu.getItem(4).isVisible = false
             }
             //adding click listener
             popup.setOnMenuItemClickListener { item ->
@@ -141,7 +122,9 @@ class KPSOSOAdapter(dashboardActivityContext: DashboardActivity, level: String, 
                         dataListFiltered!![position].position = position
                         EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataListFiltered?.get(position)))
                     }
-                    R.id.menu4 -> {
+                    R.id.menu5 -> {
+                        dataListFiltered!![position].position = position
+                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SO_ITEM_SELECT, dataListFiltered?.get(position)));
                     }
                 }//handle menu3 click
                 false
@@ -151,32 +134,9 @@ class KPSOSOAdapter(dashboardActivityContext: DashboardActivity, level: String, 
         })
 
         holder.itemView.setOnClickListener {
-            //EventBus.getDefault().post(new EventObject(BAMConstant.ClickEvents.ACCOUNT_ITEM, position));
+            dataListFiltered!![position].position = position
+            EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SO_ITEM_SELECT, dataListFiltered?.get(position)));
         }
-        /*dataListFiltered.get(position).setPosition(position)
-        val aa = OSOProductAdapter(dashboardActivity, dataListFiltered.get(position))
-        layoutManager = LinearLayoutManager(dashboardActivity)
-        holder.rviStateCode.setLayoutManager(layoutManager)
-        holder.rviStateCode.setAdapter(aa)
-        holder.rlStateWise.setOnClickListener(View.OnClickListener {
-            if (dataListFiltered.get(position).getOpen() == 0) {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_expand))
-                } else {
-                    holder.llExpand.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.ic_expand))
-                }
-                dataListFiltered.get(position).setOpen(1)
-                holder.rviStateCode.setVisibility(View.VISIBLE)
-            } else if (dataListFiltered.get(position).getOpen() == 1) {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    holder.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_colapse))
-                } else {
-                    holder.llExpand.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.ic_colapse))
-                }
-                dataListFiltered.get(position).setOpen(0)
-                holder.rviStateCode.setVisibility(View.GONE)
-            }
-        })*/
     }
 
     override fun getFilter(): Filter {

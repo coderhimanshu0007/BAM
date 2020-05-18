@@ -48,10 +48,12 @@ import com.teamcomputers.bam.Fragments.NewSalesReceivable.NewRSMTabFragment;
 import com.teamcomputers.bam.Fragments.NewSalesReceivable.NewSalesReceivableFragment;
 import com.teamcomputers.bam.Fragments.OpenSalesOrder.OSOCustomerFragment;
 import com.teamcomputers.bam.Fragments.OpenSalesOrder.OSOInvoiceFragment;
+import com.teamcomputers.bam.Fragments.OpenSalesOrder.OSOProductFragment;
 import com.teamcomputers.bam.Fragments.OpenSalesOrder.OSORSMFragment;
 import com.teamcomputers.bam.Fragments.OpenSalesOrder.OSOSalesPersonFragment;
 import com.teamcomputers.bam.Fragments.OrderProcessing.OrderProcessingFragment;
 import com.teamcomputers.bam.Fragments.Outstanding.TOSCustomerFragment;
+import com.teamcomputers.bam.Fragments.Outstanding.TOSInvoiceFragment;
 import com.teamcomputers.bam.Fragments.Outstanding.TOSProductFragment;
 import com.teamcomputers.bam.Fragments.Outstanding.TOSRSMFragment;
 import com.teamcomputers.bam.Fragments.Outstanding.TOSSalesPersonFragment;
@@ -774,6 +776,9 @@ public class DashboardActivity extends BaseActivity {
                     case Fragments.OSO_INVOICE_FRAGMENT:
                         fragment = new OSOInvoiceFragment();
                         break;
+                    case Fragments.OSO_PRODUCT_FRAGMENT:
+                        fragment = new OSOProductFragment();
+                        break;
                     case Fragments.TOS_RSM_FRAGMENT:
                         fragment = new TOSRSMFragment();
                         break;
@@ -785,6 +790,9 @@ public class DashboardActivity extends BaseActivity {
                         break;
                     case Fragments.TOS_PRODUCT_FRAGMENT:
                         fragment = new TOSProductFragment();
+                        break;
+                    case Fragments.TOS_INVOICE_FRAGMENT:
+                        fragment = new TOSInvoiceFragment();
                         break;
                     default:
                         fragment = new HomeFragment();
@@ -924,6 +932,10 @@ public class DashboardActivity extends BaseActivity {
     @BindView(R.id.tviProduct_Nav_label)
     TextView tviProduct_Nav_label;
 
+    @BindView(R.id.iviOSOHomeNav_icon)
+    ImageView iviOSOHomeNav_icon;
+    @BindView(R.id.tviOSOHome_Nav_label)
+    TextView tviOSOHome_Nav_label;
     @BindView(R.id.iviOSORSMNav_icon)
     ImageView iviOSORSMNav_icon;
     @BindView(R.id.tviOSORSM_Nav_label)
@@ -940,8 +952,15 @@ public class DashboardActivity extends BaseActivity {
     ImageView iviOSOInvoice_Nav_icon;
     @BindView(R.id.tviOSOInvoice_Nav_label)
     TextView tviOSOInvoice_Nav_label;
+    @BindView(R.id.iviOSOProduct_Nav_icon)
+    ImageView iviOSOProduct_Nav_icon;
+    @BindView(R.id.tviOSOProduct_Nav_label)
+    TextView tviOSOProduct_Nav_label;
 
-
+    @BindView(R.id.iviTOSHomeNav_icon)
+    ImageView iviTOSHomeNav_icon;
+    @BindView(R.id.tviTOSHome_Nav_label)
+    TextView tviTOSHome_Nav_label;
     @BindView(R.id.iviTOSRSMNav_icon)
     ImageView iviTOSRSMNav_icon;
     @BindView(R.id.tviTOSRSM_Nav_label)
@@ -958,6 +977,10 @@ public class DashboardActivity extends BaseActivity {
     ImageView iviTOSProduct_Nav_icon;
     @BindView(R.id.tviTOSProduct_Nav_label)
     TextView tviTOSProduct_Nav_label;
+    @BindView(R.id.iviTOSInvoice_Nav_icon)
+    ImageView iviTOSInvoice_Nav_icon;
+    @BindView(R.id.tviTOSInvoice_Nav_label)
+    TextView tviTOSInvoice_Nav_label;
 
 
     public void showTab(String level) {
@@ -986,6 +1009,7 @@ public class DashboardActivity extends BaseActivity {
     public void hideTOSTab() {
         llTOSTabs.setVisibility(View.GONE);
     }
+
 
     @OnClick(R.id.llRSM_Nav_tab)
     public void RSMNavClick() {
@@ -1098,6 +1122,12 @@ public class DashboardActivity extends BaseActivity {
         iviProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
+    @OnClick(R.id.llOSOHome_Nav_tab)
+    public void OSOHome_Nav_tab() {
+        OSOHomeClick();
+        clearStack();
+    }
+
     @OnClick(R.id.llOSORSM_Nav_tab)
     public void OSORSMNavClick() {
         //rSMClick();
@@ -1142,7 +1172,41 @@ public class DashboardActivity extends BaseActivity {
         dashboardActivityContext.replaceFragment(Fragments.OSO_INVOICE_FRAGMENT, productDataBundle);
     }
 
+    @OnClick(R.id.llOSOProduct_Nav_tab)
+    public void OSOProductNavClick() {
+        //productClick();
+        Bundle productDataBundle = new Bundle();
+        productDataBundle.putString(WSProductFragment.USER_ID, userId);
+        productDataBundle.putString(WSProductFragment.USER_LEVEL, level);
+        productDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
+        dashboardActivityContext.replaceFragment(Fragments.OSO_PRODUCT_FRAGMENT, productDataBundle);
+    }
+
+    private void OSOHomeClick() {
+        tviOSOHome_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
+        iviOSOHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSORSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSORSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSOSP_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOSP_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSOCustomer_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOCustomer_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSOInvoice_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOInvoice_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSOProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+    }
+
     public void OSORSMClick(String level) {
+        tviOSOHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
         tviOSORSM_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
         iviOSORSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -1154,12 +1218,18 @@ public class DashboardActivity extends BaseActivity {
 
         tviOSOInvoice_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviOSOInvoice_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSOProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     public void OSOSPClick(String level) {
         if (level.equals("R2") || level.equals("R3")) {
             llOSORSM_Nav_tab.setVisibility(View.GONE);
         }
+        tviOSOHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
         tviOSORSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviOSORSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -1171,6 +1241,9 @@ public class DashboardActivity extends BaseActivity {
 
         tviOSOInvoice_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviOSOInvoice_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSOProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     public void OSOcustomerClick(String level) {
@@ -1178,6 +1251,9 @@ public class DashboardActivity extends BaseActivity {
             llOSORSM_Nav_tab.setVisibility(View.GONE);
             llOSOSP_Nav_tab.setVisibility(View.GONE);
         }
+        tviOSOHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
         tviOSORSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviOSORSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -1189,9 +1265,15 @@ public class DashboardActivity extends BaseActivity {
 
         tviOSOInvoice_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviOSOInvoice_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSOProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
-    public void OSOproductClick(String level) {
+    public void OSOSOClick(String level) {
+        tviOSOHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
         tviOSORSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviOSORSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -1203,6 +1285,35 @@ public class DashboardActivity extends BaseActivity {
 
         tviOSOInvoice_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
         iviOSOInvoice_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSOProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+    }
+
+    public void OSOProductClick(String level) {
+        tviOSOHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSORSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSORSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSOSP_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOSP_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSOCustomer_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOCustomer_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSOInvoice_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviOSOInvoice_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviOSOProduct_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
+        iviOSOProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
+    }
+
+    @OnClick(R.id.llTOSHome_Nav_tab)
+    public void TOSHome_Nav_tab() {
+        TOSHomeClick();
+        clearStack();
     }
 
     @OnClick(R.id.llTOSRSM_Nav_tab)
@@ -1249,7 +1360,41 @@ public class DashboardActivity extends BaseActivity {
         dashboardActivityContext.replaceFragment(Fragments.TOS_PRODUCT_FRAGMENT, productDataBundle);
     }
 
+    @OnClick(R.id.llTOSInvoice_Nav_tab)
+    public void TOSInvoiceNavClick() {
+        //productClick();
+        Bundle productDataBundle = new Bundle();
+        productDataBundle.putString(WSProductFragment.USER_ID, userId);
+        productDataBundle.putString(WSProductFragment.USER_LEVEL, level);
+        productDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        //dashboardActivityContext.replaceFragment(Fragments.RSM_ANALYSIS_FRAGMENT, rsmDataBundle);
+        dashboardActivityContext.replaceFragment(Fragments.TOS_INVOICE_FRAGMENT, productDataBundle);
+    }
+
+    private void TOSHomeClick() {
+        tviTOSHome_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
+        iviTOSHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSRSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSSP_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSSP_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSCustomer_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSCustomer_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSInvoice_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSInvoice_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+    }
+
     public void TOSRSMClick(String level) {
+        tviTOSHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
         tviTOSRSM_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
         iviTOSRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -1261,12 +1406,18 @@ public class DashboardActivity extends BaseActivity {
 
         tviTOSProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviTOSProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSInvoice_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSInvoice_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     public void TOSSPClick(String level) {
         if (level.equals("R2") || level.equals("R3")) {
             llTOSRSM_Nav_tab.setVisibility(View.GONE);
         }
+        tviTOSHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
         tviTOSRSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviTOSRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -1278,6 +1429,9 @@ public class DashboardActivity extends BaseActivity {
 
         tviTOSProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviTOSProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSInvoice_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSInvoice_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     public void TOScustomerClick(String level) {
@@ -1285,6 +1439,9 @@ public class DashboardActivity extends BaseActivity {
             llTOSRSM_Nav_tab.setVisibility(View.GONE);
             llTOSSP_Nav_tab.setVisibility(View.GONE);
         }
+        tviTOSHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
         tviTOSRSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviTOSRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -1296,9 +1453,15 @@ public class DashboardActivity extends BaseActivity {
 
         tviTOSProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviTOSProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSInvoice_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSInvoice_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     public void TOSproductClick(String level) {
+        tviTOSHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
         tviTOSRSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviTOSRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -1310,7 +1473,37 @@ public class DashboardActivity extends BaseActivity {
 
         tviTOSProduct_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
         iviTOSProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSInvoice_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSInvoice_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
+    public void TOSInvoiceClick(String level) {
+        tviTOSHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSRSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSSP_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSSP_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSCustomer_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSCustomer_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviTOSProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviTOSInvoice_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
+        iviTOSInvoice_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
+    }
+
+    private void clearStack() {
+        int count = fragmentManager.getBackStackEntryCount();
+        while (count > 2) {
+            fragmentManager.popBackStack();
+            count--;
+        }
+    }
 
 }

@@ -1,13 +1,10 @@
 package com.teamcomputers.bam.Adapters.WSAdapters.NRAdapters
 
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.teamcomputers.bam.Activities.DashboardActivity
 import com.teamcomputers.bam.Interface.BAMConstant
@@ -21,7 +18,7 @@ import java.util.*
 
 class KTOCustomerAdapter(val mContext: DashboardActivity, val userId: String, val level: String, val dataList: List<KNRCustomerModel.Datum>, val fromRSM: Boolean, val fromSP: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KTOCustomerAdapter.ViewHolder>(), Filterable {
     private var dataListFiltered: List<KNRCustomerModel.Datum>? = dataList
-    private var layoutManager: LinearLayoutManager? = null
+    //private var layoutManager: LinearLayoutManager? = null
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var currentDataItem: KNRCustomerModel.Datum? = null
@@ -51,6 +48,7 @@ class KTOCustomerAdapter(val mContext: DashboardActivity, val userId: String, va
         }
 
         fun setData(filterDataList: KNRCustomerModel.Datum?, pos: Int) {
+            itemView.llStateWise.visibility = View.GONE
             itemView.tviName.text = (position + 1).toString() + ". " + filterDataList?.customerName
             itemView.tviAmount.text = KBAMUtils.getRoundOffValue(filterDataList?.amount!!)
 
@@ -168,7 +166,7 @@ class KTOCustomerAdapter(val mContext: DashboardActivity, val userId: String, va
         }
 
         dataListFiltered?.get(position)?.position = position
-        val aa = KTODocumentAdapter(mContext, level, dataListFiltered!!.get(position), fromRSM, fromSP, fromProduct)
+        /*val aa = KTODocumentAdapter(mContext, level, dataListFiltered!!.get(position), fromRSM, fromSP, fromProduct)
         layoutManager = LinearLayoutManager(mContext)
         holder.rviStateCode.layoutManager = layoutManager
         holder.rviStateCode.adapter = aa
@@ -190,7 +188,7 @@ class KTOCustomerAdapter(val mContext: DashboardActivity, val userId: String, va
                 dataListFiltered?.get(position)?.open = 0
                 holder.rviStateCode.visibility = View.GONE
             }
-        }
+        }*/
     }
 
     override fun getFilter(): Filter {

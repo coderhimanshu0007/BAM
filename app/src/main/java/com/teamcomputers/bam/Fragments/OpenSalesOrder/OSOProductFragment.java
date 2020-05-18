@@ -18,8 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOSOAdapter;
+import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOCustomerAdapter;
+import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOProductAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOProductModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSORSMModel;
@@ -45,37 +47,36 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
-public class OSOInvoiceFragment extends BaseFragment {
+public class OSOProductFragment extends BaseFragment {
     public static final String USER_ID = "USER_ID";
     public static final String USER_LEVEL = "USER_LEVEL";
-    public static final String CUSTOMER_PROFILE = "CUSTOMER_PROFILE";
     public static final String RSM_PROFILE = "RSM_PROFILE";
     public static final String SP_PROFILE = "SP_PROFILE";
-    public static final String PRODUCT_PROFILE = "PRODUCT_PROFILE";
-    public static final String STATE_CODE = "STATE_CODE";
+    public static final String SO_PROFILE = "SO_PROFILE";
+    public static final String CUSTOMER_PROFILE = "CUSTOMER_PROFILE";
     public static final String FROM_RSM = "FROM_RSM";
     public static final String FROM_SP = "FROM_SP";
+    public static final String FROM_SO = "FROM_SO";
     public static final String FROM_CUSTOMER = "FROM_CUSTOMER";
-    public static final String FROM_PRODUCT = "FROM_PRODUCT";
+    public static final String STATE_CODE = "STATE_CODE";
     public static final String RSM_POS = "RSM_POS";
     public static final String SP_POS = "SP_POS";
+    public static final String SO_POS = "SO_POS";
     public static final String CUSTOMER_POS = "CUSTOMER_POS";
-    public static final String PRODUCT_POS = "PRODUCT_POS";
-
     private View rootView;
     private Unbinder unbinder;
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
 
-    String userId = "", level;
-    boolean fromRSM, fromSP, fromCustomer, fromProduct, search = false;
+    boolean fromRSM, fromSP, fromSO, fromCustomer, search = false;
     String toolbarTitle = "";
+    String userId = "", level = "";
     @BindView(R.id.txtSearch)
     EditText txtSearch;
-    @BindView(R.id.cviProductHeading)
-    CardView cviProductHeading;
-    @BindView(R.id.llProductLayout)
-    LinearLayout llProductLayout;
+    @BindView(R.id.cviSPHeading)
+    CardView cviSPHeading;
+    @BindView(R.id.llSPLayout)
+    LinearLayout llSPLayout;
     @BindView(R.id.rlR1)
     RelativeLayout rlR1;
     @BindView(R.id.rlR2)
@@ -92,8 +93,8 @@ public class OSOInvoiceFragment extends BaseFragment {
     TextView tviR3Name;
     @BindView(R.id.tviR4Name)
     TextView tviR4Name;
-    @BindView(R.id.iviR1Close)
-    ImageView iviR1Close;
+    @BindView(R.id.tviSOAmount)
+    TextView tviSOAmount;
     @BindView(R.id.tviR1StateName)
     TextView tviR1StateName;
     @BindView(R.id.tviR2StateName)
@@ -102,26 +103,21 @@ public class OSOInvoiceFragment extends BaseFragment {
     TextView tviR3StateName;
     @BindView(R.id.tviR4StateName)
     TextView tviR4StateName;
-    @BindView(R.id.tviSOAmount)
-    TextView tviSOAmount;
-    /*@BindView(R.id.tviYtdHeading)
-    TextView tviYtdHeading;
-    @BindView(R.id.tviQtdHeading)
-    TextView tviQtdHeading;
-    @BindView(R.id.tviMtdHeading)
-    TextView tviMtdHeading;*/
+    @BindView(R.id.iviR1Close)
+    ImageView iviR1Close;
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
-    private KPSOSOAdapter adapter;
-    private int position = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, iPos = 0, pPos = 0;
+    private KPSOProductAdapter adapter;
+    private int position = 0, rsmPos = 0, spPos = 0, cPos = 0, stateCode = 0, soPos = 0, pPos = 0;
 
-    KPSOSOModel sOData;
-    KPSOSOModel.Datum selectedSOData;
-    PSOFilter sOFilterData;
-    List<KPSOSOModel.Datum> sODataList = new ArrayList<>();
+    KPSOProductModel productData;
+    KPSOProductModel.Datum selectedProductData;
+    List<KPSOProductModel.Datum> productDataList = new ArrayList<>();
+    KPSOProductModel.Filter productFilterData;
+
+    KPSORSMModel.Datum rsmProfile, salesProfile;
+    KPSOSOModel.Datum soProfile;
     KPSOCustomerModel.Datum customerProfile;
-    KPSORSMModel.Datum rsmProfile, spProfile;
-    KPSOProductModel.Datum productProfile;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -131,7 +127,7 @@ public class OSOInvoiceFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_oso_invoice, container, false);
+        rootView = inflater.inflate(R.layout.fragment_oso_customer, container, false);
         dashboardActivityContext = (DashboardActivity) context;
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
@@ -139,23 +135,23 @@ public class OSOInvoiceFragment extends BaseFragment {
         userId = getArguments().getString(USER_ID);
         level = getArguments().getString(USER_LEVEL);
 
-        rsmPos = getArguments().getInt(RSM_POS);
-        spPos = getArguments().getInt(SP_POS);
-        cPos = getArguments().getInt(CUSTOMER_POS);
-        pPos = getArguments().getInt(PRODUCT_POS);
-
         fromRSM = getArguments().getBoolean(FROM_RSM);
         fromSP = getArguments().getBoolean(FROM_SP);
+        fromSO = getArguments().getBoolean(FROM_SO);
         fromCustomer = getArguments().getBoolean(FROM_CUSTOMER);
-        fromProduct = getArguments().getBoolean(FROM_PRODUCT);
+
+        rsmPos = getArguments().getInt(RSM_POS);
+        spPos = getArguments().getInt(SP_POS);
+        soPos = getArguments().getInt(SO_POS);
+        cPos = getArguments().getInt(CUSTOMER_POS);
 
         rsmProfile = getArguments().getParcelable(RSM_PROFILE);
-        spProfile = getArguments().getParcelable(SP_PROFILE);
-        customerProfile = getArguments().getParcelable(CUSTOMER_PROFILE);
+        salesProfile = getArguments().getParcelable(SP_PROFILE);
+        soProfile = getArguments().getParcelable(SO_PROFILE);
         stateCode = getArguments().getInt(STATE_CODE);
-        productProfile = getArguments().getParcelable(PRODUCT_PROFILE);
+        customerProfile = getArguments().getParcelable(CUSTOMER_PROFILE);
 
-        toolbarTitle = getString(R.string.SO);
+        toolbarTitle = getString(R.string.Product);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
 
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
@@ -183,7 +179,8 @@ public class OSOInvoiceFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        dashboardActivityContext.OSOSOClick(level);
+        dashboardActivityContext.showOSOTab(level);
+        dashboardActivityContext.OSOProductClick(level);
     }
 
     @Override
@@ -193,7 +190,7 @@ public class OSOInvoiceFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return OSOInvoiceFragment.class.getSimpleName();
+        return OSOProductFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -210,132 +207,147 @@ public class OSOInvoiceFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.NO_RECORD_FOUND);
                         break;
-                    case Events.GET_INVOICE_OSO_LIST_SUCCESSFULL:
+                    case Events.GET_PRODUCT_OSO_LIST_SUCCESSFULL:
                         dismissProgress();
                         try {
                             /*JSONArray jsonArray = new JSONArray(KBAMUtils.replaceDataResponse(eventObject.getObject().toString()));
-                            OSOInvoiceModel[] data = (OSOInvoiceModel[]) KBAMUtils.fromJson(String.valueOf(jsonArray), OSOInvoiceModel[].class);
-                            model = new ArrayList<OSOInvoiceModel>(Arrays.asList(data));*/
+                            OSOCustomerModel[] data = (OSOCustomerModel[]) KBAMUtils.fromJson(String.valueOf(jsonArray), OSOCustomerModel[].class);
+                            model = new ArrayList<OSOCustomerModel>(Arrays.asList(data));*/
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
-                            sOData = (KPSOSOModel) KBAMUtils.fromJson(String.valueOf(jsonObject), KPSOSOModel.class);
-                            sODataList = sOData.getData();
-                            for (int i = 0; i < sODataList.size(); i++) {
-                                if (sODataList.get(i).getSoNumber().equals("") || sODataList.get(i).getSoNumber().equals("null")) {
-                                    sODataList.remove(i);
+                            productData = (KPSOProductModel) KBAMUtils.fromJson(String.valueOf(jsonObject), KPSOProductModel.class);
+                            productDataList = productData.getData();
+                            for (int i = 0; i < productDataList.size(); i++) {
+                                if (productDataList.get(i).getProductName().equals("") || productDataList.get(i).getProductName().equals("null")) {
+                                    productDataList.remove(i);
                                 }
                             }
-                            sOFilterData = sOData.getFilter();
-                            tviSOAmount.setText(KBAMUtils.getRoundOffValue(sOFilterData.getSoAmount()));
+                            productFilterData = productData.getFilter();
+                            tviSOAmount.setText(KBAMUtils.getRoundOffValue(productFilterData.getSoAmount()));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        initData("YTD");
+                        initData();
                         dismissProgress();
                         break;
-                    case Events.GET_INVOICE_OSO_LIST_UNSUCCESSFULL:
+                    case Events.GET_PRODUCT_OSO_LIST_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
+                    case ClickEvents.ACCOUNT_ITEM:
+                        int position = (int) eventObject.getObject();
+                        Bundle acctDataBundle = new Bundle();
+                        acctDataBundle.putParcelable(CustomerFragment.ACCT_PROFILE, productDataList.get(position));
+                        acctDataBundle.putInt(CustomerFragment.ACCT_POSITION, position);
+                        acctDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        dashboardActivityContext.replaceFragment(Fragments.OSO_CUSTOMER_FRAGMENT, acctDataBundle);
+                        /*acctDataBundle.putParcelable(ProductFragment.PRODUCT_PROFILE, model.get(position));
+                        acctDataBundle.putInt(ProductFragment.PRODUCT_POSITION, position);
+                        acctDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        dashboardActivityContext.replaceFragment(Fragments.PRODUCT_FRAGMENT, acctDataBundle);*/
+                        break;
                     case ClickEvents.SO_ITEM_SELECT:
-                        selectedSOData = (KPSOSOModel.Datum) eventObject.getObject();
-                        Bundle soDataBundle = new Bundle();
-                        soDataBundle.putString(OSOProductFragment.USER_ID, userId);
-                        soDataBundle.putString(OSOProductFragment.USER_LEVEL, level);
+                        selectedProductData = (KPSOProductModel.Datum) eventObject.getObject();
+                        Bundle soBundle = new Bundle();
+                        soBundle.putString(OSOInvoiceFragment.USER_ID, userId);
+                        soBundle.putString(OSOInvoiceFragment.USER_LEVEL, level);
 
-                        iPos = rsmPos + spPos + cPos + 1;
-                        soDataBundle.putInt(OSOProductFragment.RSM_POS, rsmPos);
-                        soDataBundle.putInt(OSOProductFragment.SP_POS, spPos);
-                        soDataBundle.putInt(OSOProductFragment.CUSTOMER_POS, cPos);
-                        soDataBundle.putInt(OSOProductFragment.SO_POS, iPos);
+                        pPos = rsmPos + spPos + cPos + 1;
 
-                        soDataBundle.putBoolean(OSOProductFragment.FROM_RSM, fromRSM);
-                        soDataBundle.putBoolean(OSOProductFragment.FROM_SP, fromSP);
-                        soDataBundle.putBoolean(OSOProductFragment.FROM_CUSTOMER, fromCustomer);
-                        soDataBundle.putBoolean(OSOProductFragment.FROM_SO, true);
+                        soBundle.putInt(OSOInvoiceFragment.RSM_POS, rsmPos);
+                        soBundle.putInt(OSOInvoiceFragment.SP_POS, spPos);
+                        soBundle.putInt(OSOInvoiceFragment.CUSTOMER_POS, cPos);
+                        soBundle.putInt(OSOInvoiceFragment.PRODUCT_POS, pPos);
 
-                        soDataBundle.putParcelable(OSOProductFragment.RSM_PROFILE, rsmProfile);
-                        soDataBundle.putParcelable(OSOProductFragment.SP_PROFILE, spProfile);
-                        soDataBundle.putParcelable(OSOProductFragment.CUSTOMER_PROFILE, customerProfile);
-                        soDataBundle.putParcelable(OSOProductFragment.SO_PROFILE, selectedSOData);
-                        soDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-                        dashboardActivityContext.replaceFragment(Fragments.OSO_PRODUCT_FRAGMENT, soDataBundle);
+                        soBundle.putBoolean(OSOInvoiceFragment.FROM_RSM, fromRSM);
+                        soBundle.putBoolean(OSOInvoiceFragment.FROM_SP, fromSP);
+                        soBundle.putBoolean(OSOInvoiceFragment.FROM_CUSTOMER, fromCustomer);
+                        soBundle.putBoolean(OSOInvoiceFragment.FROM_PRODUCT, true);
+
+                        soBundle.putParcelable(OSOInvoiceFragment.CUSTOMER_PROFILE, customerProfile);
+                        soBundle.putParcelable(OSOInvoiceFragment.RSM_PROFILE, rsmProfile);
+                        soBundle.putParcelable(OSOInvoiceFragment.SP_PROFILE, salesProfile);
+                        soBundle.putParcelable(OSOInvoiceFragment.PRODUCT_PROFILE, selectedProductData);
+
+                        soBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        dashboardActivityContext.replaceFragment(Fragments.OSO_INVOICE_FRAGMENT, soBundle);
+                        break;
+                    case ClickEvents.CUSTOMER_ITEM:
+                        selectedProductData = (KPSOProductModel.Datum) eventObject.getObject();
+                        Bundle customerBundle = new Bundle();
+                        customerBundle.putString(OSOCustomerFragment.USER_ID, userId);
+                        customerBundle.putString(OSOCustomerFragment.USER_LEVEL, level);
+
+                        pPos = rsmPos + spPos + soPos + 1;
+
+                        customerBundle.putInt(OSOCustomerFragment.RSM_POS, rsmPos);
+                        customerBundle.putInt(OSOCustomerFragment.SP_POS, spPos);
+                        customerBundle.putInt(OSOCustomerFragment.SO_POS, soPos);
+                        customerBundle.putInt(OSOCustomerFragment.PRODUCT_POS, pPos);
+
+                        customerBundle.putBoolean(OSOCustomerFragment.FROM_RSM, fromRSM);
+                        customerBundle.putBoolean(OSOCustomerFragment.FROM_SP, fromSP);
+                        customerBundle.putBoolean(OSOCustomerFragment.FROM_SO, fromSO);
+                        customerBundle.putBoolean(OSOCustomerFragment.FROM_PRODUCT, true);
+
+                        customerBundle.putParcelable(OSOCustomerFragment.SO_PROFILE, soProfile);
+                        customerBundle.putParcelable(OSOCustomerFragment.RSM_PROFILE, rsmProfile);
+                        customerBundle.putParcelable(OSOCustomerFragment.SP_PROFILE, salesProfile);
+                        customerBundle.putParcelable(OSOCustomerFragment.PRODUCT_PROFILE, selectedProductData);
+
+                        customerBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        dashboardActivityContext.replaceFragment(Fragments.OSO_CUSTOMER_FRAGMENT, customerBundle);
                         break;
                     case ClickEvents.RSM_MENU_SELECT:
-                        selectedSOData = (KPSOSOModel.Datum) eventObject.getObject();
-                        Bundle rsmMenuDataBundle = new Bundle();
-                        rsmMenuDataBundle.putString(OSORSMFragment.USER_ID, userId);
-                        rsmMenuDataBundle.putString(OSORSMFragment.USER_LEVEL, level);
+                        selectedProductData = (KPSOProductModel.Datum) eventObject.getObject();
+                        Bundle rsmBundle = new Bundle();
+                        rsmBundle.putString(OSORSMFragment.USER_ID, userId);
+                        rsmBundle.putString(OSORSMFragment.USER_LEVEL, level);
 
-                        iPos = spPos + cPos + pPos + 1;
+                        pPos = spPos + cPos + soPos + 1;
 
-                        rsmMenuDataBundle.putInt(OSORSMFragment.CUSTOMER_POS, cPos);
-                        rsmMenuDataBundle.putInt(OSORSMFragment.SP_POS, spPos);
-                        rsmMenuDataBundle.putInt(OSORSMFragment.SO_POS, iPos);
-                        rsmMenuDataBundle.putInt(OSORSMFragment.PRODUCT_POS, pPos);
+                        rsmBundle.putInt(OSORSMFragment.SP_POS, spPos);
+                        rsmBundle.putInt(OSORSMFragment.CUSTOMER_POS, cPos);
+                        rsmBundle.putInt(OSORSMFragment.SO_POS, soPos);
+                        rsmBundle.putInt(OSORSMFragment.PRODUCT_POS, pPos);
 
-                        rsmMenuDataBundle.putBoolean(OSORSMFragment.FROM_SP, fromRSM);
-                        rsmMenuDataBundle.putBoolean(OSORSMFragment.FROM_CUSTOMER, fromCustomer);
-                        rsmMenuDataBundle.putBoolean(OSORSMFragment.FROM_SO, true);
-                        rsmMenuDataBundle.putBoolean(OSORSMFragment.FROM_PRODUCT, fromProduct);
+                        rsmBundle.putBoolean(OSORSMFragment.FROM_SP, fromSP);
+                        rsmBundle.putBoolean(OSORSMFragment.FROM_CUSTOMER, fromCustomer);
+                        rsmBundle.putBoolean(OSORSMFragment.FROM_SO, fromSO);
+                        rsmBundle.putBoolean(OSORSMFragment.FROM_PRODUCT, true);
 
-                        rsmMenuDataBundle.putParcelable(OSORSMFragment.SP_PROFILE, spProfile);
-                        rsmMenuDataBundle.putParcelable(OSORSMFragment.CUSTOMER_PROFILE, customerProfile);
-                        rsmMenuDataBundle.putParcelable(OSORSMFragment.SO_PROFILE, selectedSOData);
-                        rsmMenuDataBundle.putParcelable(OSORSMFragment.PRODUCT_PROFILE, productProfile);
+                        rsmBundle.putParcelable(OSORSMFragment.SP_PROFILE, salesProfile);
+                        rsmBundle.putParcelable(OSORSMFragment.CUSTOMER_PROFILE, customerProfile);
+                        rsmBundle.putParcelable(OSORSMFragment.SO_PROFILE, soProfile);
+                        rsmBundle.putParcelable(OSORSMFragment.PRODUCT_PROFILE, selectedProductData);
 
-                        rsmMenuDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-                        dashboardActivityContext.replaceFragment(Fragments.OSO_RSM_FRAGMENT, rsmMenuDataBundle);
+                        rsmBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        dashboardActivityContext.replaceFragment(Fragments.OSO_RSM_FRAGMENT, rsmBundle);
                         break;
                     case ClickEvents.SP_MENU_SELECT:
-                        selectedSOData = (KPSOSOModel.Datum) eventObject.getObject();
-                        Bundle productDataBundle = new Bundle();
-                        productDataBundle.putString(OSOSalesPersonFragment.USER_ID, userId);
-                        productDataBundle.putString(OSOSalesPersonFragment.USER_LEVEL, level);
+                        selectedProductData = (KPSOProductModel.Datum) eventObject.getObject();
+                        Bundle salesBundle = new Bundle();
+                        salesBundle.putString(OSOSalesPersonFragment.USER_ID, userId);
+                        salesBundle.putString(OSOSalesPersonFragment.USER_LEVEL, level);
 
-                        iPos = rsmPos + cPos + pPos + 1;
+                        pPos = rsmPos + cPos + soPos + 1;
 
-                        productDataBundle.putInt(OSOSalesPersonFragment.RSM_POS, rsmPos);
-                        productDataBundle.putInt(OSOSalesPersonFragment.CUSTOMER_POS, cPos);
-                        productDataBundle.putInt(OSOSalesPersonFragment.SO_POS, iPos);
-                        productDataBundle.putInt(OSOSalesPersonFragment.PRODUCT_POS, pPos);
+                        salesBundle.putInt(OSOSalesPersonFragment.RSM_POS, rsmPos);
+                        salesBundle.putInt(OSOSalesPersonFragment.CUSTOMER_POS, cPos);
+                        salesBundle.putInt(OSOSalesPersonFragment.SO_POS, soPos);
+                        salesBundle.putInt(OSOSalesPersonFragment.SO_POS, pPos);
 
-                        productDataBundle.putBoolean(OSOSalesPersonFragment.FROM_RSM, fromRSM);
-                        productDataBundle.putBoolean(OSOSalesPersonFragment.FROM_CUSTOMER, fromCustomer);
-                        productDataBundle.putBoolean(OSOSalesPersonFragment.FROM_SO, true);
-                        productDataBundle.putBoolean(OSOSalesPersonFragment.FROM_PRODUCT, fromProduct);
+                        salesBundle.putBoolean(OSOSalesPersonFragment.FROM_RSM, fromRSM);
+                        salesBundle.putBoolean(OSOSalesPersonFragment.FROM_CUSTOMER, fromCustomer);
+                        salesBundle.putBoolean(OSOSalesPersonFragment.FROM_SO, fromSO);
+                        salesBundle.putBoolean(OSOSalesPersonFragment.FROM_PRODUCT, true);
 
-                        productDataBundle.putParcelable(OSOSalesPersonFragment.RSM_PROFILE, rsmProfile);
-                        productDataBundle.putParcelable(OSOSalesPersonFragment.CUSTOMER_PROFILE, customerProfile);
-                        productDataBundle.putParcelable(OSOSalesPersonFragment.SO_PROFILE, selectedSOData);
-                        productDataBundle.putParcelable(OSOSalesPersonFragment.PRODUCT_PROFILE, productProfile);
+                        salesBundle.putParcelable(OSOSalesPersonFragment.RSM_PROFILE, rsmProfile);
+                        salesBundle.putParcelable(OSOSalesPersonFragment.CUSTOMER_PROFILE, customerProfile);
+                        salesBundle.putParcelable(OSOSalesPersonFragment.SO_PROFILE, soProfile);
+                        salesBundle.putParcelable(OSOSalesPersonFragment.PRODUCT_PROFILE, selectedProductData);
 
-                        productDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-                        dashboardActivityContext.replaceFragment(Fragments.OSO_ACCOUNT_FRAGMENT, productDataBundle);
-                        break;
-                    case ClickEvents.CUSTOMER_MENU_SELECT:
-                        selectedSOData = (KPSOSOModel.Datum) eventObject.getObject();
-                        Bundle spDataBundle = new Bundle();
-                        spDataBundle.putString(OSOCustomerFragment.USER_ID, userId);
-                        spDataBundle.putString(OSOCustomerFragment.USER_LEVEL, level);
-
-                        iPos = rsmPos + spPos + pPos + 1;
-                        spDataBundle.putInt(OSOCustomerFragment.RSM_POS, rsmPos);
-                        spDataBundle.putInt(OSOCustomerFragment.SP_POS, spPos);
-                        spDataBundle.putInt(OSOCustomerFragment.SO_POS, iPos);
-                        spDataBundle.putInt(OSOCustomerFragment.PRODUCT_POS, pPos);
-
-                        spDataBundle.putBoolean(OSOCustomerFragment.FROM_RSM, fromRSM);
-                        spDataBundle.putBoolean(OSOCustomerFragment.FROM_SP, fromSP);
-                        spDataBundle.putBoolean(OSOCustomerFragment.FROM_SO, true);
-                        spDataBundle.putBoolean(OSOCustomerFragment.FROM_PRODUCT, fromProduct);
-
-                        spDataBundle.putParcelable(OSOCustomerFragment.RSM_PROFILE, rsmProfile);
-                        spDataBundle.putParcelable(OSOCustomerFragment.SP_PROFILE, spProfile);
-                        spDataBundle.putParcelable(OSOCustomerFragment.SO_PROFILE, selectedSOData);
-                        spDataBundle.putParcelable(OSOCustomerFragment.PRODUCT_PROFILE, productProfile);
-
-                        spDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-                        dashboardActivityContext.replaceFragment(Fragments.OSO_CUSTOMER_FRAGMENT, spDataBundle);
+                        salesBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        dashboardActivityContext.replaceFragment(Fragments.OSO_ACCOUNT_FRAGMENT, salesBundle);
                         break;
                 }
             }
@@ -370,19 +382,19 @@ public class OSOInvoiceFragment extends BaseFragment {
         rsmPos = 0;
         spPos = 0;
         cPos = 0;
+        soPos = 0;
         fromRSM = false;
         fromSP = false;
         fromCustomer = false;
+        fromSO = false;
         rsmProfile = null;
-        spProfile = null;
+        salesProfile = null;
         customerProfile = null;
-        cviProductHeading.setVisibility(View.GONE);
-        /*tviYtdHeading.setText("TARGET");
-        tviQtdHeading.setText("ACTUAL");
-        tviMtdHeading.setText("ACH%");*/
+        soProfile = null;
+        cviSPHeading.setVisibility(View.GONE);
         showProgress(ProgressDialogTexts.LOADING);
-        //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Invoice", "", "", "", "", "", ""));
-        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "SONumber", "", "", "", "", "", ""));
+        //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Customer", "", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Product", "", "", "", "", "", ""));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -405,16 +417,16 @@ public class OSOInvoiceFragment extends BaseFragment {
             } else if (cPos == 8) {
                 cPos = 4;
             }
-            if (pPos == 2) {
-                pPos = 1;
-            } else if (pPos == 4) {
-                pPos = 2;
-            } else if (pPos == 8) {
-                pPos = 4;
+            if (soPos == 2) {
+                soPos = 1;
+            } else if (soPos == 4) {
+                soPos = 2;
+            } else if (soPos == 8) {
+                soPos = 4;
             }
         } else if (spPos == 1) {
             fromSP = false;
-            spProfile = null;
+            salesProfile = null;
             spPos = 0;
             if (rsmPos == 2) {
                 rsmPos = 1;
@@ -430,12 +442,12 @@ public class OSOInvoiceFragment extends BaseFragment {
             } else if (cPos == 8) {
                 cPos = 4;
             }
-            if (pPos == 2) {
-                pPos = 1;
-            } else if (pPos == 4) {
-                pPos = 2;
-            } else if (pPos == 8) {
-                pPos = 4;
+            if (soPos == 2) {
+                soPos = 1;
+            } else if (soPos == 4) {
+                soPos = 2;
+            } else if (soPos == 8) {
+                soPos = 4;
             }
         } else if (cPos == 1) {
             fromCustomer = false;
@@ -455,17 +467,17 @@ public class OSOInvoiceFragment extends BaseFragment {
             } else if (spPos == 8) {
                 spPos = 4;
             }
-            if (pPos == 2) {
-                pPos = 1;
-            } else if (pPos == 4) {
-                pPos = 2;
-            } else if (pPos == 8) {
-                pPos = 4;
+            if (soPos == 2) {
+                soPos = 1;
+            } else if (soPos == 4) {
+                soPos = 2;
+            } else if (soPos == 8) {
+                soPos = 4;
             }
-        } else if (pPos == 1) {
-            fromProduct = false;
-            productProfile = null;
-            pPos = 0;
+        } else if (soPos == 1) {
+            fromSO = false;
+            soProfile = null;
+            soPos = 0;
             if (rsmPos == 2) {
                 rsmPos = 1;
             } else if (rsmPos == 4) {
@@ -507,14 +519,14 @@ public class OSOInvoiceFragment extends BaseFragment {
             } else if (cPos == 8) {
                 cPos = 4;
             }
-            if (pPos == 4) {
-                pPos = 2;
-            } else if (pPos == 8) {
-                pPos = 4;
+            if (soPos == 4) {
+                soPos = 2;
+            } else if (soPos == 8) {
+                soPos = 4;
             }
         } else if (spPos == 2) {
             fromSP = false;
-            spProfile = null;
+            salesProfile = null;
             spPos = 0;
             if (rsmPos == 4) {
                 rsmPos = 2;
@@ -526,10 +538,10 @@ public class OSOInvoiceFragment extends BaseFragment {
             } else if (cPos == 8) {
                 cPos = 4;
             }
-            if (pPos == 4) {
-                pPos = 2;
-            } else if (pPos == 8) {
-                pPos = 4;
+            if (soPos == 4) {
+                soPos = 2;
+            } else if (soPos == 8) {
+                soPos = 4;
             }
         } else if (cPos == 2) {
             fromCustomer = false;
@@ -545,15 +557,15 @@ public class OSOInvoiceFragment extends BaseFragment {
             } else if (spPos == 8) {
                 spPos = 4;
             }
-            if (pPos == 4) {
-                pPos = 2;
-            } else if (pPos == 8) {
-                pPos = 4;
+            if (soPos == 4) {
+                soPos = 2;
+            } else if (soPos == 8) {
+                soPos = 4;
             }
-        } else if (pPos == 2) {
-            fromProduct = false;
-            productProfile = null;
-            pPos = 0;
+        } else if (soPos == 2) {
+            fromSO = false;
+            soProfile = null;
+            soPos = 0;
             if (rsmPos == 4) {
                 rsmPos = 2;
             } else if (rsmPos == 8) {
@@ -585,12 +597,12 @@ public class OSOInvoiceFragment extends BaseFragment {
             if (cPos == 8) {
                 cPos = 4;
             }
-            if (pPos == 8) {
-                pPos = 4;
+            if (soPos == 8) {
+                soPos = 4;
             }
         } else if (spPos == 4) {
             fromSP = false;
-            spProfile = null;
+            salesProfile = null;
             spPos = 0;
             if (rsmPos == 8) {
                 rsmPos = 4;
@@ -598,8 +610,8 @@ public class OSOInvoiceFragment extends BaseFragment {
             if (cPos == 8) {
                 cPos = 4;
             }
-            if (pPos == 8) {
-                pPos = 4;
+            if (soPos == 8) {
+                soPos = 4;
             }
         } else if (cPos == 4) {
             fromCustomer = false;
@@ -611,13 +623,13 @@ public class OSOInvoiceFragment extends BaseFragment {
             if (spPos == 8) {
                 spPos = 4;
             }
-            if (pPos == 8) {
-                pPos = 4;
+            if (soPos == 8) {
+                soPos = 4;
             }
-        } else if (pPos == 4) {
-            fromProduct = false;
-            productProfile = null;
-            pPos = 0;
+        } else if (soPos == 4) {
+            fromSO = false;
+            soProfile = null;
+            soPos = 0;
             if (rsmPos == 8) {
                 rsmPos = 4;
             }
@@ -639,28 +651,26 @@ public class OSOInvoiceFragment extends BaseFragment {
             rsmPos = 0;
         } else if (spPos == 8) {
             fromSP = false;
-            spProfile = null;
+            salesProfile = null;
             spPos = 0;
         } else if (cPos == 8) {
             fromCustomer = false;
             customerProfile = null;
             cPos = 0;
-        } else if (pPos == 8) {
-            fromProduct = false;
-            productProfile = null;
-            pPos = 0;
+        } else if (soPos == 8) {
+            fromSO = false;
+            soProfile = null;
+            soPos = 0;
         }
         rowsDisplay();
     }
 
-
     private void rowsDisplay() {
-        if (fromRSM || fromSP || fromCustomer || fromProduct) {
-            cviProductHeading.setVisibility(View.VISIBLE);
-        } else {
-            cviProductHeading.setVisibility(View.GONE);
+        if (fromRSM || fromSP || fromCustomer || fromSO) {
+            cviSPHeading.setVisibility(View.VISIBLE);
         }
-        int totalPosition = rsmPos + spPos + cPos + pPos;
+
+        int totalPosition = rsmPos + spPos + cPos + soPos;
 
         if (totalPosition == 15) {
             row4Display();
@@ -672,22 +682,21 @@ public class OSOInvoiceFragment extends BaseFragment {
             iviR1Close.setVisibility(View.GONE);
             row1Display();
         }
-
-        String rsm = "", sales = "", customer = "", state = "", product = "";
+        String rsm = "", sales = "", customer = "", state = "", invoiceNo = "";
         if (null != rsmProfile)
             rsm = rsmProfile.getTmc();
-        if (null != spProfile)
-            sales = spProfile.getTmc();
+        if (null != salesProfile)
+            sales = salesProfile.getTmc();
         if (null != customerProfile)
             customer = customerProfile.getCustomerName();
         if (stateCode == 1)
             state = customerProfile.getStateCodeWise().get(0).getStateCode();
-        if (null != productProfile)
-            product = productProfile.getCode();
-        //tviR3StateName.setText(state);
+        if (null != soProfile)
+            invoiceNo = soProfile.getSoNumber();
         showProgress(ProgressDialogTexts.LOADING);
-        //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Invoice", rsm, sales, customer, state, "", ""));
-        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "SONumber", rsm, sales, customer, state, "", product));
+        //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Customer", rsm, sales, "", "", invoiceNo, ""));
+        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Product", rsm, sales, customer, state, invoiceNo, ""));
+
     }
 
     private void row1Display() {
@@ -697,45 +706,45 @@ public class OSOInvoiceFragment extends BaseFragment {
         if (rsmPos == 1) {
             position = rsmProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(rsmProfile.getName());
             tviSOAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getSoAmount()));
         } else if (spPos == 1) {
-            position = spProfile.getPosition();
+            position = salesProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
-            tviR1Name.setText(spProfile.getName());
-            tviSOAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getSoAmount()));
+            tviR1Name.setText(salesProfile.getName());
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(salesProfile.getSoAmount()));
         } else if (cPos == 1) {
             position = customerProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR1Name.setText(customerProfile.getCustomerName());
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
@@ -746,21 +755,21 @@ public class OSOInvoiceFragment extends BaseFragment {
                 tviR1StateName.setVisibility(View.GONE);
                 tviSOAmount.setText(KBAMUtils.getRoundOffValue(customerProfile.getSOAmount()));
             }
-        } else if (pPos == 1) {
-            position = productProfile.getPosition();
+        } else if (soPos == 1) {
+            position = soProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
-            tviR1Name.setText(productProfile.getProductName());
-            tviSOAmount.setText(KBAMUtils.getRoundOffValue(productProfile.getSOAmount()));
+            tviR1Name.setText(soProfile.getSoNumber());
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(soProfile.getSoAmount()));
         }
     }
 
@@ -770,45 +779,45 @@ public class OSOInvoiceFragment extends BaseFragment {
         if (rsmPos == 2) {
             position = rsmProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(rsmProfile.getName());
             tviSOAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getSoAmount()));
         } else if (spPos == 2) {
-            position = spProfile.getPosition();
+            position = salesProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
-            tviR2Name.setText(spProfile.getName());
-            tviSOAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getSoAmount()));
+            tviR2Name.setText(salesProfile.getName());
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(salesProfile.getSoAmount()));
         } else if (cPos == 4) {
             position = customerProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR2Name.setText(customerProfile.getCustomerName());
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
@@ -819,27 +828,27 @@ public class OSOInvoiceFragment extends BaseFragment {
                 tviR2StateName.setVisibility(View.GONE);
                 tviSOAmount.setText(KBAMUtils.getRoundOffValue(customerProfile.getSOAmount()));
             }
-        } else if (pPos == 2) {
-            position = productProfile.getPosition();
+        } else if (soPos == 2) {
+            position = soProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
-            tviR2Name.setText(productProfile.getProductName());
-            tviSOAmount.setText(KBAMUtils.getRoundOffValue(productProfile.getSOAmount()));
+            tviR2Name.setText(soProfile.getSoNumber());
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(soProfile.getSoAmount()));
         }
         if (rsmPos == 1) {
             tviR1Name.setText(rsmProfile.getName());
             //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getSOAmount()));
         } else if (spPos == 1) {
-            tviR1Name.setText(spProfile.getName());
+            tviR1Name.setText(salesProfile.getName());
             //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(salesProfile.getSOAmount()));
         } else if (cPos == 1) {
             tviR1Name.setText(customerProfile.getCustomerName());
@@ -850,8 +859,8 @@ public class OSOInvoiceFragment extends BaseFragment {
             } else {
                 tviR1StateName.setVisibility(View.GONE);
             }
-        } else if (pPos == 1) {
-            tviR1Name.setText(productProfile.getProductName());
+        } else if (soPos == 1) {
+            tviR1Name.setText(soProfile.getSoNumber());
             //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(soProfile.getSOAmount()));
         }
     }
@@ -861,44 +870,44 @@ public class OSOInvoiceFragment extends BaseFragment {
         if (rsmPos == 4) {
             position = rsmProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(rsmProfile.getName());
         } else if (spPos == 4) {
-            position = spProfile.getPosition();
+            position = salesProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
-            tviR3Name.setText(spProfile.getName());
-            tviSOAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getSoAmount()));
+            tviR3Name.setText(salesProfile.getName());
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(salesProfile.getSoAmount()));
         } else if (cPos == 4) {
             position = customerProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR3Name.setText(customerProfile.getCustomerName());
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
@@ -909,29 +918,29 @@ public class OSOInvoiceFragment extends BaseFragment {
                 tviR3StateName.setVisibility(View.GONE);
                 tviSOAmount.setText(KBAMUtils.getRoundOffValue(customerProfile.getSOAmount()));
             }
-        } else if (pPos == 4) {
-            position = productProfile.getPosition();
+        } else if (soPos == 4) {
+            position = soProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
-            tviR3Name.setText(productProfile.getProductName());
-            tviSOAmount.setText(KBAMUtils.getRoundOffValue(productProfile.getSOAmount()));
+            tviR3Name.setText(soProfile.getSoNumber());
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(soProfile.getSoAmount()));
         }
 
         if (rsmPos == 2) {
             tviR2Name.setText(rsmProfile.getName());
             tviSOAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getSoAmount()));
         } else if (spPos == 2) {
-            tviR2Name.setText(spProfile.getName());
-            tviSOAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getSoAmount()));
+            tviR2Name.setText(salesProfile.getName());
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(salesProfile.getSoAmount()));
         } else if (cPos == 2) {
             tviR2Name.setText(customerProfile.getCustomerName());
             //tviR2SOAmount.setText(KBAMUtils.getRoundOffValue(customerProfile.getSOAmount()));
@@ -941,15 +950,15 @@ public class OSOInvoiceFragment extends BaseFragment {
             } else {
                 tviR2StateName.setVisibility(View.GONE);
             }
-        } else if (pPos == 2) {
-            tviR2Name.setText(productProfile.getProductName());
-            tviSOAmount.setText(KBAMUtils.getRoundOffValue(productProfile.getSOAmount()));
+        } else if (soPos == 2) {
+            tviR2Name.setText(soProfile.getSoNumber());
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(soProfile.getSoAmount()));
         }
         if (rsmPos == 1) {
             tviR1Name.setText(rsmProfile.getName());
             //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getSOAmount()));
         } else if (spPos == 1) {
-            tviR1Name.setText(spProfile.getName());
+            tviR1Name.setText(salesProfile.getName());
             //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(salesProfile.getSOAmount()));
         } else if (cPos == 1) {
             tviR1Name.setText(customerProfile.getCustomerName());
@@ -960,8 +969,8 @@ public class OSOInvoiceFragment extends BaseFragment {
             } else {
                 tviR1StateName.setVisibility(View.GONE);
             }
-        } else if (pPos == 1) {
-            tviR1Name.setText(productProfile.getProductName());
+        } else if (soPos == 1) {
+            tviR1Name.setText(soProfile.getSoNumber());
             //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(soProfile.getSOAmount()));
         }
     }
@@ -970,45 +979,45 @@ public class OSOInvoiceFragment extends BaseFragment {
         if (rsmPos == 8) {
             position = rsmProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR4Name.setText(rsmProfile.getName());
             tviSOAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getSoAmount()));
         } else if (spPos == 8) {
-            position = spProfile.getPosition();
+            position = salesProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
-            tviR4Name.setText(spProfile.getName());
-            tviSOAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getSoAmount()));
+            tviR4Name.setText(salesProfile.getName());
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(salesProfile.getSoAmount()));
         } else if (cPos == 8) {
             position = customerProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
             tviR4Name.setText(customerProfile.getCustomerName());
             if (null != customerProfile.getStateCodeWise() && customerProfile.getStateCodeWise().size() == 1) {
@@ -1022,28 +1031,28 @@ public class OSOInvoiceFragment extends BaseFragment {
             //tviTarget.setText(KBAMUtils.getRoundOffValue(customerProfile.getYTD()));
             //tviActual.setText(KBAMUtils.getRoundOffValue(customerProfile.getQTD()));
             //tviAch.setText(KBAMUtils.getRoundOffValue(customerProfile.getMTD()));
-        } else if (pPos == 8) {
-            position = productProfile.getPosition();
+        } else if (soPos == 8) {
+            position = soProfile.getPosition();
             if (position == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));
             } else if (position == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_second_item_value));
             } else if (position == 2) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_third_item_value));
             } else if (position % 2 == 0) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.color_white));
             } else if (position % 2 == 1) {
-                llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
+                llSPLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             }
-            tviR4Name.setText(productProfile.getProductName());
-            tviSOAmount.setText(KBAMUtils.getRoundOffValue(productProfile.getSOAmount()));
+            tviR4Name.setText(soProfile.getSoNumber());
+            tviSOAmount.setText(KBAMUtils.getRoundOffValue(soProfile.getSoAmount()));
         }
 
         if (rsmPos == 4) {
             tviR3Name.setText(rsmProfile.getName());
             //tviR2SOAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getSOAmount()));
         } else if (spPos == 4) {
-            tviR3Name.setText(spProfile.getName());
+            tviR3Name.setText(salesProfile.getName());
             //tviR2SOAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getSOAmount()));
         } else if (cPos == 4) {
             tviR3Name.setText(customerProfile.getCustomerName());
@@ -1054,8 +1063,8 @@ public class OSOInvoiceFragment extends BaseFragment {
             } else {
                 tviR3StateName.setVisibility(View.GONE);
             }
-        } else if (pPos == 4) {
-            tviR3Name.setText(productProfile.getProductName());
+        } else if (soPos == 4) {
+            tviR3Name.setText(soProfile.getSoNumber());
             //tviR2SOAmount.setText(KBAMUtils.getRoundOffValue(soProfile.getSOAmount()));
         }
 
@@ -1063,7 +1072,7 @@ public class OSOInvoiceFragment extends BaseFragment {
             tviR2Name.setText(rsmProfile.getName());
             //tviR2SOAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getSOAmount()));
         } else if (spPos == 2) {
-            tviR2Name.setText(spProfile.getName());
+            tviR2Name.setText(salesProfile.getName());
             //tviR2SOAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getSOAmount()));
         } else if (cPos == 2) {
             tviR2Name.setText(customerProfile.getCustomerName());
@@ -1074,15 +1083,15 @@ public class OSOInvoiceFragment extends BaseFragment {
             } else {
                 tviR2StateName.setVisibility(View.GONE);
             }
-        } else if (pPos == 2) {
-            tviR2Name.setText(productProfile.getProductName());
+        } else if (soPos == 2) {
+            tviR2Name.setText(soProfile.getSoNumber());
             //tviR2SOAmount.setText(KBAMUtils.getRoundOffValue(soProfile.getSOAmount()));
         }
         if (rsmPos == 1) {
             tviR1Name.setText(rsmProfile.getName());
             //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getSOAmount()));
         } else if (spPos == 1) {
-            tviR1Name.setText(spProfile.getName());
+            tviR1Name.setText(salesProfile.getName());
             //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getSOAmount()));
         } else if (cPos == 1) {
             tviR1Name.setText(customerProfile.getCustomerName());
@@ -1094,15 +1103,15 @@ public class OSOInvoiceFragment extends BaseFragment {
             } else {
                 tviR1StateName.setVisibility(View.GONE);
             }
-        } else if (pPos == 1) {
-            tviR1Name.setText(productProfile.getProductName());
+        } else if (soPos == 1) {
+            tviR1Name.setText(soProfile.getSoNumber());
             //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(soProfile.getSOAmount()));
         }
     }
 
-    private void initData(String type) {
-        //adapter = new OSOInvoiceAdapter(dashboardActivityContext, level, type, model, fromRSM, fromSP, fromCustomer);
-        adapter = new KPSOSOAdapter(dashboardActivityContext, level, type, sODataList, fromRSM, fromSP, fromCustomer, fromProduct);
+    private void initData() {
+        //adapter = new OSOCustomerAdapter(dashboardActivityContext, userId, level, model, fromRSM, fromSP, fromSO);
+        adapter = new KPSOProductAdapter(dashboardActivityContext, level, productDataList, fromRSM, fromSP, fromCustomer, fromSO);
         rviRSM.setAdapter(adapter);
     }
 }

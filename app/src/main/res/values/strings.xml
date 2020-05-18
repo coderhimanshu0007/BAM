@@ -124,7 +124,8 @@
     <string name="Sales">Sales Person</string>
     <string name="Customer">Customer</string>
     <string name="Product">Product</string>
-    <string name="Invoice">SO</string>
+    <string name="SO">SO</string>
+    <string name="Invoice">Invoice</string>
 
     <string name="user_name">User Name</string>
     <string name="user_email">user@teamcomputers.com</string>

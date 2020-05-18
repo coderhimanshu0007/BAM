@@ -35,8 +35,9 @@ class KPSOProductModel {
     inner class Datum : Parcelable {
         override fun writeToParcel(dest: Parcel?, flags: Int) {
             this.code?.let { dest?.writeString(it) }
-            this.code?.let { dest?.writeString(it) }
-            this.amount?.let { dest?.writeDouble(it) }
+            this.productName?.let { dest?.writeString(it) }
+            this.sOAmount?.let { dest?.writeDouble(it) }
+            this.position?.let { dest?.writeInt(it) }
         }
 
         override fun describeContents(): Int {
@@ -49,9 +50,12 @@ class KPSOProductModel {
         @SerializedName("ProductName")
         @Expose
         var productName: String? = null
-        @SerializedName("Amount")
+        @SerializedName("SOAmount")
         @Expose
-        var amount: Double? = null
+        var sOAmount: Double? = null
+        @SerializedName("Position")
+        @Expose
+        var position: Int? = null
 
     }
 
@@ -69,42 +73,36 @@ class KPSOProductModel {
         @SerializedName("RSM_TMC")
         @Expose
         var rsmtmc: String? = null
-        @SerializedName("RSM_DSO")
-        @Expose
-        var rsmdso: Double? = null
         @SerializedName("Account_Manager")
         @Expose
         var accountManager: String? = null
         @SerializedName("AM_TMC")
         @Expose
         var amtmc: String? = null
-        @SerializedName("AM_DSO")
-        @Expose
-        var amdso: Double? = null
         @SerializedName("Sales_Person")
         @Expose
         var salesPerson: String? = null
         @SerializedName("SP_TMC")
         @Expose
         var sptmc: String? = null
-        @SerializedName("SP_DSO")
-        @Expose
-        var spdso: Double? = null
         @SerializedName("CustomerGroupName")
         @Expose
         var customerGroupName: String? = null
-        @SerializedName("DocumentNo")
+        @SerializedName("StateCode")
         @Expose
-        var documentNo: String? = null
+        var stateCode: String? = null
+        @SerializedName("SONumber")
+        @Expose
+        var soNumber: String? = null
         @SerializedName("Link_TARGETPROD")
         @Expose
         var linkTARGETPROD: String? = null
         @SerializedName("ProductName")
         @Expose
         var productName: String? = null
-        @SerializedName("Amount")
+        @SerializedName("SOAmount")
         @Expose
-        var amount: Double? = null
+        var soAmount: Double? = null
 
     }
 }

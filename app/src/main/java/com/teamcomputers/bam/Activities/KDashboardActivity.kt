@@ -11,7 +11,6 @@ import android.provider.MediaStore
 import android.text.SpannableStringBuilder
 import android.view.Menu
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -29,32 +28,9 @@ import com.google.android.material.appbar.AppBarLayout
 import com.teamcomputers.bam.ExpandableRecyclerview.expandables.NavigationExpandable
 import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItem
 import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItemParentModel
-import com.teamcomputers.bam.Fragments.BaseFragment
-import com.teamcomputers.bam.Fragments.FeedbackFragment
-import com.teamcomputers.bam.Fragments.Installation.InstallationFragment
-import com.teamcomputers.bam.Fragments.Logistics.LogisticsFragment
-import com.teamcomputers.bam.Fragments.NewSalesReceivable.NewRSMTabFragment
-import com.teamcomputers.bam.Fragments.NewSalesReceivable.NewSalesReceivableFragment
-import com.teamcomputers.bam.Fragments.OpenSalesOrder.OSOCustomerFragment
-import com.teamcomputers.bam.Fragments.OpenSalesOrder.OSOInvoiceFragment
-import com.teamcomputers.bam.Fragments.OpenSalesOrder.OSORSMFragment
-import com.teamcomputers.bam.Fragments.OpenSalesOrder.OSOSalesPersonFragment
-import com.teamcomputers.bam.Fragments.OrderProcessing.OrderProcessingFragment
-import com.teamcomputers.bam.Fragments.Outstanding.TOSCustomerFragment
-import com.teamcomputers.bam.Fragments.Outstanding.TOSProductFragment
-import com.teamcomputers.bam.Fragments.Outstanding.TOSRSMFragment
-import com.teamcomputers.bam.Fragments.Outstanding.TOSSalesPersonFragment
-import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment
-import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment
-import com.teamcomputers.bam.Fragments.SalesReceivable.ProductFragment
-import com.teamcomputers.bam.Fragments.SalesReceivable.SalesReceivableFragment
-import com.teamcomputers.bam.Fragments.SalesReceivableR2.NewSalesPersonTabFragment
-import com.teamcomputers.bam.Fragments.SalesReceivableR4.NewCustomerTabFragment
-import com.teamcomputers.bam.Fragments.WSPages.WSCustomerFragment
-import com.teamcomputers.bam.Fragments.WSPages.WSProductFragment
-import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment
-import com.teamcomputers.bam.Fragments.WSPages.WSSalesPersonFragment
-import com.teamcomputers.bam.Fragments.home.HomeFragment
+import com.teamcomputers.bam.Fragments.KBaseFragment
+import com.teamcomputers.bam.Fragments.NewSalesReceivable.KSalesReceivableFragment
+import com.teamcomputers.bam.Fragments.home.KHomeFragment
 import com.teamcomputers.bam.Interface.KBAMConstant
 import com.teamcomputers.bam.KBAMApplication
 import com.teamcomputers.bam.Models.LoginModel
@@ -74,27 +50,23 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class KDashboardActivity : KBaseActivity() {
-    companion object{
-        @kotlin.jvm.JvmField
+    companion object {
         val IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED = "IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED"
-        @kotlin.jvm.JvmField
-        var userId = ""
-        @kotlin.jvm.JvmField
-        var level = ""
-        @kotlin.jvm.JvmField
-        var selectedFiscalYear = ""
-        @kotlin.jvm.JvmField
-        var selectedPosition = 0
-        @kotlin.jvm.JvmField
-        var fragmentView: View? = null
     }
 
+    var userId: String? = null
+    var level: String? = null
+    var selectedFiscalYear = ""
+    var selectedPosition = 0
+    var fragmentView: View? = null
+
+
     /*@BindView(R.id.llWSTabs)
-    internal var llWSTabs: LinearLayout? = null
-    @BindView(R.id.llOSOTabs)
-    internal var llOSOTabs: LinearLayout? = null
-    @BindView(R.id.llTOSTabs)
-    internal var llTOSTabs: LinearLayout? = null*/
+        internal var llWSTabs: LinearLayout? = null
+        @BindView(R.id.llOSOTabs)
+        internal var llOSOTabs: LinearLayout? = null
+        @BindView(R.id.llTOSTabs)
+        internal var llTOSTabs: LinearLayout? = null*/
     /*@BindView(R.id.claMain)
     CoordinatorLayout claMain;*/
     /*@BindView(R.id.iviToolbarLogo)
@@ -118,13 +90,11 @@ class KDashboardActivity : KBaseActivity() {
     private var navigationExpandable: NavigationExpandable? = null
     internal var navigationItemParentModels: MutableList<NavigationItemParentModel> = ArrayList()
     //private var this: DashboardActivity? = null
-    private var fragment: BaseFragment? = null
+    private var fragment: KBaseFragment? = null
     private var userProfile: LoginModel? = null
     private var fragmentManager: FragmentManager? = null
     private val drawerHandler = Handler()
     private val mAppBarConfiguration: AppBarConfiguration? = null
-
-
 
 
     override fun getLayout(): Int {
@@ -419,8 +389,8 @@ class KDashboardActivity : KBaseActivity() {
                 fragmentTransaction.commit();
             }
         } else {*/
-        fragment = HomeFragment()
-        fragmentTransaction.add(R.id.dash_board_content, fragment as HomeFragment, fragment!!.getFragmentName())
+        fragment = KHomeFragment()
+        fragmentTransaction.add(R.id.dash_board_content, fragment as KHomeFragment, fragment!!.getFragmentName())
         fragmentTransaction.addToBackStack(fragment!!.getFragmentName())
         fragmentTransaction.commit()
         //}
@@ -440,8 +410,12 @@ class KDashboardActivity : KBaseActivity() {
                 KBAMConstant.Fragments.EDIT_PROFILE_FRAGMENTS ->
                     //fragment = new EditProfileFragment();
                     showToast(KBAMConstant.ToastTexts.WORK_PROGRESS)
-                KBAMConstant.Fragments.HOME_FRAGMENTS -> fragment = HomeFragment()
-                KBAMConstant.Fragments.ORDERPROCESSING_FRAGMENTS -> if (userProfile?.getSBU() != "WS") {
+                KBAMConstant.Fragments.HOME_FRAGMENTS ->
+                    fragment = KHomeFragment()
+                //
+                // 15-05-20 Sarvesh
+                //
+                /*KBAMConstant.Fragments.ORDERPROCESSING_FRAGMENTS -> if (userProfile?.getSBU() != "WS") {
                     fragment = OrderProcessingFragment()
                 }
                 KBAMConstant.Fragments.ORDERPROCESSING_FRAGMENTS1 -> if (userProfile?.getSBU() != "WS") {
@@ -459,7 +433,7 @@ class KDashboardActivity : KBaseActivity() {
                 KBAMConstant.Fragments.ORDERPROCESSING_FRAGMENTS4 -> if (userProfile?.getSBU() != "WS") {
                     SharedPreferencesController.getInstance(this).setOPPageNo(3)
                     fragment = OrderProcessingFragment()
-                }
+                }*/
                 KBAMConstant.Fragments.PURCHASE_FRAGMENTS -> if (userProfile?.getSBU() != "WS") {
                     //fragment = new PurchaseFragments();
                     showToast(KBAMConstant.ToastTexts.WORK_PROGRESS)
@@ -484,7 +458,10 @@ class KDashboardActivity : KBaseActivity() {
                     //fragment = new PurchaseFragments();
                     showToast(KBAMConstant.ToastTexts.WORK_PROGRESS)
                 }
-                KBAMConstant.Fragments.LOGISTICS_FRAGMENTS -> if (userProfile?.getSBU() != "WS") {
+                //
+                // 15-05-20 Sarvesh
+                //
+                /*KBAMConstant.Fragments.LOGISTICS_FRAGMENTS -> if (userProfile?.getSBU() != "WS") {
                     fragment = LogisticsFragment()
                 }
                 KBAMConstant.Fragments.LOGISTICS_FRAGMENTS1 -> if (userProfile?.getSBU() != "WS") {
@@ -521,7 +498,7 @@ class KDashboardActivity : KBaseActivity() {
                 KBAMConstant.Fragments.INSTALLATION_FRAGMENTS4 -> if (userProfile?.getSBU() != "WS") {
                     SharedPreferencesController.getInstance(this).setInstallationPageNo(3)
                     fragment = InstallationFragment()
-                }
+                }*/
                 KBAMConstant.Fragments.COLLECTION_FRAGMENTS -> if (userProfile?.getSBU() != "WS") {
                     //fragment = new CollectionFragment();
                     showToast(KBAMConstant.ToastTexts.WORK_PROGRESS)
@@ -547,18 +524,21 @@ class KDashboardActivity : KBaseActivity() {
                     showToast(KBAMConstant.ToastTexts.WORK_PROGRESS)
                 }
                 KBAMConstant.Fragments.OTHERS_FRAGMENTS -> showToast(KBAMConstant.ToastTexts.WORK_PROGRESS)
+                //
+                // 15-05-20 Sarvesh
+                //
                 KBAMConstant.Fragments.SR_FRAGMENTS ->
                     //fragment = new SalesReceivableFragment();
-                    fragment = NewSalesReceivableFragment()
+                    fragment = KSalesReceivableFragment()
                 KBAMConstant.Fragments.SR_FRAGMENTS1 -> if (userProfile?.getSBU() != "WS") {
                     SharedPreferencesController.getInstance(this).setSalesReceivablePageNo(0)
-                    fragment = SalesReceivableFragment()
+                    fragment = KSalesReceivableFragment()
                 }
                 KBAMConstant.Fragments.SR_FRAGMENTS2 -> if (userProfile?.getSBU() != "WS") {
                     SharedPreferencesController.getInstance(this).setSalesReceivablePageNo(1)
-                    fragment = SalesReceivableFragment()
+                    fragment = KSalesReceivableFragment()
                 }
-                KBAMConstant.Fragments.FEEDBACK_FRAGMENTS -> fragment = FeedbackFragment()
+                /*KBAMConstant.Fragments.FEEDBACK_FRAGMENTS -> fragment = FeedbackFragment()
                 KBAMConstant.Fragments.RSM_ANALYSIS_FRAGMENT -> fragment = NewRSMTabFragment()
                 KBAMConstant.Fragments.SALES_ANALYSIS_FRAGMENT -> fragment = NewSalesPersonTabFragment()
                 KBAMConstant.Fragments.CUSTOMER_ANALYSIS_FRAGMENT -> fragment = NewCustomerTabFragment()
@@ -576,15 +556,15 @@ class KDashboardActivity : KBaseActivity() {
                 KBAMConstant.Fragments.TOS_RSM_FRAGMENT -> fragment = TOSRSMFragment()
                 KBAMConstant.Fragments.TOS_ACCOUNT_FRAGMENT -> fragment = TOSSalesPersonFragment()
                 KBAMConstant.Fragments.TOS_CUSTOMER_FRAGMENT -> fragment = TOSCustomerFragment()
-                KBAMConstant.Fragments.TOS_PRODUCT_FRAGMENT -> fragment = TOSProductFragment()
-                else -> fragment = HomeFragment()
+                KBAMConstant.Fragments.TOS_PRODUCT_FRAGMENT -> fragment = TOSProductFragment()*/
+                else -> fragment = KHomeFragment()
             }
 
             try {
                 fragment?.setArguments(bundle)
                 val fragmentTransaction = fragmentManager?.beginTransaction()
                 fragmentTransaction?.setCustomAnimations(R.anim.left_to_right, R.anim.right_to_left)
-                fragmentTransaction?.replace(R.id.dash_board_content, fragment as BaseFragment, fragment?.getFragmentName())
+                fragmentTransaction?.replace(R.id.dash_board_content, fragment as KBaseFragment, fragment?.getFragmentName())
                 val backStackEntryCount = fragmentManager?.getBackStackEntryCount()
                 if (bundle.getBoolean(IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED)) {
                     fragmentTransaction?.addToBackStack(fragment?.getFragmentName())
