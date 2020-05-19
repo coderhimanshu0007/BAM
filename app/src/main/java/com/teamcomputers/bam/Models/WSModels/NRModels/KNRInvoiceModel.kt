@@ -6,8 +6,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-
-class KNRCustomerModel {
+class KNRInvoiceModel {
     @SerializedName("Data")
     @Expose
     private var data: List<Datum>? = null
@@ -32,31 +31,34 @@ class KNRCustomerModel {
     }
 
     @SuppressLint("ParcelCreator")
-    inner class Datum :Parcelable{
+    inner class Datum : Parcelable {
         override fun writeToParcel(dest: Parcel?, flags: Int) {
-            this.customerName?.let { dest?.writeString(it) }
+            this.documentNo?.let { dest?.writeString(it) }
             this.amount?.let { dest?.writeDouble(it) }
-            this.position?.let { dest?.writeInt(it) }
+            this.nod?.let { dest?.writeInt(it) }
             this.open?.let { dest?.writeInt(it) }
+            this.position?.let { dest?.writeInt(it) }
         }
 
         override fun describeContents(): Int {
             return 0
         }
 
-        @SerializedName("CustomerName")
+        @SerializedName("Document_No")
         @Expose
-        var customerName: String? = null
+        var documentNo: String? = null
+        @SerializedName("NOD")
+        @Expose
+        var nod: Int? = null
         @SerializedName("Amount")
         @Expose
         var amount: Double? = null
-        @SerializedName("Position")
-        @Expose
-        var position: Int? = 0
         @SerializedName("open")
         @Expose
         var open: Int = 0
+        @SerializedName("Position")
+        @Expose
+        var position: Int? = 0
+
     }
-
 }
-

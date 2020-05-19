@@ -213,5 +213,8 @@ interface KApiInterface {
                               @Field("Sales") sales: String,
                               @Field("Customer") customer: String,
                               @Field("StateCode") stateCode: String,
-                              @Field("Product") product: String): Call<Any>
+                              @Field("Product") product: String,
+                              @Field("DocumnetNo") invoice: String,
+                              @Field("StartIndex") startIndex: String,
+                              @Field("EndIndex") endIndex: String): Call<Any>
 }

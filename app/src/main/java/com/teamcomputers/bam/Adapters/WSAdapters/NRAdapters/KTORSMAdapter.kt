@@ -82,7 +82,9 @@ class KTORSMAdapter(val mContext: DashboardActivity, val type: String, val level
             //creating a popup menu
             val popup = PopupMenu(mContext, holder.iviOption)
             //inflating menu from xml resource
-            popup.inflate(R.menu.options_menu)
+            popup.inflate(R.menu.pso_options_menu)
+            popup.menu.getItem(3).setTitle("Product")
+            popup.menu.getItem(4).setTitle("Invoice")
             if (level == "R1") {
                 popup.menu.getItem(0).isVisible = false
                 if (fromSP && fromCustomer) {
@@ -126,9 +128,14 @@ class KTORSMAdapter(val mContext: DashboardActivity, val type: String, val level
                         EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, dataListFiltered?.get(position)))
                     }
                     R.id.menu4 -> {
-                        //handle menu3 click
+                        //handle menu4 click
                         dataListFiltered?.get(position)?.position = position
                         EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, dataListFiltered?.get(position)))
+                    }
+                    R.id.menu5 -> {
+                        //handle menu5 click
+                        dataListFiltered?.get(position)?.position = position
+                        //EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SO_ITEM_SELECT, dataListFiltered?.get(position)))
                     }
                 }//handle menu1 click
                 false

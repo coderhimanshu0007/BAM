@@ -7,18 +7,10 @@ import com.teamcomputers.bam.controllers.KHTTPOperationController
 import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
 
-class KAccountReceivablesAprRequester(userId: String, level: String, type: String, RSM: String, sales: String, customer: String, stateCode: String, product: String) : KBaseRequester {
-    private var userId: String = userId
-    private var level: String = level
-    private var type: String = type
-    private var RSM: String = RSM
-    private var sales: String = sales
-    private var customer: String = customer
-    private var stateCode: String = stateCode
-    private var product: String = product
+class KAccountReceivablesAprRequester(var userId: String, var level: String, var type: String, var RSM: String, var sales: String, var customer: String, var stateCode: String, var product: String, var invoice: String, var startIndex: String, var endIndex: String) : KBaseRequester {
 
     override fun run() {
-        val apiResponse = KHTTPOperationController().accountReceivablesApr(userId, level, type, RSM, sales, customer, stateCode, product)
+        val apiResponse = KHTTPOperationController().accountReceivablesApr(userId, level, type, RSM, sales, customer, stateCode, product, invoice, startIndex, endIndex)
         if (apiResponse != null) {
             if (apiResponse.responseCode == HttpURLConnection.HTTP_OK) {
                 // Log.e("Customer url",""+apiResponse.getResponseCode());
@@ -31,6 +23,8 @@ class KAccountReceivablesAprRequester(userId: String, level: String, type: Strin
                         EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_CUSTOMER_TOS_LIST_SUCCESSFULL, apiResponse.response))
                     } else if (type == "Product") {
                         EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_PRODUCT_TOS_LIST_SUCCESSFULL, apiResponse.response))
+                    } else if (type == "Invoice") {
+                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_INVOICE_TOS_LIST_SUCCESSFULL, apiResponse.response))
                     }
                     //EventBus.getDefault().post(new EventObject(Events.GET_OUTSTANDING_LIST_SUCCESSFULL, apiResponse.getResponse()));
                 } else {
@@ -42,6 +36,8 @@ class KAccountReceivablesAprRequester(userId: String, level: String, type: Strin
                         EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_CUSTOMER_TOS_LIST_UNSUCCESSFULL, null))
                     } else if (type == "Product") {
                         EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_PRODUCT_TOS_LIST_UNSUCCESSFULL, null))
+                    } else if (type == "Invoice") {
+                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_INVOICE_TOS_LIST_UNSUCCESSFULL, null))
                     }
                     //EventBus.getDefault().post(new EventObject(Events.GET_OUTSTANDING_LIST_UNSUCCESSFULL, null));
                 }

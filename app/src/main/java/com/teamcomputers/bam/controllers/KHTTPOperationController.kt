@@ -179,7 +179,7 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.salesOpenOrderApr(userId, level, type, RSM, sales, customer, stateCode, invoice, product)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun accountReceivablesApr(userId: String, level: String, type: String, RSM: String, sales: String, customer: String, stateCode: String, product: String): ApiResponse<*>? {
-        return getApiInterface()?.accountReceivablesApr(userId, level, type, RSM, sales, customer, stateCode, product)?.let { KConnectionUtils().execute<Any>(it) }
+    fun accountReceivablesApr(userId: String, level: String, type: String, RSM: String, sales: String, customer: String, stateCode: String, product: String, invoice: String, startIndex: String, endIndex: String): ApiResponse<*>? {
+        return getApiInterface()?.accountReceivablesApr(userId, level, type, RSM, sales, customer, stateCode, product, invoice, startIndex, endIndex)?.let { KConnectionUtils().execute<Any>(it) }
     }
 }

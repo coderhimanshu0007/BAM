@@ -88,7 +88,9 @@ class KTOCustomerAdapter(val mContext: DashboardActivity, val userId: String, va
             //creating a popup menu
             val popup = PopupMenu(mContext, holder.iviOption)
             //inflating menu from xml resource
-            popup.inflate(R.menu.options_menu)
+            popup.inflate(R.menu.pso_options_menu)
+            popup.menu.getItem(3).setTitle("Product")
+            popup.menu.getItem(4).setTitle("Invoice")
             if (level == "R1") {
                 popup.menu.getItem(2).isVisible = false
                 if (fromSP && fromProduct) {
@@ -125,38 +127,21 @@ class KTOCustomerAdapter(val mContext: DashboardActivity, val userId: String, va
                 when (item.itemId) {
                     R.id.menu1 -> {
                         //handle menu1 click
-                        //dataListFiltered.get(position).setUserId(userId);
-                        val rsmCustomerModel = KNRCustomerModel().Datum()
-                        //rsmCustomerModel.userId = userId
-                        rsmCustomerModel.customerName = dataListFiltered?.get(position)?.customerName
-                        rsmCustomerModel.amount = dataListFiltered?.get(position)?.amount
-                        rsmCustomerModel.position = dataListFiltered?.get(position)?.position!!
-                        rsmCustomerModel.open = dataListFiltered?.get(position)?.open!!
-                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, rsmCustomerModel))
+                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, dataListFiltered?.get(position)))
                     }
                     R.id.menu2 -> {
                         //handle menu2 click
-                        //dataListFiltered.get(position).setUserId(userId);
-                        val salesCustomerModel = KNRCustomerModel().Datum()
-                        //salesCustomerModel.userId = userId
-                        salesCustomerModel.customerName = dataListFiltered?.get(position)?.customerName
-                        salesCustomerModel.amount = dataListFiltered?.get(position)?.amount
-                        salesCustomerModel.position = dataListFiltered?.get(position)?.position!!
-                        salesCustomerModel.open = dataListFiltered?.get(position)?.open!!
-
-                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, salesCustomerModel))
+                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, dataListFiltered?.get(position)))
                     }
                     R.id.menu3 -> {
                     }
                     R.id.menu4 -> {
-                        //handle menu3 click
-                        val toCustomerModel = KNRCustomerModel().Datum()
-                        //toCustomerModel.userId = userId
-                        toCustomerModel.customerName = dataListFiltered?.get(position)?.customerName
-                        toCustomerModel.amount = dataListFiltered?.get(position)?.amount
-                        toCustomerModel.position = dataListFiltered?.get(position)?.position!!
-                        toCustomerModel.open = dataListFiltered?.get(position)?.open!!
-                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, toCustomerModel))
+                        //handle menu4 click
+                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataListFiltered?.get(position)))
+                    }
+                    R.id.menu5 -> {
+                        //handle menu5 click
+                        //EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SO_ITEM_SELECT, dataListFiltered?.get(position)))
                     }
                 }//handle menu3 click
                 false
