@@ -247,32 +247,30 @@ public class TOSCustomerFragment extends BaseFragment {
                         dashboardActivityContext.replaceFragment(Fragments.PRODUCT_FRAGMENT, acctDataBundle);*/
                         break;
                     case ClickEvents.CUSTOMER_SELECT:
-                        if (!fromProduct) {
-                            selectedCustomer = (KNRCustomerModel.Datum) eventObject.getObject();
-                            Bundle customerBundle = new Bundle();
-                            customerBundle.putString(TOSProductFragment.USER_ID, userId);
-                            customerBundle.putString(TOSProductFragment.USER_LEVEL, level);
+                        selectedCustomer = (KNRCustomerModel.Datum) eventObject.getObject();
+                        Bundle productBundle = new Bundle();
+                        productBundle.putString(TOSProductFragment.USER_ID, userId);
+                        productBundle.putString(TOSProductFragment.USER_LEVEL, level);
 
-                            cPos = rsmPos + spPos + iPos + 1;
+                        cPos = rsmPos + spPos + iPos + 1;
 
-                            customerBundle.putInt(TOSProductFragment.RSM_POS, rsmPos);
-                            customerBundle.putInt(TOSProductFragment.SP_POS, spPos);
-                            customerBundle.putInt(TOSProductFragment.CUSTOMER_POS, cPos);
-                            customerBundle.putInt(TOSProductFragment.INVOICE_POS, iPos);
+                        productBundle.putInt(TOSProductFragment.RSM_POS, rsmPos);
+                        productBundle.putInt(TOSProductFragment.SP_POS, spPos);
+                        productBundle.putInt(TOSProductFragment.CUSTOMER_POS, cPos);
+                        productBundle.putInt(TOSProductFragment.INVOICE_POS, iPos);
 
-                            customerBundle.putBoolean(TOSProductFragment.FROM_RSM, fromRSM);
-                            customerBundle.putBoolean(TOSProductFragment.FROM_SP, fromSP);
-                            customerBundle.putBoolean(TOSProductFragment.FROM_CUSTOMER, true);
-                            customerBundle.putBoolean(TOSProductFragment.FROM_INVOICE, fromInvoice);
+                        productBundle.putBoolean(TOSProductFragment.FROM_RSM, fromRSM);
+                        productBundle.putBoolean(TOSProductFragment.FROM_SP, fromSP);
+                        productBundle.putBoolean(TOSProductFragment.FROM_CUSTOMER, true);
+                        productBundle.putBoolean(TOSProductFragment.FROM_INVOICE, fromInvoice);
 
-                            customerBundle.putParcelable(TOSProductFragment.RSM_PROFILE, rsmProfile);
-                            customerBundle.putParcelable(TOSProductFragment.SP_PROFILE, salesProfile);
-                            customerBundle.putParcelable(TOSProductFragment.CUSTOMER_PROFILE, selectedCustomer);
-                            customerBundle.putParcelable(TOSProductFragment.INVOICE_PROFILE, invoiceProfile);
+                        productBundle.putParcelable(TOSProductFragment.RSM_PROFILE, rsmProfile);
+                        productBundle.putParcelable(TOSProductFragment.SP_PROFILE, salesProfile);
+                        productBundle.putParcelable(TOSProductFragment.CUSTOMER_PROFILE, selectedCustomer);
+                        productBundle.putParcelable(TOSProductFragment.INVOICE_PROFILE, invoiceProfile);
 
-                            customerBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-                            dashboardActivityContext.replaceFragment(Fragments.TOS_PRODUCT_FRAGMENT, customerBundle);
-                        }
+                        productBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        dashboardActivityContext.replaceFragment(Fragments.TOS_PRODUCT_FRAGMENT, productBundle);
                         break;
                     case ClickEvents.RSM_MENU_SELECT:
                         selectedCustomer = (KNRCustomerModel.Datum) eventObject.getObject();
@@ -327,29 +325,31 @@ public class TOSCustomerFragment extends BaseFragment {
                         dashboardActivityContext.replaceFragment(Fragments.TOS_ACCOUNT_FRAGMENT, customerBundle);
                         break;
                     case ClickEvents.SO_ITEM_SELECT:
-                        selectedCustomer = (KNRCustomerModel.Datum) eventObject.getObject();
-                        Bundle invoiceBundle = new Bundle();
-                        invoiceBundle.putString(TOSInvoiceFragment.USER_ID, userId);
-                        invoiceBundle.putString(TOSInvoiceFragment.USER_LEVEL, level);
+                        if (!fromInvoice) {
+                            selectedCustomer = (KNRCustomerModel.Datum) eventObject.getObject();
+                            Bundle invoiceBundle = new Bundle();
+                            invoiceBundle.putString(TOSInvoiceFragment.USER_ID, userId);
+                            invoiceBundle.putString(TOSInvoiceFragment.USER_LEVEL, level);
 
-                        cPos = rsmPos + spPos + pPos + 1;
-                        invoiceBundle.putInt(TOSInvoiceFragment.RSM_POS, rsmPos);
-                        invoiceBundle.putInt(TOSInvoiceFragment.SP_POS, spPos);
-                        invoiceBundle.putInt(TOSInvoiceFragment.PRODUCT_POS, pPos);
-                        invoiceBundle.putInt(TOSInvoiceFragment.CUSTOMER_POS, cPos);
+                            cPos = rsmPos + spPos + pPos + 1;
+                            invoiceBundle.putInt(TOSInvoiceFragment.RSM_POS, rsmPos);
+                            invoiceBundle.putInt(TOSInvoiceFragment.SP_POS, spPos);
+                            invoiceBundle.putInt(TOSInvoiceFragment.PRODUCT_POS, pPos);
+                            invoiceBundle.putInt(TOSInvoiceFragment.CUSTOMER_POS, cPos);
 
-                        invoiceBundle.putBoolean(TOSInvoiceFragment.FROM_RSM, fromRSM);
-                        invoiceBundle.putBoolean(TOSInvoiceFragment.FROM_SP, fromSP);
-                        invoiceBundle.putBoolean(TOSInvoiceFragment.FROM_PRODUCT, fromProduct);
-                        invoiceBundle.putBoolean(TOSInvoiceFragment.FROM_CUSTOMER, true);
+                            invoiceBundle.putBoolean(TOSInvoiceFragment.FROM_RSM, fromRSM);
+                            invoiceBundle.putBoolean(TOSInvoiceFragment.FROM_SP, fromSP);
+                            invoiceBundle.putBoolean(TOSInvoiceFragment.FROM_PRODUCT, fromProduct);
+                            invoiceBundle.putBoolean(TOSInvoiceFragment.FROM_CUSTOMER, true);
 
-                        invoiceBundle.putParcelable(TOSInvoiceFragment.RSM_PROFILE, rsmProfile);
-                        invoiceBundle.putParcelable(TOSInvoiceFragment.SP_PROFILE, salesProfile);
-                        invoiceBundle.putParcelable(TOSInvoiceFragment.PRODUCT_PROFILE, productProfile);
-                        invoiceBundle.putParcelable(TOSInvoiceFragment.CUSTOMER_PROFILE, selectedCustomer);
+                            invoiceBundle.putParcelable(TOSInvoiceFragment.RSM_PROFILE, rsmProfile);
+                            invoiceBundle.putParcelable(TOSInvoiceFragment.SP_PROFILE, salesProfile);
+                            invoiceBundle.putParcelable(TOSInvoiceFragment.PRODUCT_PROFILE, productProfile);
+                            invoiceBundle.putParcelable(TOSInvoiceFragment.CUSTOMER_PROFILE, selectedCustomer);
 
-                        invoiceBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-                        dashboardActivityContext.replaceFragment(Fragments.TOS_INVOICE_FRAGMENT, invoiceBundle);
+                            invoiceBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                            dashboardActivityContext.replaceFragment(Fragments.TOS_INVOICE_FRAGMENT, invoiceBundle);
+                        }
                         break;
                 }
             }
@@ -520,8 +520,8 @@ public class TOSCustomerFragment extends BaseFragment {
             rsm = rsmProfile.getTmc();
         if (null != salesProfile)
             sales = salesProfile.getTmc();
-        /*if (null != invoiceProfile)
-            invoice = invoiceProfile.getDocument_No();*/
+        if (null != invoiceProfile)
+            invoice = invoiceProfile.getDocumentNo();
         if (null != productProfile)
             product = productProfile.getCode();
         showProgress(ProgressDialogTexts.LOADING);
@@ -793,7 +793,7 @@ public class TOSCustomerFragment extends BaseFragment {
             tviDSOHeading.setText("DSO");
         }*/
         //adapter = new TOCustomerAdapter(dashboardActivityContext, userId, level, model, fromRSM, fromSP, fromProduct);
-        adapter = new KTOCustomerAdapter(dashboardActivityContext, userId, level, customerDataList, fromRSM, fromSP, fromProduct);
+        adapter = new KTOCustomerAdapter(dashboardActivityContext, userId, level, customerDataList, fromRSM, fromSP, fromInvoice, fromProduct);
         rviRSM.setAdapter(adapter);
     }
 }

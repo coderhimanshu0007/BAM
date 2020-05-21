@@ -215,7 +215,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
-                android:layout_weight="1"
+                android:layout_weight=".7"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -273,7 +273,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
-                android:layout_weight="1"
+                android:layout_weight=".8"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -302,7 +302,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
-                android:layout_weight="1"
+                android:layout_weight=".8"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -331,7 +331,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
-                android:layout_weight="1"
+                android:layout_weight=".8"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -417,7 +417,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
-                android:layout_weight="1"
+                android:layout_weight=".7"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -475,7 +475,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
-                android:layout_weight="1"
+                android:layout_weight=".8"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -500,40 +500,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/llTOSProduct_Nav_tab"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/iviTOSProduct_Nav_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:tint="@color/color_value_54"
-                    app:srcCompat="@drawable/ic_product" />
-
-                <TextView
-                    android:id="@+id/tviTOSProduct_Nav_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:shadowColor="@android:color/black"
-                    android:text="Product"
-                    android:textColor="@color/color_value_54"
-                    android:textSize="11sp"
-                    app:fontFamily="@font/roboto_medium" />
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/llTOSInvoice_Nav_tab"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
-                android:layout_weight="1"
+                android:layout_weight=".8"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -551,6 +522,35 @@
                     android:layout_height="wrap_content"
                     android:shadowColor="@android:color/black"
                     android:text="@string/Invoice"
+                    android:textColor="@color/color_value_54"
+                    android:textSize="11sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llTOSProduct_Nav_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight=".8"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iviTOSProduct_Nav_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/color_value_54"
+                    app:srcCompat="@drawable/ic_product" />
+
+                <TextView
+                    android:id="@+id/tviTOSProduct_Nav_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@android:color/black"
+                    android:text="Product"
                     android:textColor="@color/color_value_54"
                     android:textSize="11sp"
                     app:fontFamily="@font/roboto_medium" />

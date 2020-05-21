@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.to_customer_recyclerview_layout.view.*
 import org.greenrobot.eventbus.EventBus
 import java.util.*
 
-class KTOCustomerAdapter(val mContext: DashboardActivity, val userId: String, val level: String, val dataList: List<KNRCustomerModel.Datum>, val fromRSM: Boolean, val fromSP: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KTOCustomerAdapter.ViewHolder>(), Filterable {
+class KTOCustomerAdapter(val mContext: DashboardActivity, val userId: String, val level: String, val dataList: List<KNRCustomerModel.Datum>, val fromRSM: Boolean, val fromSP: Boolean, val fromInvoice: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KTOCustomerAdapter.ViewHolder>(), Filterable {
     private var dataListFiltered: List<KNRCustomerModel.Datum>? = dataList
     //private var layoutManager: LinearLayoutManager? = null
 
@@ -38,12 +38,7 @@ class KTOCustomerAdapter(val mContext: DashboardActivity, val userId: String, va
             this.rviStateCode = itemView.findViewById<View>(R.id.rviStateCode) as RecyclerView
 
             itemView.setOnClickListener {
-                val toCustomerModel = KNRCustomerModel().Datum()
-                toCustomerModel.customerName = currentDataItem?.customerName
-                toCustomerModel.amount = currentDataItem?.amount
-                toCustomerModel.position = currentDataItem?.position!!
-                toCustomerModel.open = currentDataItem?.open!!
-                EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, toCustomerModel))
+                EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SO_ITEM_SELECT, currentDataItem))
             }
         }
 
@@ -89,38 +84,27 @@ class KTOCustomerAdapter(val mContext: DashboardActivity, val userId: String, va
             val popup = PopupMenu(mContext, holder.iviOption)
             //inflating menu from xml resource
             popup.inflate(R.menu.pso_options_menu)
-            popup.menu.getItem(3).setTitle("Product")
-            popup.menu.getItem(4).setTitle("Invoice")
-            if (level == "R1") {
-                popup.menu.getItem(2).isVisible = false
-                if (fromSP && fromProduct) {
-                    popup.menu.getItem(1).isVisible = false
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromSP && fromRSM) {
-                    popup.menu.getItem(0).isVisible = false
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromProduct && fromRSM) {
-                    popup.menu.getItem(0).isVisible = false
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromSP) {
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromProduct) {
-                    popup.menu.getItem(2).isVisible = false
-                } else if (fromRSM) {
-                    popup.menu.getItem(0).isVisible = false
-                }
-            } else if (level == "R2" || level == "R3") {
+            popup.menu.getItem(3).setTitle("Invoice")
+            if (level == "R2" || level == "R3") {
                 popup.menu.getItem(0).isVisible = false
                 popup.menu.getItem(2).isVisible = false
-                if (fromSP) {
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromProduct) {
-                    popup.menu.getItem(3).isVisible = false
-                }
             } else if (level == "R4") {
                 popup.menu.getItem(0).isVisible = false
                 popup.menu.getItem(1).isVisible = false
                 popup.menu.getItem(2).isVisible = false
+            }
+            popup.menu.getItem(2).isVisible = false
+            if (fromRSM) {
+                popup.menu.getItem(0).isVisible = false
+            }
+            if (fromSP) {
+                popup.menu.getItem(1).isVisible = false
+            }
+            if (fromInvoice) {
+                popup.menu.getItem(3).isVisible = false
+            }
+            if (fromProduct) {
+                popup.menu.getItem(4).isVisible = false
             }
             //adding click listener
             popup.setOnMenuItemClickListener { item ->
@@ -137,11 +121,11 @@ class KTOCustomerAdapter(val mContext: DashboardActivity, val userId: String, va
                     }
                     R.id.menu4 -> {
                         //handle menu4 click
-                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataListFiltered?.get(position)))
+                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SO_ITEM_SELECT, dataListFiltered?.get(position)))
                     }
                     R.id.menu5 -> {
                         //handle menu5 click
-                        //EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SO_ITEM_SELECT, dataListFiltered?.get(position)))
+                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_SELECT, dataListFiltered?.get(position)))
                     }
                 }//handle menu3 click
                 false

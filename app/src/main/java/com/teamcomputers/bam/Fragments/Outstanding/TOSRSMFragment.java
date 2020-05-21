@@ -970,7 +970,7 @@ public class TOSRSMFragment extends BaseFragment {
             tviDSOHeading.setText("DSO");
         }
         //rsmAdapter = new TORSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
-        rsmAdapter = new KTORSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
+        rsmAdapter = new KTORSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer,fromInvoice, fromProduct);
         rviRSM.setAdapter(rsmAdapter);
     }
 

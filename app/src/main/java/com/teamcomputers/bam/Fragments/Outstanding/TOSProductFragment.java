@@ -161,7 +161,7 @@ public class TOSProductFragment extends BaseFragment {
         rsmProfile = getArguments().getParcelable(RSM_PROFILE);
         spProfile = getArguments().getParcelable(SP_PROFILE);
         customerProfile = getArguments().getParcelable(CUSTOMER_PROFILE);
-        stateCode = getArguments().getInt(STATE_CODE);
+        invoiceProfile = getArguments().getParcelable(INVOICE_PROFILE);
 
         toolbarTitle = getString(R.string.Product);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
@@ -569,7 +569,7 @@ public class TOSProductFragment extends BaseFragment {
         } else if (iPos == 1) {
             cviProductHeading.setVisibility(View.VISIBLE);
 
-            position = customerProfile.getPosition();
+            position = invoiceProfile.getPosition();
             llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR1Name.setText(invoiceProfile.getDocumentNo());
             llDSO.setVisibility(View.GONE);
@@ -619,7 +619,7 @@ public class TOSProductFragment extends BaseFragment {
         } else if (iPos == 1) {
             cviProductHeading.setVisibility(View.VISIBLE);
 
-            position = customerProfile.getPosition();
+            position = invoiceProfile.getPosition();
             llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR2Name.setText(invoiceProfile.getDocumentNo());
             llDSO.setVisibility(View.GONE);
@@ -808,7 +808,7 @@ public class TOSProductFragment extends BaseFragment {
             tviDSOHeading.setText("DSO");
         }*/
         //adapter = new TOProductAdapter(dashboardActivityContext, level, type, model, fromRSM, fromSP, fromCustomer);
-        adapter = new KTOProductAdapter(dashboardActivityContext, level, type, productDataList, fromRSM, fromSP, fromCustomer);
+        adapter = new KTOProductAdapter(dashboardActivityContext, level, type, productDataList, fromRSM, fromSP, fromCustomer, fromInvoice);
         rviRSM.setAdapter(adapter);
     }
 }

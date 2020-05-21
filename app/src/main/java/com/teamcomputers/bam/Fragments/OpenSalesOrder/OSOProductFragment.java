@@ -334,7 +334,7 @@ public class OSOProductFragment extends BaseFragment {
                         salesBundle.putInt(OSOSalesPersonFragment.RSM_POS, rsmPos);
                         salesBundle.putInt(OSOSalesPersonFragment.CUSTOMER_POS, cPos);
                         salesBundle.putInt(OSOSalesPersonFragment.SO_POS, soPos);
-                        salesBundle.putInt(OSOSalesPersonFragment.SO_POS, pPos);
+                        salesBundle.putInt(OSOSalesPersonFragment.PRODUCT_POS, pPos);
 
                         salesBundle.putBoolean(OSOSalesPersonFragment.FROM_RSM, fromRSM);
                         salesBundle.putBoolean(OSOSalesPersonFragment.FROM_CUSTOMER, fromCustomer);

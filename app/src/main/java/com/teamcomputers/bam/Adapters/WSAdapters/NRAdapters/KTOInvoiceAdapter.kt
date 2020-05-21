@@ -56,57 +56,50 @@ class KTOInvoiceAdapter(val mContext: DashboardActivity, val level: String, val 
                 val popup = PopupMenu(mContext, itemView.iviOption)
                 //inflating menu from xml resource
                 popup.inflate(R.menu.pso_options_menu)
-                popup.menu.getItem(3).setTitle("Product")
-                popup.menu.getItem(4).setTitle("Invoice")
-                if (level == "R1") {
-                    popup.menu.getItem(4).isVisible = false
-                    if (fromSP && fromProduct) {
-                        popup.menu.getItem(1).isVisible = false
-                        popup.menu.getItem(3).isVisible = false
-                    } else if (fromSP && fromRSM) {
-                        popup.menu.getItem(0).isVisible = false
-                        popup.menu.getItem(1).isVisible = false
-                    } else if (fromProduct && fromRSM) {
-                        popup.menu.getItem(0).isVisible = false
-                        popup.menu.getItem(3).isVisible = false
-                    } else if (fromSP) {
-                        popup.menu.getItem(1).isVisible = false
-                    } else if (fromProduct) {
-                        popup.menu.getItem(2).isVisible = false
-                    } else if (fromRSM) {
-                        popup.menu.getItem(0).isVisible = false
-                    }
-                } else if (level == "R2" || level == "R3") {
+                popup.menu.getItem(3).setTitle("Invoice")
+                if (level == "R2" || level == "R3") {
                     popup.menu.getItem(0).isVisible = false
                     popup.menu.getItem(2).isVisible = false
-                    if (fromSP) {
-                        popup.menu.getItem(1).isVisible = false
-                    } else if (fromProduct) {
-                        popup.menu.getItem(3).isVisible = false
-                    }
                 } else if (level == "R4") {
                     popup.menu.getItem(0).isVisible = false
                     popup.menu.getItem(1).isVisible = false
                     popup.menu.getItem(2).isVisible = false
+                }
+                popup.menu.getItem(3).isVisible = false
+                if (fromRSM) {
+                    popup.menu.getItem(0).isVisible = false
+                }
+                if (fromSP) {
+                    popup.menu.getItem(1).isVisible = false
+                }
+                if (fromCustomer) {
+                    popup.menu.getItem(2).isVisible = false
+                }
+                if (fromProduct) {
+                    popup.menu.getItem(4).isVisible = false
                 }
                 //adding click listener
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.menu1 -> {
                             //handle menu1 click
-                            //EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, invoiceData))
+                            invoiceData.position = pos
+                            EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.RSM_MENU_SELECT, invoiceData))
                         }
                         R.id.menu2 -> {
                             //handle menu2 click
-                            //EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, invoiceData))
+                            invoiceData.position = pos
+                            EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SP_MENU_SELECT, invoiceData))
                         }
                         R.id.menu3 -> {
                             //handle menu3 click
-                            //EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, invoiceData))
+                            invoiceData.position = pos
+                            EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.CUSTOMER_MENU_SELECT, invoiceData))
                         }
-                        R.id.menu4 -> {
+                        R.id.menu5 -> {
                             //handle menu3 click
-                            //EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, invoiceData))
+                            invoiceData.position = pos
+                            EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, invoiceData))
 
                         }
                     }//handle menu3 click

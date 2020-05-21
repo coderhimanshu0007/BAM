@@ -570,8 +570,8 @@ public class TOSSalesPersonFragment extends BaseFragment {
             customer = customerProfile.getCustomerName();
         if (null != productProfile)
             product = productProfile.getCode();
-        /*if (null != invoiceProfile)
-            invoice = invoiceProfile.getDocument_No();*/
+        if (null != invoiceProfile)
+            invoice = invoiceProfile.getDocumentNo();
         /*if (stateCode == 1)
             state = customerProfile.getDocumentNo().get(0).getDocumentNo();*/
         showProgress(ProgressDialogTexts.LOADING);
@@ -664,10 +664,10 @@ public class TOSSalesPersonFragment extends BaseFragment {
             tviR2Name.setText(productProfile.getProductName());
             tviAmount.setText(BAMUtil.getRoundOffValue(productProfile.getAmount()));
             llDSO.setVisibility(View.GONE);
-        } else if (iPos == 4) {
+        } else if (iPos == 2) {
             pos = invoiceProfile.getPosition();
             llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
-            tviR3Name.setText(invoiceProfile.getDocumentNo());
+            tviR2Name.setText(invoiceProfile.getDocumentNo());
             tviAmount.setText(BAMUtil.getRoundOffValue(invoiceProfile.getAmount()));
             llDSO.setVisibility(View.GONE);
         }
@@ -835,7 +835,7 @@ public class TOSSalesPersonFragment extends BaseFragment {
             tviDSOHeading.setText("DSO");
         }
         //adapter = new TOSalesPersonAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromProduct);
-        adapter = new KTOSPAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromProduct);
+        adapter = new KTOSPAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromInvoice, fromProduct);
         rviRSM.setAdapter(adapter);
     }
 

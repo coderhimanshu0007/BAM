@@ -15,7 +15,7 @@ import com.teamcomputers.bam.R
 import com.teamcomputers.bam.Utils.KBAMUtils
 import org.greenrobot.eventbus.EventBus
 
-class KTORSMAdapter(val mContext: DashboardActivity, val type: String, val level: String, val dataList: List<KNRRSMModel.Datum>, val fromSP: Boolean, val fromCustomer: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KTORSMAdapter.ViewHolder>(), Filterable {
+class KTORSMAdapter(val mContext: DashboardActivity, val type: String, val level: String, val dataList: List<KNRRSMModel.Datum>, val fromSP: Boolean, val fromCustomer: Boolean, val fromInvoice: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KTORSMAdapter.ViewHolder>(), Filterable {
     private var dataListFiltered: List<KNRRSMModel.Datum>? = dataList
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -83,34 +83,23 @@ class KTORSMAdapter(val mContext: DashboardActivity, val type: String, val level
             val popup = PopupMenu(mContext, holder.iviOption)
             //inflating menu from xml resource
             popup.inflate(R.menu.pso_options_menu)
-            popup.menu.getItem(3).setTitle("Product")
-            popup.menu.getItem(4).setTitle("Invoice")
-            if (level == "R1") {
-                popup.menu.getItem(0).isVisible = false
-                if (fromSP && fromCustomer) {
-                    popup.menu.getItem(1).isVisible = false
-                    popup.menu.getItem(2).isVisible = false
-                } else if (fromSP && fromProduct) {
-                    popup.menu.getItem(1).isVisible = false
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromCustomer && fromProduct) {
-                    popup.menu.getItem(2).isVisible = false
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromSP) {
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromCustomer) {
-                    popup.menu.getItem(2).isVisible = false
-                } else if (fromProduct) {
-                    popup.menu.getItem(3).isVisible = false
-                }
-            } else if (level == "R2" || level == "R3") {
+            popup.menu.getItem(3).setTitle("Invoice")
+            if (level == "R2" || level == "R3") {
                 popup.menu.getItem(0).isVisible = false
                 popup.menu.getItem(1).isVisible = false
-                if (fromCustomer) {
-                    popup.menu.getItem(2).isVisible = false
-                } else if (fromProduct) {
-                    popup.menu.getItem(3).isVisible = false
-                }
+            }
+            popup.menu.getItem(0).isVisible = false
+            if (fromSP) {
+                popup.menu.getItem(1).isVisible = false
+            }
+            if (fromCustomer) {
+                popup.menu.getItem(2).isVisible = false
+            }
+            if (fromInvoice) {
+                popup.menu.getItem(3).isVisible = false
+            }
+            if (fromProduct) {
+                popup.menu.getItem(4).isVisible = false
             }
             //adding click listener
             popup.setOnMenuItemClickListener { item ->
@@ -130,12 +119,12 @@ class KTORSMAdapter(val mContext: DashboardActivity, val type: String, val level
                     R.id.menu4 -> {
                         //handle menu4 click
                         dataListFiltered?.get(position)?.position = position
-                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, dataListFiltered?.get(position)))
+                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SO_ITEM_SELECT, dataListFiltered?.get(position)))
                     }
                     R.id.menu5 -> {
                         //handle menu5 click
                         dataListFiltered?.get(position)?.position = position
-                        //EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.SO_ITEM_SELECT, dataListFiltered?.get(position)))
+                        EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.PRODUCT_MENU_SELECT, dataListFiltered?.get(position)))
                     }
                 }//handle menu1 click
                 false
