@@ -1,5 +1,6 @@
 package com.teamcomputers.bam.Activities
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Intent
@@ -7,6 +8,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -14,14 +17,17 @@ import butterknife.ButterKnife
 import com.teamcomputers.bam.Interface.BAMConstant
 import com.teamcomputers.bam.Interface.KBAMConstant
 import com.teamcomputers.bam.Models.common.EventObject
+import com.teamcomputers.bam.R
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.util.*
 
 abstract class KBaseActivity : AppCompatActivity(), KBAMConstant {
     val SHOW_TOAST = 0
+    internal var mActivity: Activity? = null
     protected var alertDialogUpdateApp: AlertDialog? = null
     protected var builderUpdateApp: AlertDialog.Builder? = null
+    protected var errorAlert: AlertDialog.Builder? = null
     private var progressDialog: ProgressDialog? = null
     var appUrl: String? = null
     val pauseHandler: PauseHandler? = null
@@ -38,6 +44,7 @@ abstract class KBaseActivity : AppCompatActivity(), KBAMConstant {
 
         injectViews()
         initUpdateApp()
+        showError()
         EventBus.getDefault().register(this)
         initProgressDialog(BAMConstant.ProgressDialogTexts.AUTHENTICATING)
         // startScrollActivity(BaseActivity.class);
@@ -161,6 +168,31 @@ abstract class KBaseActivity : AppCompatActivity(), KBAMConstant {
             builderUpdateApp!!.setPositiveButton(BAMConstant.ToastTexts.UPDATE) { dialog, which ->
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(appUrl))
                 startActivity(browserIntent)
+            }
+        }
+    }
+
+    fun showDialog(mAct: Activity) {
+        mActivity = mAct;
+        if (alertDialogUpdateApp == null) {
+            alertDialogUpdateApp = errorAlert?.show()
+        } else if (!alertDialogUpdateApp!!.isShowing()) {
+            errorAlert?.show()
+        }
+    }
+
+    private fun showError() {
+        if (errorAlert == null) {
+            errorAlert = AlertDialog.Builder(this)
+            val inflater = this.layoutInflater
+            val dialogView = inflater.inflate(R.layout.error_dialog, null)
+            errorAlert!!.setView(dialogView)
+            errorAlert!!.setCancelable(false)
+
+            val btnOk = dialogView.findViewById<View>(R.id.btnOk) as Button
+            btnOk.setOnClickListener {
+                alertDialogUpdateApp!!.dismiss()
+                mActivity?.finish()
             }
         }
     }

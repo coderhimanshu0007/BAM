@@ -48,7 +48,7 @@
         android:background="@color/login_bg"
         android:orientation="vertical">
 
-        <ScrollView
+        <!--<ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none">
@@ -56,375 +56,375 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical">-->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cviProductHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="2dp"
+            android:elevation="@dimen/cardview_compat_inset_shadow"
+            android:padding="3dp"
+            android:visibility="gone"
+            app:cardCornerRadius="5dp">
+
+            <LinearLayout
+                android:id="@+id/llProductLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_first_item_value"
                 android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cviProductHeading"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="22dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="2dp"
-                    android:elevation="@dimen/cardview_compat_inset_shadow"
-                    android:padding="3dp"
-                    android:visibility="gone"
-                    app:cardCornerRadius="5dp">
+                    android:background="@drawable/ic_dso_map"
+                    android:backgroundTint="@color/color_map"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/llProductLayout"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/color_first_item_value"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/llClose"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/iviClose"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:padding="10dp"
+                                android:tint="@color/color_value"
+                                app:srcCompat="@drawable/ic_close_dialog" />
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/ic_dso_map"
-                            android:backgroundTint="@color/color_map"
+                            android:layout_toLeftOf="@+id/llClose"
                             android:orientation="vertical">
 
                             <RelativeLayout
+                                android:id="@+id/rlR1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
-                                <LinearLayout
-                                    android:id="@+id/llClose"
+                                <TextView
+                                    android:id="@+id/tviR1Name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginRight="5dp"
+                                    android:text="Sagar Pushkarna"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="14sp"
+                                    app:fontFamily="@font/roboto_bold" />
+
+                                <ImageView
+                                    android:id="@+id/iviR1Close"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
-                                    android:orientation="vertical">
+                                    android:padding="10dp"
+                                    android:tint="@color/color_value"
+                                    app:srcCompat="@drawable/ic_close_dialog" />
 
-                                    <ImageView
-                                        android:id="@+id/iviClose"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentRight="true"
-                                        android:padding="10dp"
-                                        android:tint="@color/color_value"
-                                        app:srcCompat="@drawable/ic_close_dialog" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
+                                <TextView
+                                    android:id="@+id/tviR1StateName"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_toLeftOf="@+id/llClose"
-                                    android:orientation="vertical">
-
-                                    <RelativeLayout
-                                        android:id="@+id/rlR1"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <TextView
-                                            android:id="@+id/tviR1Name"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="10dp"
-                                            android:layout_marginTop="10dp"
-                                            android:layout_marginRight="5dp"
-                                            android:text="Sagar Pushkarna"
-                                            android:textColor="@color/color_value"
-                                            android:textSize="14sp"
-                                            app:fontFamily="@font/roboto_bold" />
-
-                                        <ImageView
-                                            android:id="@+id/iviR1Close"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_alignParentRight="true"
-                                            android:padding="10dp"
-                                            android:tint="@color/color_value"
-                                            app:srcCompat="@drawable/ic_close_dialog" />
-
-                                        <TextView
-                                            android:id="@+id/tviR1StateName"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_centerVertical="true"
-                                            android:layout_toLeftOf="@+id/iviR1Close"
-                                            android:textColor="@color/color_value"
-                                            android:textSize="14sp"
-                                            app:fontFamily="@font/roboto_bold" />
-                                    </RelativeLayout>
-
-                                    <RelativeLayout
-                                        android:id="@+id/rlR2"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <TextView
-                                            android:id="@+id/tviR2Name"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="10dp"
-                                            android:layout_marginTop="10dp"
-                                            android:layout_marginRight="5dp"
-                                            android:text="Sagar Pushkarna"
-                                            android:textColor="@color/color_value"
-                                            android:textSize="14sp"
-                                            app:fontFamily="@font/roboto_bold" />
-
-                                        <ImageView
-                                            android:id="@+id/iviR2Close"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_alignParentRight="true"
-                                            android:padding="10dp"
-                                            android:tint="@color/color_value"
-                                            app:srcCompat="@drawable/ic_close_dialog" />
-
-                                        <TextView
-                                            android:id="@+id/tviR2StateName"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_centerVertical="true"
-                                            android:layout_toLeftOf="@+id/iviR2Close"
-                                            android:textColor="@color/color_value"
-                                            android:textSize="14sp"
-                                            app:fontFamily="@font/roboto_bold" />
-                                    </RelativeLayout>
-
-                                    <RelativeLayout
-                                        android:id="@+id/rlR3"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <TextView
-                                            android:id="@+id/tviR3Name"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="10dp"
-                                            android:layout_marginTop="10dp"
-                                            android:layout_marginRight="5dp"
-                                            android:text="Sagar Pushkarna"
-                                            android:textColor="@color/color_value"
-                                            android:textSize="14sp"
-                                            app:fontFamily="@font/roboto_bold" />
-
-                                        <ImageView
-                                            android:id="@+id/iviR3Close"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_alignParentRight="true"
-                                            android:padding="10dp"
-                                            android:tint="@color/color_value"
-                                            app:srcCompat="@drawable/ic_close_dialog" />
-
-                                        <TextView
-                                            android:id="@+id/tviR3StateName"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_centerVertical="true"
-                                            android:layout_toLeftOf="@+id/iviR3Close"
-                                            android:textColor="@color/color_value"
-                                            android:textSize="14sp"
-                                            app:fontFamily="@font/roboto_bold" />
-                                    </RelativeLayout>
-
-                                    <RelativeLayout
-                                        android:id="@+id/rlR4"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <TextView
-                                            android:id="@+id/tviR4Name"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="10dp"
-                                            android:layout_marginTop="10dp"
-                                            android:layout_marginRight="5dp"
-                                            android:text="Sagar Pushkarna"
-                                            android:textColor="@color/color_value"
-                                            android:textSize="14sp"
-                                            app:fontFamily="@font/roboto_bold" />
-
-                                        <ImageView
-                                            android:id="@+id/iviR4Close"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_alignParentRight="true"
-                                            android:padding="10dp"
-                                            android:tint="@color/color_value"
-                                            app:srcCompat="@drawable/ic_close_dialog" />
-
-                                        <TextView
-                                            android:id="@+id/tviR4StateName"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_centerVertical="true"
-                                            android:layout_toLeftOf="@+id/iviR4Close"
-                                            android:textColor="@color/color_value"
-                                            android:textSize="14sp"
-                                            app:fontFamily="@font/roboto_bold" />
-                                    </RelativeLayout>
-
-                                </LinearLayout>
+                                    android:layout_centerVertical="true"
+                                    android:layout_toLeftOf="@+id/iviR1Close"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="14sp"
+                                    app:fontFamily="@font/roboto_bold" />
                             </RelativeLayout>
 
-                            <LinearLayout
+                            <RelativeLayout
+                                android:id="@+id/rlR2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/tviR2Name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginRight="5dp"
+                                    android:text="Sagar Pushkarna"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="14sp"
+                                    app:fontFamily="@font/roboto_bold" />
+
+                                <ImageView
+                                    android:id="@+id/iviR2Close"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:padding="10dp"
+                                    android:tint="@color/color_value"
+                                    app:srcCompat="@drawable/ic_close_dialog" />
+
+                                <TextView
+                                    android:id="@+id/tviR2StateName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toLeftOf="@+id/iviR2Close"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="14sp"
+                                    app:fontFamily="@font/roboto_bold" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/rlR3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/tviR3Name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginRight="5dp"
+                                    android:text="Sagar Pushkarna"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="14sp"
+                                    app:fontFamily="@font/roboto_bold" />
+
+                                <ImageView
+                                    android:id="@+id/iviR3Close"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:padding="10dp"
+                                    android:tint="@color/color_value"
+                                    app:srcCompat="@drawable/ic_close_dialog" />
+
+                                <TextView
+                                    android:id="@+id/tviR3StateName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toLeftOf="@+id/iviR3Close"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="14sp"
+                                    app:fontFamily="@font/roboto_bold" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/rlR4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/tviR4Name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginRight="5dp"
+                                    android:text="Sagar Pushkarna"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="14sp"
+                                    app:fontFamily="@font/roboto_bold" />
+
+                                <ImageView
+                                    android:id="@+id/iviR4Close"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:padding="10dp"
+                                    android:tint="@color/color_value"
+                                    app:srcCompat="@drawable/ic_close_dialog" />
+
+                                <TextView
+                                    android:id="@+id/tviR4StateName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toLeftOf="@+id/iviR4Close"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="14sp"
+                                    app:fontFamily="@font/roboto_bold" />
+                            </RelativeLayout>
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/llAmount"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="14dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="14dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/td_bg"
+                            android:backgroundTint="@color/color_filter_amount"
+                            android:orientation="vertical"
+                            android:padding="7dp">
+
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="Outstanding"
+                                android:textColor="@color/color_value"
+                                android:textSize="12sp"
+                                app:fontFamily="@font/roboto_medium" />
 
-                                <LinearLayout
-                                    android:id="@+id/llAmount"
-                                    android:layout_width="0dp"
-                                    android:layout_height="50dp"
-                                    android:layout_marginLeft="20dp"
-                                    android:layout_marginTop="14dp"
-                                    android:layout_marginRight="20dp"
-                                    android:layout_marginBottom="14dp"
-                                    android:layout_weight="1"
-                                    android:background="@drawable/td_bg"
-                                    android:backgroundTint="@color/color_filter_amount"
-                                    android:orientation="vertical"
-                                    android:padding="7dp">
+                            <TextView
+                                android:id="@+id/tviAmount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="625.2"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_bold" />
+                        </LinearLayout>
 
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:gravity="center"
-                                        android:text="Outstanding"
-                                        android:textColor="@color/color_value"
-                                        android:textSize="12sp"
-                                        app:fontFamily="@font/roboto_medium" />
+                        <LinearLayout
+                            android:id="@+id/llDSO"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="14dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="14dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/td_bg"
+                            android:backgroundTint="@color/color_filter_amount"
+                            android:orientation="vertical"
+                            android:padding="1dp">
 
-                                    <TextView
-                                        android:id="@+id/tviAmount"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:gravity="center"
-                                        android:text="625.2"
-                                        android:textColor="@color/color_value"
-                                        android:textSize="14sp"
-                                        app:fontFamily="@font/roboto_bold" />
-                                </LinearLayout>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="DSO"
+                                android:textColor="@color/color_value"
+                                android:textSize="12sp"
+                                app:fontFamily="@font/roboto_medium" />
 
-                                <LinearLayout
-                                    android:id="@+id/llDSO"
-                                    android:layout_width="0dp"
-                                    android:layout_height="50dp"
-                                    android:layout_marginLeft="20dp"
-                                    android:layout_marginTop="14dp"
-                                    android:layout_marginRight="20dp"
-                                    android:layout_marginBottom="14dp"
-                                    android:layout_weight="1"
-                                    android:background="@drawable/td_bg"
-                                    android:backgroundTint="@color/color_filter_amount"
-                                    android:orientation="vertical"
-                                    android:padding="1dp">
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:gravity="center">
 
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:gravity="center"
-                                        android:text="DSO"
-                                        android:textColor="@color/color_value"
-                                        android:textSize="12sp"
-                                        app:fontFamily="@font/roboto_medium" />
+                                <ProgressBar
+                                    android:id="@+id/pBar"
+                                    style="?android:attr/progressBarStyleHorizontal"
+                                    android:layout_width="55dp"
+                                    android:layout_height="10dp"
+                                    android:indeterminate="false"
+                                    android:max="100"
+                                    android:minWidth="200dp"
+                                    android:minHeight="10dp"
+                                    android:progress="0"
+                                    android:progressDrawable="@drawable/seekbar_drawable_progress" />
 
-                                    <RelativeLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:layout_gravity="center"
-                                        android:gravity="center">
+                                <TextView
+                                    android:id="@+id/tviDSO"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/pBar"
+                                    android:layout_centerHorizontal="true"
+                                    android:text="625.2"
+                                    android:textColor="@color/color_value"
+                                    android:textSize="14sp"
+                                    app:fontFamily="@font/roboto_bold" />
 
-                                        <ProgressBar
-                                            android:id="@+id/pBar"
-                                            style="?android:attr/progressBarStyleHorizontal"
-                                            android:layout_width="55dp"
-                                            android:layout_height="10dp"
-                                            android:indeterminate="false"
-                                            android:max="100"
-                                            android:minWidth="200dp"
-                                            android:minHeight="10dp"
-                                            android:progress="0"
-                                            android:progressDrawable="@drawable/seekbar_drawable_progress" />
-
-                                        <TextView
-                                            android:id="@+id/tviDSO"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_below="@+id/pBar"
-                                            android:layout_centerHorizontal="true"
-                                            android:text="625.2"
-                                            android:textColor="@color/color_value"
-                                            android:textSize="14sp"
-                                            app:fontFamily="@font/roboto_bold" />
-
-                                    </RelativeLayout>
-                                </LinearLayout>
-
-                            </LinearLayout>
-
+                            </RelativeLayout>
                         </LinearLayout>
 
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
+                </LinearLayout>
 
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginRight="20dp"
-                    android:elevation="@dimen/cardview_compat_inset_shadow"
-                    android:padding="3dp"
-                    app:cardCornerRadius="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/color_heading_bg"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tviYtdHeading"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="OUTSTANDING"
-                            android:textColor="@color/color_value"
-                            android:textSize="12sp"
-                            app:fontFamily="@font/roboto_bold" />
-
-
-                        <TextView
-                            android:id="@+id/tviMtdHeading"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="NOD"
-                            android:textColor="@color/color_value"
-                            android:textSize="12sp"
-                            app:fontFamily="@font/roboto_bold" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rviRSM"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="50dp"
-                    android:scrollbars="none" />
             </LinearLayout>
-        </ScrollView>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="20dp"
+            android:elevation="@dimen/cardview_compat_inset_shadow"
+            android:padding="3dp"
+            app:cardCornerRadius="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_heading_bg"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tviYtdHeading"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="OUTSTANDING"
+                    android:textColor="@color/color_value"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/roboto_bold" />
+
+
+                <TextView
+                    android:id="@+id/tviMtdHeading"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="NOD"
+                    android:textColor="@color/color_value"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/roboto_bold" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rviRSM"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        <!--</LinearLayout>
+    </ScrollView>-->
     </LinearLayout>
 
 </LinearLayout>

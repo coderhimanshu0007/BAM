@@ -33,8 +33,9 @@ class KSplashActivity : KBaseActivity() {
                 KBAMConstant.Events.YOU_ARE_USING_CURRENT_VERSION_OF_APP -> nextActivity()
                 KBAMConstant.Events.OOPS_MESSAGE -> showToast(KBAMConstant.ToastTexts.OOPS_MESSAGE)
                 KBAMConstant.Events.NO_INTERNET_CONNECTION -> showToast(KBAMConstant.ToastTexts.NO_INTERNET_CONNECTION)
+                KBAMConstant.Events.INTERNAL_ERROR -> showDialog(this)
             }//appUrl = ((AppVersionResponse) eventObject.getObject()).getAppVersionUrl();
-            //showVersionCheck();
+            //showVersionCheck();/
         }
     }
 

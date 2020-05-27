@@ -21,6 +21,8 @@ class KAppVersionRequester : BaseRequester {
                 } else {
                     EventBus.getDefault().post(EventObject(BAMConstant.Events.YOU_ARE_USING_CURRENT_VERSION_OF_APP, null))
                 }*/
+            } else if (apiResponse.responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+                EventBus.getDefault().post(EventObject(KBAMConstant.Events.INTERNAL_ERROR, null))
             } else {
                 EventBus.getDefault().post(EventObject(KBAMConstant.Events.OOPS_MESSAGE, null))
             }

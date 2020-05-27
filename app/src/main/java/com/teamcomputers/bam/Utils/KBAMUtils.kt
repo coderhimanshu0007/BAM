@@ -70,6 +70,17 @@ class KBAMUtils : KBAMApplication() {
             return null
         }
 
+        // Generic function to convert an Array to List
+        @JvmStatic
+        fun <T> convertArrayToList(array: Array<T>): List<T> {
+
+            // Create the List by passing the Array
+            // as parameter in the constructor
+
+            // Return the converted List
+            return Arrays.asList(*array)
+        }
+
         @JvmStatic
         fun hideSoftKeyboard(activity: Activity) {
             val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager

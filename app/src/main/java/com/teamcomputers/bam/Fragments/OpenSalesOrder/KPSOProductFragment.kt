@@ -1,5 +1,6 @@
 package com.teamcomputers.bam.Fragments.OpenSalesOrder
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -111,6 +112,7 @@ class KPSOProductFragment : KBaseFragment() {
         super.onCreate(savedInstanceState)
     }
 
+    @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -128,8 +130,8 @@ class KPSOProductFragment : KBaseFragment() {
         spPos = arguments!!.getInt(SP_POS)
         iPos = arguments!!.getInt(SO_POS)
 
-        userId = arguments!!.getString(USER_ID)
-        level = arguments!!.getString(USER_LEVEL)
+        userId = arguments?.getString(USER_ID)!!
+        level = arguments?.getString(USER_LEVEL)!!
         rsmProfile = arguments!!.getParcelable<KPSORSMModel.Datum>(RSM_PROFILE)
         salesProfile = arguments!!.getParcelable<KPSORSMModel.Datum>(SP_PROFILE)
         sOProfile = arguments!!.getParcelable<KPSOSOModel.Datum>(SO_PROFILE)

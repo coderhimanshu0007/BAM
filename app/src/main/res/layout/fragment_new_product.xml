@@ -424,7 +424,7 @@
                                     android:background="@drawable/td_bg"
                                     android:backgroundTint="@color/text"
                                     android:orientation="vertical"
-                                    android:padding="7dp">
+                                    android:padding="5dp">
 
                                     <TextView
                                         android:id="@+id/tviAchHeading"

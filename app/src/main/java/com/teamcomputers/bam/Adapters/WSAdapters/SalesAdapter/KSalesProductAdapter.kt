@@ -77,6 +77,7 @@ class KSalesProductAdapter(dashboardActivityContext: DashboardActivity, level: S
             holder.tviYTD.text = KBAMUtils.getRoundOffValue(dataListFiltered!![position].ytd!!)
             holder.tviQTD.text = KBAMUtils.getRoundOffValue(dataListFiltered!![position].qtd!!)
             holder.tviMTD.text = KBAMUtils.getRoundOffValue(dataListFiltered!![position].mtd!!)
+            holder.tviSOAmount.text = KBAMUtils.getRoundOffValue(dataListFiltered!![position].soAmount!!)
             holder.pBar.visibility = View.GONE
         } else {
             var target = ""

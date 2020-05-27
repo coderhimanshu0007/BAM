@@ -182,4 +182,8 @@ class KHTTPOperationController : KBAMConstant {
     fun accountReceivablesApr(userId: String, level: String, type: String, RSM: String, sales: String, customer: String, stateCode: String, product: String, invoice: String, startIndex: String, endIndex: String): ApiResponse<*>? {
         return getApiInterface()?.accountReceivablesApr(userId, level, type, RSM, sales, customer, stateCode, product, invoice, startIndex, endIndex)?.let { KConnectionUtils().execute<Any>(it) }
     }
+
+    fun invoiceSerachApr(userId: String, level: String, documnetNo: String): ApiResponse<*>? {
+        return getApiInterface()?.invoiceSerachApr(userId, level, documnetNo)?.let { KConnectionUtils().execute<Any>(it) }
+    }
 }

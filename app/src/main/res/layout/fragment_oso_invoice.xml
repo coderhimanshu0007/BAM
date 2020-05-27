@@ -346,26 +346,12 @@
                             android:layout_marginRight="5dp"
                             android:layout_marginBottom="10dp"
                             android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:text="SO NO."
+                            android:gravity="center"
+                            android:text="PSO"
                             android:textColor="@color/color_value"
                             android:textSize="12sp"
                             app:fontFamily="@font/roboto_bold" />
 
-                        <TextView
-                            android:id="@+id/tviQtdHeading"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:text=""
-                            android:textColor="@color/color_value"
-                            android:textSize="12sp"
-                            app:fontFamily="@font/roboto_bold" />
 
                         <TextView
                             android:id="@+id/tviMtdHeading"
@@ -376,7 +362,7 @@
                             android:layout_marginBottom="10dp"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:text="PENDING SALES ORDER"
+                            android:text="NOD"
                             android:textColor="@color/color_value"
                             android:textSize="12sp"
                             app:fontFamily="@font/roboto_bold" />

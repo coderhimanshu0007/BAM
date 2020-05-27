@@ -915,6 +915,10 @@ public class DashboardActivity extends BaseActivity {
     @BindView(R.id.llTOSSP_Nav_tab)
     LinearLayout llTOSSP_Nav_tab;
 
+    @BindView(R.id.iviHomeNav_icon)
+    ImageView iviHomeNav_icon;
+    @BindView(R.id.tviHome_Nav_label)
+    TextView tviHome_Nav_label;
     @BindView(R.id.iviRSMNav_icon)
     ImageView iviRSMNav_icon;
     @BindView(R.id.tviRSM_Nav_label)
@@ -1010,6 +1014,11 @@ public class DashboardActivity extends BaseActivity {
         llTOSTabs.setVisibility(View.GONE);
     }
 
+    @OnClick(R.id.llHome_Nav_tab)
+    public void Home_Nav_tab() {
+        HomeClick();
+        clearStack();
+    }
 
     @OnClick(R.id.llRSM_Nav_tab)
     public void RSMNavClick() {
@@ -1059,7 +1068,27 @@ public class DashboardActivity extends BaseActivity {
         dashboardActivityContext.replaceFragment(Fragments.WS_PRODUCT_FRAGMENT, productDataBundle);
     }
 
+    private void HomeClick() {
+        tviHome_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
+        iviHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviRSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviSP_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviSP_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviCustomer_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviCustomer_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        tviProduct_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviProduct_Nav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+    }
+
     public void rSMClick(String level) {
+        tviHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
         tviRSM_Nav_label.setTextColor(getResources().getColor(R.color.end_header_color_bg));
         iviRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.end_header_color_bg), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -1077,6 +1106,9 @@ public class DashboardActivity extends BaseActivity {
         if (level.equals("R2") || level.equals("R3")) {
             llRSM_Nav_tab.setVisibility(View.GONE);
         }
+        tviHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
         tviRSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -1095,6 +1127,9 @@ public class DashboardActivity extends BaseActivity {
             llRSM_Nav_tab.setVisibility(View.GONE);
             llSP_Nav_tab.setVisibility(View.GONE);
         }
+        tviHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
         tviRSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -1109,6 +1144,9 @@ public class DashboardActivity extends BaseActivity {
     }
 
     public void productClick(String level) {
+        tviHome_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
+        iviHomeNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
+
         tviRSM_Nav_label.setTextColor(getResources().getColor(R.color.color_value_54));
         iviRSMNav_icon.setColorFilter(ContextCompat.getColor(dashboardActivityContext, R.color.color_value_54), android.graphics.PorterDuff.Mode.SRC_IN);
 

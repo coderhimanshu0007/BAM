@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "69959774570",
+    "firebase_url": "https://bamapp-ab345.firebaseio.com",
+    "project_id": "bamapp-ab345",
+    "storage_bucket": "bamapp-ab345.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69959774570:android:46c13df97af32a36427513",
+        "android_client_info": {
+          "package_name": "com.teamcomputers.bam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69959774570-vr82bg2fdtbba4jatgnjp0ncth34n642.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8-h6W3WYk_YhojF427fko_AWSWZ-PliU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69959774570-vr82bg2fdtbba4jatgnjp0ncth34n642.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

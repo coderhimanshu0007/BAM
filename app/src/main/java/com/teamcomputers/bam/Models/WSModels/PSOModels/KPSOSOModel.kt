@@ -29,9 +29,10 @@ class KPSOSOModel {
     }
 
     @SuppressLint("ParcelCreator")
-    inner class Datum :Parcelable{
+    inner class Datum : Parcelable {
         override fun writeToParcel(dest: Parcel?, flags: Int) {
             this.soNumber?.let { dest?.writeString(it) }
+            this.nod?.let { dest?.writeInt(it) }
             this.soAmount?.let { dest?.writeDouble(it) }
             this.position?.let { dest?.writeInt(it) }
         }
@@ -43,6 +44,9 @@ class KPSOSOModel {
         @SerializedName("SONumber")
         @Expose
         var soNumber: String? = null
+        @SerializedName("NOD")
+        @Expose
+        var nod: Int? = null
         @SerializedName("SOAmount")
         @Expose
         var soAmount: Double? = null

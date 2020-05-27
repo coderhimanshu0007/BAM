@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.annotation.NonNull
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.teamcomputers.bam.Activities.DashboardActivity
@@ -14,16 +15,24 @@ import com.teamcomputers.bam.Models.common.EventObject
 import com.teamcomputers.bam.R
 import com.teamcomputers.bam.Utils.KBAMUtils
 import kotlinx.android.synthetic.main.to_invoice_recyclerview_layout.view.*
-import kotlinx.android.synthetic.main.to_state_recyclerview_layout.view.*
 import kotlinx.android.synthetic.main.to_state_recyclerview_layout.view.iviOption
 import kotlinx.android.synthetic.main.to_state_recyclerview_layout.view.tviStateName
 import org.greenrobot.eventbus.EventBus
 
-class KTOInvoiceAdapter(val mContext: DashboardActivity, val level: String, val customerData: List<KNRInvoiceModel.Datum>, val fromRSM: Boolean, val fromSP: Boolean, val fromCustomer: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KTOInvoiceAdapter.ViewHolder>(), Filterable {
 
+class KTOInvoiceAdapter(val mContext: DashboardActivity, val level: String, val customerData: List<KNRInvoiceModel.Datum>, val fromRSM: Boolean, val fromSP: Boolean, val fromCustomer: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
+    private val VIEW_TYPE_ITEM = 0
+    private val VIEW_TYPE_LOADING = 1
     private var dataList: List<KNRInvoiceModel.Datum>? = customerData
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        fun showLoadingView(viewHolder: LoadingViewHolder, position: Int) {
+            //ProgressBar would be displayed
+        }
+    }
+
+    class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var invoice: KNRInvoiceModel.Datum? = null
         var itemPos: Int = 0
 
@@ -111,18 +120,37 @@ class KTOInvoiceAdapter(val mContext: DashboardActivity, val level: String, val 
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.to_invoice_recyclerview_layout, parent, false)
-
-        return ViewHolder(view)
+    @NonNull
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        if (viewType === VIEW_TYPE_ITEM) {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.to_invoice_recyclerview_layout, parent, false)
+            return ItemViewHolder(view)
+        } else {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_loading, parent, false)
+            return LoadingViewHolder(view)
+        }
     }
 
     override fun getItemCount(): Int {
-        return dataList?.size!!
+        return if (dataList == null) 0 else dataList?.size!!
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.showData(mContext, level, fromRSM, fromSP, fromCustomer, fromProduct, dataList?.get(position)!!, position)
+    /**
+     * The following method decides the type of ViewHolder to display in the RecyclerView
+     *
+     * @param position
+     * @return
+     */
+    override fun getItemViewType(position: Int): Int {
+        return if (dataList?.get(position) == null) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is ItemViewHolder) {
+            holder.showData(mContext, level, fromRSM, fromSP, fromCustomer, fromProduct, dataList?.get(position)!!, position)
+        } else if (holder is LoadingViewHolder) {
+            holder.showLoadingView(holder as LoadingViewHolder, position)
+        }
     }
 
     override fun getFilter(): Filter {

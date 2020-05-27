@@ -217,4 +217,11 @@ interface KApiInterface {
                               @Field("DocumnetNo") invoice: String,
                               @Field("StartIndex") startIndex: String,
                               @Field("EndIndex") endIndex: String): Call<Any>
+
+    // New Sales List
+    @FormUrlEncoded
+    @POST("AccountReceivablesAprInvoiceSearch")
+    fun invoiceSerachApr(@Field("UserId") userId: String,
+                     @Field("Level") level: String,
+                     @Field("DocumnetNo") type: String): Call<Any>
 }

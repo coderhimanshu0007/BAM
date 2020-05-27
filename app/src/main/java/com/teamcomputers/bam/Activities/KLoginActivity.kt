@@ -4,10 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.app.ActivityCompat
-import butterknife.BindView
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -70,6 +67,7 @@ class KLoginActivity : KBaseActivity() {
                     dismissProgress()
                     showToast(KBAMConstant.ToastTexts.OOPS_MESSAGE)
                 }
+                KBAMConstant.Events.INTERNAL_ERROR -> showDialog(this)
             }//appUrl = ((AppVersionResponse) eventObject.getObject()).getAppVersionUrl();
             //showVersionCheck();
         }

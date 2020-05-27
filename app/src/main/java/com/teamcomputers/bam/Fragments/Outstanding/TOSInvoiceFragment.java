@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,9 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.NRAdapters.KTOInvoiceAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Fragments.WSPages.WSCustomerFragment;
-import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
-import com.teamcomputers.bam.Fragments.WSPages.WSSalesPersonFragment;
 import com.teamcomputers.bam.Models.WSModels.NRModels.Filter;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRInvoiceModel;
@@ -33,16 +31,20 @@ import com.teamcomputers.bam.Models.WSModels.NRModels.KNRRSMModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesAprRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KInvoiceLoadMoreRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KInvoiceSearchRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -122,8 +124,9 @@ public class TOSInvoiceFragment extends BaseFragment {
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
     private KTOInvoiceAdapter adapter;
-    boolean fromRSM, fromSP, fromCustomer, fromProduct, search = false;
-    private int position = 0, bar = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0, iPos = 0;
+    boolean fromRSM, fromSP, fromCustomer, fromProduct, search = false, isLoading = false;
+
+    private int position = 0, bar = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0, iPos = 0, nextLimit = 0;
 
     KNRCustomerModel.Datum customerProfile;
     KNRProductModel.Datum productProfile;
@@ -167,6 +170,8 @@ public class TOSInvoiceFragment extends BaseFragment {
         toolbarTitle = getString(R.string.Invoice);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
 
+        isLoading = false;
+
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviRSM.setLayoutManager(layoutManager);
 
@@ -174,7 +179,42 @@ public class TOSInvoiceFragment extends BaseFragment {
 
         dashboardActivityContext.fragmentView = rootView;
 
+        rviRSM.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                if (!isLoading) {
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == invoiceDataList.size() - 1) {
+                        //bottom of list!
+                        loadMore();
+                    }
+                }
+            }
+        });
+
         return rootView;
+    }
+
+    private void loadMore() {
+        invoiceDataList.add(null);
+        adapter.notifyItemInserted(invoiceDataList.size() - 1);
+        String rsm = "", sales = "", customer = "", state = "", product = "";
+        if (null != rsmProfile)
+            rsm = rsmProfile.getTmc();
+        if (null != spProfile)
+            sales = spProfile.getTmc();
+        if (null != customerProfile)
+            customer = customerProfile.getCustomerName();
+        BackgroundExecutor.getInstance().execute(new KInvoiceLoadMoreRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50"));
+        isLoading = true;
     }
 
     @Override
@@ -220,7 +260,6 @@ public class TOSInvoiceFragment extends BaseFragment {
                         showToast(ToastTexts.NO_RECORD_FOUND);
                         break;
                     case Events.GET_INVOICE_TOS_LIST_SUCCESSFULL:
-                        dismissProgress();
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
                             invoiceData = (KNRInvoiceModel) KBAMUtils.fromJson(String.valueOf(jsonObject), KNRInvoiceModel.class);
@@ -234,10 +273,54 @@ public class TOSInvoiceFragment extends BaseFragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        initData("YTD");
                         dismissProgress();
+                        isLoading = false;
+                        //adapter.notifyDataSetChanged();
+                        initData("YTD");
                         break;
                     case Events.GET_INVOICE_TOS_LIST_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                    case Events.GET_INVOICE_LOAD_MORE_SUCCESSFULL:
+                        invoiceDataList.remove(invoiceDataList.size() - 1);
+                        int scrollPosition = invoiceDataList.size();
+                        adapter.notifyItemRemoved(scrollPosition);
+                        int currentSize = scrollPosition;
+                        nextLimit = currentSize + 10;
+                        try {
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
+                            invoiceData = (KNRInvoiceModel) KBAMUtils.fromJson(String.valueOf(jsonObject), KNRInvoiceModel.class);
+                            invoiceDataList.addAll(invoiceData.getData());
+                            for (int i = 0; i < invoiceDataList.size(); i++) {
+                                if (invoiceDataList.get(i).getDocumentNo().equals("") || invoiceDataList.get(i).getDocumentNo().equals("null")) {
+                                    invoiceDataList.remove(i);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        adapter.notifyDataSetChanged();
+                        isLoading = false;
+                        break;
+                    case Events.GET_INVOICE_LOAD_MORE_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                    case Events.GET_INVOICE_SERACH_SUCCESSFULL:
+                        try {
+                            JSONArray jsonArray = new JSONArray(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
+                            //invoiceDataList.clear();
+                            invoiceDataList = KBAMUtils.convertArrayToList((KNRInvoiceModel.Datum[]) KBAMUtils.fromJson(String.valueOf(jsonArray), KNRInvoiceModel.Datum[].class));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        dismissProgress();
+                        displayList();
+                        showToast("Baised on top 1000 Rows");
+                        //adapter.notifyDataSetChanged();
+                        break;
+                    case Events.GET_INVOICE_SERACH_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
@@ -359,7 +442,24 @@ public class TOSInvoiceFragment extends BaseFragment {
 
     @OnTextChanged(R.id.txtSearch)
     public void search() {
-        adapter.getFilter().filter(txtSearch.getText().toString());
+        //adapter.getFilter().filter(txtSearch.getText().toString());
+        if (txtSearch.getText().toString().length() > 3) {
+            isLoading = true;
+            showProgress(ProgressDialogTexts.LOADING);
+            BackgroundExecutor.getInstance().execute(new KInvoiceSearchRequester(userId, level, txtSearch.getText().toString()));
+        } else if (txtSearch.getText().toString().length() == 0) {
+            isLoading = false;
+            KBAMUtils.hideSoftKeyboard(dashboardActivityContext);
+            String rsm = "", sales = "", customer = "", state = "", product = "";
+            if (null != rsmProfile)
+                rsm = rsmProfile.getTmc();
+            if (null != spProfile)
+                sales = spProfile.getTmc();
+            if (null != customerProfile)
+                customer = customerProfile.getCustomerName();
+            showProgress(ProgressDialogTexts.LOADING);
+            BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50"));
+        }
     }
 
     @OnClick(R.id.iviSearch)
@@ -387,7 +487,7 @@ public class TOSInvoiceFragment extends BaseFragment {
         cviProductHeading.setVisibility(View.GONE);
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Product", "", "", "", "", ""));
-        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Invoice", "", "", "", "", "", "", "0", "100"));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Invoice", "", "", "", "", "", "", "0", "50"));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -524,14 +624,9 @@ public class TOSInvoiceFragment extends BaseFragment {
             sales = spProfile.getTmc();
         if (null != customerProfile)
             customer = customerProfile.getCustomerName();
-        /*if (stateCode == 1)
-            state = customerProfile.getDocumentNo().get(0).getDocumentNo();*/
-        /*if(null!=productProfile)
-            product = productProfile.getDocument_No();*/
-        //tviR3StateName.setText(state);
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Product", rsm, sales, customer, state, ""));
-        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", "0", "100"));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50"));
     }
 
     private void row1Display() {
@@ -833,6 +928,10 @@ public class TOSInvoiceFragment extends BaseFragment {
             tviEmpty.setVisibility(View.GONE);
             tviDSOHeading.setText("DSO");
         }*/
+        displayList();
+    }
+
+    private void displayList() {
         //adapter = new TOProductAdapter(dashboardActivityContext, level, type, model, fromRSM, fromSP, fromCustomer);
         adapter = new KTOInvoiceAdapter(dashboardActivityContext, level, invoiceDataList, fromRSM, fromSP, fromCustomer, fromProduct);
         rviRSM.setAdapter(adapter);

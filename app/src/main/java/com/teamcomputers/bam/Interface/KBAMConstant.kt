@@ -72,6 +72,7 @@ public interface KBAMConstant {
             val YOU_ARE_USING_OLDER_VERSION_OF_APP = 4
             val YOU_ARE_USING_CURRENT_VERSION_OF_APP = 5
             val OOPS_MESSAGE = 6
+            val INTERNAL_ERROR = 500
             val ORDER_PROCESSING = 7
             val PURCHASE = 8
             val LOGISTICS = 9
@@ -203,6 +204,12 @@ public interface KBAMConstant {
             val GET_FISCAL_YEAR_LIST_UNSUCCESSFULL = 139
             val GET_SALES_RECEIVABLE_FISCAL_SUCCESSFULL = 140
             val GET_SALES_RECEIVABLE_FISCAL_UNSUCCESSFULL = 141
+
+            val GET_INVOICE_LOAD_MORE_SUCCESSFULL = 142
+            val GET_INVOICE_LOAD_MORE_UNSUCCESSFULL = 143
+
+            val GET_INVOICE_SERACH_SUCCESSFULL = 144
+            val GET_INVOICE_SERACH_UNSUCCESSFULL = 145
         }
     }
 
