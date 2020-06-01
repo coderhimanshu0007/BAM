@@ -20,8 +20,14 @@ interface KApiInterface {
     @FormUrlEncoded
     @POST("Login")
     fun loginUser(@Field("LoginId") id: String,
-                           @Field("Password") password: String): Call<LoginModel>
+                  @Field("Password") password: String): Call<LoginModel>
 
+    // New Login User
+    @FormUrlEncoded
+    @POST("LoginNew")
+    fun loginNewUser(@Field("LoginId") id: String,
+                     @Field("Password") password: String,
+                     @Field("DeviceId") deviceId: String): Call<LoginModel>
 
     // Order Processing Refresh
     @POST("LastRefreshedOrderProcessing")
@@ -222,6 +228,6 @@ interface KApiInterface {
     @FormUrlEncoded
     @POST("AccountReceivablesAprInvoiceSearch")
     fun invoiceSerachApr(@Field("UserId") userId: String,
-                     @Field("Level") level: String,
-                     @Field("DocumnetNo") type: String): Call<Any>
+                         @Field("Level") level: String,
+                         @Field("DocumnetNo") type: String): Call<Any>
 }

@@ -42,6 +42,7 @@ import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItem;
 import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItemParentModel;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.FeedbackFragment;
+import com.teamcomputers.bam.Fragments.HelpFragment;
 import com.teamcomputers.bam.Fragments.Installation.InstallationFragment;
 import com.teamcomputers.bam.Fragments.Logistics.LogisticsFragment;
 import com.teamcomputers.bam.Fragments.NewSalesReceivable.NewRSMTabFragment;
@@ -305,9 +306,9 @@ public class DashboardActivity extends BaseActivity {
         replaceFragment(Fragments.SR_FRAGMENTS, srBundle);
     }
 
-    @OnClick(R.id.ll_favourits)
+    @OnClick(R.id.ll_help)
     public void favourits() {
-        replaceFragment(Fragments.SETTINGS_FRAGMENTS, new Bundle());
+        replaceFragment(Fragments.HELP_FRAGMENTS, new Bundle());
     }
 
     @OnClick(R.id.ll_feedback)
@@ -730,6 +731,9 @@ public class DashboardActivity extends BaseActivity {
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSalesReceivablePageNo(1);
                             fragment = new SalesReceivableFragment();
                         }
+                        break;
+                    case Fragments.HELP_FRAGMENTS:
+                        fragment = new HelpFragment();
                         break;
                     case Fragments.FEEDBACK_FRAGMENTS:
                         fragment = new FeedbackFragment();

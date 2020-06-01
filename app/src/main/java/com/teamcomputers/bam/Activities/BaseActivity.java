@@ -3,7 +3,6 @@ package com.teamcomputers.bam.Activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,14 +12,12 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
-
 
 import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.teamcomputers.bam.Interface.BAMConstant;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
@@ -35,6 +32,7 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity extends AppCompatActivity implements BAMConstant {
 
     public final int SHOW_TOAST = 0;
+    private FirebaseAnalytics mFirebaseAnalytics;
     Activity mActivity;
     protected AlertDialog alertDialogUpdateApp;
     protected AlertDialog.Builder builderUpdateApp, errorAlert;
@@ -54,6 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BAMConst
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
 
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         injectViews();
         initUpdateApp();
         showError();

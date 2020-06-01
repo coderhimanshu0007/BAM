@@ -443,7 +443,7 @@ public class TOSInvoiceFragment extends BaseFragment {
     @OnTextChanged(R.id.txtSearch)
     public void search() {
         //adapter.getFilter().filter(txtSearch.getText().toString());
-        if (txtSearch.getText().toString().length() > 3) {
+        if (txtSearch.getText().toString().length() > 2) {
             isLoading = true;
             showProgress(ProgressDialogTexts.LOADING);
             BackgroundExecutor.getInstance().execute(new KInvoiceSearchRequester(userId, level, txtSearch.getText().toString()));

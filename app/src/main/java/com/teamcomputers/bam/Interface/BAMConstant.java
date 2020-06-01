@@ -247,7 +247,7 @@ public interface BAMConstant {
         int COLLECTION_FRAGMENTS3 = 1083;
         int COLLECTION_FRAGMENTS4 = 1084;
         int OTHERS_FRAGMENTS = 109;
-        int SETTINGS_FRAGMENTS = 110;
+        int HELP_FRAGMENTS = 110;
         int FEEDBACK_FRAGMENTS = 111;
         int SR_FRAGMENTS = 112;
         int SR_FRAGMENTS1 = 1121;

@@ -799,9 +799,9 @@ public class WSRSMFragment extends BaseFragment {
                 tviTargetHeading.setText("YTD");
                 tviActualHeading.setText("QTD");
                 tviAchHeading.setText("MTD");
-                tviTarget.setText(BAMUtil.getRoundOffValue(spProfile.getYtd()));
-                tviActual.setText(BAMUtil.getRoundOffValue(spProfile.getQtd()));
-                tviAch.setText(BAMUtil.getRoundOffValue(spProfile.getMtd()));
+                tviTarget.setText(BAMUtil.getRoundOffValue(productProfile.getYtd()));
+                tviActual.setText(BAMUtil.getRoundOffValue(productProfile.getQtd()));
+                tviAch.setText(BAMUtil.getRoundOffValue(productProfile.getMtd()));
             } else if (!fromCustomer) {
                 tviTargetHeading.setText("Target");
                 tviActualHeading.setText("Actual");

@@ -14,6 +14,8 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import butterknife.ButterKnife
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.FirebaseAnalytics.getInstance
 import com.teamcomputers.bam.Interface.BAMConstant
 import com.teamcomputers.bam.Interface.KBAMConstant
 import com.teamcomputers.bam.Models.common.EventObject
@@ -22,8 +24,10 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.util.*
 
+
 abstract class KBaseActivity : AppCompatActivity(), KBAMConstant {
     val SHOW_TOAST = 0
+    private var mFirebaseAnalytics: FirebaseAnalytics? = null
     internal var mActivity: Activity? = null
     protected var alertDialogUpdateApp: AlertDialog? = null
     protected var builderUpdateApp: AlertDialog.Builder? = null
@@ -36,12 +40,12 @@ abstract class KBaseActivity : AppCompatActivity(), KBAMConstant {
     protected abstract fun getLayout(): Int
 
     @Subscribe
-    open abstract fun onEvent(eventObject: EventObject)
+    abstract fun onEvent(eventObject: EventObject)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayout())
-
+        mFirebaseAnalytics = getInstance(this);
         injectViews()
         initUpdateApp()
         showError()

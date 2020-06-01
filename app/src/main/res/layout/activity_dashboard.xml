@@ -142,7 +142,7 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:id="@+id/ll_favourits"
+                android:id="@+id/ll_help"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:clickable="true"
@@ -169,7 +169,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/roboto"
                     android:gravity="start|center"
-                    android:text="Favourits"
+                    android:text="Help"
                     android:textColor="@color/text_color_login"
                     android:textSize="10sp" />
 

@@ -261,7 +261,7 @@ public interface KBAMConstant {
             val COLLECTION_FRAGMENTS3 = 1083
             val COLLECTION_FRAGMENTS4 = 1084
             val OTHERS_FRAGMENTS = 109
-            val SETTINGS_FRAGMENTS = 110
+            val HELP_FRAGMENTS = 110
             val FEEDBACK_FRAGMENTS = 111
             val SR_FRAGMENTS = 112
             val SR_FRAGMENTS1 = 1121

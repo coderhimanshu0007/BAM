@@ -569,7 +569,7 @@ public class TOSRSMFragment extends BaseFragment {
             llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR1Name.setText(spProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
-            if (fromCustomer) {
+            if (fromCustomer || fromInvoice) {
                 llDSO.setVisibility(View.GONE);
             } else {
                 llDSO.setVisibility(View.VISIBLE);
@@ -654,7 +654,7 @@ public class TOSRSMFragment extends BaseFragment {
             llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR2Name.setText(spProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
-            if (fromCustomer) {
+            if (fromCustomer || fromInvoice) {
                 llDSO.setVisibility(View.GONE);
             } else {
                 llDSO.setVisibility(View.VISIBLE);
@@ -747,7 +747,7 @@ public class TOSRSMFragment extends BaseFragment {
             llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR3Name.setText(spProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
-            if (fromCustomer) {
+            if (fromCustomer || fromInvoice) {
                 llDSO.setVisibility(View.GONE);
             } else {
                 llDSO.setVisibility(View.VISIBLE);
@@ -849,7 +849,7 @@ public class TOSRSMFragment extends BaseFragment {
             llRSMLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR4Name.setText(spProfile.getName());
             tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
-            if (fromCustomer) {
+            if (fromCustomer || fromInvoice) {
                 llDSO.setVisibility(View.GONE);
             } else {
                 llDSO.setVisibility(View.VISIBLE);
@@ -945,7 +945,7 @@ public class TOSRSMFragment extends BaseFragment {
 
     private void initRSMData(String type) {
         tviAmount.setText(BAMUtil.getRoundOffValue(rsmFilterData.getAmount()));
-        if (fromCustomer) {
+        if (fromCustomer || fromInvoice) {
             llDSO.setVisibility(View.GONE);
         } else {
             llDSO.setVisibility(View.VISIBLE);
@@ -958,7 +958,7 @@ public class TOSRSMFragment extends BaseFragment {
         } else {
             pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
         }
-        if (fromCustomer || fromProduct) {
+        if (fromCustomer || fromInvoice|| fromProduct) {
             llDSO.setVisibility(View.GONE);
             tviOutstandingHeading.setText("CUSTOMER NAME");
             tviEmpty.setVisibility(View.VISIBLE);
