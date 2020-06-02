@@ -57,6 +57,7 @@ class KSplashActivity : KBaseActivity() {
         }
 
         if (java.lang.Float.parseFloat(`object`.appVersionID) > java.lang.Float.parseFloat(versionName)) {
+            appUrl = `object`.appVersionUrl
             showVersionCheck()
         } else {
             nextActivity()

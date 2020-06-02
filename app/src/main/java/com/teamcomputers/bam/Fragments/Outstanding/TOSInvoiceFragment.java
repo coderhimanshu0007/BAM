@@ -440,6 +440,10 @@ public class TOSInvoiceFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    @OnClick(R.id.iviFilter)
+    public void filter() {
+    }
+
     @OnTextChanged(R.id.txtSearch)
     public void search() {
         //adapter.getFilter().filter(txtSearch.getText().toString());

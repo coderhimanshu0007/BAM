@@ -166,6 +166,7 @@ class KLoginActivity : KBaseActivity() {
         }
 
         if (java.lang.Float.parseFloat(`object`.appVersionID) > java.lang.Float.parseFloat(versionName)) {
+            appUrl = `object`.appVersionUrl
             showVersionCheck()
         } else {
             BackgroundExecutor.getInstance().execute(KLoginRequester(txtUserName?.getText().toString(), txtPassword?.getText().toString()))

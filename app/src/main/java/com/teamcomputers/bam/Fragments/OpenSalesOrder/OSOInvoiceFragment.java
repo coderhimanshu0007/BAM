@@ -354,6 +354,10 @@ public class OSOInvoiceFragment extends BaseFragment {
         adapter.getFilter().filter(txtSearch.getText().toString());
     }
 
+    @OnClick(R.id.iviFilter)
+    public void filter() {
+    }
+
     @OnClick(R.id.iviSearch)
     public void Search() {
         if (!search) {

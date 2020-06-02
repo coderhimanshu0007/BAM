@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import butterknife.ButterKnife
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.FirebaseAnalytics.getInstance
-import com.teamcomputers.bam.Interface.BAMConstant
 import com.teamcomputers.bam.Interface.KBAMConstant
 import com.teamcomputers.bam.Models.common.EventObject
 import com.teamcomputers.bam.R
@@ -50,7 +49,7 @@ abstract class KBaseActivity : AppCompatActivity(), KBAMConstant {
         initUpdateApp()
         showError()
         EventBus.getDefault().register(this)
-        initProgressDialog(BAMConstant.ProgressDialogTexts.AUTHENTICATING)
+        initProgressDialog(KBAMConstant.ProgressDialogTexts.AUTHENTICATING)
         // startScrollActivity(BaseActivity.class);
     }
 
@@ -155,10 +154,14 @@ abstract class KBaseActivity : AppCompatActivity(), KBAMConstant {
     }
 
     fun showVersionCheck() {
-        if (alertDialogUpdateApp == null) {
-            alertDialogUpdateApp = builderUpdateApp!!.show()
-        } else if (!alertDialogUpdateApp!!.isShowing) {
-            builderUpdateApp!!.show()
+        try {
+            if (alertDialogUpdateApp == null) {
+                alertDialogUpdateApp = builderUpdateApp!!.show()
+            } else if (!alertDialogUpdateApp!!.isShowing) {
+                builderUpdateApp!!.show()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -166,10 +169,10 @@ abstract class KBaseActivity : AppCompatActivity(), KBAMConstant {
         if (builderUpdateApp == null) {
             builderUpdateApp = AlertDialog.Builder(this)
             builderUpdateApp!!.setCancelable(false)
-            builderUpdateApp!!.setMessage(BAMConstant.ToastTexts.YOU_ARE_USING_OLDER_VERSION_OF_TEAM_WORKS_APP_PLEASE_USE_LATEST_VERSION)
-            builderUpdateApp!!.setTitle(BAMConstant.ToastTexts.INFORMATION)
-            builderUpdateApp!!.setNegativeButton(BAMConstant.ToastTexts.CANCEL) { dialog, which -> alertDialogUpdateApp!!.dismiss() }
-            builderUpdateApp!!.setPositiveButton(BAMConstant.ToastTexts.UPDATE) { dialog, which ->
+            builderUpdateApp!!.setMessage(KBAMConstant.ToastTexts.YOU_ARE_USING_OLDER_VERSION_OF_TEAM_WORKS_APP_PLEASE_USE_LATEST_VERSION)
+            builderUpdateApp!!.setTitle(KBAMConstant.ToastTexts.INFORMATION)
+            builderUpdateApp!!.setNegativeButton(KBAMConstant.ToastTexts.CANCEL) { dialog, which -> alertDialogUpdateApp!!.dismiss() }
+            builderUpdateApp!!.setPositiveButton(KBAMConstant.ToastTexts.UPDATE) { dialog, which ->
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(appUrl))
                 startActivity(browserIntent)
             }

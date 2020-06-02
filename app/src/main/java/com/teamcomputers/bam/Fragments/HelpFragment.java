@@ -66,7 +66,7 @@ public class HelpFragment extends BaseFragment {
         settings.setJavaScriptEnabled(true);
         settings.setSupportZoom(true);
         settings.setBuiltInZoomControls(true);
-        wviHelp.loadUrl("http://www.amazon.com");
+        wviHelp.loadUrl("https://www.kockpit.in/kockpit-business-xray/");
         // Force links and redirects to open in the WebView instead of in a browser
         wviHelp.setWebViewClient(new WebViewClient());
         return rootView;
