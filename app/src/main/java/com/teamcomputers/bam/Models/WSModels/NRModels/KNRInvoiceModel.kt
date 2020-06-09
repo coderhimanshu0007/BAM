@@ -13,6 +13,9 @@ class KNRInvoiceModel {
     @SerializedName("Filter")
     @Expose
     private var filter: Filter? = null
+    @SerializedName("MinMax")
+    @Expose
+    private var minMaxModel: MinMaxModel? = null
 
     fun getData(): List<Datum>? {
         return data
@@ -28,6 +31,14 @@ class KNRInvoiceModel {
 
     fun setFilter(filter: Filter) {
         this.filter = filter
+    }
+
+    fun getMinMax(): MinMaxModel? {
+        return minMaxModel
+    }
+
+    fun setMinMax(minMax: MinMaxModel) {
+        this.minMaxModel = minMax
     }
 
     @SuppressLint("ParcelCreator")

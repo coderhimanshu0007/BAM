@@ -270,7 +270,7 @@ public class WSSalesPersonFragment extends BaseFragment {
                             spData = (KSalesRSMModel) BAMUtil.fromJson(String.valueOf(jsonObject), KSalesRSMModel.class);
                             spDataList = spData.getData();
                             for (int i = 0; i < spDataList.size(); i++) {
-                                if (spDataList.get(i).getName().equals("")) {
+                                if (spDataList.get(i).getName().equals("") || spDataList.get(i).getName().equalsIgnoreCase("null")) {
                                     spDataList.remove(i);
                                 }
                             }

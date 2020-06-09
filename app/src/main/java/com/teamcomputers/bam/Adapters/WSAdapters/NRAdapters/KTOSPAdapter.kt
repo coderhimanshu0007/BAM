@@ -64,7 +64,7 @@ class KTOSPAdapter(val mContext: DashboardActivity, val type: String, val level:
             holder.pBar.progressDrawable.setColorFilter(mContext.resources.getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN)
         }
 
-        if (fromCustomer) {
+        if (fromCustomer || fromInvoice) {
             holder.llAmountDSO.visibility = View.GONE
             holder.tviOutstanding.text = KBAMUtils.getRoundOffValue(dataListFiltered?.get(position)?.amount!!)
         } else {
@@ -73,7 +73,7 @@ class KTOSPAdapter(val mContext: DashboardActivity, val type: String, val level:
         }
 
         if (level == "R1") {
-            if (fromRSM && fromCustomer && fromProduct) {
+            if (fromRSM && fromCustomer && fromProduct && fromInvoice) {
                 holder.iviOption.visibility = View.GONE
             }
         } else if (level == "R2" || level == "R3") {

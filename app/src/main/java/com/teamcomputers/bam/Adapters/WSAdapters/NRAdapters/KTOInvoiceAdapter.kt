@@ -68,7 +68,7 @@ class KTOInvoiceAdapter(val mContext: DashboardActivity, val level: String, val 
                 popup.menu.getItem(3).setTitle("Invoice")
                 if (level == "R2" || level == "R3") {
                     popup.menu.getItem(0).isVisible = false
-                    popup.menu.getItem(2).isVisible = false
+                    //popup.menu.getItem(2).isVisible = false
                 } else if (level == "R4") {
                     popup.menu.getItem(0).isVisible = false
                     popup.menu.getItem(1).isVisible = false

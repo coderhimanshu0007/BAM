@@ -16,10 +16,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
+import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.NRAdapters.KTOInvoiceAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
@@ -28,9 +31,10 @@ import com.teamcomputers.bam.Models.WSModels.NRModels.KNRCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRInvoiceModel;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRProductModel;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRRSMModel;
+import com.teamcomputers.bam.Models.WSModels.NRModels.MinMaxModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesAprRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesJunRequester;
 import com.teamcomputers.bam.Requesters.WSRequesters.KInvoiceLoadMoreRequester;
 import com.teamcomputers.bam.Requesters.WSRequesters.KInvoiceSearchRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
@@ -44,7 +48,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -79,7 +82,7 @@ public class TOSInvoiceFragment extends BaseFragment {
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
 
-    String userId = "", level;
+    String userId = "", level, minAmount = "", maxAmount = "", minNOD = "", maxNOD = "";
 
     String toolbarTitle = "";
     @BindView(R.id.txtSearch)
@@ -134,6 +137,7 @@ public class TOSInvoiceFragment extends BaseFragment {
     KNRInvoiceModel invoiceData;
     List<KNRInvoiceModel.Datum> invoiceDataList = new ArrayList<>();
     Filter invoiceFilterData;
+    MinMaxModel minMaxData;
     KNRInvoiceModel.Datum selectedInvoiceData;
 
     @Override
@@ -213,7 +217,8 @@ public class TOSInvoiceFragment extends BaseFragment {
             sales = spProfile.getTmc();
         if (null != customerProfile)
             customer = customerProfile.getCustomerName();
-        BackgroundExecutor.getInstance().execute(new KInvoiceLoadMoreRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50"));
+        //BackgroundExecutor.getInstance().execute(new KInvoiceLoadMoreRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50"));
+        BackgroundExecutor.getInstance().execute(new KInvoiceLoadMoreRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50", minAmount, maxAmount, minNOD, maxNOD));
         isLoading = true;
     }
 
@@ -261,7 +266,7 @@ public class TOSInvoiceFragment extends BaseFragment {
                         break;
                     case Events.GET_INVOICE_TOS_LIST_SUCCESSFULL:
                         try {
-                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceTOSInvoiceDataResponse(eventObject.getObject().toString()));
                             invoiceData = (KNRInvoiceModel) KBAMUtils.fromJson(String.valueOf(jsonObject), KNRInvoiceModel.class);
                             invoiceDataList = invoiceData.getData();
                             for (int i = 0; i < invoiceDataList.size(); i++) {
@@ -270,6 +275,7 @@ public class TOSInvoiceFragment extends BaseFragment {
                                 }
                             }
                             invoiceFilterData = invoiceData.getFilter();
+                            minMaxData = invoiceData.getMinMax();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -289,7 +295,7 @@ public class TOSInvoiceFragment extends BaseFragment {
                         int currentSize = scrollPosition;
                         nextLimit = currentSize + 10;
                         try {
-                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceTOSInvoiceDataResponse(eventObject.getObject().toString()));
                             invoiceData = (KNRInvoiceModel) KBAMUtils.fromJson(String.valueOf(jsonObject), KNRInvoiceModel.class);
                             invoiceDataList.addAll(invoiceData.getData());
                             for (int i = 0; i < invoiceDataList.size(); i++) {
@@ -442,6 +448,7 @@ public class TOSInvoiceFragment extends BaseFragment {
 
     @OnClick(R.id.iviFilter)
     public void filter() {
+        showFilterDialog();
     }
 
     @OnTextChanged(R.id.txtSearch)
@@ -462,7 +469,8 @@ public class TOSInvoiceFragment extends BaseFragment {
             if (null != customerProfile)
                 customer = customerProfile.getCustomerName();
             showProgress(ProgressDialogTexts.LOADING);
-            BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50"));
+            //BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50"));
+            BackgroundExecutor.getInstance().execute(new KAccountReceivablesJunRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50", "", "", "", ""));
         }
     }
 
@@ -491,7 +499,8 @@ public class TOSInvoiceFragment extends BaseFragment {
         cviProductHeading.setVisibility(View.GONE);
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Product", "", "", "", "", ""));
-        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Invoice", "", "", "", "", "", "", "0", "50"));
+        //BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Invoice", "", "", "", "", "", "", "0", "50"));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesJunRequester(userId, level, "Invoice", "", "", "", "", "", "", "0", "50", "", "", "", ""));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -630,7 +639,8 @@ public class TOSInvoiceFragment extends BaseFragment {
             customer = customerProfile.getCustomerName();
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Product", rsm, sales, customer, state, ""));
-        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50"));
+        //BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50"));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesJunRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50", "", "", "", ""));
     }
 
     private void row1Display() {
@@ -933,6 +943,117 @@ public class TOSInvoiceFragment extends BaseFragment {
             tviDSOHeading.setText("DSO");
         }*/
         displayList();
+    }
+
+    AlertDialog alertDialog;
+
+    public void showFilterDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(dashboardActivityContext);
+// ...Irrelevant code for customizing the buttons and title
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.so_filter_dialog, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+
+        TextView tviDialogType = (TextView) dialogView.findViewById(R.id.tviDialogType);
+        ImageView iviCloseDialogType = (ImageView) dialogView.findViewById(R.id.iviCloseDialogType);
+        CrystalRangeSeekbar rangeSeekbarOutstanding = (CrystalRangeSeekbar) dialogView.findViewById(R.id.rangeSeekbarOutstanding);
+        CrystalRangeSeekbar rangeSeekbarNOD = (CrystalRangeSeekbar) dialogView.findViewById(R.id.rangeSeekbarNOD);
+
+        EditText txtMinOutstanding = (EditText) dialogView.findViewById(R.id.txtMinOutstanding);
+        EditText txtMaxOutstanding = (EditText) dialogView.findViewById(R.id.txtMaxOutstanding);
+
+        rangeSeekbarOutstanding.setMinValue(minMaxData.getMinAmount());
+        rangeSeekbarOutstanding.setMaxValue(minMaxData.getMaxAmount());
+
+        EditText txtMinNOD = (EditText) dialogView.findViewById(R.id.txtMinNOD);
+        EditText txtMaxNOD = (EditText) dialogView.findViewById(R.id.txtMaxNOD);
+
+        /*if (!minAmount.equals(""))
+            rangeSeekbarOutstanding.setMinStartValue(Float.parseFloat(minAmount));
+        if (!maxAmount.equals(""))
+            rangeSeekbarOutstanding.setMaxStartValue(Float.parseFloat(maxAmount));
+
+        if (!minNOD.equals(""))
+            rangeSeekbarNOD.setMinStartValue(Float.parseFloat(minNOD));
+        if (!maxNOD.equals(""))
+            rangeSeekbarNOD.setMaxStartValue(Float.parseFloat(maxNOD));*/
+
+        TextView tviApply = (TextView) dialogView.findViewById(R.id.tviApply);
+        TextView tviClear = (TextView) dialogView.findViewById(R.id.tviClear);
+
+        tviDialogType.setText("Apply Filter");
+
+        // set listener
+        rangeSeekbarOutstanding.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
+            @Override
+            public void valueChanged(Number minValue, Number maxValue) {
+                txtMinOutstanding.setText(String.valueOf(minValue));
+                txtMaxOutstanding.setText(String.valueOf(maxValue));
+            }
+        });
+
+        // set listener
+        rangeSeekbarNOD.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
+            @Override
+            public void valueChanged(Number minValue, Number maxValue) {
+                txtMinNOD.setText(String.valueOf(minValue));
+                txtMaxNOD.setText(String.valueOf(maxValue));
+            }
+        });
+
+        tviApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                String rsm = "", sales = "", customer = "", state = "", product = "";
+                if (null != rsmProfile)
+                    rsm = rsmProfile.getTmc();
+                if (null != spProfile)
+                    sales = spProfile.getTmc();
+                if (null != customerProfile)
+                    customer = customerProfile.getCustomerName();
+                if (null != txtMinOutstanding.getText().toString())
+                    minAmount = txtMinOutstanding.getText().toString();
+                if (null != txtMaxOutstanding.getText().toString())
+                    maxAmount = txtMaxOutstanding.getText().toString();
+                if (null != txtMinNOD.getText().toString())
+                    minNOD = txtMinNOD.getText().toString();
+                if (null != txtMaxNOD.getText().toString())
+                    maxNOD = txtMaxNOD.getText().toString();
+                showProgress(ProgressDialogTexts.LOADING);
+                //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Product", rsm, sales, customer, state, ""));
+                BackgroundExecutor.getInstance().execute(new KAccountReceivablesJunRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50", minAmount, maxAmount, minNOD, maxNOD));
+            }
+        });
+        tviClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                String rsm = "", sales = "", customer = "", state = "", product = "";
+                if (null != rsmProfile)
+                    rsm = rsmProfile.getTmc();
+                if (null != spProfile)
+                    sales = spProfile.getTmc();
+                if (null != customerProfile)
+                    customer = customerProfile.getCustomerName();
+                minAmount = "";
+                maxAmount = "";
+                minNOD = "";
+                maxNOD = "";
+                showProgress(ProgressDialogTexts.LOADING);
+                BackgroundExecutor.getInstance().execute(new KAccountReceivablesJunRequester(userId, level, "Invoice", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50", minAmount, maxAmount, minNOD, maxNOD));
+            }
+        });
+        iviCloseDialogType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+            }
+        });
+        KBAMUtils.hideSoftKeyboard(dashboardActivityContext);
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
     private void displayList() {

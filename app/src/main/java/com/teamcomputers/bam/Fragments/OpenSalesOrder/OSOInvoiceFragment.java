@@ -13,10 +13,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
+import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOSOAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
@@ -356,6 +359,7 @@ public class OSOInvoiceFragment extends BaseFragment {
 
     @OnClick(R.id.iviFilter)
     public void filter() {
+        //showFilterDialog();
     }
 
     @OnClick(R.id.iviSearch)
@@ -1102,6 +1106,74 @@ public class OSOInvoiceFragment extends BaseFragment {
             tviR1Name.setText(productProfile.getProductName());
             //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(soProfile.getSOAmount()));
         }
+    }
+
+    AlertDialog alertDialog;
+
+    public void showFilterDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(dashboardActivityContext);
+// ...Irrelevant code for customizing the buttons and title
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.so_filter_dialog, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+
+        TextView tviDialogType = (TextView) dialogView.findViewById(R.id.tviDialogType);
+        ImageView iviCloseDialogType = (ImageView) dialogView.findViewById(R.id.iviCloseDialogType);
+        CrystalRangeSeekbar rangeSeekbarOutstanding = (CrystalRangeSeekbar) dialogView.findViewById(R.id.rangeSeekbarOutstanding);
+        CrystalRangeSeekbar rangeSeekbarNOD = (CrystalRangeSeekbar) dialogView.findViewById(R.id.rangeSeekbarNOD);
+
+        EditText txtMinOutstanding = (EditText) dialogView.findViewById(R.id.txtMinOutstanding);
+        EditText txtMaxOutstanding = (EditText) dialogView.findViewById(R.id.txtMaxOutstanding);
+
+        EditText txtMinNOD = (EditText) dialogView.findViewById(R.id.txtMinNOD);
+        EditText txtMaxNOD = (EditText) dialogView.findViewById(R.id.txtMaxNOD);
+
+        TextView tviApply = (TextView) dialogView.findViewById(R.id.tviApply);
+        TextView tviClear = (TextView) dialogView.findViewById(R.id.tviClear);
+
+        tviDialogType.setText("Apply Filter");
+
+        // set listener
+        rangeSeekbarOutstanding.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
+            @Override
+            public void valueChanged(Number minValue, Number maxValue) {
+                txtMinOutstanding.setText(String.valueOf(minValue));
+                txtMaxOutstanding.setText(String.valueOf(maxValue));
+            }
+        });
+
+        // set listener
+        rangeSeekbarNOD.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
+            @Override
+            public void valueChanged(Number minValue, Number maxValue) {
+                txtMinNOD.setText(String.valueOf(minValue));
+                txtMaxNOD.setText(String.valueOf(maxValue));
+            }
+        });
+
+        tviApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+            }
+        });
+        tviClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+            }
+        });
+
+        iviCloseDialogType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+            }
+        });
+
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
     private void initData(String type) {

@@ -187,7 +187,7 @@ public class InTransitFragment extends BaseFragment {
         if (data != null) {
             tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[2].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(data[2].getAmount()));
-            mAdapter = new InTransitAdapter(dashboardActivityContext, data[2].getTable());
+            mAdapter = new InTransitAdapter(dashboardActivityContext, data[1].getTable());
             rviData.setAdapter(mAdapter);
         }
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
@@ -205,7 +205,7 @@ public class InTransitFragment extends BaseFragment {
         if (data != null) {
             tviNoofInvoice.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[3].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(data[3].getAmount()));
-            mAdapter = new InTransitAdapter(dashboardActivityContext, data[3].getTable());
+            mAdapter = new InTransitAdapter(dashboardActivityContext, data[1].getTable());
             rviData.setAdapter(mAdapter);
         }
         tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));

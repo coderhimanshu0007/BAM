@@ -224,6 +224,25 @@ interface KApiInterface {
                               @Field("StartIndex") startIndex: String,
                               @Field("EndIndex") endIndex: String): Call<Any>
 
+    // New Outstanding List
+    @FormUrlEncoded
+    @POST("AccountReceivablesJun")
+    fun accountReceivablesJun(@Field("UserId") userId: String,
+                              @Field("Level") level: String,
+                              @Field("Type") type: String,
+                              @Field("RSM") RSM: String,
+                              @Field("Sales") sales: String,
+                              @Field("Customer") customer: String,
+                              @Field("StateCode") stateCode: String,
+                              @Field("Product") product: String,
+                              @Field("DocumnetNo") invoice: String,
+                              @Field("StartIndex") startIndex: String,
+                              @Field("EndIndex") endIndex: String,
+                              @Field("MinAmount") minAmount: String,
+                              @Field("MaxAmount") maxAmount: String,
+                              @Field("MinNOD") minNOD: String,
+                              @Field("MaxNOD") maxNOD: String): Call<Any>
+
     // New Sales List
     @FormUrlEncoded
     @POST("AccountReceivablesAprInvoiceSearch")

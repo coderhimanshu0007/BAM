@@ -153,6 +153,11 @@ class KBAMUtils : KBAMApplication() {
             return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}").replace("]\", \"Filter\": \"", "], \"Filter\": ").replace("\"}\"", "\"}")
         }
 
+        @JvmStatic
+        fun replaceTOSInvoiceDataResponse(response: String): String {
+            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}").replace("]\", \"Filter\": \"", "], \"Filter\": ").replace("\"}\"", "\"}").replace("\"{\"","{\"")
+        }
+
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         private fun isConnected(connMgr: ConnectivityManager, type: Int): Boolean {
             val networks = connMgr.allNetworks
