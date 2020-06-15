@@ -10,9 +10,7 @@ import com.teamcomputers.bam.controllers.SharedPreferencesController
 import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
 
-class KLoginRequester(tmcId: String, password: String) : KBaseRequester {
-    private var tmcId: String = tmcId
-    private var password: String = password
+class KLoginRequester(val tmcId: String, val password: String) : KBaseRequester {
 
     override fun run() {
         val apiResponse = KHTTPOperationController().loginUser(tmcId, password)

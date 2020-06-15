@@ -87,6 +87,8 @@ public class TOSInvoiceFragment extends BaseFragment {
     String toolbarTitle = "";
     @BindView(R.id.txtSearch)
     EditText txtSearch;
+    @BindView(R.id.tviTotalOutstanding)
+    TextView tviTotalOutstanding;
     @BindView(R.id.cviProductHeading)
     CardView cviProductHeading;
     @BindView(R.id.llProductLayout)
@@ -282,7 +284,7 @@ public class TOSInvoiceFragment extends BaseFragment {
                         dismissProgress();
                         isLoading = false;
                         //adapter.notifyDataSetChanged();
-                        initData("YTD");
+                        initData();
                         break;
                     case Events.GET_INVOICE_TOS_LIST_UNSUCCESSFULL:
                         dismissProgress();
@@ -308,6 +310,7 @@ public class TOSInvoiceFragment extends BaseFragment {
                         }
                         adapter.notifyDataSetChanged();
                         isLoading = false;
+                        dismissProgress();
                         break;
                     case Events.GET_INVOICE_LOAD_MORE_UNSUCCESSFULL:
                         dismissProgress();
@@ -918,20 +921,21 @@ public class TOSInvoiceFragment extends BaseFragment {
         }
     }
 
-    private void initData(String type) {
+    private void initData() {
+        tviTotalOutstanding.setText(BAMUtil.getRoundOffValue(minMaxData.getAmount()));
         tviAmount.setText(BAMUtil.getRoundOffValue(invoiceFilterData.getAmount()));
-        if (fromCustomer) {
+        if (fromCustomer || fromProduct) {
             llDSO.setVisibility(View.GONE);
         } else {
             llDSO.setVisibility(View.VISIBLE);
-        }
-        bar = (invoiceFilterData.getDso()).intValue();
-        tviDSO.setText(bar + " Days");
-        pBar.setProgress(bar);
-        if (bar < 30) {
-            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
-        } else {
-            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+            bar = (invoiceFilterData.getDso()).intValue();
+            tviDSO.setText(bar + " Days");
+            pBar.setProgress(bar);
+            if (bar < 30) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            } else {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+            }
         }
         /*if (fromCustomer) {
             tviOutstandingHeading.setText("CUSTOMER NAME");

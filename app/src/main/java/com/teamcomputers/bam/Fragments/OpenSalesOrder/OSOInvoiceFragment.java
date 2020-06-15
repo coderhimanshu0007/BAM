@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
@@ -23,6 +24,7 @@ import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOSOAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.WSModels.NRModels.MinMaxModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOProductModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSORSMModel;
@@ -30,12 +32,17 @@ import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOSOModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.PSOFilter;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderAprRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesJunRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KInvoiceLoadMoreRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KSOLoadMoreRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderJunRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderSearchRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -70,8 +77,8 @@ public class OSOInvoiceFragment extends BaseFragment {
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
 
-    String userId = "", level;
-    boolean fromRSM, fromSP, fromCustomer, fromProduct, search = false;
+    String userId = "", level, minAmount = "", maxAmount = "", minNOD = "", maxNOD = "";
+    boolean fromRSM, fromSP, fromCustomer, fromProduct, search = false, isLoading = false;
     String toolbarTitle = "";
     @BindView(R.id.txtSearch)
     EditText txtSearch;
@@ -116,11 +123,12 @@ public class OSOInvoiceFragment extends BaseFragment {
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
     private KPSOSOAdapter adapter;
-    private int position = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, iPos = 0, pPos = 0;
+    private int position = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, iPos = 0, pPos = 0, nextLimit = 0;
 
     KPSOSOModel sOData;
     KPSOSOModel.Datum selectedSOData;
     PSOFilter sOFilterData;
+    MinMaxModel minMaxData;
     List<KPSOSOModel.Datum> sODataList = new ArrayList<>();
     KPSOCustomerModel.Datum customerProfile;
     KPSORSMModel.Datum rsmProfile, spProfile;
@@ -168,7 +176,47 @@ public class OSOInvoiceFragment extends BaseFragment {
 
         dashboardActivityContext.fragmentView = rootView;
 
+        rviRSM.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                if (!isLoading) {
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == sODataList.size() - 1) {
+                        //bottom of list!
+                        loadMore();
+                    }
+                }
+            }
+        });
+
         return rootView;
+    }
+
+    private void loadMore() {
+        sODataList.add(null);
+        adapter.notifyItemInserted(sODataList.size() - 1);
+        String rsm = "", sales = "", customer = "", state = "", product = "";
+        if (null != rsmProfile)
+            rsm = rsmProfile.getTmc();
+        if (null != spProfile)
+            sales = spProfile.getTmc();
+        if (null != customerProfile)
+            customer = customerProfile.getCustomerName();
+        if (stateCode == 1)
+            state = customerProfile.getStateCodeWise().get(0).getStateCode();
+        if (null != productProfile)
+            product = productProfile.getCode();
+        showProgress(ProgressDialogTexts.LOADING);
+        BackgroundExecutor.getInstance().execute(new KSOLoadMoreRequester(userId, level, "SONumber", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50", minAmount, maxAmount, minNOD, maxNOD));
+        isLoading = true;
     }
 
     @Override
@@ -219,7 +267,7 @@ public class OSOInvoiceFragment extends BaseFragment {
                             /*JSONArray jsonArray = new JSONArray(KBAMUtils.replaceDataResponse(eventObject.getObject().toString()));
                             OSOInvoiceModel[] data = (OSOInvoiceModel[]) KBAMUtils.fromJson(String.valueOf(jsonArray), OSOInvoiceModel[].class);
                             model = new ArrayList<OSOInvoiceModel>(Arrays.asList(data));*/
-                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceTOSInvoiceDataResponse(eventObject.getObject().toString()));
                             sOData = (KPSOSOModel) KBAMUtils.fromJson(String.valueOf(jsonObject), KPSOSOModel.class);
                             sODataList = sOData.getData();
                             for (int i = 0; i < sODataList.size(); i++) {
@@ -228,14 +276,58 @@ public class OSOInvoiceFragment extends BaseFragment {
                                 }
                             }
                             sOFilterData = sOData.getFilter();
+                            minMaxData = sOData.getMinMax();
                             tviSOAmount.setText(KBAMUtils.getRoundOffValue(sOFilterData.getSoAmount()));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        initData("YTD");
+                        initData();
                         dismissProgress();
                         break;
                     case Events.GET_INVOICE_OSO_LIST_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                    case Events.GET_SO_LOAD_MORE_SUCCESSFULL:
+                        sODataList.remove(sODataList.size() - 1);
+                        int scrollPosition = sODataList.size();
+                        adapter.notifyItemRemoved(scrollPosition);
+                        int currentSize = scrollPosition;
+                        nextLimit = currentSize + 10;
+                        try {
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceTOSInvoiceDataResponse(eventObject.getObject().toString()));
+                            sOData = (KPSOSOModel) KBAMUtils.fromJson(String.valueOf(jsonObject), KPSOSOModel.class);
+                            sODataList.addAll(sOData.getData());
+                            for (int i = 0; i < sODataList.size(); i++) {
+                                if (sODataList.get(i).getSoNumber().equals("") || sODataList.get(i).getSoNumber().equals("null")) {
+                                    sODataList.remove(i);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        adapter.notifyDataSetChanged();
+                        isLoading = false;
+                        dismissProgress();
+                        break;
+                    case Events.GET_SO_LOAD_MORE_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                    case Events.GET_SO_SERACH_SUCCESSFULL:
+                        try {
+                            JSONArray jsonArray = new JSONArray(KBAMUtils.replaceWSDataResponse(eventObject.getObject().toString()));
+                            //invoiceDataList.clear();
+                            sODataList = KBAMUtils.convertArrayToList((KPSOSOModel.Datum[]) KBAMUtils.fromJson(String.valueOf(jsonArray), KPSOSOModel.Datum[].class));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        dismissProgress();
+                        initData();
+                        showToast("Baised on top 1000 Rows");
+                        //adapter.notifyDataSetChanged();
+                        break;
+                    case Events.GET_SO_SERACH_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
@@ -354,12 +446,33 @@ public class OSOInvoiceFragment extends BaseFragment {
 
     @OnTextChanged(R.id.txtSearch)
     public void search() {
-        adapter.getFilter().filter(txtSearch.getText().toString());
+        //adapter.getFilter().filter(txtSearch.getText().toString());
+        if (txtSearch.getText().toString().length() > 2) {
+            isLoading = true;
+            showProgress(ProgressDialogTexts.LOADING);
+            BackgroundExecutor.getInstance().execute(new KSalesOpenOrderSearchRequester(userId, level, txtSearch.getText().toString()));
+        } else if (txtSearch.getText().toString().length() == 0) {
+            isLoading = false;
+            KBAMUtils.hideSoftKeyboard(dashboardActivityContext);
+            String rsm = "", sales = "", customer = "", state = "", product = "";
+            if (null != rsmProfile)
+                rsm = rsmProfile.getTmc();
+            if (null != spProfile)
+                sales = spProfile.getTmc();
+            if (null != customerProfile)
+                customer = customerProfile.getCustomerName();
+            if (stateCode == 1)
+                state = customerProfile.getStateCodeWise().get(0).getStateCode();
+            if (null != productProfile)
+                product = productProfile.getCode();
+            showProgress(ProgressDialogTexts.LOADING);
+            BackgroundExecutor.getInstance().execute(new KSalesOpenOrderJunRequester(userId, level, "SONumber", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50", "", "", "", ""));
+        }
     }
 
     @OnClick(R.id.iviFilter)
     public void filter() {
-        //showFilterDialog();
+        showFilterDialog();
     }
 
     @OnClick(R.id.iviSearch)
@@ -390,7 +503,8 @@ public class OSOInvoiceFragment extends BaseFragment {
         tviMtdHeading.setText("ACH%");*/
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Invoice", "", "", "", "", "", ""));
-        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "SONumber", "", "", "", "", "", ""));
+        //BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "SONumber", "", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderJunRequester(userId, level, "SONumber", "", "", "", "", "", "", String.valueOf(nextLimit), "50", "", "", "", ""));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -695,7 +809,8 @@ public class OSOInvoiceFragment extends BaseFragment {
         //tviR3StateName.setText(state);
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Invoice", rsm, sales, customer, state, "", ""));
-        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "SONumber", rsm, sales, customer, state, "", product));
+        //BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "SONumber", rsm, sales, customer, state, "", product));
+        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderJunRequester(userId, level, "SONumber", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50", "", "", "", ""));
     }
 
     private void row1Display() {
@@ -1129,6 +1244,9 @@ public class OSOInvoiceFragment extends BaseFragment {
         EditText txtMinNOD = (EditText) dialogView.findViewById(R.id.txtMinNOD);
         EditText txtMaxNOD = (EditText) dialogView.findViewById(R.id.txtMaxNOD);
 
+        rangeSeekbarOutstanding.setMinValue(minMaxData.getMinAmount());
+        rangeSeekbarOutstanding.setMaxValue(minMaxData.getMaxAmount());
+
         TextView tviApply = (TextView) dialogView.findViewById(R.id.tviApply);
         TextView tviClear = (TextView) dialogView.findViewById(R.id.tviClear);
 
@@ -1156,12 +1274,42 @@ public class OSOInvoiceFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 alertDialog.cancel();
+                String rsm = "", sales = "", customer = "", state = "", product = "";
+                if (null != rsmProfile)
+                    rsm = rsmProfile.getTmc();
+                if (null != spProfile)
+                    sales = spProfile.getTmc();
+                if (null != customerProfile)
+                    customer = customerProfile.getCustomerName();
+                if (null != txtMinOutstanding.getText().toString())
+                    minAmount = txtMinOutstanding.getText().toString();
+                if (null != txtMaxOutstanding.getText().toString())
+                    maxAmount = txtMaxOutstanding.getText().toString();
+                if (null != txtMinNOD.getText().toString())
+                    minNOD = txtMinNOD.getText().toString();
+                if (null != txtMaxNOD.getText().toString())
+                    maxNOD = txtMaxNOD.getText().toString();
+                showProgress(ProgressDialogTexts.LOADING);
+                BackgroundExecutor.getInstance().execute(new KSalesOpenOrderJunRequester(userId, level, "SONumber", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50", minAmount, maxAmount, minNOD, maxNOD));
             }
         });
         tviClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertDialog.cancel();
+                String rsm = "", sales = "", customer = "", state = "", product = "";
+                if (null != rsmProfile)
+                    rsm = rsmProfile.getTmc();
+                if (null != spProfile)
+                    sales = spProfile.getTmc();
+                if (null != customerProfile)
+                    customer = customerProfile.getCustomerName();
+                minAmount = "";
+                maxAmount = "";
+                minNOD = "";
+                maxNOD = "";
+                showProgress(ProgressDialogTexts.LOADING);
+                BackgroundExecutor.getInstance().execute(new KSalesOpenOrderJunRequester(userId, level, "SONumber", rsm, sales, customer, state, product, "", String.valueOf(nextLimit), "50", minAmount, maxAmount, minNOD, maxNOD));
             }
         });
 
@@ -1176,9 +1324,9 @@ public class OSOInvoiceFragment extends BaseFragment {
         alertDialog.show();
     }
 
-    private void initData(String type) {
+    private void initData() {
         //adapter = new OSOInvoiceAdapter(dashboardActivityContext, level, type, model, fromRSM, fromSP, fromCustomer);
-        adapter = new KPSOSOAdapter(dashboardActivityContext, level, type, sODataList, fromRSM, fromSP, fromCustomer, fromProduct);
+        adapter = new KPSOSOAdapter(dashboardActivityContext, level, sODataList, fromRSM, fromSP, fromCustomer, fromProduct);
         rviRSM.setAdapter(adapter);
     }
 }

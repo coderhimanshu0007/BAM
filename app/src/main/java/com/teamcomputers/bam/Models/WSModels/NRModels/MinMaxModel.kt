@@ -11,6 +11,9 @@ class MinMaxModel {
     @SerializedName("MinAmount")
     @Expose
     private var minAmount: Float? = null
+    @SerializedName("Amount")
+    @Expose
+    private var amount: Float? = null
 
     fun getMaxAmount(): Float? {
         return maxAmount
@@ -26,6 +29,14 @@ class MinMaxModel {
 
     fun setMinAmount(minAmount: Float?) {
         this.minAmount = minAmount
+    }
+
+    fun getAmount(): Float? {
+        return amount
+    }
+
+    fun setAmount(amount: Float?) {
+        this.amount = amount
     }
 
 }

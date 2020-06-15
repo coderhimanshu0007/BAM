@@ -7,16 +7,7 @@ import com.teamcomputers.bam.controllers.KHTTPOperationController
 import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
 
-class KSalesListAprRequester(userId: String, level: String, type: String, RSM: String, sales: String, customer: String, stateCode: String, product: String, fiscalYear: String) : KBaseRequester {
-    private var userId: String = userId
-    private var level: String = level
-    private var type: String = type
-    private var RSM: String = RSM
-    private var sales: String = sales
-    private var customer: String = customer
-    private var stateCode: String = stateCode
-    private var product: String = product
-    private var fiscalYear: String = fiscalYear
+class KSalesListAprRequester(val userId: String, val level: String, val type: String, val RSM: String, val sales: String, val customer: String, val stateCode: String, val product: String, val fiscalYear: String) : KBaseRequester {
 
     override fun run() {
         val apiResponse = KHTTPOperationController().salesListApr(userId, level, type, RSM, sales, customer, stateCode, product, fiscalYear)

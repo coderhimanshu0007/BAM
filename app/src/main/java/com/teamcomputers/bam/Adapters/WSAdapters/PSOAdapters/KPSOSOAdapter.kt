@@ -17,13 +17,19 @@ import com.teamcomputers.bam.Utils.BAMUtil
 import kotlinx.android.synthetic.main.to_invoice_recyclerview_layout.view.*
 import org.greenrobot.eventbus.EventBus
 
-class KPSOSOAdapter(val mContext: DashboardActivity, level: String, type: String, data: List<KPSOSOModel.Datum>, val fromRSM: Boolean, val fromSP: Boolean, val fromCustomer: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KPSOSOAdapter.ViewHolder>(), Filterable {
-    private val dataList: List<KPSOSOModel.Datum> = data
-    private var dataListFiltered: List<KPSOSOModel.Datum>? = data
-    internal var level: String = level
-    internal var type: String = type
+class KPSOSOAdapter(val mContext: DashboardActivity, val level: String, val dataList: List<KPSOSOModel.Datum>, val fromRSM: Boolean, val fromSP: Boolean, val fromCustomer: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
+    private val VIEW_TYPE_ITEM = 0
+    private val VIEW_TYPE_LOADING = 1
+    private var dataListFiltered: List<KPSOSOModel.Datum>? = dataList
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        fun showLoadingView(viewHolder: LoadingViewHolder, position: Int) {
+            //ProgressBar would be displayed
+        }
+    }
+
+    class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var soData: KPSOSOModel.Datum? = null
         var itemPos: Int = 0
 
@@ -38,15 +44,15 @@ class KPSOSOAdapter(val mContext: DashboardActivity, level: String, type: String
             soData = SOData
             itemPos = pos
             if (pos == 0) {
-                itemView.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext,R.color.color_first_item_value))
+                itemView.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_first_item_value))
             } else if (pos == 1) {
-                itemView.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext,R.color.color_second_item_value))
+                itemView.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_second_item_value))
             } else if (pos == 2) {
-                itemView.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext,R.color.color_third_item_value))
+                itemView.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_third_item_value))
             } else if (pos % 2 == 0) {
-                itemView.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext,R.color.color_white))
+                itemView.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_white))
             } else if (pos % 2 == 1) {
-                itemView.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext,R.color.login_bg))
+                itemView.llRSMLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.login_bg))
             }
             itemView.tviStateName.setText((pos + 1).toString() + ". " + SOData.soNumber)
 
@@ -126,18 +132,41 @@ class KPSOSOAdapter(val mContext: DashboardActivity, level: String, type: String
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.to_invoice_recyclerview_layout, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        /*val view = LayoutInflater.from(parent.context).inflate(R.layout.to_invoice_recyclerview_layout, parent, false)
 
-        return ViewHolder(view)
+        return ViewHolder(view)*/
+        if (viewType === VIEW_TYPE_ITEM) {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.to_invoice_recyclerview_layout, parent, false)
+            return ItemViewHolder(view)
+        } else {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_loading, parent, false)
+            return LoadingViewHolder(view)
+        }
     }
 
     override fun getItemCount(): Int {
-        return dataListFiltered!!.size
+        return if (dataListFiltered == null) 0 else dataListFiltered?.size!!
+        //return dataListFiltered!!.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.showData(mContext, level, fromRSM, fromSP, fromCustomer, fromProduct, dataListFiltered?.get(position)!!, position)
+    /**
+     * The following method decides the type of ViewHolder to display in the RecyclerView
+     *
+     * @param position
+     * @return
+     */
+    override fun getItemViewType(position: Int): Int {
+        return if (dataListFiltered?.get(position) == null) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        //holder.showData(mContext, level, fromRSM, fromSP, fromCustomer, fromProduct, dataListFiltered?.get(position)!!, position)
+        if (holder is ItemViewHolder) {
+            holder.showData(mContext, level, fromRSM, fromSP, fromCustomer, fromProduct, dataListFiltered?.get(position)!!, position)
+        } else if (holder is LoadingViewHolder) {
+            holder.showLoadingView(holder as LoadingViewHolder, position)
+        }
     }
 
     override fun getFilter(): Filter {

@@ -143,6 +143,79 @@
 
             </LinearLayout>
 
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".5"
+                    android:background="@drawable/border_bg"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:drawableLeft="@drawable/ic_no_of_projects"
+                        android:drawablePadding="5dp"
+                        android:text="No. of Projects"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                    <TextView
+                        android:id="@+id/tviNoofSO"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:textColor="@color/logistics_amount"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:fontFamily="@font/montserrat" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_weight=".5"
+                    android:background="@drawable/border_bg"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:drawableLeft="@drawable/ic_group_amount"
+                        android:drawablePadding="5dp"
+                        android:text="Amount"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                    <TextView
+                        android:id="@+id/tviAmounts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:textColor="@color/logistics_amount"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:fontFamily="@font/montserrat" />
+
+                </LinearLayout>
+
+            </LinearLayout>-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

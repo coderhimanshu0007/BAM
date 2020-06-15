@@ -23,9 +23,6 @@ import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.NRAdapters.KTOCustomerAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
-import com.teamcomputers.bam.Fragments.WSPages.WSProductFragment;
-import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
-import com.teamcomputers.bam.Fragments.WSPages.WSSalesPersonFragment;
 import com.teamcomputers.bam.Models.WSModels.NRModels.Filter;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRInvoiceModel;
@@ -33,7 +30,7 @@ import com.teamcomputers.bam.Models.WSModels.NRModels.KNRProductModel;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRRSMModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesAprRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesJunRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -393,7 +390,8 @@ public class TOSCustomerFragment extends BaseFragment {
         cviSPHeading.setVisibility(View.GONE);
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Customer", "", "", "", "", ""));
-        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Customer", "", "", "", "", "", "", "", ""));
+        //BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Customer", "", "", "", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesJunRequester(userId, level, "Customer", "", "", "", "", "", "", "", "", "", "", "", ""));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -526,7 +524,8 @@ public class TOSCustomerFragment extends BaseFragment {
             product = productProfile.getCode();
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Customer", rsm, sales, "", "", product));
-        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Customer", rsm, sales, "", "", product, invoice, "", ""));
+        //BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Customer", rsm, sales, "", "", product, invoice, "", ""));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesJunRequester(userId, level, "Customer", rsm, sales, "", "", product, invoice, "", "", "", "", "", ""));
 
     }
 
@@ -774,14 +773,18 @@ public class TOSCustomerFragment extends BaseFragment {
 
     private void initData() {
         tviAmount.setText(BAMUtil.getRoundOffValue(customerFilterData.getAmount()));
-        llDSO.setVisibility(View.VISIBLE);
-        bar = (customerFilterData.getDso()).intValue();
-        tviDSO.setText(bar + " Days");
-        pBar.setProgress(bar);
-        if (bar < 30) {
-            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+        if(fromInvoice || fromProduct) {
+            llDSO.setVisibility(View.GONE);
         } else {
-            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+            llDSO.setVisibility(View.VISIBLE);
+            bar = (customerFilterData.getDso()).intValue();
+            tviDSO.setText(bar + " Days");
+            pBar.setProgress(bar);
+            if (bar < 30) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            } else {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+            }
         }
         /*if(fromCustomer){
             tviOutstandingHeading.setText("CUSTOMER NAME");

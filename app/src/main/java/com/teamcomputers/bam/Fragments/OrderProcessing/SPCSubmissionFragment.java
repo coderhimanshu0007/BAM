@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Adapters.OrderProcessing.KSPCSubmissionAdapter;
 import com.teamcomputers.bam.Adapters.OrderProcessing.SPCSubmissionAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.SPCSModel;
@@ -60,6 +61,7 @@ public class SPCSubmissionFragment extends BaseFragment {
     RecyclerView rviData;
     EventObject eventObjects;
     private SPCSubmissionAdapter mAdapter;
+    //private KSPCSubmissionAdapter mAdapter;
     private ArrayList<LinkedTreeMap> spcSubmissionArrayList0 = new ArrayList<>();
     private ArrayList<LinkedTreeMap> spcSubmissionArrayList1 = new ArrayList<>();
     private ArrayList<LinkedTreeMap> spcSubmissionArrayList2 = new ArrayList<>();
@@ -94,6 +96,7 @@ public class SPCSubmissionFragment extends BaseFragment {
             tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
             mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, data[0].getTable());
+            //mAdapter = new KSPCSubmissionAdapter(dashboardActivityContext, data[0].getTable());
             rviData.setAdapter(mAdapter);
         }
         showProgress(ProgressDialogTexts.LOADING);
@@ -137,6 +140,7 @@ public class SPCSubmissionFragment extends BaseFragment {
                             tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
                             tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
                             mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, data[0].getTable());
+                            //mAdapter = new KSPCSubmissionAdapter(dashboardActivityContext, data[0].getTable());
                             rviData.setAdapter(mAdapter);
                         }
                         break;
@@ -159,6 +163,7 @@ public class SPCSubmissionFragment extends BaseFragment {
         tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
         mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, data[0].getTable());
+        //mAdapter = new KSPCSubmissionAdapter(dashboardActivityContext, data[0].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -174,6 +179,7 @@ public class SPCSubmissionFragment extends BaseFragment {
         tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[1].getAmount()));
         mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, data[1].getTable());
+        //mAdapter = new KSPCSubmissionAdapter(dashboardActivityContext, data[1].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -189,6 +195,7 @@ public class SPCSubmissionFragment extends BaseFragment {
         tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[2].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[2].getAmount()));
         mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, data[2].getTable());
+        //mAdapter = new KSPCSubmissionAdapter(dashboardActivityContext, data[2].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
@@ -204,6 +211,7 @@ public class SPCSubmissionFragment extends BaseFragment {
         tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[3].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[3].getAmount()));
         mAdapter = new SPCSubmissionAdapter(dashboardActivityContext, data[3].getTable());
+        //mAdapter = new KSPCSubmissionAdapter(dashboardActivityContext, data[3].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));

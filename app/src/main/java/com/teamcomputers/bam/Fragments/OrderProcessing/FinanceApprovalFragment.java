@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.OrderProcessing.FAAdapter;
+import com.teamcomputers.bam.Adapters.OrderProcessing.KFAAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.FAModel;
 import com.teamcomputers.bam.Models.common.EventObject;
@@ -55,6 +56,7 @@ public class FinanceApprovalFragment extends BaseFragment {
     RecyclerView rviData;
 
     private FAAdapter mAdapter;
+    //private KFAAdapter mAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +87,7 @@ public class FinanceApprovalFragment extends BaseFragment {
             tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
             mAdapter = new FAAdapter(dashboardActivityContext, data[0].getTable());
+            //mAdapter = new KFAAdapter(dashboardActivityContext, data[0].getTable());
             rviData.setAdapter(mAdapter);
         }
         showProgress(ProgressDialogTexts.LOADING);
@@ -127,6 +130,7 @@ public class FinanceApprovalFragment extends BaseFragment {
                             tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(model[0].getInvoices())));
                             tviAmounts.setText(BAMUtil.getRoundOffValue((Double) model[0].getAmount()));
                             mAdapter = new FAAdapter(dashboardActivityContext, model[0].getTable());
+                            //mAdapter = new KFAAdapter(dashboardActivityContext, model[0].getTable());
                             rviData.setAdapter(mAdapter);
                         }
                         break;
@@ -149,6 +153,7 @@ public class FinanceApprovalFragment extends BaseFragment {
         tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
         mAdapter = new FAAdapter(dashboardActivityContext, data[0].getTable());
+        //mAdapter = new KFAAdapter(dashboardActivityContext, data[0].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -164,6 +169,7 @@ public class FinanceApprovalFragment extends BaseFragment {
         tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[1].getAmount()));
         mAdapter = new FAAdapter(dashboardActivityContext, data[1].getTable());
+        //mAdapter = new KFAAdapter(dashboardActivityContext, data[1].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
@@ -179,6 +185,7 @@ public class FinanceApprovalFragment extends BaseFragment {
         tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[2].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[2].getAmount()));
         mAdapter = new FAAdapter(dashboardActivityContext, data[2].getTable());
+        //mAdapter = new KFAAdapter(dashboardActivityContext, data[2].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -194,6 +201,7 @@ public class FinanceApprovalFragment extends BaseFragment {
         tviNoofProjects.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[3].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[3].getAmount()));
         mAdapter = new FAAdapter(dashboardActivityContext, data[3].getTable());
+        //mAdapter = new KFAAdapter(dashboardActivityContext, data[3].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofProjects.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));

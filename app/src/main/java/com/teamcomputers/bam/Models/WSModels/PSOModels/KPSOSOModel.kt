@@ -5,6 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.teamcomputers.bam.Models.WSModels.NRModels.MinMaxModel
 import java.io.Serializable
 
 
@@ -15,6 +16,9 @@ class KPSOSOModel {
     @SerializedName("Filter")
     @Expose
     private var filter: PSOFilter? = null
+    @SerializedName("MinMax")
+    @Expose
+    private var minMaxModel: MinMaxModel? = null
 
     fun getData(): List<Datum>? {
         return data
@@ -26,6 +30,14 @@ class KPSOSOModel {
 
     fun getFilter(): PSOFilter? {
         return filter
+    }
+
+    fun getMinMax(): MinMaxModel? {
+        return minMaxModel
+    }
+
+    fun setMinMax(minMax: MinMaxModel) {
+        this.minMaxModel = minMax
     }
 
     @SuppressLint("ParcelCreator")

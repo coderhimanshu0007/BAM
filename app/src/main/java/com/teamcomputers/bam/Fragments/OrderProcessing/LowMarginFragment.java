@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Adapters.OrderProcessing.KLowMarginAdapter;
 import com.teamcomputers.bam.Adapters.OrderProcessing.LowMarginAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.LowMarginModel;
@@ -54,11 +55,12 @@ public class LowMarginFragment extends BaseFragment {
 
     @BindView(R.id.rviData)
     RecyclerView rviData;
-    EventObject eventObjects;
+    //EventObject eventObjects;
 
     private LowMarginAdapter mAdapter;
-    private ArrayList<LinkedTreeMap> lowMarginArrayList0 = new ArrayList<>();
-    private ArrayList<LinkedTreeMap> lowMarginArrayList1 = new ArrayList<>();
+    //private KLowMarginAdapter mAdapter;
+    //private ArrayList<LinkedTreeMap> lowMarginArrayList0 = new ArrayList<>();
+    //private ArrayList<LinkedTreeMap> lowMarginArrayList1 = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +91,7 @@ public class LowMarginFragment extends BaseFragment {
             tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(Double.valueOf(data[0].getAmount())));
             mAdapter = new LowMarginAdapter(dashboardActivityContext, data[0].getTable());
+            //mAdapter = new KLowMarginAdapter(dashboardActivityContext, data[0].getTable());
             rviData.setAdapter(mAdapter);
         }
         showProgress(ProgressDialogTexts.LOADING);
@@ -138,6 +141,7 @@ public class LowMarginFragment extends BaseFragment {
                         lowMarginArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Table");
                         lowMarginArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Table");*/
                         mAdapter = new LowMarginAdapter(dashboardActivityContext, data[0].getTable());
+                        //mAdapter = new KLowMarginAdapter(dashboardActivityContext, data[0].getTable());
                         rviData.setAdapter(mAdapter);
                         break;
                     case Events.GET_ORDERPROCESING_LOWMARGIN_UNSUCCESSFULL:
@@ -157,6 +161,7 @@ public class LowMarginFragment extends BaseFragment {
         tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue(Double.valueOf(data[0].getAmount())));
         mAdapter = new LowMarginAdapter(dashboardActivityContext, data[0].getTable());
+        //mAdapter = new KLowMarginAdapter(dashboardActivityContext, data[0].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofSO.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -170,6 +175,7 @@ public class LowMarginFragment extends BaseFragment {
         tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue(Double.valueOf(data[1].getAmount())));
         mAdapter = new LowMarginAdapter(dashboardActivityContext, data[1].getTable());
+        //mAdapter = new KLowMarginAdapter(dashboardActivityContext, data[1].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofSO.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));

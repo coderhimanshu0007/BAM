@@ -68,11 +68,11 @@ class KTOCustomerAdapter(val mContext: DashboardActivity, val userId: String, va
         holder.setData(dataListFiltered?.get(position), position)
 
         if (level == "R1") {
-            if (fromRSM && fromSP && fromProduct) {
+            if (fromRSM && fromSP && fromProduct && fromInvoice) {
                 holder.iviOption.visibility = View.GONE
             }
         } else if (level == "R2" || level == "R3") {
-            if (fromSP && fromProduct) {
+            if (fromSP && fromProduct && fromInvoice) {
                 holder.iviOption.visibility = View.GONE
             }
         } else if (level == "R4") {

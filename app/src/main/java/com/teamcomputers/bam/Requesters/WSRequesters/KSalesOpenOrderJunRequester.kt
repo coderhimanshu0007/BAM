@@ -7,10 +7,10 @@ import com.teamcomputers.bam.controllers.KHTTPOperationController
 import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
 
-class KSalesOpenOrderAprRequester(val userId: String, val level: String, val type: String, val RSM: String, val sales: String, val customer: String, val stateCode: String, val invoice: String, val product: String) : KBaseRequester {
+class KSalesOpenOrderJunRequester(val userId: String,val level: String, val type: String, val RSM: String, val sales: String, val customer: String, val stateCode: String, val product: String, val documnetNo: String, val startIndex: String, val endIndex: String, val minAmount: String, val maxAmount: String, val minNOD: String, val maxNOD: String) : KBaseRequester {
 
     override fun run() {
-        val apiResponse = KHTTPOperationController().salesOpenOrderApr(userId, level, type, RSM, sales, customer, stateCode, invoice, product)
+        val apiResponse = KHTTPOperationController().salesOpenOrderJun(userId, level, type, RSM, sales, customer, stateCode, product, documnetNo, startIndex, endIndex, minAmount, maxAmount, minNOD, maxNOD)
         if (apiResponse != null) {
             if (apiResponse.responseCode == HttpURLConnection.HTTP_OK) {
                 if (apiResponse.response != null) {

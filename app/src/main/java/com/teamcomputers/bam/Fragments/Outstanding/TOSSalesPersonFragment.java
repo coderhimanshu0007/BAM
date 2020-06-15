@@ -23,9 +23,6 @@ import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.NRAdapters.KTOSPAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
-import com.teamcomputers.bam.Fragments.WSPages.WSCustomerFragment;
-import com.teamcomputers.bam.Fragments.WSPages.WSProductFragment;
-import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
 import com.teamcomputers.bam.Models.WSModels.NRModels.Filter;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRInvoiceModel;
@@ -33,7 +30,7 @@ import com.teamcomputers.bam.Models.WSModels.NRModels.KNRProductModel;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRRSMModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesAprRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesJunRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -432,7 +429,8 @@ public class TOSSalesPersonFragment extends BaseFragment {
         type = 1;
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Sales", "", "", "", "", ""));
-        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Sales", "", "", "", "", "", "", "", ""));
+        //BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Sales", "", "", "", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesJunRequester(userId, level, "Sales", "", "", "", "", "", "", "", "", "", "", "", ""));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -576,7 +574,8 @@ public class TOSSalesPersonFragment extends BaseFragment {
             state = customerProfile.getDocumentNo().get(0).getDocumentNo();*/
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Sales", rsm, "", customer, state, product));
-        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Sales", rsm, "", customer, state, product, invoice, "", ""));
+        //BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Sales", rsm, "", customer, state, product, invoice, "", ""));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesJunRequester(userId, level, "Sales", rsm, "", customer, state, product, invoice, "", "", "", "", "", ""));
     }
 
     private void row1Display() {

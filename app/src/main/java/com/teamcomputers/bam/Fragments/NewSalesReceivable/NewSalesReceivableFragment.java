@@ -366,7 +366,7 @@ public class NewSalesReceivableFragment extends BaseFragment {
 
     @OnClick(R.id.txtSalesAnalysis)
     public void salesAnalysis() {
-        if (level.equals("R1")) {
+        if (level.equals("R0") || level.equals("R1")) {
             Bundle rsmDataBundle = new Bundle();
             rsmDataBundle.putString(NewRSMTabFragment.USER_ID, userId);
             rsmDataBundle.putString(WSRSMFragment.USER_LEVEL, level);
@@ -408,7 +408,7 @@ public class NewSalesReceivableFragment extends BaseFragment {
 
     @OnClick(R.id.txtBtnOpenSellsOrderAnalysis)
     public void btnOpenSellsOrderAnalysis() {
-        if (level.equals("R1")) {
+        if (level.equals("R0") || level.equals("R1")) {
             Bundle rsmDataBundle = new Bundle();
             rsmDataBundle.putString(NewRSMTabFragment.USER_ID, userId);
             rsmDataBundle.putString(WSRSMFragment.USER_LEVEL, level);
@@ -464,6 +464,8 @@ public class NewSalesReceivableFragment extends BaseFragment {
             spDataBundle.putParcelable(WSCustomerFragment.SP_PROFILE, null);
             spDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
             dashboardActivityContext.replaceFragment(Fragments.TOS_CUSTOMER_FRAGMENT, spDataBundle);
+        } else {
+            showToast("This feciality is not available");
         }
     }
 

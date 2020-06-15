@@ -134,8 +134,9 @@ interface KApiInterface {
     abstract fun fiscalYearList(): Call<FiscalYearModel>
 
     // YTD QTD
+    // Replace SalesReceiveablesFiscal to SalesReceiveablesFiscalJun
     @FormUrlEncoded
-    @POST("SalesReceiveablesFiscal")
+    @POST("SalesReceiveablesFiscalJun")
     abstract fun salesReceiveablesFiscal(@Field("UserId") userId: String,
                                          @Field("FiscalYear") fiscalYear: String): Call<Any>
 
@@ -184,8 +185,9 @@ interface KApiInterface {
                                  @Field("Product") product: String): Call<Any>
 
     // New Sales List
+    // Replace SalesListApr to SalesListJun
     @FormUrlEncoded
-    @POST("SalesListApr")
+    @POST("SalesListJun")
     fun salesListApr(@Field("UserId") userId: String,
                      @Field("Level") level: String,
                      @Field("Type") type: String,
@@ -224,6 +226,25 @@ interface KApiInterface {
                               @Field("StartIndex") startIndex: String,
                               @Field("EndIndex") endIndex: String): Call<Any>
 
+    // New Open Sales Order List
+    @FormUrlEncoded
+    @POST("SalesOpenOrderJun")
+    fun salesOpenOrderJun(@Field("UserId") userId: String,
+                          @Field("Level") level: String,
+                          @Field("Type") type: String,
+                          @Field("RSM") RSM: String,
+                          @Field("Sales") sales: String,
+                          @Field("Customer") customer: String,
+                          @Field("StateCode") stateCode: String,
+                          @Field("Product") product: String,
+                          @Field("DocumnetNo") documnetNo: String,
+                          @Field("StartIndex") startIndex: String,
+                          @Field("EndIndex") endIndex: String,
+                          @Field("MinAmount") minAmount: String,
+                          @Field("MaxAmount") maxAmount: String,
+                          @Field("MinNOD") minNOD: String,
+                          @Field("MaxNOD") maxNOD: String): Call<Any>
+
     // New Outstanding List
     @FormUrlEncoded
     @POST("AccountReceivablesJun")
@@ -243,10 +264,17 @@ interface KApiInterface {
                               @Field("MinNOD") minNOD: String,
                               @Field("MaxNOD") maxNOD: String): Call<Any>
 
-    // New Sales List
+    // Invoice Search Net Receivable
     @FormUrlEncoded
     @POST("AccountReceivablesAprInvoiceSearch")
     fun invoiceSerachApr(@Field("UserId") userId: String,
+                         @Field("Level") level: String,
+                         @Field("DocumnetNo") type: String): Call<Any>
+
+    // Invoice Search Pending Sales Order
+    @FormUrlEncoded
+    @POST("SalesOpenOrderSearch")
+    fun salesOpenOrderSearch(@Field("UserId") userId: String,
                          @Field("Level") level: String,
                          @Field("DocumnetNo") type: String): Call<Any>
 }

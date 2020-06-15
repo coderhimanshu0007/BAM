@@ -992,7 +992,7 @@ public class DashboardActivity extends BaseActivity {
 
 
     public void showTab(String level) {
-        if (level.equals("R1") || level.equals("R2") || level.equals("R3") || level.equals("R4"))
+        if (level.equals("R0") || level.equals("R1") || level.equals("R2") || level.equals("R3") || level.equals("R4"))
             llWSTabs.setVisibility(View.VISIBLE);
     }
 
@@ -1001,7 +1001,7 @@ public class DashboardActivity extends BaseActivity {
     }
 
     public void showOSOTab(String level) {
-        if (level.equals("R1") || level.equals("R2") || level.equals("R3") || level.equals("R4"))
+        if (level.equals("R0") || level.equals("R1") || level.equals("R2") || level.equals("R3") || level.equals("R4"))
             llOSOTabs.setVisibility(View.VISIBLE);
     }
 

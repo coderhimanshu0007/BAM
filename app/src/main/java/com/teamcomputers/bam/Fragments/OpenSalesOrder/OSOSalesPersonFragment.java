@@ -21,7 +21,6 @@ import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOSPAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
-import com.teamcomputers.bam.Fragments.WSPages.WSProductFragment;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOProductModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSORSMModel;
@@ -29,7 +28,7 @@ import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOSOModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.PSOFilter;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderAprRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderJunRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
 
@@ -416,7 +415,8 @@ public class OSOSalesPersonFragment extends BaseFragment {
         type = 1;
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Sales", "", "", "", "", "", ""));
-        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Sales", "", "", "", "", "", ""));
+        //BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Sales", "", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderJunRequester(userId, level, "Sales", "", "", "", "", "", "", "", "", "", "", "", ""));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -605,7 +605,8 @@ public class OSOSalesPersonFragment extends BaseFragment {
             product = productProfile.getCode();
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Sales", rsm, "", customer, state, invoiceNo, ""));
-        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Sales", rsm, "", customer, state, invoiceNo, product));
+        //BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Sales", rsm, "", customer, state, invoiceNo, product));
+        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderJunRequester(userId, level, "Sales", rsm, "", customer, state, product, invoiceNo, "", "", "", "", "", ""));
     }
 
     private void row1Display() {

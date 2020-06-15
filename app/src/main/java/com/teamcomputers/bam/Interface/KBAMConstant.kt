@@ -210,6 +210,12 @@ public interface KBAMConstant {
 
             val GET_INVOICE_SERACH_SUCCESSFULL = 144
             val GET_INVOICE_SERACH_UNSUCCESSFULL = 145
+
+            val GET_SO_LOAD_MORE_SUCCESSFULL = 146
+            val GET_SO_LOAD_MORE_UNSUCCESSFULL = 147
+
+            val GET_SO_SERACH_SUCCESSFULL = 148
+            val GET_SO_SERACH_UNSUCCESSFULL = 149
         }
     }
 

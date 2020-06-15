@@ -7,9 +7,7 @@ import com.teamcomputers.bam.controllers.KHTTPOperationController
 import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
 
-class KYTDQTDFiscalRequester(userId: String, fiscalYear: String) : KBaseRequester {
-    private var userId: String = userId
-    private var fiscalYear: String = fiscalYear
+class KYTDQTDFiscalRequester(val userId: String, val fiscalYear: String) : KBaseRequester {
     override fun run() {
         val apiResponse = KHTTPOperationController().fiscalYTDQTD(userId, fiscalYear)
         if (apiResponse != null) {

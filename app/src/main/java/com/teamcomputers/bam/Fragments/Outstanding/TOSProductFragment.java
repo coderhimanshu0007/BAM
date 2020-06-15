@@ -32,7 +32,7 @@ import com.teamcomputers.bam.Models.WSModels.NRModels.KNRProductModel;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRRSMModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesAprRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesJunRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -344,7 +344,8 @@ public class TOSProductFragment extends BaseFragment {
         cviProductHeading.setVisibility(View.GONE);
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "Product", "", "", "", "", ""));
-        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Product", "", "", "", "", "", "", "", ""));
+        //BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "Product", "", "", "", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesJunRequester(userId, level, "Product", "", "", "", "", "", "", "", "", "", "", "", ""));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -785,18 +786,18 @@ public class TOSProductFragment extends BaseFragment {
 
     private void initData(String type) {
         tviAmount.setText(BAMUtil.getRoundOffValue(prductFilterData.getAmount()));
-        if (fromCustomer) {
+        if (fromInvoice || fromCustomer) {
             llDSO.setVisibility(View.GONE);
         } else {
             llDSO.setVisibility(View.VISIBLE);
-        }
-        bar = (prductFilterData.getDso()).intValue();
-        tviDSO.setText(bar + " Days");
-        pBar.setProgress(bar);
-        if (bar < 30) {
-            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
-        } else {
-            pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+            bar = (prductFilterData.getDso()).intValue();
+            tviDSO.setText(bar + " Days");
+            pBar.setProgress(bar);
+            if (bar < 30) {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
+            } else {
+                pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
+            }
         }
         /*if (fromCustomer) {
             tviOutstandingHeading.setText("CUSTOMER NAME");

@@ -23,8 +23,6 @@ import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.NRAdapters.KTORSMAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSCustomerFragment;
-import com.teamcomputers.bam.Fragments.WSPages.WSProductFragment;
-import com.teamcomputers.bam.Fragments.WSPages.WSSalesPersonFragment;
 import com.teamcomputers.bam.Models.WSModels.NRModels.Filter;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRInvoiceModel;
@@ -32,7 +30,7 @@ import com.teamcomputers.bam.Models.WSModels.NRModels.KNRProductModel;
 import com.teamcomputers.bam.Models.WSModels.NRModels.KNRRSMModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesAprRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesJunRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -399,7 +397,8 @@ public class TOSRSMFragment extends BaseFragment {
         type = 1;
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "RSM", "", "", "", "", ""));
-        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "RSM", "", "", "", "", "", "", "", ""));
+        //BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "RSM", "", "", "", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesJunRequester(userId, level, "RSM", "", "", "", "", "", "", "", "", "", "", "", ""));
 
     }
 
@@ -546,7 +545,8 @@ public class TOSRSMFragment extends BaseFragment {
 
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OutstandingRequester(userId, level, "RSM", "", sales, customer, state, product));
-        BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "RSM", "", sales, customer, state, product, invoice, "", ""));
+        //BackgroundExecutor.getInstance().execute(new KAccountReceivablesAprRequester(userId, level, "RSM", "", sales, customer, state, product, invoice, "", ""));
+        BackgroundExecutor.getInstance().execute(new KAccountReceivablesJunRequester(userId, level, "RSM", "", sales, customer, state, product, invoice, "", "", "", "", "", ""));
     }
 
     private void row1Display() {
@@ -958,7 +958,7 @@ public class TOSRSMFragment extends BaseFragment {
         } else {
             pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_start), PorterDuff.Mode.SRC_IN);
         }
-        if (fromCustomer || fromInvoice|| fromProduct) {
+        if (fromCustomer || fromInvoice || fromProduct) {
             llDSO.setVisibility(View.GONE);
             tviOutstandingHeading.setText("CUSTOMER NAME");
             tviEmpty.setVisibility(View.VISIBLE);
@@ -970,7 +970,7 @@ public class TOSRSMFragment extends BaseFragment {
             tviDSOHeading.setText("DSO");
         }
         //rsmAdapter = new TORSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
-        rsmAdapter = new KTORSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer,fromInvoice, fromProduct);
+        rsmAdapter = new KTORSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromInvoice, fromProduct);
         rviRSM.setAdapter(rsmAdapter);
     }
 

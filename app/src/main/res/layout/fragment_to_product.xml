@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:paddingTop="5dp"
             android:paddingLeft="10dp"
+            android:paddingTop="5dp"
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
             android:tint="@color/color_white"
@@ -61,6 +61,49 @@
         android:layout_height="match_parent"
         android:background="@color/login_bg"
         android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="2dp"
+            android:elevation="@dimen/cardview_compat_inset_shadow"
+            android:padding="3dp"
+            app:cardCornerRadius="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="63dp"
+                android:background="@drawable/sr_gradient_new_drawable"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="7dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="TOTAL OUTSTANDING"
+                    android:textColor="@color/color_white"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+                <TextView
+                    android:id="@+id/tviTotalOutstanding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="0"
+                    android:textColor="@color/color_white"
+                    android:textSize="14sp"
+                    app:fontFamily="@font/roboto_bold" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
         <!--<ScrollView
             android:layout_width="match_parent"
@@ -381,7 +424,6 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

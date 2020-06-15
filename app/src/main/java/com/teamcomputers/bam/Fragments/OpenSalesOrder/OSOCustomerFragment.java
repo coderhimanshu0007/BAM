@@ -28,7 +28,7 @@ import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOSOModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.PSOFilter;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderAprRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderJunRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
 
@@ -440,7 +440,8 @@ public class OSOCustomerFragment extends BaseFragment {
         cviSPHeading.setVisibility(View.GONE);
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Customer", "", "", "", "", "", ""));
-        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Customer", "", "", "", "", "", ""));
+        //BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Customer", "", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderJunRequester(userId, level, "Customer", "", "", "", "", "", "", "", "", "", "", "", ""));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -623,7 +624,8 @@ public class OSOCustomerFragment extends BaseFragment {
             product = productProfile.getCode();
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Customer", rsm, sales, "", "", invoiceNo, ""));
-        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Customer", rsm, sales, "", "", invoiceNo, product));
+        //BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Customer", rsm, sales, "", "", invoiceNo, product));
+        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderJunRequester(userId, level, "Customer", rsm, sales, "", "", product, invoiceNo, "", "", "", "", "", ""));
 
     }
 

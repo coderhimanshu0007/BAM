@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOCustomerAdapter;
 import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOProductAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
@@ -26,10 +25,9 @@ import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOProductModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSORSMModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOSOModel;
-import com.teamcomputers.bam.Models.WSModels.PSOModels.PSOFilter;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderAprRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderJunRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
 
@@ -394,7 +392,8 @@ public class OSOProductFragment extends BaseFragment {
         cviSPHeading.setVisibility(View.GONE);
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Customer", "", "", "", "", "", ""));
-        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Product", "", "", "", "", "", ""));
+        //BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Product", "", "", "", "", "", ""));
+        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderJunRequester(userId, level, "Product", "", "", "", "", "", "", "", "", "", "", "", ""));
     }
 
     @OnClick(R.id.iviR1Close)
@@ -695,7 +694,8 @@ public class OSOProductFragment extends BaseFragment {
             invoiceNo = soProfile.getSoNumber();
         showProgress(ProgressDialogTexts.LOADING);
         //BackgroundExecutor.getInstance().execute(new OpenSalesOrderRequester(userId, level, "Customer", rsm, sales, "", "", invoiceNo, ""));
-        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Product", rsm, sales, customer, state, invoiceNo, ""));
+        //BackgroundExecutor.getInstance().execute(new KSalesOpenOrderAprRequester(userId, level, "Product", rsm, sales, customer, state, invoiceNo, ""));
+        BackgroundExecutor.getInstance().execute(new KSalesOpenOrderJunRequester(userId, level, "Product", rsm, sales, customer, state, "", invoiceNo, "", "", "", "", "", ""));
 
     }
 

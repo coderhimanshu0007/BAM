@@ -199,6 +199,12 @@ public interface BAMConstant {
 
         int GET_INVOICE_SERACH_SUCCESSFULL = 144;
         int GET_INVOICE_SERACH_UNSUCCESSFULL = 145;
+
+        int GET_SO_LOAD_MORE_SUCCESSFULL = 146;
+        int GET_SO_LOAD_MORE_UNSUCCESSFULL = 147;
+
+        int GET_SO_SERACH_SUCCESSFULL = 148;
+        int GET_SO_SERACH_UNSUCCESSFULL = 149;
     }
 
     interface ToastTexts {
