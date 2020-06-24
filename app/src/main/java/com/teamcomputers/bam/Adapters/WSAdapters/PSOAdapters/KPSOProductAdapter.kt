@@ -57,7 +57,7 @@ class KPSOProductAdapter(val dashboardActivityContext: DashboardActivity, val le
 
             itemView.tviSOAmount.text = BAMUtil.getRoundOffValue(productData?.sOAmount!!)
 
-            if (level == "R1") {
+            if (level == "R0" || level == "R1") {
                 if (fromRSM && fromSP && fromSO && fromCustomer) {
                     itemView.iviOption.visibility = View.GONE
                 }

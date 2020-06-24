@@ -83,7 +83,7 @@ class KSalesSPAdapter(dashboardActivityContext: DashboardActivity, type: String,
         } else if (bar >= 99) {
             holder.pBar.progressDrawable.setColorFilter(mActivity.resources.getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN)
         }
-        if (level == "R1") {
+        if (level == "R0" || level == "R1") {
             if (fromRSM && fromCustomer && fromProduct) {
                 holder.iviOption.visibility = View.GONE
             }
@@ -91,38 +91,29 @@ class KSalesSPAdapter(dashboardActivityContext: DashboardActivity, type: String,
             if (fromCustomer && fromProduct) {
                 holder.iviOption.visibility = View.GONE
             }
+        } else if (level == "R4" && fromCustomer) {
+            holder.iviOption.visibility = View.GONE
         }
         holder.iviOption.setOnClickListener {
             //creating a popup menu
             val popup = PopupMenu(mActivity, holder.iviOption)
             //inflating menu from xml resource
             popup.inflate(R.menu.options_menu)
-            if (level == "R1") {
-                popup.menu.getItem(1).isVisible = false
-                if (fromRSM && fromCustomer) {
-                    popup.menu.getItem(0).isVisible = false
-                    popup.menu.getItem(2).isVisible = false
-                } else if (fromRSM && fromProduct) {
-                    popup.menu.getItem(0).isVisible = false
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromCustomer && fromProduct) {
-                    popup.menu.getItem(2).isVisible = false
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromRSM) {
-                    popup.menu.getItem(0).isVisible = false
-                } else if (fromCustomer) {
-                    popup.menu.getItem(2).isVisible = false
-                } else if (fromProduct) {
-                    popup.menu.getItem(3).isVisible = false
-                }
-            } else if (level == "R2" || level == "R3") {
+            popup.menu.getItem(1).isVisible = false
+            if (level == "R2" || level == "R3") {
+                popup.menu.getItem(0).isVisible = false
+            } else if (level == "R4") {
                 popup.menu.getItem(0).isVisible = false
                 popup.menu.getItem(1).isVisible = false
-                if (fromCustomer) {
-                    popup.menu.getItem(2).isVisible = false
-                } else if (fromProduct) {
-                    popup.menu.getItem(3).isVisible = false
-                }
+            }
+            if (fromRSM) {
+                popup.menu.getItem(0).isVisible = false
+            }
+            if (fromCustomer) {
+                popup.menu.getItem(2).isVisible = false
+            }
+            if (fromProduct) {
+                popup.menu.getItem(3).isVisible = false
             }
             //adding click listener
             popup.setOnMenuItemClickListener { item ->

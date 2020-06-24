@@ -32,8 +32,6 @@ import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOSOModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.PSOFilter;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesJunRequester;
-import com.teamcomputers.bam.Requesters.WSRequesters.KInvoiceLoadMoreRequester;
 import com.teamcomputers.bam.Requesters.WSRequesters.KSOLoadMoreRequester;
 import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderJunRequester;
 import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderSearchRequester;
@@ -82,6 +80,8 @@ public class OSOInvoiceFragment extends BaseFragment {
     String toolbarTitle = "";
     @BindView(R.id.txtSearch)
     EditText txtSearch;
+    @BindView(R.id.tviTotalOutstanding)
+    TextView tviTotalOutstanding;
     @BindView(R.id.cviProductHeading)
     CardView cviProductHeading;
     @BindView(R.id.llProductLayout)
@@ -278,6 +278,7 @@ public class OSOInvoiceFragment extends BaseFragment {
                             sOFilterData = sOData.getFilter();
                             minMaxData = sOData.getMinMax();
                             tviSOAmount.setText(KBAMUtils.getRoundOffValue(sOFilterData.getSoAmount()));
+                            tviTotalOutstanding.setText(KBAMUtils.getRoundOffValue(minMaxData.getAmount()));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

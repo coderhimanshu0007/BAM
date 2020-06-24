@@ -59,7 +59,7 @@ class KPSOSOAdapter(val mContext: DashboardActivity, val level: String, val data
             itemView.tviAmount.setText(BAMUtil.getRoundOffValue(SOData.soAmount!!))
             itemView.tviNOD.text = SOData.nod.toString()!!
 
-            if (level == "R1") {
+            if (level == "R0" || level == "R1") {
                 if (fromRSM && fromSP && fromCustomer && fromProduct) {
                     itemView.iviOption.setVisibility(View.GONE)
                 }

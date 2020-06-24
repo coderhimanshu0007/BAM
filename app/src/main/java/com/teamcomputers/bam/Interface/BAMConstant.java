@@ -43,7 +43,7 @@ public interface BAMConstant {
         String KK_MM = "kk:mm";
         String HH_MM = "hh:mm a";
         String ATTENDANCE_DATE_FORMAT = "MM/dd/yyyy kk:mm:s a";
-        String ATTENDANCE_DATE_FORMAT_1 = "MM/dd/yyyy hh:mm:ss a";
+        String SESSION_DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
         String CONFERENCE_DATE_FORMAT = "yyyy/MM/dd";
     }
 
@@ -205,6 +205,12 @@ public interface BAMConstant {
 
         int GET_SO_SERACH_SUCCESSFULL = 148;
         int GET_SO_SERACH_UNSUCCESSFULL = 149;
+
+        int GET_ACTIVE_EMPLOYEE_ACCESS_SUCCESSFUL = 150;
+        int GET_ACTIVE_EMPLOYEE_ACCESS_UNSUCCESSFUL = 151;
+
+        int GET_SAVE_SESSION_DETAIL_SUCCESSFUL = 152;
+        int GET_SAVE_SESSION_DETAIL_UNSUCCESSFUL = 153;
     }
 
     interface ToastTexts {

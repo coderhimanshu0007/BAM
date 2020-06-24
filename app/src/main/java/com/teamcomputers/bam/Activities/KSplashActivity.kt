@@ -5,18 +5,24 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import androidx.core.app.ActivityCompat
+import com.teamcomputers.bam.BAMApplication
 import com.teamcomputers.bam.Interface.KBAMConstant
 import com.teamcomputers.bam.KBAMApplication
 import com.teamcomputers.bam.Models.AppVersionResponse
+import com.teamcomputers.bam.Models.LoginModel
 import com.teamcomputers.bam.Models.common.EventObject
 import com.teamcomputers.bam.R
+import com.teamcomputers.bam.Requesters.KActiveEmployeeAccessRequester
 import com.teamcomputers.bam.Requesters.KAppVersionRequester
+import com.teamcomputers.bam.Service.OnClearFromRecentService
 import com.teamcomputers.bam.Utils.BackgroundExecutor
 import com.teamcomputers.bam.controllers.SharedPreferencesController
 import org.greenrobot.eventbus.Subscribe
 
+
 class KSplashActivity : KBaseActivity() {
     var splashHandler: Handler? = null
+    private var userProfile: LoginModel? = null
 
     private val splashRunnable = Runnable { launchNextActivity() }
 
@@ -34,6 +40,24 @@ class KSplashActivity : KBaseActivity() {
                 KBAMConstant.Events.OOPS_MESSAGE -> showToast(KBAMConstant.ToastTexts.OOPS_MESSAGE)
                 KBAMConstant.Events.NO_INTERNET_CONNECTION -> showToast(KBAMConstant.ToastTexts.NO_INTERNET_CONNECTION)
                 KBAMConstant.Events.INTERNAL_ERROR -> showDialog(this)
+                KBAMConstant.Events.GET_ACTIVE_EMPLOYEE_ACCESS_SUCCESSFUL -> {
+                    dismissProgress()
+                    showToast("RECORD_FOUND")
+                    dismissProgress()
+                    ActivityCompat.finishAffinity(this@KSplashActivity)
+                    val dashBoard = Intent()
+                    dashBoard.setClass(this@KSplashActivity, DashboardActivity::class.java)
+                    dashBoard.putExtra(KBAMConstant.Constants.FINISH, true)
+                    dashBoard.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    dashBoard.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    dashBoard.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left)
+                    startActivity(dashBoard)
+                }
+                KBAMConstant.Events.GET_ACTIVE_EMPLOYEE_ACCESS_UNSUCCESSFUL -> {
+                    dismissProgress()
+                    showToast(KBAMConstant.ToastTexts.NO_RECORD_FOUND)
+                }
             }//appUrl = ((AppVersionResponse) eventObject.getObject()).getAppVersionUrl();
             //showVersionCheck();/
         }
@@ -43,6 +67,7 @@ class KSplashActivity : KBaseActivity() {
         super.onCreate(savedInstanceState)
         splashHandler = Handler()
         splashHandler?.postDelayed(splashRunnable, 2000)
+        startService(Intent(baseContext, OnClearFromRecentService::class.java))
     }
 
     private fun getVersionInfo(`object`: AppVersionResponse) {
@@ -69,7 +94,10 @@ class KSplashActivity : KBaseActivity() {
 
     private fun nextActivity() {
         if (SharedPreferencesController.getInstance(applicationContext).isUserLoggedIn) {
-            ActivityCompat.finishAffinity(this@KSplashActivity)
+            userProfile = SharedPreferencesController.getInstance(BAMApplication.getInstance()).userProfile
+            //showProgress(KBAMConstant.ProgressDialogTexts.LOADING)
+            BackgroundExecutor.getInstance().execute(KActiveEmployeeAccessRequester(userProfile?.getUserID()!!, userProfile?.getMemberName()!!))
+            /*ActivityCompat.finishAffinity(this@KSplashActivity)
             val intent = Intent()
             intent.setClass(this@KSplashActivity, DashboardActivity::class.java)
             intent.putExtra(KBAMConstant.Constants.FINISH, true)
@@ -78,7 +106,7 @@ class KSplashActivity : KBaseActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left)
-            startActivity(intent)
+            startActivity(intent)*/
         } else {
             ActivityCompat.finishAffinity(this@KSplashActivity)
             val intent = Intent()

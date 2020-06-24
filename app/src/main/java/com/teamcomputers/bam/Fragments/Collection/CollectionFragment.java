@@ -16,21 +16,26 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.google.android.material.tabs.TabLayout;
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.BAMApplication;
 import com.teamcomputers.bam.CustomView.CustomViewPager;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Fragments.Logistics.AcknowledgementFragment;
-import com.teamcomputers.bam.Fragments.Logistics.DispatchFragment;
-import com.teamcomputers.bam.Fragments.Logistics.HoldDeliveryFragment;
-import com.teamcomputers.bam.Fragments.Logistics.InTransitFragment;
+import com.teamcomputers.bam.Models.ActiveEmployeeAccessModel;
+import com.teamcomputers.bam.Models.SessionDataModel;
+import com.teamcomputers.bam.Models.SessionDetailsModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Collection.CollectionRefreshRequester;
-import com.teamcomputers.bam.Requesters.Purchase.PurchaseRefreshRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.Utils.KBAMUtils;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -39,6 +44,10 @@ public class CollectionFragment extends BaseFragment {
     private View rootView;
     private Unbinder unbinder;
     private DashboardActivity dashboardActivityContext;
+
+    ActiveEmployeeAccessModel activeEmployeeAccessModel;
+    Date currentDate;
+    String logInTime, logOutTime;
 
     private String[] navLabels = {
             "Outstanding",
@@ -63,6 +72,10 @@ public class CollectionFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, rootView);
         toolbarTitle = getString(R.string.Heading_Logistics);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
+
+        activeEmployeeAccessModel = SharedPreferencesController.getInstance(BAMApplication.getInstance()).getActiveEmployeeAccess();
+        currentDate = Calendar.getInstance().getTime();
+        logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
 
         TabLayout tabLayout = rootView.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab());
@@ -135,6 +148,31 @@ public class CollectionFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        logOutTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+
+
+        SessionDetailsModel sessionDetailsModel = new SessionDetailsModel();
+        sessionDetailsModel.setSessionId(activeEmployeeAccessModel.getData().getSessionId());
+        List<SessionDataModel> sessionDataModelList = new ArrayList<>();
+        if (null != SharedPreferencesController.getInstance(dashboardActivityContext).getSessionDetail()) {
+            sessionDataModelList = SharedPreferencesController.getInstance(dashboardActivityContext).getSessionDetail().getData();
+        }
+        SessionDataModel sessionDataModel = new SessionDataModel();
+        sessionDataModel.setModule("Collection");
+        sessionDataModel.setPage("");
+        sessionDataModel.setLogInTimeStamp(logInTime);
+        sessionDataModel.setLogOutTimeStamp(logOutTime);
+        sessionDataModel.setOs("Android");
+        sessionDataModel.setSharing(1);
+        sessionDataModelList.add(sessionDataModel);
+        sessionDetailsModel.setData(sessionDataModelList);
+        SharedPreferencesController.getInstance(dashboardActivityContext).setSessionDetail(sessionDetailsModel);
+
     }
 
     @Override

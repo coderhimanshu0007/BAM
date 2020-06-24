@@ -63,7 +63,7 @@ class KPSOStateAdapter(dashboardActivityContext: DashboardActivity, level: Strin
             toCustomerModel.stateCodeWise = selected
             EventBus.getDefault().post(EventObject(BAMConstant.ClickEvents.STATE_ITEM, toCustomerModel))
         }
-        if (level == "R1") {
+        if (level == "R0" || level == "R1") {
             if (fromRSM && fromSP && fromProduct) {
                 holder.iviOption.visibility = View.GONE
             }

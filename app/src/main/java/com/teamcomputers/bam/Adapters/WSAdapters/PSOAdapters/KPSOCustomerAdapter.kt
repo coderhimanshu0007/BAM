@@ -70,17 +70,17 @@ class KPSOCustomerAdapter(val mContext: DashboardActivity, val level: String, va
 
         holder.tviSOAmount.text = BAMUtil.getRoundOffValue(dataListFiltered?.get(position)?.sOAmount!!)
 
-        if (level == "R1") {
-            if (fromRSM && fromSP && fromSO) {
+        if (level == "R0" || level == "R1") {
+            if (fromRSM && fromSP && fromSO && fromProduct) {
                 holder.iviOption.visibility = View.GONE
             }
         } else if (level == "R2" || level == "R3") {
-            if (fromSP && fromSO) {
+            if (fromSP && fromSO && fromProduct) {
                 holder.iviOption.visibility = View.GONE
             }
-        } else if (level == "R4" && fromSO) {
+        } else if (level == "R4" && fromSO && fromProduct) {
             holder.iviOption.visibility = View.GONE
-        } else if (level == "R4" && !fromSO) {
+        } else if (level == "R4" && !fromSO && fromProduct) {
             holder.iviOption.visibility = View.VISIBLE
         }
 
@@ -92,11 +92,9 @@ class KPSOCustomerAdapter(val mContext: DashboardActivity, val level: String, va
             popup.menu.getItem(3).title = "SO"
             if (level == "R2" || level == "R3") {
                 popup.menu.getItem(0).isVisible = false
-                popup.menu.getItem(2).isVisible = false
             } else if (level == "R4") {
                 popup.menu.getItem(0).isVisible = false
                 popup.menu.getItem(1).isVisible = false
-                popup.menu.getItem(2).isVisible = false
             }
             popup.menu.getItem(2).isVisible = false
             if (fromRSM) {

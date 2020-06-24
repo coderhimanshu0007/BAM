@@ -5,9 +5,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
-import com.teamcomputers.bam.Interface.BAMConstant;
 import com.teamcomputers.bam.Interface.KBAMConstant;
 import com.teamcomputers.bam.Models.AcknowledgemantModel;
+import com.teamcomputers.bam.Models.ActiveEmployeeAccessModel;
 import com.teamcomputers.bam.Models.DOAIRModel;
 import com.teamcomputers.bam.Models.DispatchModel;
 import com.teamcomputers.bam.Models.FAModel;
@@ -20,6 +20,8 @@ import com.teamcomputers.bam.Models.OpenCallsModel;
 import com.teamcomputers.bam.Models.SOAModel;
 import com.teamcomputers.bam.Models.SPCSModel;
 import com.teamcomputers.bam.Models.SalesDataModel;
+import com.teamcomputers.bam.Models.SessionDataModel;
+import com.teamcomputers.bam.Models.SessionDetailsModel;
 import com.teamcomputers.bam.Models.WIPModel;
 import com.teamcomputers.bam.Utils.BAMUtil;
 
@@ -174,6 +176,33 @@ public class SharedPreferencesController implements KBAMConstant {
         putString(Keys.USER_PROFILE.getLabel(), BAMUtil.toJson(userProfile));
     }
 
+    public ActiveEmployeeAccessModel getActiveEmployeeAccess() {
+        String json = getString(Keys.ACTIVE_EMPLOYEE_ACCESS.getLabel(), "");
+        return (ActiveEmployeeAccessModel) BAMUtil.fromJson(json, ActiveEmployeeAccessModel.class);
+    }
+
+    public void setActiveEmployeeAccess(ActiveEmployeeAccessModel activeEmployeeAccess) {
+        putString(Keys.ACTIVE_EMPLOYEE_ACCESS.getLabel(), BAMUtil.toJson(activeEmployeeAccess));
+    }
+
+    public SessionDetailsModel getSessionDetail() {
+        String json = getString(Keys.SESSION_DETAIL.getLabel(), "");
+        return (SessionDetailsModel) BAMUtil.fromJson(json, SessionDetailsModel.class);
+    }
+
+    public void setSessionDetail(SessionDetailsModel activeEmployeeAccess) {
+        putString(Keys.SESSION_DETAIL.getLabel(), BAMUtil.toJson(activeEmployeeAccess));
+    }
+
+    public SessionDataModel getSessionData() {
+        String json = getString(Keys.SESSION_DATA.getLabel(), "");
+        return (SessionDataModel) BAMUtil.fromJson(json, SessionDataModel.class);
+    }
+
+    public void setSessionData(SessionDataModel activeEmployeeAccess) {
+        putString(Keys.SESSION_DATA.getLabel(), BAMUtil.toJson(activeEmployeeAccess));
+    }
+
     public boolean isUserLoggedIn() {
         return getBoolean(Keys.LOGGED_IN.getLabel(), false);
     }
@@ -188,6 +217,14 @@ public class SharedPreferencesController implements KBAMConstant {
 
     public void setOPPageNo(Integer pageNo) {
         putInt(Keys.ORDERPROCESSING_PAGENO.getLabel(), pageNo);
+    }
+
+    public int getSharing() {
+        return getInt(Keys.SHARING.getLabel(), 0);
+    }
+
+    public void setSharing(Integer pageNo) {
+        putInt(Keys.SHARING.getLabel(), pageNo);
     }
 
     public FAModel[] getOPFAData() {
@@ -371,8 +408,12 @@ public class SharedPreferencesController implements KBAMConstant {
     private enum Keys {
         USERID("USERID"),
         USER_PROFILE("USER_PROFILE"),
+        ACTIVE_EMPLOYEE_ACCESS("ACTIVE_EMPLOYEE_ACCESS"),
+        SESSION_DETAIL("SESSION_DETAIL"),
+        SESSION_DATA("SESSION_DATA"),
         LOGGED_IN("LOGGED_IN"),
         ORDERPROCESSING_PAGENO("ORDERPROCESSING_PAGENO"),
+        SHARING("SHARING"),
         OPFA_DATA("OPFA_DATA"),
         OPSOA_DATA("OPSOA_DATA"),
         SPCS_DATA("SPCS_DATA"),

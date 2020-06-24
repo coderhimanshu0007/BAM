@@ -26,10 +26,13 @@ import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSCustomerFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSSalesPersonFragment;
+import com.teamcomputers.bam.Models.ActiveEmployeeAccessModel;
 import com.teamcomputers.bam.Models.FiscalYearModel;
 import com.teamcomputers.bam.Models.LoginModel;
 import com.teamcomputers.bam.Models.NewYTDQTDModel;
 import com.teamcomputers.bam.Models.SalesReceivableModel;
+import com.teamcomputers.bam.Models.SessionDataModel;
+import com.teamcomputers.bam.Models.SessionDetailsModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.SalesReceivable.SalesReceivableRequester;
@@ -38,6 +41,7 @@ import com.teamcomputers.bam.Requesters.WSRequesters.KSalesReceivablesFiscalRequ
 import com.teamcomputers.bam.Requesters.WSRequesters.KYTDQTDFiscalRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.Utils.KBAMUtils;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,6 +50,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -93,7 +99,6 @@ public class NewSalesReceivableFragment extends BaseFragment {
     FiscalYearModel fiscalYearModel = new FiscalYearModel();
     CustomSpinnerAdapter customSpinnerAdapter;
 
-    int days = 260;
     String type = null;
     String userId = null;
     String level = null;

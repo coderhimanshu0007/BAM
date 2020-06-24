@@ -9,21 +9,26 @@ import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.teamcomputers.bam.BAMApplication
 import com.teamcomputers.bam.Interface.KBAMConstant
 import com.teamcomputers.bam.Models.AppVersionResponse
+import com.teamcomputers.bam.Models.LoginModel
 import com.teamcomputers.bam.Models.common.EventObject
 import com.teamcomputers.bam.R
+import com.teamcomputers.bam.Requesters.KActiveEmployeeAccessRequester
 import com.teamcomputers.bam.Requesters.KAppVersionRequester
 import com.teamcomputers.bam.Requesters.KLoginRequester
 import com.teamcomputers.bam.Requesters.LoginRequester
 import com.teamcomputers.bam.Utils.BackgroundExecutor
 import com.teamcomputers.bam.Utils.KBAMUtils
+import com.teamcomputers.bam.controllers.SharedPreferencesController
 import kotlinx.android.synthetic.main.activity_login.*
 import org.greenrobot.eventbus.Subscribe
 
 class KLoginActivity : KBaseActivity() {
     internal var save = false
     internal var show = false
+    private var userProfile: LoginModel? = null
     override fun getLayout(): Int {
         return R.layout.activity_login
     }
@@ -33,6 +38,13 @@ class KLoginActivity : KBaseActivity() {
         runOnUiThread {
             when (eventObject.id) {
                 KBAMConstant.Events.LOGIN_SUCCESSFUL -> {
+                    userProfile = SharedPreferencesController.getInstance(BAMApplication.getInstance()).userProfile
+                    //showProgress(KBAMConstant.ProgressDialogTexts.LOADING)
+                    BackgroundExecutor.getInstance().execute(KActiveEmployeeAccessRequester(userProfile?.getUserID()!!, userProfile?.getMemberName()!!))
+                }
+                KBAMConstant.Events.GET_ACTIVE_EMPLOYEE_ACCESS_SUCCESSFUL -> {
+                    dismissProgress()
+                    showToast("RECORD_FOUND")
                     dismissProgress()
                     ActivityCompat.finishAffinity(this@KLoginActivity)
                     val dashBoard = Intent()
@@ -43,6 +55,10 @@ class KLoginActivity : KBaseActivity() {
                     dashBoard.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left)
                     startActivity(dashBoard)
+                }
+                KBAMConstant.Events.GET_ACTIVE_EMPLOYEE_ACCESS_UNSUCCESSFUL -> {
+                    dismissProgress()
+                    showToast(KBAMConstant.ToastTexts.NO_RECORD_FOUND)
                 }
                 KBAMConstant.Events.WRONG_LOGIN_CREDENTIALS_USED -> {
                     dismissProgress()
@@ -84,6 +100,9 @@ class KLoginActivity : KBaseActivity() {
     private fun init() {
         save = false
         show = false
+        for (i in 6 downTo 0 step 2) {
+            println(i)
+        }
         Dexter.withActivity(this)
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,

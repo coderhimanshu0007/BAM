@@ -43,7 +43,7 @@ class KSalesCustomerAdapter(dashboardActivityContext: DashboardActivity, userId:
         internal var tviYTD: TextView
         internal var tviQTD: TextView
         internal var tviMTD: TextView
-        internal var tviSOAmount : TextView
+        internal var tviSOAmount: TextView
         internal var rviStateCode: RecyclerView
         internal var pBar: ProgressBar
         internal var iviOption: ImageView
@@ -99,7 +99,7 @@ class KSalesCustomerAdapter(dashboardActivityContext: DashboardActivity, userId:
         } else if (bar >= 99) {
             holder.pBar.progressDrawable.setColorFilter(mActivity.resources.getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN)
         }
-        if (level == "R1") {
+        if (level == "R0" || level == "R1") {
             if (fromRSM && fromSP && fromProduct) {
                 holder.iviOption.visibility = View.GONE
             }
@@ -121,36 +121,21 @@ class KSalesCustomerAdapter(dashboardActivityContext: DashboardActivity, userId:
             val popup = PopupMenu(mActivity, holder.iviOption)
             //inflating menu from xml resource
             popup.inflate(R.menu.options_menu)
-            if (level == "R1") {
-                popup.menu.getItem(2).isVisible = false
-                if (fromSP && fromProduct) {
-                    popup.menu.getItem(1).isVisible = false
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromSP && fromRSM) {
-                    popup.menu.getItem(0).isVisible = false
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromProduct && fromRSM) {
-                    popup.menu.getItem(0).isVisible = false
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromSP) {
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromProduct) {
-                    popup.menu.getItem(3).isVisible = false
-                } else if (fromRSM) {
-                    popup.menu.getItem(0).isVisible = false
-                }
-            } else if (level == "R2" || level == "R3") {
+            popup.menu.getItem(2).isVisible = false
+           if (level == "R2" || level == "R3") {
                 popup.menu.getItem(0).isVisible = false
-                popup.menu.getItem(2).isVisible = false
-                if (fromSP) {
-                    popup.menu.getItem(1).isVisible = false
-                } else if (fromProduct) {
-                    popup.menu.getItem(3).isVisible = false
-                }
             } else if (level == "R4") {
                 popup.menu.getItem(0).isVisible = false
                 popup.menu.getItem(1).isVisible = false
-                popup.menu.getItem(2).isVisible = false
+            }
+            if (fromRSM) {
+                popup.menu.getItem(0).isVisible = false
+            }
+            if (fromSP) {
+                popup.menu.getItem(1).isVisible = false
+            }
+            if (fromProduct) {
+                popup.menu.getItem(3).isVisible = false
             }
             //adding click listener
             popup.setOnMenuItemClickListener { item ->

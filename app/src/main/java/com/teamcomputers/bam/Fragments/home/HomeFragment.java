@@ -22,6 +22,7 @@ import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,6 +41,7 @@ public class HomeFragment extends BaseFragment {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
         dashboardActivityContext = (DashboardActivity) context;
         toolbarTitle = getString(R.string.Heading_Home);
@@ -54,7 +56,7 @@ public class HomeFragment extends BaseFragment {
                 text_name.setText(userProfile.getFirstName());
             }
         });*/
-        homeViewModel.getText().observe(this, new Observer<LoginModel>() {
+        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<LoginModel>() {
             @Override
             public void onChanged(LoginModel loginModel) {
                 //text_hello.setText("Hello,");
@@ -80,6 +82,13 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_screen_share);
         item.setVisible(false);
@@ -97,6 +106,29 @@ public class HomeFragment extends BaseFragment {
     @Override
     public String getFragmentName() {
         return HomeFragment.class.getSimpleName();
+    }
+
+    @Subscribe
+    public void onEvent(final EventObject eventObject) {
+        dashboardActivityContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (eventObject.getId()) {
+                    /*case Events.NO_INTERNET_CONNECTION:
+                        dismissProgress();
+                        showToast(ToastTexts.NO_INTERNET_CONNECTION);
+                        break;
+                    case Events.GET_ACTIVE_EMPLOYEE_ACCESS_SUCCESSFUL:
+                        dismissProgress();
+                        showToast("RECORD_FOUND");
+                        break;
+                    case Events.GET_ACTIVE_EMPLOYEE_ACCESS_UNSUCCESSFUL:
+                        dismissProgress();
+                        showToast(ToastTexts.NO_RECORD_FOUND);
+                        break;*/
+                }
+            }
+        });
     }
 
     @OnClick(R.id.rlaOrderProcessing)

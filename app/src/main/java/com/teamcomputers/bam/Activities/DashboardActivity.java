@@ -69,10 +69,16 @@ import com.teamcomputers.bam.Fragments.WSPages.WSProductFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
 import com.teamcomputers.bam.Fragments.WSPages.WSSalesPersonFragment;
 import com.teamcomputers.bam.Fragments.home.HomeFragment;
+import com.teamcomputers.bam.Models.ActiveEmployeeAccessModel;
 import com.teamcomputers.bam.Models.LoginModel;
+import com.teamcomputers.bam.Models.SessionDataModel;
+import com.teamcomputers.bam.Models.SessionDetailsModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
+import com.teamcomputers.bam.Requesters.KSaveSessionDetailRequester;
+import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.CircularImageView;
+import com.teamcomputers.bam.Utils.KBAMUtils;
 import com.teamcomputers.bam.Utils.WrapContentLinearLayoutManager;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
 
@@ -83,6 +89,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -130,7 +137,13 @@ public class DashboardActivity extends BaseActivity {
     public View fragmentView;
 
     public String userId = "", level = "", selectedFiscalYear = "";
-    public int selectedPosition = 0;
+    public int selectedPosition = 0, sharing = 0, levelSharing = 0;
+
+    ActiveEmployeeAccessModel activeEmployeeAccessModel;
+    SessionDataModel level1sessionData = new SessionDataModel();
+    SessionDataModel sessionDataModel = new SessionDataModel();
+    Date currentDate;
+    String logInTime, logOutTime;
 
     @Override
     protected int getLayout() {
@@ -145,19 +158,29 @@ public class DashboardActivity extends BaseActivity {
             public void run() {
                 switch (eventObject.getId()) {
                     case Events.ORDER_PROCESSING:
-                        replaceFragment(Fragments.ORDERPROCESSING_FRAGMENTS, new Bundle());
+                        Bundle opBundle = new Bundle();
+                        opBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        replaceFragment(Fragments.ORDERPROCESSING_FRAGMENTS, opBundle);
                         break;
                     case Events.PURCHASE:
-                        replaceFragment(Fragments.PURCHASE_FRAGMENTS, new Bundle());
+                        Bundle pBundle = new Bundle();
+                        pBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        replaceFragment(Fragments.PURCHASE_FRAGMENTS, pBundle);
                         break;
                     case Events.LOGISTICS:
-                        replaceFragment(Fragments.LOGISTICS_FRAGMENTS, new Bundle());
+                        Bundle lBundle = new Bundle();
+                        lBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        replaceFragment(Fragments.LOGISTICS_FRAGMENTS, lBundle);
                         break;
                     case Events.INSTALLATION:
-                        replaceFragment(Fragments.INSTALLATION_FRAGMENTS, new Bundle());
+                        Bundle iBundle = new Bundle();
+                        iBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        replaceFragment(Fragments.INSTALLATION_FRAGMENTS, iBundle);
                         break;
                     case Events.COLLECTION:
-                        replaceFragment(Fragments.COLLECTION_FRAGMENTS, new Bundle());
+                        Bundle cBundle = new Bundle();
+                        cBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        replaceFragment(Fragments.COLLECTION_FRAGMENTS, cBundle);
                         break;
                     case Events.WS:
                         Bundle srBundle = new Bundle();
@@ -188,6 +211,8 @@ public class DashboardActivity extends BaseActivity {
         setSupportActionBar(toolbar);*/
             DrawerLayout drawer = findViewById(R.id.drawer_layout);
             //NavigationView navigationView = findViewById(R.id.nav_view);
+
+            activeEmployeeAccessModel = SharedPreferencesController.getInstance(BAMApplication.getInstance()).getActiveEmployeeAccess();
 
             drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
                 @Override
@@ -292,6 +317,39 @@ public class DashboardActivity extends BaseActivity {
             }
         });*/
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        uploadData();
+    }
+
+    private void uploadData() {
+        SessionDetailsModel sessionDetailsModel = SharedPreferencesController.getInstance(dashboardActivityContext).getSessionDetail();
+        if (null != sessionDetailsModel) {
+            String session = "{\n\t\"SessionId\":" + sessionDetailsModel.getSessionId() + ",\n\t\"Data\":[\n\t\t";
+            for (int i = 0; i < sessionDetailsModel.getData().size(); i++) {
+                String data = "{\n\t\t\t\"Module\":\"" + sessionDetailsModel.getData().get(i).getModule() + "\"," +
+                        "\n\t\t\t\"Page\":\"" + sessionDetailsModel.getData().get(i).getPage() + "\"," +
+                        "\n\t\t\t\"LogInTimeStamp\":\"" + sessionDetailsModel.getData().get(i).getLogInTimeStamp() + "\"," +
+                        "\n\t\t\t\"LogOutTimeStamp\":\"" + sessionDetailsModel.getData().get(i).getLogOutTimeStamp() + "\"," +
+                        "\n\t\t\t\"OS\":\"" + sessionDetailsModel.getData().get(i).getOs() + "\"," +
+                        "\n\t\t\t\"Sharing\":" + sessionDetailsModel.getData().get(i).getSharing() + "\n\t\t}";
+                if (i > 0) {
+                    session = session + "," + data;
+                } else {
+                    session = session + data;
+                }
+            }
+            session = session + "\n\t]\n}";
+            BackgroundExecutor.getInstance().execute(new KSaveSessionDetailRequester(session));
+        }
     }
 
     @OnClick(R.id.ll_home)
@@ -560,6 +618,13 @@ public class DashboardActivity extends BaseActivity {
                         break;
                     case Fragments.ORDERPROCESSING_FRAGMENTS:
                         if (!userProfile.getSBU().equals("WS")) {
+                            levelSharing = 0;
+                            currentDate = Calendar.getInstance().getTime();
+                            logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                            level1sessionData.setModule("Order Processing");
+                            level1sessionData.setPage("");
+                            level1sessionData.setLogInTimeStamp(logInTime);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(level1sessionData);
                             fragment = new OrderProcessingFragment();
                         }
                         break;
@@ -623,6 +688,13 @@ public class DashboardActivity extends BaseActivity {
                         break;
                     case Fragments.LOGISTICS_FRAGMENTS:
                         if (!userProfile.getSBU().equals("WS")) {
+                            levelSharing = 0;
+                            currentDate = Calendar.getInstance().getTime();
+                            logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                            level1sessionData.setModule("Logistics");
+                            level1sessionData.setPage("");
+                            level1sessionData.setLogInTimeStamp(logInTime);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(level1sessionData);
                             fragment = new LogisticsFragment();
                         }
                         break;
@@ -652,6 +724,13 @@ public class DashboardActivity extends BaseActivity {
                         break;
                     case Fragments.INSTALLATION_FRAGMENTS:
                         if (!userProfile.getSBU().equals("WS")) {
+                            levelSharing = 0;
+                            currentDate = Calendar.getInstance().getTime();
+                            logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                            level1sessionData.setModule("Installation");
+                            level1sessionData.setPage("");
+                            level1sessionData.setLogInTimeStamp(logInTime);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(level1sessionData);
                             fragment = new InstallationFragment();
                         }
                         break;
@@ -718,6 +797,13 @@ public class DashboardActivity extends BaseActivity {
                         break;
                     case Fragments.SR_FRAGMENTS:
                         //fragment = new SalesReceivableFragment();
+                        levelSharing = 0;
+                        currentDate = Calendar.getInstance().getTime();
+                        logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                        level1sessionData.setModule("WSDashboard");
+                        level1sessionData.setPage("");
+                        level1sessionData.setLogInTimeStamp(logInTime);
+                        SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(level1sessionData);
                         fragment = new NewSalesReceivableFragment();
                         break;
                     case Fragments.SR_FRAGMENTS1:
@@ -757,24 +843,78 @@ public class DashboardActivity extends BaseActivity {
                         fragment = new ProductFragment();
                         break;
                     case Fragments.WS_RSM_FRAGMENT:
+                        if (bundle.get("USER_LEVEL").equals("R0") || bundle.get("USER_LEVEL").equals("R1")) {
+                            sharing = 0;
+                            currentDate = Calendar.getInstance().getTime();
+                            logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                            sessionDataModel.setModule("WS");
+                            sessionDataModel.setPage("Sales");
+                            sessionDataModel.setLogInTimeStamp(logInTime);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
+                        }
                         fragment = new WSRSMFragment();
                         break;
                     case Fragments.WS_ACCOUNT_FRAGMENT:
+                        if (bundle.get("USER_LEVEL").equals("R2") || bundle.get("USER_LEVEL").equals("R3")) {
+                            sharing = 0;
+                            currentDate = Calendar.getInstance().getTime();
+                            logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                            sessionDataModel.setModule("WS");
+                            sessionDataModel.setPage("Sales");
+                            sessionDataModel.setLogInTimeStamp(logInTime);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
+                        }
                         fragment = new WSSalesPersonFragment();
                         break;
                     case Fragments.WS_CUSTOMER_FRAGMENT:
+                        if (bundle.get("USER_LEVEL").equals("R4")) {
+                            sharing = 0;
+                            currentDate = Calendar.getInstance().getTime();
+                            logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                            sessionDataModel.setModule("WS");
+                            sessionDataModel.setPage("Sales");
+                            sessionDataModel.setLogInTimeStamp(logInTime);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
+                        }
                         fragment = new WSCustomerFragment();
                         break;
                     case Fragments.WS_PRODUCT_FRAGMENT:
                         fragment = new WSProductFragment();
                         break;
                     case Fragments.OSO_RSM_FRAGMENT:
+                        if (bundle.get("USER_LEVEL").equals("R0") || bundle.get("USER_LEVEL").equals("R1")) {
+                            sharing = 0;
+                            currentDate = Calendar.getInstance().getTime();
+                            logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                            sessionDataModel.setModule("WS");
+                            sessionDataModel.setPage("OSO");
+                            sessionDataModel.setLogInTimeStamp(logInTime);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
+                        }
                         fragment = new OSORSMFragment();
                         break;
                     case Fragments.OSO_ACCOUNT_FRAGMENT:
+                        if (bundle.get("USER_LEVEL").equals("R2") || bundle.get("USER_LEVEL").equals("R3")) {
+                            sharing = 0;
+                            currentDate = Calendar.getInstance().getTime();
+                            logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                            sessionDataModel.setModule("WS");
+                            sessionDataModel.setPage("OSO");
+                            sessionDataModel.setLogInTimeStamp(logInTime);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
+                        }
                         fragment = new OSOSalesPersonFragment();
                         break;
                     case Fragments.OSO_CUSTOMER_FRAGMENT:
+                        if (bundle.get("USER_LEVEL").equals("R4")) {
+                            sharing = 0;
+                            currentDate = Calendar.getInstance().getTime();
+                            logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                            sessionDataModel.setModule("WS");
+                            sessionDataModel.setPage("OSO");
+                            sessionDataModel.setLogInTimeStamp(logInTime);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
+                        }
                         fragment = new OSOCustomerFragment();
                         break;
                     case Fragments.OSO_INVOICE_FRAGMENT:
@@ -784,12 +924,39 @@ public class DashboardActivity extends BaseActivity {
                         fragment = new OSOProductFragment();
                         break;
                     case Fragments.TOS_RSM_FRAGMENT:
+                        if (bundle.get("USER_LEVEL").equals("R0") || bundle.get("USER_LEVEL").equals("R1")) {
+                            sharing = 0;
+                            currentDate = Calendar.getInstance().getTime();
+                            logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                            sessionDataModel.setModule("WS");
+                            sessionDataModel.setPage("Net Receivable");
+                            sessionDataModel.setLogInTimeStamp(logInTime);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
+                        }
                         fragment = new TOSRSMFragment();
                         break;
                     case Fragments.TOS_ACCOUNT_FRAGMENT:
+                        if (bundle.get("USER_LEVEL").equals("R2") || bundle.get("USER_LEVEL").equals("R3")) {
+                            sharing = 0;
+                            currentDate = Calendar.getInstance().getTime();
+                            logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                            sessionDataModel.setModule("WS");
+                            sessionDataModel.setPage("Net Receivable");
+                            sessionDataModel.setLogInTimeStamp(logInTime);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
+                        }
                         fragment = new TOSSalesPersonFragment();
                         break;
                     case Fragments.TOS_CUSTOMER_FRAGMENT:
+                        if (bundle.get("USER_LEVEL").equals("R4")) {
+                            sharing = 0;
+                            currentDate = Calendar.getInstance().getTime();
+                            logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                            sessionDataModel.setModule("WS");
+                            sessionDataModel.setPage("Net Receivable");
+                            sessionDataModel.setLogInTimeStamp(logInTime);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
+                        }
                         fragment = new TOSCustomerFragment();
                         break;
                     case Fragments.TOS_PRODUCT_FRAGMENT:
@@ -838,22 +1005,48 @@ public class DashboardActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (fragment.getFragmentName().equals("HomeFragment")) {
+        if (fragmentManager.getBackStackEntryCount() == 0) {
             finish();
         }
-        //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        //fragmentTransaction.setCustomAnimations(R.anim.left_to_right_order, R.anim.right_to_left_order);
-        //fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
-        //        R.anim.slide_out_right, R.anim.slide_in_right);
-        /*else if (fragment.getFragmentName().equals("OrderProcessingFragment")) {
-            finish();
-        } else if (fragment.getFragmentName().equals("LogisticsFragment")) {
-            finish();
-        } else if (fragment.getFragmentName().equals("HomeFragment")) {
-            finish();
-        } else if (fragment.getFragmentName().equals("HomeFragment")) {
-            finish();
-        }*/
+        if (fragmentManager.getBackStackEntryCount() == 1) {
+            currentDate = Calendar.getInstance().getTime();
+            logOutTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+
+            SessionDetailsModel sessionDetailsModel = new SessionDetailsModel();
+            sessionDetailsModel.setSessionId(activeEmployeeAccessModel.getData().getSessionId());
+            List<SessionDataModel> sessionDataModelList = new ArrayList<>();
+            if (null != SharedPreferencesController.getInstance(dashboardActivityContext).getSessionDetail()) {
+                sessionDataModelList = SharedPreferencesController.getInstance(dashboardActivityContext).getSessionDetail().getData();
+            }
+            level1sessionData.setLogOutTimeStamp(logOutTime);
+            level1sessionData.setOs("Android");
+            level1sessionData.setSharing(levelSharing);
+            sessionDataModelList.add(level1sessionData);
+            sessionDetailsModel.setData(sessionDataModelList);
+            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionDetail(sessionDetailsModel);
+        }
+        if (fragmentManager.getBackStackEntryCount() == 2) {
+            getSessionData();
+        }
+
+    }
+
+    private void getSessionData() {
+        currentDate = Calendar.getInstance().getTime();
+        logOutTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+
+        SessionDetailsModel sessionDetailsModel = new SessionDetailsModel();
+        sessionDetailsModel.setSessionId(activeEmployeeAccessModel.getData().getSessionId());
+        List<SessionDataModel> sessionDataModelList = new ArrayList<>();
+        if (null != SharedPreferencesController.getInstance(dashboardActivityContext).getSessionDetail()) {
+            sessionDataModelList = SharedPreferencesController.getInstance(dashboardActivityContext).getSessionDetail().getData();
+        }
+        sessionDataModel.setLogOutTimeStamp(logOutTime);
+        sessionDataModel.setOs("Android");
+        sessionDataModel.setSharing(sharing);
+        sessionDataModelList.add(sessionDataModel);
+        sessionDetailsModel.setData(sessionDataModelList);
+        SharedPreferencesController.getInstance(dashboardActivityContext).setSessionDetail(sessionDetailsModel);
     }
 
     private void getScreen() {
@@ -887,6 +1080,13 @@ public class DashboardActivity extends BaseActivity {
     }
 
     private void shareIt(File imagePath) {
+        if (fragmentManager.getBackStackEntryCount() > 2) {
+            sharing++;
+            SharedPreferencesController.getInstance(dashboardActivityContext).setSharing(sharing);
+        } else if (fragmentManager.getBackStackEntryCount() == 2) {
+            levelSharing++;
+            SharedPreferencesController.getInstance(dashboardActivityContext).setSharing(levelSharing);
+        }
         Uri fileUri = FileProvider.getUriForFile(dashboardActivityContext, "com.teamcomputers.bam.provider",
                 imagePath);
         Intent intent = new Intent();
@@ -1541,6 +1741,7 @@ public class DashboardActivity extends BaseActivity {
     }
 
     private void clearStack() {
+        getSessionData();
         int count = fragmentManager.getBackStackEntryCount();
         while (count > 2) {
             fragmentManager.popBackStack();

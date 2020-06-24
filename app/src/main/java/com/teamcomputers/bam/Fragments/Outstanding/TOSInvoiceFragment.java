@@ -37,7 +37,7 @@ import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.WSRequesters.KAccountReceivablesJunRequester;
 import com.teamcomputers.bam.Requesters.WSRequesters.KInvoiceLoadMoreRequester;
 import com.teamcomputers.bam.Requesters.WSRequesters.KInvoiceSearchRequester;
-import com.teamcomputers.bam.Utils.BAMUtil;
+import com.teamcomputers.bam.Utils.KBAMUtils;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
 
@@ -666,7 +666,7 @@ public class TOSInvoiceFragment extends BaseFragment {
             }*/
             llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR1Name.setText(rsmProfile.getName());
-            tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
+            tviAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getDso()).intValue();
             tviDSO.setText(bar + " Days");
@@ -682,7 +682,7 @@ public class TOSInvoiceFragment extends BaseFragment {
             position = spProfile.getPosition();
             llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR1Name.setText(spProfile.getName());
-            tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
+            tviAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (spProfile.getDso()).intValue();
             tviDSO.setText(bar + " Days");
@@ -717,7 +717,7 @@ public class TOSInvoiceFragment extends BaseFragment {
             position = rsmProfile.getPosition();
             llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR2Name.setText(rsmProfile.getName());
-            tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
+            tviAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getDso()).intValue();
             tviDSO.setText(bar + " Days");
@@ -733,7 +733,7 @@ public class TOSInvoiceFragment extends BaseFragment {
             position = spProfile.getPosition();
             llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR2Name.setText(spProfile.getName());
-            tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
+            tviAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (spProfile.getDso()).intValue();
             tviDSO.setText(bar + " Days");
@@ -778,7 +778,7 @@ public class TOSInvoiceFragment extends BaseFragment {
             position = rsmProfile.getPosition();
             llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR3Name.setText(rsmProfile.getName());
-            tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
+            tviAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getDso()).intValue();
             tviDSO.setText(bar + " Days");
@@ -794,7 +794,7 @@ public class TOSInvoiceFragment extends BaseFragment {
             position = spProfile.getPosition();
             llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR3Name.setText(spProfile.getName());
-            tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
+            tviAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (spProfile.getDso()).intValue();
             tviDSO.setText(bar + " Days");
@@ -848,7 +848,7 @@ public class TOSInvoiceFragment extends BaseFragment {
             position = rsmProfile.getPosition();
             llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR4Name.setText(rsmProfile.getName());
-            tviAmount.setText(BAMUtil.getRoundOffValue(rsmProfile.getAmount()));
+            tviAmount.setText(KBAMUtils.getRoundOffValue(rsmProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (rsmProfile.getDso()).intValue();
             tviDSO.setText(bar + " Days");
@@ -864,7 +864,7 @@ public class TOSInvoiceFragment extends BaseFragment {
             position = spProfile.getPosition();
             llProductLayout.setBackgroundColor(getResources().getColor(R.color.login_bg));
             tviR4Name.setText(spProfile.getName());
-            tviAmount.setText(BAMUtil.getRoundOffValue(spProfile.getAmount()));
+            tviAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getAmount()));
             llDSO.setVisibility(View.VISIBLE);
             bar = (spProfile.getDso()).intValue();
             tviDSO.setText(bar + " Days");
@@ -922,8 +922,8 @@ public class TOSInvoiceFragment extends BaseFragment {
     }
 
     private void initData() {
-        tviTotalOutstanding.setText(BAMUtil.getRoundOffValue(minMaxData.getAmount()));
-        tviAmount.setText(BAMUtil.getRoundOffValue(invoiceFilterData.getAmount()));
+        tviTotalOutstanding.setText(KBAMUtils.getRoundOffValue(minMaxData.getAmount()));
+        tviAmount.setText(KBAMUtils.getRoundOffValue(invoiceFilterData.getAmount()));
         if (fromCustomer || fromProduct) {
             llDSO.setVisibility(View.GONE);
         } else {

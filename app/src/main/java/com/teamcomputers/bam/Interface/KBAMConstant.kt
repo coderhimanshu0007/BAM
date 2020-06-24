@@ -216,6 +216,12 @@ public interface KBAMConstant {
 
             val GET_SO_SERACH_SUCCESSFULL = 148
             val GET_SO_SERACH_UNSUCCESSFULL = 149
+
+            val GET_ACTIVE_EMPLOYEE_ACCESS_SUCCESSFUL = 150
+            val GET_ACTIVE_EMPLOYEE_ACCESS_UNSUCCESSFUL = 151
+
+            val GET_SAVE_SESSION_DETAIL_SUCCESSFUL = 152
+            val GET_SAVE_SESSION_DETAIL_UNSUCCESSFUL = 153
         }
     }
 

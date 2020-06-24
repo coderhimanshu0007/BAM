@@ -1,10 +1,12 @@
 package com.teamcomputers.bam.controllers
 
+import com.google.gson.JsonObject
 import com.teamcomputers.bam.Interface.KBAMConstant
 import com.teamcomputers.bam.Interface.retrofit.KApiInterface
 import com.teamcomputers.bam.KBAMApplication
 import com.teamcomputers.bam.Models.AppVersionResponse
 import com.teamcomputers.bam.Models.LoginModel
+import com.teamcomputers.bam.Models.SessionDetailsModel
 import com.teamcomputers.bam.webservice.ApiResponse
 import com.teamcomputers.bam.webservice.KConnectionUtils
 import java.util.*
@@ -145,6 +147,10 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.collectionDeliveryInstallation()?.let { KConnectionUtils().execute<Any>(it) }
     }
 
+    fun activeEmployeeAccess(userId: String, userName: String): ApiResponse<*>? {
+        return getApiInterface()?.activeEmployeeAccess(userId, userName)?.let { KConnectionUtils().execute<LoginModel>(it) }
+    }
+
     //WS Requesters
     fun fiscalYear(): ApiResponse<*>? {
         return getApiInterface()?.fiscalYearList()?.let { KConnectionUtils().execute<Any>(it) }
@@ -197,5 +203,9 @@ class KHTTPOperationController : KBAMConstant {
 
     fun salesOpenOrderSearch(userId: String, level: String, documnetNo: String): ApiResponse<*>? {
         return getApiInterface()?.salesOpenOrderSearch(userId, level, documnetNo)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun saveSessionDetail(sessionDetailsModel: JsonObject): ApiResponse<*>? {
+        return getApiInterface()?.saveSessionDetail(sessionDetailsModel.toString())?.let { KConnectionUtils().execute<Any>(it) }
     }
 }

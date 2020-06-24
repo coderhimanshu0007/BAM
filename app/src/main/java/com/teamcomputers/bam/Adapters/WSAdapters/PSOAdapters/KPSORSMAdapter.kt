@@ -58,7 +58,7 @@ class KPSORSMAdapter(val mContext: DashboardActivity, val type: String, val leve
         }
         holder.tviName.text = (position + 1).toString() + ". " + dataListFiltered?.get(position)?.name
         holder.tviSOAmount.text = dataListFiltered?.get(position)?.soAmount?.let { BAMUtil.getRoundOffValue(it) }
-        if (level == "R1") {
+        if (level == "R0" || level == "R1") {
             if (fromSP && fromCustomer && fromSO && fromProduct) {
                 holder.iviOption.visibility = View.GONE
             }

@@ -1,14 +1,9 @@
 package com.teamcomputers.bam.Interface.retrofit
 
-import com.teamcomputers.bam.Models.AppVersionResponse
-import com.teamcomputers.bam.Models.FiscalYearModel
-import com.teamcomputers.bam.Models.LoginModel
+import com.teamcomputers.bam.Models.*
 import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.Headers
-import retrofit2.http.POST
-import java.util.ArrayList
+import retrofit2.http.*
+import java.util.*
 
 interface KApiInterface {
 
@@ -28,6 +23,12 @@ interface KApiInterface {
     fun loginNewUser(@Field("LoginId") id: String,
                      @Field("Password") password: String,
                      @Field("DeviceId") deviceId: String): Call<LoginModel>
+
+    // ActiveEmployeeAccess
+    @FormUrlEncoded
+    @POST("ActiveEmployeeAccess")
+    fun activeEmployeeAccess(@Field("UserId") userId: String,
+                             @Field("UserName") userName: String): Call<ActiveEmployeeAccessModel>
 
     // Order Processing Refresh
     @POST("LastRefreshedOrderProcessing")
@@ -140,9 +141,10 @@ interface KApiInterface {
     abstract fun salesReceiveablesFiscal(@Field("UserId") userId: String,
                                          @Field("FiscalYear") fiscalYear: String): Call<Any>
 
+    // Replace YTDQTDFiscal to YTDQTDFiscalJun
     // YTD QTD
     @FormUrlEncoded
-    @POST("YTDQTDFiscal")
+    @POST("YTDQTDFiscalJun")
     abstract fun fiscalYTDQTD(@Field("UserId") userId: String,
                               @Field("FiscalYear") fiscalYear: String): Call<Any>
 
@@ -275,6 +277,10 @@ interface KApiInterface {
     @FormUrlEncoded
     @POST("SalesOpenOrderSearch")
     fun salesOpenOrderSearch(@Field("UserId") userId: String,
-                         @Field("Level") level: String,
-                         @Field("DocumnetNo") type: String): Call<Any>
+                             @Field("Level") level: String,
+                             @Field("DocumnetNo") type: String): Call<Any>
+
+    @Headers("Content-Type: application/json")
+    @POST("SaveSessionDetails")
+    fun saveSessionDetail(@Body sessionDetailsModel: String): Call<Any>
 }

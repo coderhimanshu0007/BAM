@@ -60,6 +60,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_list" />
         </provider>
+        <service
+            android:name="com.teamcomputers.bam.Service.OnClearFromRecentService"
+            android:stopWithTask="false" />
     </application>
 
 </manifest>

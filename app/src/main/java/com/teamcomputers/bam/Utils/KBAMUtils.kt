@@ -30,6 +30,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.app.NotificationCompat
 import com.google.gson.Gson
+import com.teamcomputers.bam.Interface.BAMConstant
 import com.teamcomputers.bam.KBAMApplication
 import java.io.File
 import java.io.FileOutputStream
@@ -45,7 +46,7 @@ import java.util.concurrent.TimeUnit
 
 class KBAMUtils : KBAMApplication() {
     companion object {
-        val TAG = BAMUtil::class.java.name
+        val TAG = KBAMUtils::class.java.name
         val FILE_NAME = "draw_state.ser"
         @JvmStatic
         fun fromJson(responseString: String, listType: Type): Any? {
@@ -155,7 +156,7 @@ class KBAMUtils : KBAMApplication() {
 
         @JvmStatic
         fun replaceTOSInvoiceDataResponse(response: String): String {
-            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}").replace("]\", \"Filter\": \"", "], \"Filter\": ").replace("\"}\"", "\"}").replace("\"{\"","{\"")
+            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}").replace("]\", \"Filter\": \"", "], \"Filter\": ").replace("\"}\"", "\"}").replace("\"{\"", "{\"")
         }
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -169,6 +170,19 @@ class KBAMUtils : KBAMApplication() {
                 }
             }
             return false
+        }
+
+        @JvmStatic
+        fun getFormattedDate(dateFormat: String, date: Date): String {
+            var formattedDate = ""
+            var simpleDateFormat: SimpleDateFormat
+            when (dateFormat) {
+                BAMConstant.DateFormat.SESSION_DATE_FORMAT -> {
+                    simpleDateFormat = SimpleDateFormat(BAMConstant.DateFormat.SESSION_DATE_FORMAT, Locale.getDefault())
+                    formattedDate = simpleDateFormat?.format(date)
+                }
+            }
+            return formattedDate
         }
     }
 
@@ -310,14 +324,14 @@ class KBAMUtils : KBAMApplication() {
         return BitmapFactory.decodeByteArray(base64Bytes, 0, base64Bytes.size)
     }
 
-    // Check if a timestamp occurs today
-    /*public static boolean isToday(long check) {
-        Date date = new Date();
-        date.setTime(check);
-        String today = getFormattedDate(DateFormat.DDMMYYYY, new Date());
-        String compare = getFormattedDate(DateFormat.DDMMYYYY, date);
-        return today.equals(compare);
-    }*/
+// Check if a timestamp occurs today
+/*public static boolean isToday(long check) {
+    Date date = new Date();
+    date.setTime(check);
+    String today = getFormattedDate(DateFormat.DDMMYYYY, new Date());
+    String compare = getFormattedDate(DateFormat.DDMMYYYY, date);
+    return today.equals(compare);
+}*/
 
     fun showAlertDialog(context: Context, title: String, message: String) {
         val alert = AlertDialog.Builder(context)
