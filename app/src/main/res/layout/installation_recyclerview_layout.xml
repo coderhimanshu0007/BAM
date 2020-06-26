@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cviSPHeading"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginRight="20dp"
+    android:elevation="@dimen/cardview_compat_inset_shadow"
+    android:padding="3dp"
+    app:cardCornerRadius="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tviHeading1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:drawableLeft="@drawable/ic_customer_new"
+                android:drawablePadding="5dp"
+                android:text="Customer"
+                android:textColor="@color/color_value"
+                android:textSize="12sp"
+                app:fontFamily="@font/roboto_medium" />
+
+            <TextView
+                android:id="@+id/tviValue1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:text=""
+                android:textColor="@color/color_value"
+                android:textSize="10sp"
+                app:fontFamily="@font/roboto" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tviHeading21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:drawableLeft="@drawable/ic_group_value"
+                    android:drawablePadding="5dp"
+                    android:text="Amount"
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+                <TextView
+                    android:id="@+id/tviValue21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:text=""
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tviHeading22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:drawableLeft="@drawable/ic_shape_location"
+                    android:drawablePadding="5dp"
+                    android:text="Zone Name"
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+                <TextView
+                    android:id="@+id/tviValue22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:text=""
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llItem2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tviHeading23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:drawableLeft="@drawable/ic_nod"
+                    android:drawablePadding="5dp"
+                    android:text="NOD"
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+                <TextView
+                    android:id="@+id/tviValue23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:text=""
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llrowi3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".32"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tviHeading31"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:drawableLeft="@drawable/ic_shape_location"
+                    android:drawablePadding="5dp"
+                    android:text="City"
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+                <TextView
+                    android:id="@+id/tviValue31"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:text=""
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llItem3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight=".67"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tviHeading32"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:drawableLeft="@drawable/ic_count"
+                    android:drawablePadding="5dp"
+                    android:text="Count"
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+                <TextView
+                    android:id="@+id/tviValue32"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:text=""
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/strock_color" />
+
+        <LinearLayout
+            android:id="@+id/llrow4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".32"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tviHeading41"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:drawablePadding="5dp"
+                    android:text="Remaining Amount"
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+                <TextView
+                    android:id="@+id/tviValue41"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text=""
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llItem4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight=".67"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tviHeading42"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:drawablePadding="5dp"
+                    android:text="Reason"
+                    android:textColor="@color/text_color_reason"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+                <TextView
+                    android:id="@+id/tviValue42"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text=""
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llrow5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".32"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tviHeading51"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:drawableLeft="@drawable/ic_forma_invoice"
+                    android:drawablePadding="5dp"
+                    android:drawableTint="@color/end_header_color_bg"
+                    android:text="Invoie"
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+                <TextView
+                    android:id="@+id/tviValue51"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:text=""
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llItem5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight=".67"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tviHeading52"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:drawablePadding="5dp"
+                    android:text="Payment Status"
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+                <TextView
+                    android:id="@+id/tviValue52"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text=""
+                    android:textColor="@color/color_value"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/roboto" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -10,17 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.OrderProcessing.KSOAuthorizationAdapter;
-import com.teamcomputers.bam.Adapters.OrderProcessing.SOAuthorizationAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Models.FAModel;
 import com.teamcomputers.bam.Models.SOAModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.OrderProcessing.KOPSOAuthorizationRequester;
-import com.teamcomputers.bam.Requesters.OrderProcessing.OrderProcessingSOAuthorizationRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
@@ -29,8 +25,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,8 +49,8 @@ public class SOAuthorizationFragment extends BaseFragment {
     RecyclerView rviData;
     private LinearLayoutManager layoutManager;
 
-    private SOAuthorizationAdapter mAdapter;
-    //private KSOAuthorizationAdapter mAdapter;
+    //private SOAuthorizationAdapter mAdapter;
+    private KSOAuthorizationAdapter mAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,8 +80,8 @@ public class SOAuthorizationFragment extends BaseFragment {
         if (data!=null) {
             tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
-            mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
-            //mAdapter = new KSOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
+            //mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
+            mAdapter = new KSOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
             rviData.setAdapter(mAdapter);
         }
         showProgress(ProgressDialogTexts.LOADING);
@@ -128,8 +122,8 @@ public class SOAuthorizationFragment extends BaseFragment {
 
                         tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
                         tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
-                        mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
-                        //mAdapter = new KSOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
+                        //mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
+                        mAdapter = new KSOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
                         rviData.setAdapter(mAdapter);
                         break;
                     case Events.GET_ORDERPROCESING_SOAUTHORIZATION_UNSUCCESSFULL:
@@ -148,8 +142,8 @@ public class SOAuthorizationFragment extends BaseFragment {
         SOAModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOPSOAData();
         tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[0].getAmount()));
-        mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
-        //mAdapter = new KSOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
+        //mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
+        mAdapter = new KSOAuthorizationAdapter(dashboardActivityContext, data[0].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofSO.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -162,8 +156,8 @@ public class SOAuthorizationFragment extends BaseFragment {
         SOAModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getOPSOAData();
         tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue((Double) data[1].getAmount()));
-        mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, data[1].getTable());
-        //mAdapter = new KSOAuthorizationAdapter(dashboardActivityContext, data[1].getTable());
+        //mAdapter = new SOAuthorizationAdapter(dashboardActivityContext, data[1].getTable());
+        mAdapter = new KSOAuthorizationAdapter(dashboardActivityContext, data[1].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofSO.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));

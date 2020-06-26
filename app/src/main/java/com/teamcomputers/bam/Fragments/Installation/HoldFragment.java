@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.Installation.HoldAdapter;
+import com.teamcomputers.bam.Adapters.Installation.KHoldAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.HoldModel;
 import com.teamcomputers.bam.Models.common.EventObject;
@@ -43,7 +43,7 @@ public class HoldFragment extends BaseFragment {
     @BindView(R.id.rviData)
     RecyclerView rviData;
 
-    private HoldAdapter mAdapter;
+    private KHoldAdapter mAdapter;
     private ArrayList<LinkedTreeMap> holdArrayList0 = new ArrayList<>();
     private ArrayList<LinkedTreeMap> holdArrayList1 = new ArrayList<>();
     private ArrayList<LinkedTreeMap> holdArrayList2 = new ArrayList<>();
@@ -92,7 +92,7 @@ public class HoldFragment extends BaseFragment {
         if (data != null) {
             tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
-            mAdapter = new HoldAdapter(dashboardActivityContext, data[0].getTable());
+            mAdapter = new KHoldAdapter(dashboardActivityContext, data[0].getTable());
             rviData.setAdapter(mAdapter);
         }
         showProgress(ProgressDialogTexts.LOADING);
@@ -134,7 +134,7 @@ public class HoldFragment extends BaseFragment {
                         if (data != null) {
                             tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
                             tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
-                            mAdapter = new HoldAdapter(dashboardActivityContext, data[0].getTable());
+                            mAdapter = new KHoldAdapter(dashboardActivityContext, data[0].getTable());
                             rviData.setAdapter(mAdapter);
                         }
                         break;
@@ -157,7 +157,7 @@ public class HoldFragment extends BaseFragment {
         if (data != null) {
             tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
-            mAdapter = new HoldAdapter(dashboardActivityContext, data[0].getTable());
+            mAdapter = new KHoldAdapter(dashboardActivityContext, data[0].getTable());
             rviData.setAdapter(mAdapter);
         }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -174,7 +174,7 @@ public class HoldFragment extends BaseFragment {
         if (data != null) {
             tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(data[1].getAmount()));
-            mAdapter = new HoldAdapter(dashboardActivityContext, data[1].getTable());
+            mAdapter = new KHoldAdapter(dashboardActivityContext, data[1].getTable());
             rviData.setAdapter(mAdapter);
         }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount_red));
@@ -191,7 +191,7 @@ public class HoldFragment extends BaseFragment {
         if (data != null) {
             tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[2].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(data[2].getAmount()));
-            mAdapter = new HoldAdapter(dashboardActivityContext, data[2].getTable());
+            mAdapter = new KHoldAdapter(dashboardActivityContext, data[2].getTable());
             rviData.setAdapter(mAdapter);
         }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount_red));
@@ -208,7 +208,7 @@ public class HoldFragment extends BaseFragment {
         if (data != null) {
             tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[3].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(data[3].getAmount()));
-            mAdapter = new HoldAdapter(dashboardActivityContext, data[3].getTable());
+            mAdapter = new KHoldAdapter(dashboardActivityContext, data[3].getTable());
             rviData.setAdapter(mAdapter);
         }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount_red));

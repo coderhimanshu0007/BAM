@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.Installation.DOAIRAdapter;
+import com.teamcomputers.bam.Adapters.Installation.KDOAIRAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.DOAIRModel;
 import com.teamcomputers.bam.Models.common.EventObject;
@@ -40,7 +40,7 @@ public class DOAIRFragment extends BaseFragment {
     @BindView(R.id.rviData)
     RecyclerView rviData;
 
-    private DOAIRAdapter mAdapter;
+    private KDOAIRAdapter mAdapter;
 
     @BindView(R.id.tviNoofInvoices)
     TextView tviNoofInvoices;
@@ -84,7 +84,7 @@ public class DOAIRFragment extends BaseFragment {
         if (data != null) {
             tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
-            mAdapter = new DOAIRAdapter(dashboardActivityContext, data[0].getTable());
+            mAdapter = new KDOAIRAdapter(dashboardActivityContext, data[0].getTable());
             rviData.setAdapter(mAdapter);
         }
         showProgress(ProgressDialogTexts.LOADING);
@@ -126,7 +126,7 @@ public class DOAIRFragment extends BaseFragment {
                         if (data != null) {
                             tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
                             tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
-                            mAdapter = new DOAIRAdapter(dashboardActivityContext, data[0].getTable());
+                            mAdapter = new KDOAIRAdapter(dashboardActivityContext, data[0].getTable());
                             rviData.setAdapter(mAdapter);
                         }
                         break;
@@ -149,7 +149,7 @@ public class DOAIRFragment extends BaseFragment {
         if (data != null) {
             tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(data[0].getAmount()));
-            mAdapter = new DOAIRAdapter(dashboardActivityContext, data[0].getTable());
+            mAdapter = new KDOAIRAdapter(dashboardActivityContext, data[0].getTable());
             rviData.setAdapter(mAdapter);
         }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -166,7 +166,7 @@ public class DOAIRFragment extends BaseFragment {
         if (data != null) {
             tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(data[1].getAmount()));
-            mAdapter = new DOAIRAdapter(dashboardActivityContext, data[1].getTable());
+            mAdapter = new KDOAIRAdapter(dashboardActivityContext, data[1].getTable());
             rviData.setAdapter(mAdapter);
         }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -183,7 +183,7 @@ public class DOAIRFragment extends BaseFragment {
         if (data != null) {
             tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[2].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(data[2].getAmount()));
-            mAdapter = new DOAIRAdapter(dashboardActivityContext, data[2].getTable());
+            mAdapter = new KDOAIRAdapter(dashboardActivityContext, data[2].getTable());
             rviData.setAdapter(mAdapter);
         }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -200,7 +200,7 @@ public class DOAIRFragment extends BaseFragment {
         if (data != null) {
             tviNoofInvoices.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[3].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(data[3].getAmount()));
-            mAdapter = new DOAIRAdapter(dashboardActivityContext, data[3].getTable());
+            mAdapter = new KDOAIRAdapter(dashboardActivityContext, data[3].getTable());
             rviData.setAdapter(mAdapter);
         }
         tviNoofInvoices.setTextColor(getResources().getColor(R.color.logistics_amount_red));

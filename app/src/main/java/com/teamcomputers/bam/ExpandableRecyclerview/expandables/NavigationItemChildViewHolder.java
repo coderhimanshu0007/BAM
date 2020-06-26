@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Activities.KDashboardActivity;
 import com.teamcomputers.bam.ExpandableRecyclerview.libmoduleExpandable.viewholder.ChildViewHolder;
 import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItem;
 import com.teamcomputers.bam.R;
@@ -37,7 +36,7 @@ public class NavigationItemChildViewHolder extends ChildViewHolder {
         childRootLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((KDashboardActivity) context).replaceFragment(navigationItem.getFragment(), new Bundle());
+                ((DashboardActivity) context).replaceFragment(navigationItem.getFragment(), new Bundle());
             }
         });
     }

@@ -83,7 +83,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="330dp"
                 android:layout_height="44dp"
                 android:layout_marginLeft="15dp"
@@ -141,9 +141,9 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </LinearLayout>-->
 
-            <!--<LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -214,7 +214,7 @@
 
                 </LinearLayout>
 
-            </LinearLayout>-->
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -222,7 +222,7 @@
                 android:layout_marginTop="12dp"
                 android:orientation="vertical">
 
-                <HorizontalScrollView
+                <!--<HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scrollbars="none">
@@ -339,15 +339,15 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="@color/color_heading" />
+                            android:background="@color/color_heading" />-->
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rviData"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:minHeight="200dp" />
-                    </LinearLayout>
-                </HorizontalScrollView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rviData"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:minHeight="200dp" />
+                <!--</LinearLayout>
+            </HorizontalScrollView>-->
             </LinearLayout>
 
         </LinearLayout>

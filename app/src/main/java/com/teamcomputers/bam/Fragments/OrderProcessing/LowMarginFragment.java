@@ -57,8 +57,8 @@ public class LowMarginFragment extends BaseFragment {
     RecyclerView rviData;
     //EventObject eventObjects;
 
-    private LowMarginAdapter mAdapter;
-    //private KLowMarginAdapter mAdapter;
+    //private LowMarginAdapter mAdapter;
+    private KLowMarginAdapter mAdapter;
     //private ArrayList<LinkedTreeMap> lowMarginArrayList0 = new ArrayList<>();
     //private ArrayList<LinkedTreeMap> lowMarginArrayList1 = new ArrayList<>();
 
@@ -90,8 +90,8 @@ public class LowMarginFragment extends BaseFragment {
         if (data != null) {
             tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
             tviAmounts.setText(BAMUtil.getRoundOffValue(Double.valueOf(data[0].getAmount())));
-            mAdapter = new LowMarginAdapter(dashboardActivityContext, data[0].getTable());
-            //mAdapter = new KLowMarginAdapter(dashboardActivityContext, data[0].getTable());
+            //mAdapter = new LowMarginAdapter(dashboardActivityContext, data[0].getTable());
+            mAdapter = new KLowMarginAdapter(dashboardActivityContext, data[0].getTable());
             rviData.setAdapter(mAdapter);
         }
         showProgress(ProgressDialogTexts.LOADING);
@@ -140,8 +140,8 @@ public class LowMarginFragment extends BaseFragment {
                         tviAmounts.setText(BAMUtil.getRoundOffValue((Double) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Amount")));
                         lowMarginArrayList0 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(0)).get("Table");
                         lowMarginArrayList1 = (ArrayList<LinkedTreeMap>) ((LinkedTreeMap) ((ArrayList) eventObjects.getObject()).get(1)).get("Table");*/
-                        mAdapter = new LowMarginAdapter(dashboardActivityContext, data[0].getTable());
-                        //mAdapter = new KLowMarginAdapter(dashboardActivityContext, data[0].getTable());
+                        //mAdapter = new LowMarginAdapter(dashboardActivityContext, data[0].getTable());
+                        mAdapter = new KLowMarginAdapter(dashboardActivityContext, data[0].getTable());
                         rviData.setAdapter(mAdapter);
                         break;
                     case Events.GET_ORDERPROCESING_LOWMARGIN_UNSUCCESSFULL:
@@ -160,8 +160,8 @@ public class LowMarginFragment extends BaseFragment {
         LowMarginModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getLMData();
         tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[0].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue(Double.valueOf(data[0].getAmount())));
-        mAdapter = new LowMarginAdapter(dashboardActivityContext, data[0].getTable());
-        //mAdapter = new KLowMarginAdapter(dashboardActivityContext, data[0].getTable());
+        //mAdapter = new LowMarginAdapter(dashboardActivityContext, data[0].getTable());
+        mAdapter = new KLowMarginAdapter(dashboardActivityContext, data[0].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofSO.setTextColor(getResources().getColor(R.color.logistics_amount));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
@@ -174,8 +174,8 @@ public class LowMarginFragment extends BaseFragment {
         LowMarginModel[] data = SharedPreferencesController.getInstance(dashboardActivityContext).getLMData();
         tviNoofSO.setText(BAMUtil.getStringInNoFormat(Double.valueOf(data[1].getInvoices())));
         tviAmounts.setText(BAMUtil.getRoundOffValue(Double.valueOf(data[1].getAmount())));
-        mAdapter = new LowMarginAdapter(dashboardActivityContext, data[1].getTable());
-        //mAdapter = new KLowMarginAdapter(dashboardActivityContext, data[1].getTable());
+        //mAdapter = new LowMarginAdapter(dashboardActivityContext, data[1].getTable());
+        mAdapter = new KLowMarginAdapter(dashboardActivityContext, data[1].getTable());
         rviData.setAdapter(mAdapter);
         tviNoofSO.setTextColor(getResources().getColor(R.color.logistics_amount_red));
         tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
