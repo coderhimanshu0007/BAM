@@ -4,23 +4,24 @@ import com.teamcomputers.bam.Interface.KBAMConstant
 import com.teamcomputers.bam.Interface.KBaseRequester
 import com.teamcomputers.bam.KBAMApplication
 import com.teamcomputers.bam.Models.LoginModel
+import com.teamcomputers.bam.Models.WSModels.NewLoginModel
 import com.teamcomputers.bam.Models.common.EventObject
 import com.teamcomputers.bam.controllers.KHTTPOperationController
 import com.teamcomputers.bam.controllers.SharedPreferencesController
 import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
 
-class KLoginRequester(val tmcId: String, val password: String) : KBaseRequester {
+class KLoginRequester(val tmcId: String, val password: String, val deviceId: String) : KBaseRequester {
 
     override fun run() {
-        val apiResponse = KHTTPOperationController().loginUser(tmcId, password)
+        val apiResponse = KHTTPOperationController().loginUser(tmcId, password, deviceId)
         if (apiResponse != null) {
             if (apiResponse.responseCode == HttpURLConnection.HTTP_OK) {
                 //EventBus.getDefault().post(new EventObject(Events.USER_LOGIN_SUCCESSFUL, null));
                 if (apiResponse.response != null) {
-                    val loginModel = apiResponse.response as LoginModel
+                    val loginModel = apiResponse.response as NewLoginModel
                     SharedPreferencesController.getInstance(KBAMApplication.ctx).isUserLoggedIn = true
-                    SharedPreferencesController.getInstance(KBAMApplication.ctx).setUserProfile(loginModel)
+                    SharedPreferencesController.getInstance(KBAMApplication.ctx).setUserProfile(loginModel.getLogin())
                     EventBus.getDefault().post(EventObject(KBAMConstant.Events.LOGIN_SUCCESSFUL, null))
 
                 } else {

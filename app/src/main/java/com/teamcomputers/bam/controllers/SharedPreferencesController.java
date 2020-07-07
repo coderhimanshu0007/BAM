@@ -22,6 +22,7 @@ import com.teamcomputers.bam.Models.SPCSModel;
 import com.teamcomputers.bam.Models.SalesDataModel;
 import com.teamcomputers.bam.Models.SessionDataModel;
 import com.teamcomputers.bam.Models.SessionDetailsModel;
+import com.teamcomputers.bam.Models.Token;
 import com.teamcomputers.bam.Models.WIPModel;
 import com.teamcomputers.bam.Utils.BAMUtil;
 
@@ -174,6 +175,23 @@ public class SharedPreferencesController implements KBAMConstant {
 
     public void setUserProfile(LoginModel userProfile) {
         putString(Keys.USER_PROFILE.getLabel(), BAMUtil.toJson(userProfile));
+    }
+
+    public Token getToken() {
+        String json = getString(Keys.TOKEN.getLabel(), "");
+        return (Token) BAMUtil.fromJson(json, Token.class);
+    }
+
+    public void setToken(Token token) {
+        putString(Keys.TOKEN.getLabel(), BAMUtil.toJson(token));
+    }
+
+    public String getFireBaseToken() {
+        return getString(Keys.FIRE_BASE_TOKEN.getLabel(), "");
+    }
+
+    public void setFireBaseToken(String authToken) {
+        putString(Keys.FIRE_BASE_TOKEN.getLabel(), authToken);
     }
 
     public ActiveEmployeeAccessModel getActiveEmployeeAccess() {
@@ -406,6 +424,8 @@ public class SharedPreferencesController implements KBAMConstant {
 
 
     private enum Keys {
+        FIRE_BASE_TOKEN("FIRE_BASE_TOKEN"),
+        TOKEN("TOKEN"),
         USERID("USERID"),
         USER_PROFILE("USER_PROFILE"),
         ACTIVE_EMPLOYEE_ACCESS("ACTIVE_EMPLOYEE_ACCESS"),

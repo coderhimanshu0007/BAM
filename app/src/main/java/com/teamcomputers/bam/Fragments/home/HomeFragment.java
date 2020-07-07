@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.BAMApplication;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.ActiveEmployeeAccessModel;
 import com.teamcomputers.bam.Models.LoginModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
@@ -24,6 +26,7 @@ import com.teamcomputers.bam.controllers.SharedPreferencesController;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
@@ -35,6 +38,19 @@ public class HomeFragment extends BaseFragment {
     private DashboardActivity dashboardActivityContext;
     private HomeViewModel homeViewModel;
     String toolbarTitle = "";
+    ActiveEmployeeAccessModel activeEmployeeAccessModel;
+    @BindView(R.id.llaOrderProcssing)
+    LinearLayout llaOrderProcessing;
+    @BindView(R.id.llaPurchase)
+    LinearLayout llaPurchase;
+    @BindView(R.id.llaLogistics)
+    LinearLayout llaLogistics;
+    @BindView(R.id.llaInstallation)
+    LinearLayout llaInstallation;
+    @BindView(R.id.llaCollection)
+    LinearLayout llaCollection;
+    @BindView(R.id.llaWS)
+    LinearLayout llaWS;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -71,6 +87,33 @@ public class HomeFragment extends BaseFragment {
                 text_hello.setText("Hello " + name);
             }
         });
+
+        llaOrderProcessing.setVisibility(View.VISIBLE);
+        llaPurchase.setVisibility(View.VISIBLE);
+        llaLogistics.setVisibility(View.VISIBLE);
+        llaInstallation.setVisibility(View.VISIBLE);
+        llaCollection.setVisibility(View.VISIBLE);
+        llaWS.setVisibility(View.VISIBLE);
+
+        activeEmployeeAccessModel = SharedPreferencesController.getInstance(dashboardActivityContext).getActiveEmployeeAccess();
+        if (activeEmployeeAccessModel.getData().getOrderProcessingModule() == 1) {
+            llaOrderProcessing.setVisibility(View.GONE);
+        }
+        if (activeEmployeeAccessModel.getData().getPurchaseModule() == 1) {
+            llaPurchase.setVisibility(View.GONE);
+        }
+        if (activeEmployeeAccessModel.getData().getLogisticsModule() == 1) {
+            llaLogistics.setVisibility(View.GONE);
+        }
+        if (activeEmployeeAccessModel.getData().getInstallationModule() == 1) {
+            llaInstallation.setVisibility(View.GONE);
+        }
+        if (activeEmployeeAccessModel.getData().getCollectionModule() == 1) {
+            llaCollection.setVisibility(View.GONE);
+        }
+        if (activeEmployeeAccessModel.getData().getSalesModule() == 1) {
+            llaWS.setVisibility(View.GONE);
+        }
 
         return rootView;
     }
@@ -133,32 +176,44 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick(R.id.rlaOrderProcessing)
     public void OrderProcessing() {
-        EventBus.getDefault().post(new EventObject(Events.ORDER_PROCESSING, null));
+        if (activeEmployeeAccessModel.getData().getOrderProcessingModule() == 1) {
+            EventBus.getDefault().post(new EventObject(Events.ORDER_PROCESSING, null));
+        }
     }
 
     @OnClick(R.id.rlaPurchase)
     public void Purchase() {
-        EventBus.getDefault().post(new EventObject(Events.PURCHASE, null));
+        if (activeEmployeeAccessModel.getData().getPurchaseModule() == 1) {
+            EventBus.getDefault().post(new EventObject(Events.PURCHASE, null));
+        }
     }
 
     @OnClick(R.id.rlaLogistics)
     public void Logistics() {
-        EventBus.getDefault().post(new EventObject(Events.LOGISTICS, null));
+        if (activeEmployeeAccessModel.getData().getLogisticsModule() == 1) {
+            EventBus.getDefault().post(new EventObject(Events.LOGISTICS, null));
+        }
     }
 
     @OnClick(R.id.rlaInstallation)
     public void Installation() {
-        EventBus.getDefault().post(new EventObject(Events.INSTALLATION, null));
+        if (activeEmployeeAccessModel.getData().getInstallationModule() == 1) {
+            EventBus.getDefault().post(new EventObject(Events.INSTALLATION, null));
+        }
     }
 
     @OnClick(R.id.rlaCollection)
     public void Collection() {
-        EventBus.getDefault().post(new EventObject(Events.COLLECTION, null));
+        if (activeEmployeeAccessModel.getData().getCollectionModule() == 1) {
+            EventBus.getDefault().post(new EventObject(Events.COLLECTION, null));
+        }
     }
 
     @OnClick(R.id.rlaWS)
     public void WS() {
-        EventBus.getDefault().post(new EventObject(Events.WS, null));
+        if (activeEmployeeAccessModel.getData().getSalesModule() == 1) {
+            EventBus.getDefault().post(new EventObject(Events.WS, null));
+        }
     }
 
     @OnClick(R.id.rlaOthers)

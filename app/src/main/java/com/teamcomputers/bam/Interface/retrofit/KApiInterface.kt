@@ -1,6 +1,7 @@
 package com.teamcomputers.bam.Interface.retrofit
 
 import com.teamcomputers.bam.Models.*
+import com.teamcomputers.bam.Models.WSModels.NewLoginModel
 import retrofit2.Call
 import retrofit2.http.*
 import java.util.*
@@ -22,7 +23,7 @@ interface KApiInterface {
     @POST("LoginNew")
     fun loginNewUser(@Field("LoginId") id: String,
                      @Field("Password") password: String,
-                     @Field("DeviceId") deviceId: String): Call<LoginModel>
+                     @Field("DeviceId") deviceId: String): Call<NewLoginModel>
 
     // ActiveEmployeeAccess
     @FormUrlEncoded

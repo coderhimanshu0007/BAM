@@ -7,6 +7,7 @@ import com.teamcomputers.bam.KBAMApplication
 import com.teamcomputers.bam.Models.AppVersionResponse
 import com.teamcomputers.bam.Models.LoginModel
 import com.teamcomputers.bam.Models.SessionDetailsModel
+import com.teamcomputers.bam.Models.WSModels.NewLoginModel
 import com.teamcomputers.bam.webservice.ApiResponse
 import com.teamcomputers.bam.webservice.KConnectionUtils
 import java.util.*
@@ -38,8 +39,8 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.getCurrentAppVersion()?.let { KConnectionUtils().execute<ArrayList<AppVersionResponse>>(it) }
     }
 
-    fun loginUser(tmcId: String, password: String): ApiResponse<*>? {
-        return getApiInterface()?.loginUser(tmcId, password)?.let { KConnectionUtils().execute<LoginModel>(it) }
+    fun loginUser(tmcId: String, password: String, deviceId: String): ApiResponse<*>? {
+        return getApiInterface()?.loginNewUser(tmcId, password, deviceId)?.let { KConnectionUtils().execute<NewLoginModel>(it) }
     }
 
     // Order Processing

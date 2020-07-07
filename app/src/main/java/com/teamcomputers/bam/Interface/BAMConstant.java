@@ -24,6 +24,7 @@ public interface BAMConstant {
 
     interface Constants {
         String FINISH = "finish";
+        String TAG = "Timer";
     }
 
     interface DateFormat {

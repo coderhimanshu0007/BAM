@@ -921,7 +921,7 @@ public class OSOInvoiceFragment extends BaseFragment {
             }
             tviR2Name.setText(spProfile.getName());
             tviSOAmount.setText(KBAMUtils.getRoundOffValue(spProfile.getSoAmount()));
-        } else if (cPos == 4) {
+        } else if (cPos == 2) {
             position = customerProfile.getPosition();
             if (position == 0) {
                 llProductLayout.setBackgroundColor(getResources().getColor(R.color.color_first_item_value));

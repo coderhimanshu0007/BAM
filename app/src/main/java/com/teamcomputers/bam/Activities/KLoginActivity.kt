@@ -1,10 +1,15 @@
 package com.teamcomputers.bam.Activities
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.telephony.TelephonyManager
 import androidx.core.app.ActivityCompat
+import com.google.firebase.iid.FirebaseInstanceId
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -24,10 +29,14 @@ import com.teamcomputers.bam.Utils.KBAMUtils
 import com.teamcomputers.bam.controllers.SharedPreferencesController
 import kotlinx.android.synthetic.main.activity_login.*
 import org.greenrobot.eventbus.Subscribe
+import java.util.*
+
 
 class KLoginActivity : KBaseActivity() {
     internal var save = false
     internal var show = false
+    internal var deviceId: String = ""
+    var telephonyManager: TelephonyManager? = null
     private var userProfile: LoginModel? = null
     override fun getLayout(): Int {
         return R.layout.activity_login
@@ -106,7 +115,8 @@ class KLoginActivity : KBaseActivity() {
         Dexter.withActivity(this)
                 .withPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_PHONE_STATE)
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport) {
                         // check if all permissions are granted
@@ -138,8 +148,29 @@ class KLoginActivity : KBaseActivity() {
 
     }
 
+    @SuppressLint("MissingPermission")
     fun submit() {
         KBAMUtils?.hideSoftKeyboard(this)
+        SharedPreferencesController.getInstance(
+                BAMApplication.getInstance()).setFireBaseToken(
+                FirebaseInstanceId.getInstance().token)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+            /*
+        * getDeviceId() returns the unique device ID.
+        * For example,the IMEI for GSM and the MEID or ESN for CDMA phones.
+        */
+            deviceId = telephonyManager?.getDeviceId().toString()
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            deviceId = UUID.randomUUID().toString()
+        }
+        /*
+        * getSubscriberId() returns the unique subscriber ID,
+        * For example, the IMSI for a GSM phone.
+        */
+        //val subscriberId = telephonyManager?.getSubscriberId()
         if (!validate()) {
             return
         }
@@ -188,7 +219,8 @@ class KLoginActivity : KBaseActivity() {
             appUrl = `object`.appVersionUrl
             showVersionCheck()
         } else {
-            BackgroundExecutor.getInstance().execute(KLoginRequester(txtUserName?.getText().toString(), txtPassword?.getText().toString()))
+            BackgroundExecutor.getInstance().execute(KLoginRequester(txtUserName?.getText().toString(), txtPassword?.getText().toString(), SharedPreferencesController.getInstance(
+                    BAMApplication.getInstance()).getFireBaseToken()))
         }
 
         //TextView textViewVersionInfo = (TextView) findViewById(R.id.textview_version_info);

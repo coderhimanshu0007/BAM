@@ -14,6 +14,9 @@ import com.teamcomputers.bam.Utils.BackgroundExecutor
 import com.teamcomputers.bam.Utils.KBAMUtils
 import com.teamcomputers.bam.controllers.SharedPreferencesController
 import java.util.*
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.os.Handler
 
 
 class OnClearFromRecentService : Service() {
@@ -23,7 +26,7 @@ class OnClearFromRecentService : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.d("ClearFromRecentService", "Service Started")
-        return Service.START_NOT_STICKY
+        return Service.START_STICKY
     }
 
     override fun onDestroy() {

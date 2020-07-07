@@ -25,6 +25,7 @@ import com.teamcomputers.bam.Models.SessionDetailsModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Collection.CollectionRefreshRequester;
+import com.teamcomputers.bam.Requesters.KSaveSessionDetailRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
 import com.teamcomputers.bam.controllers.SharedPreferencesController;
@@ -173,6 +174,29 @@ public class CollectionFragment extends BaseFragment {
         sessionDetailsModel.setData(sessionDataModelList);
         SharedPreferencesController.getInstance(dashboardActivityContext).setSessionDetail(sessionDetailsModel);
 
+        uploadData();
+    }
+
+    private void uploadData() {
+        SessionDetailsModel sessionDetailsModel = SharedPreferencesController.getInstance(dashboardActivityContext).getSessionDetail();
+        if (null != sessionDetailsModel) {
+            String session = "{\n\t\"SessionId\":" + sessionDetailsModel.getSessionId() + ",\n\t\"Data\":[\n\t\t";
+            for (int i = 0; i < sessionDetailsModel.getData().size(); i++) {
+                String data = "{\n\t\t\t\"Module\":\"" + sessionDetailsModel.getData().get(i).getModule() + "\"," +
+                        "\n\t\t\t\"Page\":\"" + sessionDetailsModel.getData().get(i).getPage() + "\"," +
+                        "\n\t\t\t\"LogInTimeStamp\":\"" + sessionDetailsModel.getData().get(i).getLogInTimeStamp() + "\"," +
+                        "\n\t\t\t\"LogOutTimeStamp\":\"" + sessionDetailsModel.getData().get(i).getLogOutTimeStamp() + "\"," +
+                        "\n\t\t\t\"OS\":\"" + sessionDetailsModel.getData().get(i).getOs() + "\"," +
+                        "\n\t\t\t\"Sharing\":" + sessionDetailsModel.getData().get(i).getSharing() + "\n\t\t}";
+                if (i > 0) {
+                    session = session + "," + data;
+                } else {
+                    session = session + data;
+                }
+            }
+            session = session + "\n\t]\n}";
+            BackgroundExecutor.getInstance().execute(new KSaveSessionDetailRequester(session));
+        }
     }
 
     @Override

@@ -219,7 +219,7 @@ public class LoginActivity extends BaseActivity {
         if (Float.parseFloat(object.getAppVersionID()) > Float.parseFloat(versionName)) {
             showVersionCheck();
         } else {
-            BackgroundExecutor.getInstance().execute(new KLoginRequester(txtUserName.getText().toString(), txtPassword.getText().toString()));
+            BackgroundExecutor.getInstance().execute(new KLoginRequester(txtUserName.getText().toString(), txtPassword.getText().toString(), ""));
         }
 
         //TextView textViewVersionInfo = (TextView) findViewById(R.id.textview_version_info);

@@ -44,6 +44,7 @@ class KSaveSessionDetailRequester(val session: String) : KBaseRequester {
             .build()
 
     override fun run() {
+        Log.e("Input Text", session)
         var apiResponse = client.newCall(request).execute()
         //val apiResponse = KHTTPOperationController().saveSessionDetail(saveSessionDetailsModel)
         if (apiResponse != null) {
@@ -51,11 +52,13 @@ class KSaveSessionDetailRequester(val session: String) : KBaseRequester {
                 if (apiResponse != null) {
                     SharedPreferencesController.getInstance(BAMApplication.getInstance()).sessionDetail = null
                     //EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_SAVE_SESSION_DETAIL_SUCCESSFUL, null))
-                    Log.d("Session", "Saved");
+                    Log.e("Session", "Saved")
                 } else {
                     //EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_SAVE_SESSION_DETAIL_UNSUCCESSFUL, null))
-                    Log.d("Session", "Failed");
+                    Log.e("Session", "Failed")
                 }
+            } else if (apiResponse.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
+                Log.e("Session", "Not Save")
             }
         } else {
             EventBus.getDefault().post(EventObject(KBAMConstant.Events.NO_INTERNET_CONNECTION, null))
