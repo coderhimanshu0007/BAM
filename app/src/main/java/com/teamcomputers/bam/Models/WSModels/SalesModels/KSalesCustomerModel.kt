@@ -101,6 +101,7 @@ class KSalesCustomerModel {
 
     @SuppressLint("ParcelCreator")
     inner class Data :Parcelable{
+        @SuppressLint("NewApi")
         override fun writeToParcel(dest: Parcel?, flags: Int) {
             this.userId?.let { dest?.writeString(it) }
             this.customerName?.let { dest?.writeString(it) }
@@ -111,6 +112,7 @@ class KSalesCustomerModel {
             this.open?.let { dest?.writeInt(it) }
             this.position?.let { dest?.writeInt(it) }
             this.stateCodeWise?.let { dest?.writeArray(arrayOf(it)) }
+            this.isSelected?.let { dest?.writeBoolean(it) }
         }
 
         override fun describeContents(): Int {
@@ -144,6 +146,9 @@ class KSalesCustomerModel {
         @SerializedName("StateCodeWise")
         @Expose
         var stateCodeWise: List<StateCodeWise>? = null
+        @SerializedName("isSelected")
+        @Expose
+        var isSelected: Boolean = false
     }
 
     inner class StateCodeWise {

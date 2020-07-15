@@ -33,11 +33,13 @@ class KPSOProductModel {
 
     @SuppressLint("ParcelCreator")
     inner class Datum : Parcelable {
+        @SuppressLint("NewApi")
         override fun writeToParcel(dest: Parcel?, flags: Int) {
             this.code?.let { dest?.writeString(it) }
             this.productName?.let { dest?.writeString(it) }
             this.sOAmount?.let { dest?.writeDouble(it) }
             this.position?.let { dest?.writeInt(it) }
+            this.isSelected?.let { dest?.writeBoolean(it) }
         }
 
         override fun describeContents(): Int {
@@ -56,6 +58,9 @@ class KPSOProductModel {
         @SerializedName("Position")
         @Expose
         var position: Int? = null
+        @SerializedName("isSelected")
+        @Expose
+        var isSelected: Boolean = false
 
     }
 

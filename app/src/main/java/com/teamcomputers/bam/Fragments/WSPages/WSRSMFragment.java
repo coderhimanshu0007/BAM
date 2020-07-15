@@ -15,11 +15,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesRSMFilterAdapter;
 import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesRSMAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesCustomerModel;
@@ -67,7 +69,7 @@ public class WSRSMFragment extends BaseFragment {
 
     String toolbarTitle = "";
 
-    String userId = "", level = "", fiscalYear = "";
+    String userId = "", level = "", fiscalYear = "", type = "";
     @BindView(R.id.txtSearch)
     EditText txtSearch;
     @BindView(R.id.tviFiscalYear)
@@ -122,7 +124,7 @@ public class WSRSMFragment extends BaseFragment {
     RecyclerView rviRSM;
     //private NewRSMAdapter rsmAdapter;
     private KSalesRSMAdapter rsmAdapter;
-    private int pos = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0, bar = 0;
+    private int pos = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0, bar = 0, filterSelectedPos = 0;
     boolean fromSP, fromCustomer, fromProduct, search = false, selectYear = false;
 
     //FullSalesModel spData;
@@ -130,6 +132,7 @@ public class WSRSMFragment extends BaseFragment {
     KSalesRSMModel.Data selectedRSMData, spProfile;
     KSalesRSMModel.Filter rsmFilterData;
     List<KSalesRSMModel.Data> rsmDataList = new ArrayList<>();
+    List<KSalesRSMModel.Data> filterRSMList = new ArrayList<>();
     KSalesCustomerModel.Data customerProfile;
     KSalesProductModel.Data productProfile;
     //CustomSpinnerAdapter customSpinnerAdapter;
@@ -232,6 +235,11 @@ public class WSRSMFragment extends BaseFragment {
                             JSONObject jsonObject = new JSONObject(BAMUtil.replaceWSDataResponse(eventObject.getObject().toString()));
                             RSMdata = (KSalesRSMModel) BAMUtil.fromJson(String.valueOf(jsonObject), KSalesRSMModel.class);
                             rsmDataList = RSMdata.getData();
+                            for (int x = 0; x < rsmDataList.size(); x++) {
+                                if (rsmDataList.get(x).getName().equals("null")) {
+                                    rsmDataList.remove(x);
+                                }
+                            }
                             rsmFilterData = RSMdata.getFilter();
                             tviTarget.setText(BAMUtil.getRoundOffValue(rsmFilterData.getTargetYTD()));
                             tviActual.setText(BAMUtil.getRoundOffValue(rsmFilterData.getYtd()));
@@ -252,7 +260,8 @@ public class WSRSMFragment extends BaseFragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        initRSMData("YTD");
+                        type = "YTD";
+                        initRSMData();
                         dismissProgress();
                         break;
                     case Events.GET_RSM_LIST_UNSUCCESSFULL:
@@ -325,6 +334,16 @@ public class WSRSMFragment extends BaseFragment {
                         productDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.WS_PRODUCT_FRAGMENT, productDataBundle);
                         break;
+                    case Events.ITEM_SELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        rsmDataList.get(filterSelectedPos).setSelected(true);
+                        filterRSMList.add(rsmDataList.get(filterSelectedPos));
+                        break;
+                    case Events.ITEM_UNSELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        rsmDataList.get(filterSelectedPos).setSelected(false);
+                        filterRSMList.remove(rsmDataList.get(filterSelectedPos));
+                        break;
                 }
             }
         });
@@ -335,6 +354,11 @@ public class WSRSMFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnClick(R.id.iviFilter)
+    public void filter() {
+        showFilterDialog();
     }
 
     @OnTextChanged(R.id.txtSearch)
@@ -383,7 +407,8 @@ public class WSRSMFragment extends BaseFragment {
         } else if (bar >= 99) {
             pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
         }
-        initRSMData("YTD");
+        type = "YTD";
+        initRSMData();
         rsmAdapter.notifyDataSetChanged();
     }
 
@@ -407,7 +432,8 @@ public class WSRSMFragment extends BaseFragment {
         } else if (bar >= 99) {
             pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
         }
-        initRSMData("QTD");
+        type = "QTD";
+        initRSMData();
         rsmAdapter.notifyDataSetChanged();
     }
 
@@ -431,7 +457,8 @@ public class WSRSMFragment extends BaseFragment {
         } else if (bar >= 99) {
             pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
         }
-        initRSMData("MTD");
+        type = "MTD";
+        initRSMData();
         rsmAdapter.notifyDataSetChanged();
         /*if (type == 0) {
             initRSMData("MTD");
@@ -941,7 +968,70 @@ public class WSRSMFragment extends BaseFragment {
         }
     }
 
-    private void initRSMData(String type) {
+    AlertDialog alertDialog;
+
+    public void showFilterDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(dashboardActivityContext);
+// ...Irrelevant code for customizing the buttons and title
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.filter_dialog, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+
+        TextView tviDialogType = (TextView) dialogView.findViewById(R.id.tviDialogType);
+        ImageView iviCloseDialogType = (ImageView) dialogView.findViewById(R.id.iviCloseDialogType);
+
+        TextView tviApply = (TextView) dialogView.findViewById(R.id.tviApply);
+        TextView tviClear = (TextView) dialogView.findViewById(R.id.tviClear);
+
+        tviDialogType.setText("Apply Filter");
+
+        RecyclerView rviFilterList = (RecyclerView) dialogView.findViewById(R.id.rviFilterList);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(dashboardActivityContext);
+        rviFilterList.setLayoutManager(layoutManager);
+
+        KSalesRSMFilterAdapter filterAdapter = new KSalesRSMFilterAdapter(dashboardActivityContext, rsmDataList);
+        rviFilterList.setAdapter(filterAdapter);
+
+        tviApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                if(filterRSMList.size()>0) {
+                    rsmAdapter = new KSalesRSMAdapter(dashboardActivityContext, type, level, filterRSMList, fromSP, fromCustomer, fromProduct);
+                } else {
+                    filterRSMList.clear();
+                    rsmAdapter = new KSalesRSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
+                }
+                rviRSM.setAdapter(rsmAdapter);
+            }
+        });
+        tviClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                filterRSMList.clear();
+                for (int i = 0; i < rsmDataList.size(); i++) {
+                    rsmDataList.get(i).setSelected(false);
+                }
+                rsmAdapter = new KSalesRSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
+                rviRSM.setAdapter(rsmAdapter);
+            }
+        });
+
+        iviCloseDialogType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+            }
+        });
+
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void initRSMData() {
         //rsmAdapter = new NewRSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
         rsmAdapter = new KSalesRSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
         rviRSM.setAdapter(rsmAdapter);

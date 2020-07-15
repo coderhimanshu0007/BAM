@@ -34,6 +34,7 @@ class KSalesRSMModel {
 
     @SuppressLint("ParcelCreator")
     inner class Data() : Parcelable {
+        @SuppressLint("NewApi")
         override fun writeToParcel(dest: Parcel?, flags: Int) {
             this.name?.let { dest?.writeString(it) }
             this.tmc?.let { dest?.writeString(it) }
@@ -48,6 +49,7 @@ class KSalesRSMModel {
             this.qtdPercentage?.let { dest?.writeDouble(it) }
             this.ytdPercentage?.let { dest?.writeDouble(it) }
             this.position?.let { dest?.writeInt(it) }
+            this.isSelected?.let { dest?.writeBoolean(it) }
         }
 
         override fun describeContents(): Int {
@@ -93,7 +95,12 @@ class KSalesRSMModel {
         @SerializedName("Position")
         @Expose
         var position: Int = 0
+        @SerializedName("isSelected")
+        @Expose
+        var isSelected: Boolean = false
 
+
+        @SuppressLint("NewApi")
         constructor(parcel: Parcel) : this() {
             name = parcel.readString()
             tmc = parcel.readString()
@@ -108,6 +115,7 @@ class KSalesRSMModel {
             qtdPercentage = parcel.readValue(Double::class.java.classLoader) as? Double
             ytdPercentage = parcel.readValue(Double::class.java.classLoader) as? Double
             position = parcel.readInt()
+            isSelected = parcel.readBoolean()
         }
 
         /*companion object CREATOR : Parcelable.Creator<Data> {

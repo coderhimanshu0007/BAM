@@ -33,11 +33,13 @@ class KNRCustomerModel {
 
     @SuppressLint("ParcelCreator")
     inner class Datum :Parcelable{
+        @SuppressLint("NewApi")
         override fun writeToParcel(dest: Parcel?, flags: Int) {
             this.customerName?.let { dest?.writeString(it) }
             this.amount?.let { dest?.writeDouble(it) }
             this.position?.let { dest?.writeInt(it) }
             this.open?.let { dest?.writeInt(it) }
+            this.isSelected?.let { dest?.writeBoolean(it) }
         }
 
         override fun describeContents(): Int {
@@ -56,6 +58,9 @@ class KNRCustomerModel {
         @SerializedName("open")
         @Expose
         var open: Int = 0
+        @SerializedName("isSelected")
+        @Expose
+        var isSelected: Boolean = false
     }
 
 }

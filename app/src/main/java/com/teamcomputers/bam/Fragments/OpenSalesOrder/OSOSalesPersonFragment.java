@@ -13,11 +13,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSORSMFilterAdapter;
 import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOSPAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
@@ -109,12 +111,13 @@ public class OSOSalesPersonFragment extends BaseFragment {
     RecyclerView rviRSM;
     //private OSOSalesPersonAdapter adapter;
     private KPSOSPAdapter adapter;
-    private int type = 0, pos = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, soPos = 0, pPos = 0;
+    private int type = 0, pos = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, soPos = 0, pPos = 0, filterSelectedPos = 0;
     boolean fromRSM, fromCustomer, fromSO, fromProduct, search = false;
 
     KPSORSMModel spData;
     KPSORSMModel.Datum selectedSPData;
     List<KPSORSMModel.Datum> spDataList = new ArrayList<>();
+    List<KPSORSMModel.Datum> filterSalesList = new ArrayList<>();
     PSOFilter spFilterData;
     KPSOCustomerModel.Datum customerProfile;
     KPSORSMModel.Datum rsmProfile;
@@ -228,7 +231,7 @@ public class OSOSalesPersonFragment extends BaseFragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        initData("YTD");
+                        initData();
                         dismissProgress();
                         break;
                     case Events.GET_SALES_OSO_LIST_UNSUCCESSFULL:
@@ -372,6 +375,16 @@ public class OSOSalesPersonFragment extends BaseFragment {
                         rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.OSO_ACCOUNT_FRAGMENT, rsmDataBundle);
                         break;
+                    case Events.ITEM_SELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        spDataList.get(filterSelectedPos).setSelected(true);
+                        filterSalesList.add(spDataList.get(filterSelectedPos));
+                        break;
+                    case Events.ITEM_UNSELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        spDataList.get(filterSelectedPos).setSelected(false);
+                        filterSalesList.remove(spDataList.get(filterSelectedPos));
+                        break;
                 }
             }
         });
@@ -382,6 +395,11 @@ public class OSOSalesPersonFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnClick(R.id.iviFilter)
+    public void filter() {
+        showFilterDialog();
     }
 
     @OnTextChanged(R.id.txtSearch)
@@ -1026,9 +1044,73 @@ public class OSOSalesPersonFragment extends BaseFragment {
         }
     }
 
-    private void initData(String type) {
+    AlertDialog alertDialog;
+
+    public void showFilterDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(dashboardActivityContext);
+// ...Irrelevant code for customizing the buttons and title
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.filter_dialog, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+
+        TextView tviDialogType = (TextView) dialogView.findViewById(R.id.tviDialogType);
+        ImageView iviCloseDialogType = (ImageView) dialogView.findViewById(R.id.iviCloseDialogType);
+
+        TextView tviApply = (TextView) dialogView.findViewById(R.id.tviApply);
+        TextView tviClear = (TextView) dialogView.findViewById(R.id.tviClear);
+
+        tviDialogType.setText("Apply Filter");
+
+        RecyclerView rviFilterList = (RecyclerView) dialogView.findViewById(R.id.rviFilterList);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(dashboardActivityContext);
+        rviFilterList.setLayoutManager(layoutManager);
+
+        KPSORSMFilterAdapter filterAdapter = new KPSORSMFilterAdapter(dashboardActivityContext, spDataList);
+        rviFilterList.setAdapter(filterAdapter);
+
+        tviApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                if (filterSalesList.size() > 0) {
+                    adapter = new KPSOSPAdapter(dashboardActivityContext, level, filterSalesList, fromRSM, fromCustomer, fromSO, fromProduct);
+                } else {
+                    filterSalesList.clear();
+                    adapter = new KPSOSPAdapter(dashboardActivityContext, level, spDataList, fromRSM, fromCustomer, fromSO, fromProduct);
+                }
+                rviRSM.setAdapter(adapter);
+            }
+        });
+        tviClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                filterSalesList.clear();
+                for (int i = 0; i < spDataList.size(); i++) {
+                    spDataList.get(i).setSelected(false);
+                }
+                adapter = new KPSOSPAdapter(dashboardActivityContext, level, spDataList, fromRSM, fromCustomer, fromSO, fromProduct);
+                rviRSM.setAdapter(adapter);
+            }
+        });
+
+
+        iviCloseDialogType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+            }
+        });
+
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void initData() {
         //adapter = new OSOSalesPersonAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromSO);
-        adapter = new KPSOSPAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromSO, fromProduct);
+        adapter = new KPSOSPAdapter(dashboardActivityContext, level, spDataList, fromRSM, fromCustomer, fromSO, fromProduct);
         rviRSM.setAdapter(adapter);
     }
 

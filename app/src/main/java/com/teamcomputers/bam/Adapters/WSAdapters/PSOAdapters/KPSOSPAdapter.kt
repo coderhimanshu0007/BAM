@@ -18,7 +18,7 @@ import com.teamcomputers.bam.Utils.BAMUtil
 import org.greenrobot.eventbus.EventBus
 import java.util.ArrayList
 
-class KPSOSPAdapter(val mContext: DashboardActivity, val type: String, val level: String, val dataList: List<KPSORSMModel.Datum>, val fromRSM: Boolean, val fromCustomer: Boolean, val fromSO: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KPSOSPAdapter.ViewHolder>(), Filterable {
+class KPSOSPAdapter(val mContext: DashboardActivity, val level: String, val dataList: List<KPSORSMModel.Datum>, val fromRSM: Boolean, val fromCustomer: Boolean, val fromSO: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KPSOSPAdapter.ViewHolder>(), Filterable {
     private var dataListFiltered: List<KPSORSMModel.Datum>? = dataList
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

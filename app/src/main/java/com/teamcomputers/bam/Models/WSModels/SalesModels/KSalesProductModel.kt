@@ -32,6 +32,7 @@ class KSalesProductModel {
 
     @SuppressLint("ParcelCreator")
     inner class Data : Parcelable {
+        @SuppressLint("NewApi")
         override fun writeToParcel(dest: Parcel?, flags: Int) {
             this.name?.let { dest?.writeString(it) }
             this.code?.let { dest?.writeString(it) }
@@ -46,6 +47,7 @@ class KSalesProductModel {
             this.qtdPercentage?.let { dest?.writeDouble(it) }
             this.ytdPercentage?.let { dest?.writeDouble(it) }
             this.position?.let { dest?.writeInt(it) }
+            this.isSelected?.let { dest?.writeBoolean(it) }
         }
 
         override fun describeContents(): Int {
@@ -91,6 +93,9 @@ class KSalesProductModel {
         @SerializedName("Position")
         @Expose
         var position: Int = 0
+        @SerializedName("isSelected")
+        @Expose
+        var isSelected: Boolean = false
 
     }
 

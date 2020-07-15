@@ -15,11 +15,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
+import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesRSMFilterAdapter;
 import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesSPAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.AccountsFragment;
@@ -74,7 +76,7 @@ public class WSSalesPersonFragment extends BaseFragment {
     KSalesProductModel.Data productProfile;
 
     String toolbarTitle = "";
-    String userId = "", level = "", fiscalYear = "";
+    String userId = "", level = "", fiscalYear = "", type = "";
     @BindView(R.id.txtSearch)
     EditText txtSearch;
     @BindView(R.id.tviFiscalYear)
@@ -129,7 +131,7 @@ public class WSSalesPersonFragment extends BaseFragment {
     RecyclerView rviRSM;
     //private NewSalesPersonAdapter adapter;
     private KSalesSPAdapter adapter;
-    private int pos = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0, bar = 0;
+    private int pos = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0, bar = 0, filterSelectedPos = 0;
     boolean fromRSM, fromCustomer, fromProduct, search = false, selectYear = false;
 
     //List<FullSalesModel> spDataList = new ArrayList<>();
@@ -137,6 +139,7 @@ public class WSSalesPersonFragment extends BaseFragment {
     KSalesRSMModel.Data selectedSPData;
     KSalesRSMModel.Filter spFilterData;
     List<KSalesRSMModel.Data> spDataList = new ArrayList<>();
+    List<KSalesRSMModel.Data> filterRSMList = new ArrayList<>();
 
     //CustomSpinnerAdapter customSpinnerAdapter;
 
@@ -294,7 +297,8 @@ public class WSSalesPersonFragment extends BaseFragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        initData("YTD");
+                        type = "YTD";
+                        initData();
                         dismissProgress();
                         break;
                     case Events.GET_SALES_LIST_UNSUCCESSFULL:
@@ -403,6 +407,16 @@ public class WSSalesPersonFragment extends BaseFragment {
                         rsmDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.ACCOUNT_FRAGMENT, rsmDataBundle);
                         break;
+                    case Events.ITEM_SELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        spDataList.get(filterSelectedPos).setSelected(true);
+                        filterRSMList.add(spDataList.get(filterSelectedPos));
+                        break;
+                    case Events.ITEM_UNSELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        spDataList.get(filterSelectedPos).setSelected(false);
+                        filterRSMList.remove(spDataList.get(filterSelectedPos));
+                        break;
                 }
             }
         });
@@ -413,6 +427,11 @@ public class WSSalesPersonFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnClick(R.id.iviFilter)
+    public void filter() {
+        showFilterDialog();
     }
 
     @OnTextChanged(R.id.txtSearch)
@@ -453,7 +472,8 @@ public class WSSalesPersonFragment extends BaseFragment {
         } else if (bar >= 99) {
             pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
         }
-        initData("YTD");
+        type = "YTD";
+        initData();
         adapter.notifyDataSetChanged();
     }
 
@@ -479,7 +499,8 @@ public class WSSalesPersonFragment extends BaseFragment {
         } else if (bar >= 99) {
             pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
         }
-        initData("QTD");
+        type = "QTD";
+        initData();
         adapter.notifyDataSetChanged();
     }
 
@@ -505,7 +526,8 @@ public class WSSalesPersonFragment extends BaseFragment {
         } else if (bar >= 99) {
             pBar.getProgressDrawable().setColorFilter(dashboardActivityContext.getResources().getColor(R.color.color_progress_end), PorterDuff.Mode.SRC_IN);
         }
-        initData("MTD");
+        type = "MTD";
+        initData();
         adapter.notifyDataSetChanged();
     }
 
@@ -1014,7 +1036,70 @@ public class WSSalesPersonFragment extends BaseFragment {
         }
     }
 
-    private void initData(String type) {
+    AlertDialog alertDialog;
+
+    public void showFilterDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(dashboardActivityContext);
+// ...Irrelevant code for customizing the buttons and title
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.filter_dialog, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+
+        TextView tviDialogType = (TextView) dialogView.findViewById(R.id.tviDialogType);
+        ImageView iviCloseDialogType = (ImageView) dialogView.findViewById(R.id.iviCloseDialogType);
+
+        TextView tviApply = (TextView) dialogView.findViewById(R.id.tviApply);
+        TextView tviClear = (TextView) dialogView.findViewById(R.id.tviClear);
+
+        tviDialogType.setText("Apply Filter");
+
+        RecyclerView rviFilterList = (RecyclerView) dialogView.findViewById(R.id.rviFilterList);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(dashboardActivityContext);
+        rviFilterList.setLayoutManager(layoutManager);
+
+        KSalesRSMFilterAdapter filterAdapter = new KSalesRSMFilterAdapter(dashboardActivityContext, spDataList);
+        rviFilterList.setAdapter(filterAdapter);
+
+        tviApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                if (filterRSMList.size() > 0) {
+                    adapter = new KSalesSPAdapter(dashboardActivityContext, type, level, filterRSMList, fromRSM, fromCustomer, fromProduct);
+                } else {
+                    filterRSMList.clear();
+                    adapter = new KSalesSPAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromProduct);
+                }
+                rviRSM.setAdapter(adapter);
+            }
+        });
+        tviClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                filterRSMList.clear();
+                for (int i = 0; i < spDataList.size(); i++) {
+                    spDataList.get(i).setSelected(false);
+                }
+                adapter = new KSalesSPAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromProduct);
+                rviRSM.setAdapter(adapter);
+            }
+        });
+
+        iviCloseDialogType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+            }
+        });
+
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void initData() {
         //adapter = new NewSalesPersonAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromProduct);
         adapter = new KSalesSPAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromProduct);
         rviRSM.setAdapter(adapter);

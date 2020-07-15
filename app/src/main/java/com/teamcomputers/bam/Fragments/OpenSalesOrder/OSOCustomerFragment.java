@@ -13,12 +13,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOCustomerAdapter;
+import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOCustomerFilterAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel;
@@ -106,11 +108,12 @@ public class OSOCustomerFragment extends BaseFragment {
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
     private KPSOCustomerAdapter adapter;
-    private int pos = 0, rsmPos = 0, spPos = 0, cPos = 0, soPos = 0, pPos = 0;
+    private int pos = 0, rsmPos = 0, spPos = 0, cPos = 0, soPos = 0, pPos = 0, filterSelectedPos = 0;
 
     KPSOCustomerModel customerData;
     KPSOCustomerModel.Datum selectedCustomerData;
     List<KPSOCustomerModel.Datum> customerDataList = new ArrayList<>();
+    List<KPSOCustomerModel.Datum> filterCustomerList = new ArrayList<>();
     PSOFilter customerFilterData;
 
     KPSORSMModel.Datum rsmProfile, salesProfile;
@@ -395,6 +398,16 @@ public class OSOCustomerFragment extends BaseFragment {
                         customerBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.OSO_ACCOUNT_FRAGMENT, customerBundle);
                         break;
+                    case Events.ITEM_SELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        customerDataList.get(filterSelectedPos).setSelected(true);
+                        filterCustomerList.add(customerDataList.get(filterSelectedPos));
+                        break;
+                    case Events.ITEM_UNSELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        customerDataList.get(filterSelectedPos).setSelected(false);
+                        filterCustomerList.remove(customerDataList.get(filterSelectedPos));
+                        break;
                 }
             }
         });
@@ -405,6 +418,11 @@ public class OSOCustomerFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnClick(R.id.iviFilter)
+    public void filter() {
+        showFilterDialog();
     }
 
     @OnTextChanged(R.id.txtSearch)
@@ -953,6 +971,69 @@ public class OSOCustomerFragment extends BaseFragment {
         } else if (soPos == 1) {
             tviR1Name.setText(soProfile.getSoNumber());
         }
+    }
+
+    AlertDialog alertDialog;
+
+    public void showFilterDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(dashboardActivityContext);
+// ...Irrelevant code for customizing the buttons and title
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.filter_dialog, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+
+        TextView tviDialogType = (TextView) dialogView.findViewById(R.id.tviDialogType);
+        ImageView iviCloseDialogType = (ImageView) dialogView.findViewById(R.id.iviCloseDialogType);
+
+        TextView tviApply = (TextView) dialogView.findViewById(R.id.tviApply);
+        TextView tviClear = (TextView) dialogView.findViewById(R.id.tviClear);
+
+        tviDialogType.setText("Apply Filter");
+
+        RecyclerView rviFilterList = (RecyclerView) dialogView.findViewById(R.id.rviFilterList);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(dashboardActivityContext);
+        rviFilterList.setLayoutManager(layoutManager);
+
+        KPSOCustomerFilterAdapter filterAdapter = new KPSOCustomerFilterAdapter(dashboardActivityContext, customerDataList);
+        rviFilterList.setAdapter(filterAdapter);
+
+        tviApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                if (filterCustomerList.size() > 0) {
+                    adapter = new KPSOCustomerAdapter(dashboardActivityContext, level, filterCustomerList, fromRSM, fromSP, fromSO, fromProduct);
+                } else {
+                    filterCustomerList.clear();
+                    adapter = new KPSOCustomerAdapter(dashboardActivityContext, level, customerDataList, fromRSM, fromSP, fromSO, fromProduct);
+                }
+                rviRSM.setAdapter(adapter);
+            }
+        });
+        tviClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                filterCustomerList.clear();
+                for (int i = 0; i < customerDataList.size(); i++) {
+                    customerDataList.get(i).setSelected(false);
+                }
+                adapter = new KPSOCustomerAdapter(dashboardActivityContext, level, customerDataList, fromRSM, fromSP, fromSO, fromProduct);
+                rviRSM.setAdapter(adapter);
+            }
+        });
+
+        iviCloseDialogType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+            }
+        });
+
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
     private void initData() {

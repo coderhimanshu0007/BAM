@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.to_product_recyclerview_layout.view.*
 import org.greenrobot.eventbus.EventBus
 import java.util.*
 
-class KTOProductAdapter(val mContext: DashboardActivity, val level: String, val type: String, val dataList: List<KNRProductModel.Datum>, val fromRSM: Boolean, val fromSP: Boolean, val fromCustomer: Boolean, val fromInvoice: Boolean) : RecyclerView.Adapter<KTOProductAdapter.ViewHolder>(), Filterable {
+class KTOProductAdapter(val mContext: DashboardActivity, val level: String, val dataList: List<KNRProductModel.Datum>, val fromRSM: Boolean, val fromSP: Boolean, val fromCustomer: Boolean, val fromInvoice: Boolean) : RecyclerView.Adapter<KTOProductAdapter.ViewHolder>(), Filterable {
     private var dataListFiltered: List<KNRProductModel.Datum>? = dataList
 
 

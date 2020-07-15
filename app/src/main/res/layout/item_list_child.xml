@@ -36,6 +36,6 @@
         android:gravity="start|center"
         android:text="@string/user_name"
         android:textColor="@color/text_color_login"
-        android:textSize="10sp" />
+        android:textSize="14sp" />
 
 </LinearLayout>

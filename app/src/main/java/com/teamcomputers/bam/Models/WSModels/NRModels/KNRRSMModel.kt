@@ -7,7 +7,6 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 
-
 class KNRRSMModel {
     @SerializedName("Data")
     @Expose
@@ -33,13 +32,15 @@ class KNRRSMModel {
     }
 
     @SuppressLint("ParcelCreator")
-    inner class Datum : Parcelable{
+    inner class Datum : Parcelable {
+        @SuppressLint("NewApi")
         override fun writeToParcel(dest: Parcel?, flags: Int) {
             this.name.let { dest?.writeString(it) }
             this.tmc.let { dest?.writeString(it) }
             this.dso?.let { dest?.writeDouble(it) }
             this.amount?.let { dest?.writeDouble(it) }
             this.position?.let { dest?.writeInt(it) }
+            this.isSelected?.let { dest?.writeBoolean(it) }
         }
 
         override fun describeContents(): Int {
@@ -61,6 +62,9 @@ class KNRRSMModel {
         @SerializedName("Position")
         @Expose
         var position: Int? = 0
+        @SerializedName("isSelected")
+        @Expose
+        var isSelected: Boolean = false
     }
 
 }

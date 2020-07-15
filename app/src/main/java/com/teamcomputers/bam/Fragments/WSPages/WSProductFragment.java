@@ -15,12 +15,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesProductAdapter;
+import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesProductFilterAdapter;
+import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesRSMAdapter;
+import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesRSMFilterAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesProductModel;
@@ -66,7 +70,7 @@ public class WSProductFragment extends BaseFragment {
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
 
-    String userId = "", level, fiscalYear = "";
+    String userId = "", level, fiscalYear = "", type = "";
     boolean fromRSM, fromSP, fromCustomer, search = false, selectYear = false;
     String toolbarTitle = "";
     @BindView(R.id.txtSearch)
@@ -131,7 +135,7 @@ public class WSProductFragment extends BaseFragment {
     RecyclerView rviRSM;
     //private NewProductAdapter adapter;
     private KSalesProductAdapter adapter;
-    private int position = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0, bar = 0;
+    private int position = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, pPos = 0, bar = 0, filterSelectedPos = 0;
     /*SalesCustomerModel customerProfile;
     FullSalesModel rsmProfile, spProfile;
     List<FullSalesModel> model = new ArrayList<>();*/
@@ -141,6 +145,7 @@ public class WSProductFragment extends BaseFragment {
     KSalesProductModel.Data selectedProductData;
     KSalesProductModel.Filter productFilterData;
     List<KSalesProductModel.Data> productDataList = new ArrayList<>();
+    List<KSalesProductModel.Data> filterProductList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -281,7 +286,8 @@ public class WSProductFragment extends BaseFragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        initData("YTD");
+                        type = "YTD";
+                        initData();
                         dismissProgress();
                         break;
                     case Events.GET_PRODUCT_LIST_UNSUCCESSFULL:
@@ -356,6 +362,16 @@ public class WSProductFragment extends BaseFragment {
                         spDataBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.WS_CUSTOMER_FRAGMENT, spDataBundle);
                         break;
+                    case Events.ITEM_SELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        productDataList.get(filterSelectedPos).setSelected(true);
+                        filterProductList.add(productDataList.get(filterSelectedPos));
+                        break;
+                    case Events.ITEM_UNSELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        productDataList.get(filterSelectedPos).setSelected(false);
+                        filterProductList.remove(productDataList.get(filterSelectedPos));
+                        break;
                 }
             }
         });
@@ -366,6 +382,11 @@ public class WSProductFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnClick(R.id.iviFilter)
+    public void filter() {
+        showFilterDialog();
     }
 
     @OnTextChanged(R.id.txtSearch)
@@ -390,7 +411,8 @@ public class WSProductFragment extends BaseFragment {
         viQTD.setVisibility(View.INVISIBLE);
         viMTD.setVisibility(View.INVISIBLE);
         YTDDisplay();
-        initData("YTD");
+        type = "YTD";
+        initData();
         adapter.notifyDataSetChanged();
     }
 
@@ -431,7 +453,8 @@ public class WSProductFragment extends BaseFragment {
         viQTD.setVisibility(View.VISIBLE);
         viMTD.setVisibility(View.INVISIBLE);
         QTDDisplay();
-        initData("QTD");
+        type = "YTD";
+        initData();
         adapter.notifyDataSetChanged();
     }
 
@@ -472,7 +495,8 @@ public class WSProductFragment extends BaseFragment {
         viQTD.setVisibility(View.INVISIBLE);
         viMTD.setVisibility(View.VISIBLE);
         MTDDisplay();
-        initData("MTD");
+        type = "MTD";
+        initData();
         adapter.notifyDataSetChanged();
     }
 
@@ -1059,7 +1083,70 @@ public class WSProductFragment extends BaseFragment {
         }
     }
 
-    private void initData(String type) {
+    AlertDialog alertDialog;
+
+    public void showFilterDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(dashboardActivityContext);
+// ...Irrelevant code for customizing the buttons and title
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.filter_dialog, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+
+        TextView tviDialogType = (TextView) dialogView.findViewById(R.id.tviDialogType);
+        ImageView iviCloseDialogType = (ImageView) dialogView.findViewById(R.id.iviCloseDialogType);
+
+        TextView tviApply = (TextView) dialogView.findViewById(R.id.tviApply);
+        TextView tviClear = (TextView) dialogView.findViewById(R.id.tviClear);
+
+        tviDialogType.setText("Apply Filter");
+
+        RecyclerView rviFilterList = (RecyclerView) dialogView.findViewById(R.id.rviFilterList);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(dashboardActivityContext);
+        rviFilterList.setLayoutManager(layoutManager);
+
+        KSalesProductFilterAdapter filterAdapter = new KSalesProductFilterAdapter(dashboardActivityContext, productDataList);
+        rviFilterList.setAdapter(filterAdapter);
+
+        tviApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                if (filterProductList.size() > 0) {
+                    adapter = new KSalesProductAdapter(dashboardActivityContext, level, type, filterProductList, fromRSM, fromSP, fromCustomer);
+                } else {
+                    filterProductList.clear();
+                    adapter = new KSalesProductAdapter(dashboardActivityContext, level, type, productDataList, fromRSM, fromSP, fromCustomer);
+                }
+                rviRSM.setAdapter(adapter);
+            }
+        });
+        tviClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                filterProductList.clear();
+                for (int i = 0; i < productDataList.size(); i++) {
+                    productDataList.get(i).setSelected(false);
+                }
+                adapter = new KSalesProductAdapter(dashboardActivityContext, level, type, productDataList, fromRSM, fromSP, fromCustomer);
+                rviRSM.setAdapter(adapter);
+            }
+        });
+
+        iviCloseDialogType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+            }
+        });
+
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void initData() {
         //adapter = new NewProductAdapter(dashboardActivityContext, level, type, model, fromRSM, fromSP, fromCustomer);
         adapter = new KSalesProductAdapter(dashboardActivityContext, level, type, productDataList, fromRSM, fromSP, fromCustomer);
         rviRSM.setAdapter(adapter);

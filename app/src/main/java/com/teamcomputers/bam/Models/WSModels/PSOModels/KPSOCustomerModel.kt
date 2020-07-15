@@ -33,11 +33,13 @@ class KPSOCustomerModel {
 
     @SuppressLint("ParcelCreator")
     inner class Datum : Parcelable {
+        @SuppressLint("NewApi")
         override fun writeToParcel(dest: Parcel?, flags: Int) {
             this.customerName?.let { dest?.writeString(it) }
             this.sOAmount?.let { dest?.writeDouble(it) }
             this.position?.let { dest?.writeInt(it) }
             this.open?.let { dest?.writeInt(it) }
+            this.isSelected?.let { dest?.writeBoolean(it) }
         }
 
         override fun describeContents(): Int {
@@ -59,6 +61,9 @@ class KPSOCustomerModel {
         @SerializedName("StateCodeWise")
         @Expose
         var stateCodeWise: List<StateCodeWise>? = null
+        @SerializedName("isSelected")
+        @Expose
+        var isSelected: Boolean = false
     }
 
     inner class StateCodeWise {

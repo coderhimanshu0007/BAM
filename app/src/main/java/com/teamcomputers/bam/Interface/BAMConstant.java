@@ -212,6 +212,9 @@ public interface BAMConstant {
 
         int GET_SAVE_SESSION_DETAIL_SUCCESSFUL = 152;
         int GET_SAVE_SESSION_DETAIL_UNSUCCESSFUL = 153;
+
+        int ITEM_SELECTED = 154;
+        int ITEM_UNSELECTED = 155;
     }
 
     interface ToastTexts {

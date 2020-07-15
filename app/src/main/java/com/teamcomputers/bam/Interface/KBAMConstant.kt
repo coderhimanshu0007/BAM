@@ -222,6 +222,9 @@ public interface KBAMConstant {
 
             val GET_SAVE_SESSION_DETAIL_SUCCESSFUL = 152
             val GET_SAVE_SESSION_DETAIL_UNSUCCESSFUL = 153
+
+            val ITEM_SELECTED = 154
+            val ITEM_UNSELECTED = 155
         }
     }
 

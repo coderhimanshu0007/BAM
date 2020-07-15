@@ -13,12 +13,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOProductAdapter;
+import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSOProductFilterAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.SalesReceivable.CustomerFragment;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel;
@@ -106,11 +108,12 @@ public class OSOProductFragment extends BaseFragment {
     @BindView(R.id.rviRSM)
     RecyclerView rviRSM;
     private KPSOProductAdapter adapter;
-    private int position = 0, rsmPos = 0, spPos = 0, cPos = 0, stateCode = 0, soPos = 0, pPos = 0;
+    private int position = 0, rsmPos = 0, spPos = 0, cPos = 0, stateCode = 0, soPos = 0, pPos = 0, filterSelectedPos = 0;
 
     KPSOProductModel productData;
     KPSOProductModel.Datum selectedProductData;
     List<KPSOProductModel.Datum> productDataList = new ArrayList<>();
+    List<KPSOProductModel.Datum> filterProductList = new ArrayList<>();
     KPSOProductModel.Filter productFilterData;
 
     KPSORSMModel.Datum rsmProfile, salesProfile;
@@ -347,6 +350,16 @@ public class OSOProductFragment extends BaseFragment {
                         salesBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.OSO_ACCOUNT_FRAGMENT, salesBundle);
                         break;
+                    case Events.ITEM_SELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        productDataList.get(filterSelectedPos).setSelected(true);
+                        filterProductList.add(productDataList.get(filterSelectedPos));
+                        break;
+                    case Events.ITEM_UNSELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        productDataList.get(filterSelectedPos).setSelected(false);
+                        filterProductList.remove(productDataList.get(filterSelectedPos));
+                        break;
                 }
             }
         });
@@ -357,6 +370,11 @@ public class OSOProductFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnClick(R.id.iviFilter)
+    public void filter() {
+        showFilterDialog();
     }
 
     @OnTextChanged(R.id.txtSearch)
@@ -1107,6 +1125,69 @@ public class OSOProductFragment extends BaseFragment {
             tviR1Name.setText(soProfile.getSoNumber());
             //tviR1SOAmount.setText(KBAMUtils.getRoundOffValue(soProfile.getSOAmount()));
         }
+    }
+
+    AlertDialog alertDialog;
+
+    public void showFilterDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(dashboardActivityContext);
+// ...Irrelevant code for customizing the buttons and title
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.filter_dialog, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+
+        TextView tviDialogType = (TextView) dialogView.findViewById(R.id.tviDialogType);
+        ImageView iviCloseDialogType = (ImageView) dialogView.findViewById(R.id.iviCloseDialogType);
+
+        TextView tviApply = (TextView) dialogView.findViewById(R.id.tviApply);
+        TextView tviClear = (TextView) dialogView.findViewById(R.id.tviClear);
+
+        tviDialogType.setText("Apply Filter");
+
+        RecyclerView rviFilterList = (RecyclerView) dialogView.findViewById(R.id.rviFilterList);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(dashboardActivityContext);
+        rviFilterList.setLayoutManager(layoutManager);
+
+        KPSOProductFilterAdapter filterAdapter = new KPSOProductFilterAdapter(dashboardActivityContext, productDataList);
+        rviFilterList.setAdapter(filterAdapter);
+
+        tviApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                if (filterProductList.size() > 0) {
+                    adapter = new KPSOProductAdapter(dashboardActivityContext, level, filterProductList, fromRSM, fromSP, fromCustomer, fromSO);
+                } else {
+                    filterProductList.clear();
+                    adapter = new KPSOProductAdapter(dashboardActivityContext, level, productDataList, fromRSM, fromSP, fromCustomer, fromSO);
+                }
+                rviRSM.setAdapter(adapter);
+            }
+        });
+        tviClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                filterProductList.clear();
+                for (int i = 0; i < productDataList.size(); i++) {
+                    productDataList.get(i).setSelected(false);
+                }
+                adapter = new KPSOProductAdapter(dashboardActivityContext, level, productDataList, fromRSM, fromSP, fromCustomer, fromSO);
+                rviRSM.setAdapter(adapter);
+            }
+        });
+
+        iviCloseDialogType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+            }
+        });
+
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
     private void initData() {

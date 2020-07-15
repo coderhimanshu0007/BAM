@@ -45,7 +45,7 @@
                 android:gravity="start|center"
                 android:text="@string/user_name"
                 android:textColor="@color/color_parent_list_item"
-                android:textSize="10sp" />
+                android:textSize="14sp" />
 
             <ImageView
                 android:id="@+id/image_view_collapse"

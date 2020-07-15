@@ -13,12 +13,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSORSMAdapter;
+import com.teamcomputers.bam.Adapters.WSAdapters.PSOAdapters.KPSORSMFilterAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.PSOModels.KPSOProductModel;
@@ -69,7 +71,7 @@ public class OSORSMFragment extends BaseFragment {
 
     String toolbarTitle = "";
 
-    String userId = "", level = "";
+    String userId = "", level = "", type = "";
     @BindView(R.id.txtSearch)
     EditText txtSearch;
     @BindView(R.id.llRSMLayout)
@@ -109,12 +111,13 @@ public class OSORSMFragment extends BaseFragment {
     RecyclerView rviRSM;
     //private OSORSMAdapter rsmAdapter;
     private KPSORSMAdapter rsmAdapter;
-    private int pos = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, soPos = 0, pPos = 0;
+    private int pos = 0, stateCode = 0, rsmPos = 0, spPos = 0, cPos = 0, soPos = 0, pPos = 0, filterSelectedPos = 0;
     boolean fromSP, fromCustomer, fromSO, fromProduct, search = false;
 
     KPSORSMModel RSMdata;
     KPSORSMModel.Datum selectedRSMData;
     List<KPSORSMModel.Datum> rsmDataList = new ArrayList<>();
+    List<KPSORSMModel.Datum> filterRSMList = new ArrayList<>();
     PSOFilter rsmFilterData;
     KPSOCustomerModel.Datum customerProfile;
     KPSORSMModel.Datum spProfile;
@@ -228,7 +231,8 @@ public class OSORSMFragment extends BaseFragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        initRSMData("YTD");
+                        type = "YTD";
+                        initRSMData();
                         dismissProgress();
                         break;
                     case Events.GET_RSM_OSO_LIST_UNSUCCESSFULL:
@@ -337,6 +341,16 @@ public class OSORSMFragment extends BaseFragment {
                         productBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.OSO_PRODUCT_FRAGMENT, productBundle);
                         break;
+                    case Events.ITEM_SELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        rsmDataList.get(filterSelectedPos).setSelected(true);
+                        filterRSMList.add(rsmDataList.get(filterSelectedPos));
+                        break;
+                    case Events.ITEM_UNSELECTED:
+                        filterSelectedPos = (int) eventObject.getObject();
+                        rsmDataList.get(filterSelectedPos).setSelected(false);
+                        filterRSMList.remove(rsmDataList.get(filterSelectedPos));
+                        break;
                 }
             }
         });
@@ -347,6 +361,11 @@ public class OSORSMFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
+    }
+
+    @OnClick(R.id.iviFilter)
+    public void filter() {
+        showFilterDialog();
     }
 
     @OnTextChanged(R.id.txtSearch)
@@ -1000,7 +1019,70 @@ public class OSORSMFragment extends BaseFragment {
         }
     }
 
-    private void initRSMData(String type) {
+    AlertDialog alertDialog;
+
+    public void showFilterDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(dashboardActivityContext);
+// ...Irrelevant code for customizing the buttons and title
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.filter_dialog, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+
+        TextView tviDialogType = (TextView) dialogView.findViewById(R.id.tviDialogType);
+        ImageView iviCloseDialogType = (ImageView) dialogView.findViewById(R.id.iviCloseDialogType);
+
+        TextView tviApply = (TextView) dialogView.findViewById(R.id.tviApply);
+        TextView tviClear = (TextView) dialogView.findViewById(R.id.tviClear);
+
+        tviDialogType.setText("Apply Filter");
+
+        RecyclerView rviFilterList = (RecyclerView) dialogView.findViewById(R.id.rviFilterList);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(dashboardActivityContext);
+        rviFilterList.setLayoutManager(layoutManager);
+
+        KPSORSMFilterAdapter filterAdapter = new KPSORSMFilterAdapter(dashboardActivityContext, rsmDataList);
+        rviFilterList.setAdapter(filterAdapter);
+
+        tviApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                if (filterRSMList.size() > 0) {
+                    rsmAdapter = new KPSORSMAdapter(dashboardActivityContext, type, level, filterRSMList, fromSP, fromCustomer, fromSO, fromProduct);
+                } else {
+                    filterRSMList.clear();
+                    rsmAdapter = new KPSORSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromSO, fromProduct);
+                }
+                rviRSM.setAdapter(rsmAdapter);
+            }
+        });
+        tviClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+                filterRSMList.clear();
+                for (int i = 0; i < rsmDataList.size(); i++) {
+                    rsmDataList.get(i).setSelected(false);
+                }
+                rsmAdapter = new KPSORSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromSO, fromProduct);
+                rviRSM.setAdapter(rsmAdapter);
+            }
+        });
+
+        iviCloseDialogType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.cancel();
+            }
+        });
+
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void initRSMData() {
         //rsmAdapter = new OSORSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromSO);
         rsmAdapter = new KPSORSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromSO, fromProduct);
         rviRSM.setAdapter(rsmAdapter);

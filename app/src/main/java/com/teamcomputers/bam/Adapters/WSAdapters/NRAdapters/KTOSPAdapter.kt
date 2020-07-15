@@ -15,7 +15,7 @@ import com.teamcomputers.bam.R
 import com.teamcomputers.bam.Utils.KBAMUtils
 import org.greenrobot.eventbus.EventBus
 
-class KTOSPAdapter(val mContext: DashboardActivity, val type: String, val level: String, val dataList: List<KNRRSMModel.Datum>, val fromRSM: Boolean, val fromCustomer: Boolean, val fromInvoice: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KTOSPAdapter.ViewHolder>(), Filterable {
+class KTOSPAdapter(val mContext: DashboardActivity, val level: String, val dataList: List<KNRRSMModel.Datum>, val fromRSM: Boolean, val fromCustomer: Boolean, val fromInvoice: Boolean, val fromProduct: Boolean) : RecyclerView.Adapter<KTOSPAdapter.ViewHolder>(), Filterable {
     private var dataListFiltered: List<KNRRSMModel.Datum>? = dataList
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
