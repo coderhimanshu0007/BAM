@@ -24,7 +24,7 @@ import com.teamcomputers.bam.Models.SessionDataModel;
 import com.teamcomputers.bam.Models.SessionDetailsModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.Collection.CollectionRefreshRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionRefreshRequester;
 import com.teamcomputers.bam.Requesters.KSaveSessionDetailRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -51,9 +51,9 @@ public class CollectionFragment extends BaseFragment {
     String logInTime, logOutTime;
 
     private String[] navLabels = {
+            "OS Ageing",
             "Outstanding",
             "Collection",
-            "OS Ageing",
             "Delivery/Installation"
     };
 
@@ -126,8 +126,8 @@ public class CollectionFragment extends BaseFragment {
 
             }
         });
-        showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new CollectionRefreshRequester());
+        //showProgress(ProgressDialogTexts.LOADING);
+        //BackgroundExecutor.getInstance().execute(new KCollectionRefreshRequester());
         int position = SharedPreferencesController.getInstance(dashboardActivityContext).getCollectionPageNo();
         tabLayout.getTabAt(position).select();
         SharedPreferencesController.getInstance(dashboardActivityContext).setCollectionPageNo(0);
@@ -269,14 +269,14 @@ public class CollectionFragment extends BaseFragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    OutstandingFragment outstandingFragment = new OutstandingFragment();
-                    return outstandingFragment;
+                    OSAgeingFragment osAgeingFragment = new OSAgeingFragment();
+                    return osAgeingFragment;
                 case 1:
                     CollectionDataFragment collectionDataFragment = new CollectionDataFragment();
                     return collectionDataFragment;
                 case 2:
-                    OSAgeingFragment osAgeingFragment = new OSAgeingFragment();
-                    return osAgeingFragment;
+                    OutstandingFragment outstandingFragment = new OutstandingFragment();
+                    return outstandingFragment;
                 case 3:
                     DeliveryInstallationFragment deliveryInstallationFragment = new DeliveryInstallationFragment();
                     return deliveryInstallationFragment;

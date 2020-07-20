@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.OSAgeingAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.OSAgeingModel;
 import com.teamcomputers.bam.Models.common.EventObject;
@@ -36,7 +35,7 @@ public class DeliveryInstallationFragment extends BaseFragment {
     @BindView(R.id.rviData)
     RecyclerView rviData;
 
-    private OSAgeingAdapter mAdapter;
+    //private OSAgeingAdapter mAdapter;
     private ArrayList<OSAgeingModel> osAgeingModelArrayList = new ArrayList<>();
 
     @BindView(R.id.tviNoofInvoices)
@@ -73,8 +72,8 @@ public class DeliveryInstallationFragment extends BaseFragment {
 
         setData();
 
-        mAdapter = new OSAgeingAdapter(dashboardActivityContext, osAgeingModelArrayList);
-        rviData.setAdapter(mAdapter);
+        //mAdapter = new OSAgeingAdapter(dashboardActivityContext, osAgeingModelArrayList);
+        //rviData.setAdapter(mAdapter);
 
         return rootView;
     }

@@ -204,9 +204,9 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick(R.id.rlaCollection)
     public void Collection() {
-        if (activeEmployeeAccessModel.getData().getCollectionModule() == 1) {
+        //if (activeEmployeeAccessModel.getData().getCollectionModule() == 1) {
             EventBus.getDefault().post(new EventObject(Events.COLLECTION, null));
-        }
+        //}
     }
 
     @OnClick(R.id.rlaWS)

@@ -1066,13 +1066,7 @@ public class WSSalesPersonFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 alertDialog.cancel();
-                if (filterRSMList.size() > 0) {
-                    adapter = new KSalesSPAdapter(dashboardActivityContext, type, level, filterRSMList, fromRSM, fromCustomer, fromProduct);
-                } else {
-                    filterRSMList.clear();
-                    adapter = new KSalesSPAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromProduct);
-                }
-                rviRSM.setAdapter(adapter);
+                initData();
             }
         });
         tviClear.setOnClickListener(new View.OnClickListener() {
@@ -1083,8 +1077,7 @@ public class WSSalesPersonFragment extends BaseFragment {
                 for (int i = 0; i < spDataList.size(); i++) {
                     spDataList.get(i).setSelected(false);
                 }
-                adapter = new KSalesSPAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromProduct);
-                rviRSM.setAdapter(adapter);
+                initData();
             }
         });
 
@@ -1101,7 +1094,12 @@ public class WSSalesPersonFragment extends BaseFragment {
 
     private void initData() {
         //adapter = new NewSalesPersonAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromProduct);
-        adapter = new KSalesSPAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromProduct);
+        if (filterRSMList.size() > 0) {
+            adapter = new KSalesSPAdapter(dashboardActivityContext, type, level, filterRSMList, fromRSM, fromCustomer, fromProduct);
+        } else {
+            filterRSMList.clear();
+            adapter = new KSalesSPAdapter(dashboardActivityContext, type, level, spDataList, fromRSM, fromCustomer, fromProduct);
+        }
         rviRSM.setAdapter(adapter);
     }
 

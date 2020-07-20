@@ -44,6 +44,7 @@ import com.teamcomputers.bam.ExpandableRecyclerview.expandables.NavigationExpand
 import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItem;
 import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItemParentModel;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Fragments.Collection.CollectionFragment;
 import com.teamcomputers.bam.Fragments.FeedbackFragment;
 import com.teamcomputers.bam.Fragments.HelpFragment;
 import com.teamcomputers.bam.Fragments.Installation.InstallationFragment;
@@ -822,10 +823,10 @@ public class DashboardActivity extends BaseActivity {
                         }
                         break;
                     case Fragments.COLLECTION_FRAGMENTS:
-                        if (activeEmployeeAccessModel.getData().getCollectionModule() == 1) {
-                            //fragment = new CollectionFragment();
-                            showToast(ToastTexts.WORK_PROGRESS);
-                        }
+                        //if (activeEmployeeAccessModel.getData().getCollectionModule() == 1) {
+                            fragment = new CollectionFragment();
+                        //    showToast(ToastTexts.WORK_PROGRESS);
+                        //}
                         break;
                     case Fragments.COLLECTION_FRAGMENTS1:
                         if (activeEmployeeAccessModel.getData().getCollectionModule() == 1) {

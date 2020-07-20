@@ -23,8 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesProductAdapter;
 import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesProductFilterAdapter;
-import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesRSMAdapter;
-import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesRSMFilterAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesProductModel;
@@ -32,7 +30,6 @@ import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesRSMModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.WSRequesters.KSalesListAprRequester;
-import com.teamcomputers.bam.Utils.KBAMUtils;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
 
@@ -1113,13 +1110,7 @@ public class WSProductFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 alertDialog.cancel();
-                if (filterProductList.size() > 0) {
-                    adapter = new KSalesProductAdapter(dashboardActivityContext, level, type, filterProductList, fromRSM, fromSP, fromCustomer);
-                } else {
-                    filterProductList.clear();
-                    adapter = new KSalesProductAdapter(dashboardActivityContext, level, type, productDataList, fromRSM, fromSP, fromCustomer);
-                }
-                rviRSM.setAdapter(adapter);
+                initData();
             }
         });
         tviClear.setOnClickListener(new View.OnClickListener() {
@@ -1130,8 +1121,7 @@ public class WSProductFragment extends BaseFragment {
                 for (int i = 0; i < productDataList.size(); i++) {
                     productDataList.get(i).setSelected(false);
                 }
-                adapter = new KSalesProductAdapter(dashboardActivityContext, level, type, productDataList, fromRSM, fromSP, fromCustomer);
-                rviRSM.setAdapter(adapter);
+                initData();
             }
         });
 
@@ -1148,7 +1138,12 @@ public class WSProductFragment extends BaseFragment {
 
     private void initData() {
         //adapter = new NewProductAdapter(dashboardActivityContext, level, type, model, fromRSM, fromSP, fromCustomer);
-        adapter = new KSalesProductAdapter(dashboardActivityContext, level, type, productDataList, fromRSM, fromSP, fromCustomer);
+        if (filterProductList.size() > 0) {
+            adapter = new KSalesProductAdapter(dashboardActivityContext, level, type, filterProductList, fromRSM, fromSP, fromCustomer);
+        } else {
+            filterProductList.clear();
+            adapter = new KSalesProductAdapter(dashboardActivityContext, level, type, productDataList, fromRSM, fromSP, fromCustomer);
+        }
         rviRSM.setAdapter(adapter);
     }
 }

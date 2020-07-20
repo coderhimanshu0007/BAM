@@ -1,30 +1,46 @@
 package com.teamcomputers.bam.Fragments.Collection;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.OSAgeingAdapter;
+import com.teamcomputers.bam.Adapters.Collection.KCollectionAgeingAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.Collection.AgeingModel;
 import com.teamcomputers.bam.Models.OSAgeingModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionAgeingRequester;
+import com.teamcomputers.bam.Utils.BAMUtil;
+import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.Utils.KBAMUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class OSAgeingFragment extends BaseFragment {
@@ -33,27 +49,17 @@ public class OSAgeingFragment extends BaseFragment {
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
 
+    @BindView(R.id.pieChart)
+    PieChart chart;
+
     @BindView(R.id.rviData)
     RecyclerView rviData;
 
-    private OSAgeingAdapter mAdapter;
-    private ArrayList<OSAgeingModel> osAgeingModelArrayList = new ArrayList<>();
+    private KCollectionAgeingAdapter mAdapter;
+    AgeingModel model = new AgeingModel();
 
-    @BindView(R.id.tviNoofSO)
-    TextView tviNoofInvoice;
-    @BindView(R.id.tviAmounts)
-    TextView tviAmounts;
+    //Typeface tf;
 
-    @BindView(R.id.viUpto30Days)
-    View viUpto30Days;
-    @BindView(R.id.viUpto60Days)
-    View viUpto60Days;
-    @BindView(R.id.viUpto90Days)
-    View viUpto90Days;
-    @BindView(R.id.viUpto120Days)
-    View viUpto120Days;
-    @BindView(R.id.viMoreThan120Days)
-    View viMoreThan120Days;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,20 +77,92 @@ public class OSAgeingFragment extends BaseFragment {
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviData.setLayoutManager(layoutManager);
 
-        setData();
+        //tf = Typeface.createFromAsset(context.getAssets(), "OpenSans-Light.ttf");
 
-        mAdapter = new OSAgeingAdapter(dashboardActivityContext, osAgeingModelArrayList);
-        rviData.setAdapter(mAdapter);
+        showProgress(ProgressDialogTexts.LOADING);
+        BackgroundExecutor.getInstance().execute(new KCollectionAgeingRequester());
+
+        //init();
+
+        //setData();
 
         return rootView;
     }
 
-    private void setData() {
-        for (int i = 0; i < 15; i++) {
-            OSAgeingModel osAgeingModel = new OSAgeingModel("LIC of India", "0.45", "15.15", "4.83", "1.92", "0.14", "0.10","22.59");
+    private void init() {
+        chart.getDescription().setEnabled(false);
+
+        //chart.setCenterTextTypeface(tf);
+        chart.setCenterText(generateCenterText());
+        chart.setCenterTextSize(10f);
+        //chart.setCenterTextTypeface(tf);
+
+        // radius of the center hole in percent of maximum radius
+        chart.setHoleRadius(85f);
+        //chart.setTransparentCircleRadius(90f);
+
+        Legend l = chart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
+        l.setDrawInside(false);
+
+        chart.setData(generatePieData());
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private SpannableString generateCenterText() {
+        float total = 0;
+        for (int i = 0; i < model.getProgress().size(); i++) {
+            AgeingModel.Progress progress = model.getProgress().get(i);
+            String val = KBAMUtils.getRoundOffValue(progress.getAmount());
+            float x = (float) Double.parseDouble(val);
+            total = total + x;
+        }
+        String tot = String.valueOf(total);
+        int len = tot.length() + 1;
+        SpannableString s = new SpannableString(tot + "\nCOLLECTIBLE\nOUTSTANDING");
+        s.setSpan(new RelativeSizeSpan(2.5f), 0, len, 0);
+        //s.setSpan(new ForegroundColorSpan(R.color.color_progress_end), 0, len, 0);
+        s.setSpan(new RelativeSizeSpan(1f), len, s.length(), 0);
+        s.setSpan(new ForegroundColorSpan(R.color.text_color_login), len, s.length(), 0);
+        return s;
+    }
+
+    protected PieData generatePieData() {
+
+        int count = 4;
+
+        ArrayList<PieEntry> entries1 = new ArrayList<>();
+
+        for (int i = 0; i < model.getProgress().size(); i++) {
+            AgeingModel.Progress progress = model.getProgress().get(i);
+            //entries1.add(new PieEntry((float) ((Math.random() * 60) + 40), "Quarter " + (i + 1)));
+            String val = KBAMUtils.getRoundOffValue(progress.getAmount());
+            float x = (float) Double.parseDouble(val);
+            entries1.add(new PieEntry(x, progress.getInterval()));
+        }
+
+        PieDataSet ds1 = new PieDataSet(entries1, "");
+        ds1.setColors(ColorTemplate.VORDIPLOM_COLORS);
+        //ds1.setSliceSpace(2f);
+        ds1.setValueTextColor(Color.BLACK);
+        ds1.setValueTextSize(12f);
+
+        PieData d = new PieData(ds1);
+        //d.setValueTypeface(tf);
+        ds1.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        ds1.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
+        return d;
+    }
+
+    /*private void setData() {
+        for (int i = 0; i < 5; i++) {
+            OSAgeingModel osAgeingModel = new OSAgeingModel("LIC of India", "0.45", "15.15", "4.83", "1.92", "0.14", "0.10", "22.59");
             osAgeingModelArrayList.add(osAgeingModel);
         }
-    }
+    }*/
 
     @Override
     public void onResume() {
@@ -112,75 +190,38 @@ public class OSAgeingFragment extends BaseFragment {
                         //showToast(ToastTexts.LOGIN_SUCCESSFULL);
                         //((DashbordActivity) getActivity()).replaceFragment(Fragments.ASSIGN_CALLS_MAP_FRAGMENTS, assignedCallsBundle);
                         break;
+                    case Events.GET_COLLECTION_OS_AGEING_SUCCESSFULL:
+                        try {
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionDataResponse(eventObject.getObject().toString()));
+                            model = (AgeingModel) BAMUtil.fromJson(String.valueOf(jsonObject), AgeingModel.class);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        dismissProgress();
+                        mAdapter = new KCollectionAgeingAdapter(dashboardActivityContext, model.getTable());
+                        rviData.setAdapter(mAdapter);
+                        init();
+                        //chart.setData(generatePieData());
+                        //chart.notifyDataSetChanged();
+                        chart.invalidate();
+                        break;
+                    case Events.GET_COLLECTION_OS_AGEING_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                    case Events.OOPS_MESSAGE:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                    case Events.INTERNAL_ERROR:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
                 }
             }
         });
     }
 
-    @OnClick(R.id.tviUpto30Days)
-    public void Upto30Days() {
-        viUpto30Days.setVisibility(View.VISIBLE);
-        viUpto60Days.setVisibility(View.INVISIBLE);
-        viUpto90Days.setVisibility(View.INVISIBLE);
-        viUpto120Days.setVisibility(View.INVISIBLE);
-        viMoreThan120Days.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText("2959");
-        tviAmounts.setText(getString(R.string.Rs) + " 53.23");
-        tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
-        tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
-    }
-
-    @OnClick(R.id.tviUpto60Days)
-    public void Upto60Days() {
-        viUpto30Days.setVisibility(View.INVISIBLE);
-        viUpto60Days.setVisibility(View.VISIBLE);
-        viUpto90Days.setVisibility(View.INVISIBLE);
-        viUpto120Days.setVisibility(View.INVISIBLE);
-        viMoreThan120Days.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText("2896");
-        tviAmounts.setText(getString(R.string.Rs) + " 21.87");
-        tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
-        tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
-    }
-
-    @OnClick(R.id.tviUpto90Days)
-    public void Upto90Days() {
-        viUpto30Days.setVisibility(View.INVISIBLE);
-        viUpto60Days.setVisibility(View.INVISIBLE);
-        viUpto90Days.setVisibility(View.VISIBLE);
-        viUpto120Days.setVisibility(View.INVISIBLE);
-        viMoreThan120Days.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText("932");
-        tviAmounts.setText(getString(R.string.Rs) + " 5.99");
-        tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
-        tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
-    }
-
-    @OnClick(R.id.tviUpto120Days)
-    public void Upto120Days() {
-        viUpto30Days.setVisibility(View.INVISIBLE);
-        viUpto60Days.setVisibility(View.INVISIBLE);
-        viUpto90Days.setVisibility(View.INVISIBLE);
-        viUpto120Days.setVisibility(View.VISIBLE);
-        viMoreThan120Days.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText("669");
-        tviAmounts.setText(getString(R.string.Rs) + " 4.37");
-        tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
-        tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
-    }
-
-    @OnClick(R.id.tviMoreThan120Days)
-    public void MoreThan120Days() {
-        viUpto30Days.setVisibility(View.INVISIBLE);
-        viUpto60Days.setVisibility(View.INVISIBLE);
-        viUpto90Days.setVisibility(View.INVISIBLE);
-        viUpto120Days.setVisibility(View.INVISIBLE);
-        viMoreThan120Days.setVisibility(View.VISIBLE);
-        tviNoofInvoice.setText("1454");
-        tviAmounts.setText(getString(R.string.Rs) + " 12.15");
-        tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount_red));
-        tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount_red));
-    }
 
     @Override
     public void onDestroyView() {

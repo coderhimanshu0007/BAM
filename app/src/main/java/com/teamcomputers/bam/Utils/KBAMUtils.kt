@@ -159,6 +159,12 @@ class KBAMUtils : KBAMApplication() {
             return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}").replace("]\", \"Filter\": \"", "], \"Filter\": ").replace("\"}\"", "\"}").replace("\"{\"", "{\"")
         }
 
+        @JvmStatic
+        fun replaceCollectionDataResponse(response: String):String{
+            //return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}")
+            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}").replace("]\", \"Table\"","], \"Table\"").replace(" \", \"", "\", \"")
+        }
+
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         private fun isConnected(connMgr: ConnectivityManager, type: Int): Boolean {
             val networks = connMgr.allNetworks

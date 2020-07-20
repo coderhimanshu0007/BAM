@@ -21,8 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesRSMFilterAdapter;
 import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesRSMAdapter;
+import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesRSMFilterAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesCustomerModel;
 import com.teamcomputers.bam.Models.WSModels.SalesModels.KSalesProductModel;
@@ -998,13 +998,7 @@ public class WSRSMFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 alertDialog.cancel();
-                if(filterRSMList.size()>0) {
-                    rsmAdapter = new KSalesRSMAdapter(dashboardActivityContext, type, level, filterRSMList, fromSP, fromCustomer, fromProduct);
-                } else {
-                    filterRSMList.clear();
-                    rsmAdapter = new KSalesRSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
-                }
-                rviRSM.setAdapter(rsmAdapter);
+                initRSMData();
             }
         });
         tviClear.setOnClickListener(new View.OnClickListener() {
@@ -1015,8 +1009,7 @@ public class WSRSMFragment extends BaseFragment {
                 for (int i = 0; i < rsmDataList.size(); i++) {
                     rsmDataList.get(i).setSelected(false);
                 }
-                rsmAdapter = new KSalesRSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
-                rviRSM.setAdapter(rsmAdapter);
+                initRSMData();
             }
         });
 
@@ -1033,7 +1026,13 @@ public class WSRSMFragment extends BaseFragment {
 
     private void initRSMData() {
         //rsmAdapter = new NewRSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
-        rsmAdapter = new KSalesRSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
+        //rsmAdapter = new KSalesRSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
+        if (filterRSMList.size() > 0) {
+            rsmAdapter = new KSalesRSMAdapter(dashboardActivityContext, type, level, filterRSMList, fromSP, fromCustomer, fromProduct);
+        } else {
+            filterRSMList.clear();
+            rsmAdapter = new KSalesRSMAdapter(dashboardActivityContext, type, level, rsmDataList, fromSP, fromCustomer, fromProduct);
+        }
         rviRSM.setAdapter(rsmAdapter);
     }
 

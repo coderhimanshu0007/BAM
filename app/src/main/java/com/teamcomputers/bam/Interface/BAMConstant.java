@@ -63,6 +63,7 @@ public interface BAMConstant {
         int YOU_ARE_USING_OLDER_VERSION_OF_APP = 4;
         int YOU_ARE_USING_CURRENT_VERSION_OF_APP = 5;
         int OOPS_MESSAGE = 6;
+        int INTERNAL_ERROR = 500;
         int ORDER_PROCESSING = 7;
         int PURCHASE = 8;
         int LOGISTICS = 9;

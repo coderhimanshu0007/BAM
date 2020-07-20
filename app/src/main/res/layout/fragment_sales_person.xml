@@ -22,6 +22,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingTop="5dp"
+            android:paddingRight="10dp"
             android:paddingBottom="5dp"
             android:tint="@color/color_white"
             app:srcCompat="@drawable/ic_filter" />
@@ -30,8 +31,8 @@
             android:id="@+id/tviFiscalYear"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/iviFilter"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/iviFilter"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:popupBackground="@color/start_home_color_bg"

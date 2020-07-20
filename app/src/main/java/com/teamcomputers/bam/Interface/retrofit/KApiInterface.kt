@@ -124,7 +124,7 @@ interface KApiInterface {
     abstract fun collectionCollection(): Call<Any>
 
     // Collection OS Ageing
-    @POST("OrderProcessingSOAuthorization")
+    @POST("CollectionAgeing")
     abstract fun collectionOSAgeing(): Call<Any>
 
     // Collection Delivery/Installation
