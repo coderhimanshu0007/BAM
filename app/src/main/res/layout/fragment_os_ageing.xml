@@ -27,6 +27,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="2dp"
                     android:elevation="1dp"
                     app:cardCornerRadius="5dp">
 
@@ -34,13 +35,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/ic_dso_map"
-                        android:backgroundTint="@color/map_opacity_white"
+                        android:backgroundTint="@color/material_gray_100"
                         android:orientation="horizontal">
 
                         <com.github.mikephil.charting.charts.PieChart
                             android:id="@+id/pieChart"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp" />
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -51,14 +53,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="17dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="17dp"
                 android:orientation="vertical">
-
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="2dp"
                     android:elevation="1dp"
                     app:cardCornerRadius="5dp">
 
@@ -81,7 +83,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:layout_marginRight="20dp"
+                            android:layout_margin="10dp"
                             android:minWidth="40dp"
                             android:text="Total"
                             android:textColor="@color/color_value"

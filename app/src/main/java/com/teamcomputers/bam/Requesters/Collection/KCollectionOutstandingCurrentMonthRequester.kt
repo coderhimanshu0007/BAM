@@ -2,22 +2,20 @@ package com.teamcomputers.bam.Requesters.Collection
 
 import com.teamcomputers.bam.Interface.BaseRequester
 import com.teamcomputers.bam.Interface.KBAMConstant
-import com.teamcomputers.bam.Models.AppVersionResponse
 import com.teamcomputers.bam.Models.common.EventObject
 import com.teamcomputers.bam.controllers.KHTTPOperationController
 import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
-import java.util.*
 
-class KCollectionAgeingRequester : BaseRequester {
+class KCollectionOutstandingCurrentMonthRequester(var start: String, var end: String) : BaseRequester {
     override fun run() {
-        val apiResponse = KHTTPOperationController().collectionOSAgeing()
+        val apiResponse = KHTTPOperationController().collectionOutstandingCurrentMonth(start, end)
         if (apiResponse != null) {
             if (apiResponse.responseCode == HttpURLConnection.HTTP_OK) {
                 if (apiResponse.response != null) {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_OS_AGEING_SUCCESSFULL, apiResponse.response))
+                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_TOTAL_OUTSTANDING_SUCCESSFULL, apiResponse.response))
                 } else {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_OS_AGEING_UNSUCCESSFULL, null))
+                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_TOTAL_OUTSTANDING_UNSUCCESSFULL, null))
                 }
             } else if (apiResponse.responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                 EventBus.getDefault().post(EventObject(KBAMConstant.Events.INTERNAL_SERVER_ERROR, null))

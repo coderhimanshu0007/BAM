@@ -33,6 +33,7 @@
     <color name="material_blue_gray_500">#FF607D8B</color>
     <color name="yellow_accent_700">#ffd600</color>
     <color name="transparent_white">#96ffffff</color>
+    <color name="white">#ffffff</color>
     <color name="material_cyan_100">#ffb2ebf2</color>
 
     <color name="map_opacity_white">#52ffffff</color>

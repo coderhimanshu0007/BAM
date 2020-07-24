@@ -8,27 +8,45 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.teamcomputers.bam.Activities.DashboardActivity
-import com.teamcomputers.bam.Models.Collection.AgeingModel
+import com.teamcomputers.bam.Models.Collection.TotalOutstandingModel
 import com.teamcomputers.bam.R
 import com.teamcomputers.bam.Utils.KBAMUtils
-import kotlinx.android.synthetic.main.os_ageing_recyclerview_layout.view.*
+import kotlinx.android.synthetic.main.os_ageing_recyclerview_layout.view.llCustomerDetail
+import kotlinx.android.synthetic.main.os_ageing_recyclerview_layout.view.llExpand
+import kotlinx.android.synthetic.main.os_ageing_recyclerview_layout.view.rlCustomerItem
+import kotlinx.android.synthetic.main.os_ageing_recyclerview_layout.view.tviCustomer
+import kotlinx.android.synthetic.main.os_ageing_recyclerview_layout.view.tviTotal
+import kotlinx.android.synthetic.main.total_outstanding_recyclerview_layout.view.*
 
-class KCollectionAgeingAdapter(val mContext: DashboardActivity, val dataList: List<AgeingModel.Table>) : RecyclerView.Adapter<KCollectionAgeingAdapter.ViewHolder>() {
+class KCollectionTotalOutstandingAdapter(val mContext: DashboardActivity, val dataList: List<TotalOutstandingModel.Table>) : RecyclerView.Adapter<KCollectionTotalOutstandingAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
         }
 
-        fun setData(mContext: Context, dataList: AgeingModel.Table?) {
+        fun setData(mContext: Context, dataList: TotalOutstandingModel.Table?) {
             itemView.tviCustomer.setText(dataList?.customerName)
-            itemView.tviTotal.setText(dataList?.due?.let { KBAMUtils.getRoundOffValue(it) })
-            itemView.tviValue1.setText(dataList?.c030.toString())
-            itemView.tviValue2.setText(dataList?.c3160.toString())
-            itemView.tviValue3.setText(dataList?.c6190.toString())
-            itemView.tviValue4.setText(dataList?.c91120.toString())
-            itemView.tviValue5.setText(dataList?.c121180.toString())
-            itemView.tviValue6.setText(dataList?.c181270.toString())
-            itemView.tviValue7.setText(dataList?.c270.toString())
+            itemView.tviTotal.setText(dataList?.amount?.let { KBAMUtils.getRoundOffValue(it) })
+
+            itemView.tviValue11.setText(dataList?.financePerson)
+            itemView.tviValue12.setText(dataList?.nod.toString())
+
+            itemView.tviValue21.setText(dataList?.docSubmissionDate)
+            itemView.tviValue22.setText(dataList?.dueDate)
+            itemView.tviValue23.setText(dataList?.paymentTermsCode)
+
+            itemView.tviValue31.setText(dataList?.expectedCollectionDate)
+            itemView.tviValue32.setText(dataList?.paymentStageName)
+
+            itemView.tviValue41.setText(dataList?.remarks)
+            itemView.tviValue42.setText(dataList?.remarksByCollectionTeam)
+
+            itemView.tviValue51.setText(dataList?.bu)
+            itemView.tviValue52.setText(dataList?.customerName)
+
+            itemView.tviValue61.setText(dataList?.invoiceNo)
+            itemView.tviValue62.setText(dataList?.actualDeliveryDate)
+            itemView.tviValue63.setText(dataList?.percentage.toString())
 
             itemView.rlCustomerItem.setOnClickListener {
                 if (dataList?.open == 0) {
@@ -53,7 +71,7 @@ class KCollectionAgeingAdapter(val mContext: DashboardActivity, val dataList: Li
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.os_ageing_recyclerview_layout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.total_outstanding_recyclerview_layout, parent, false)
 
         return ViewHolder(view)
     }

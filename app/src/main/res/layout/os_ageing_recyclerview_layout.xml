@@ -1,31 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="1dp"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
+        android:elevation="1dp"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="2dp"
-            android:layout_marginBottom="5dp"
-            android:elevation="1dp">
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/rlCustomerItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_bg_statewise"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal"
                 android:padding="5dp">
 
@@ -57,324 +54,326 @@
                     android:textSize="13sp"
                     app:fontFamily="@font/roboto_medium" />
             </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-
-        <LinearLayout
-            android:id="@+id/llCustomerDetail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="13dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="13dp"
-            android:layout_marginBottom="5dp"
-            android:orientation="vertical"
-            android:visibility="gone">
 
             <LinearLayout
+                android:id="@+id/llCustomerDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="13dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical"
+                android:visibility="visible">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_value_54" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:elevation="1dp">
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:orientation="vertical">
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:elevation="1dp">
 
-                        <TextView
-                            android:id="@+id/tviHeading1"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_group_1511"
-                            android:drawablePadding="10dp"
-                            android:text="C0_30"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/tviValue1"
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/tviHeading1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_group_1511"
+                                android:drawablePadding="10dp"
+                                android:text="C0_30"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
+
+                            <TextView
+                                android:id="@+id/tviValue1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="18dp"
+                                android:text="0-30"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:elevation="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="18dp"
-                            android:text="0-30"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:elevation="1dp">
+                            <TextView
+                                android:id="@+id/tviHeading2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_group_1511"
+                                android:drawablePadding="10dp"
+                                android:text="C31_60"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tviValue2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="18dp"
+                                android:text="0-30"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-                        <TextView
-                            android:id="@+id/tviHeading2"
-                            android:layout_width="wrap_content"
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:elevation="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_group_1511"
-                            android:drawablePadding="10dp"
-                            android:text="C31_60"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/tviValue2"
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/tviHeading3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_group_1511"
+                                android:drawablePadding="10dp"
+                                android:text="C61_90"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
+
+                            <TextView
+                                android:id="@+id/tviValue3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="18dp"
+                                android:text="0-30"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:elevation="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="18dp"
-                            android:text="0-30"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:elevation="1dp">
+                            <TextView
+                                android:id="@+id/tviHeading4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_group_1511"
+                                android:drawablePadding="10dp"
+                                android:text="C91_120"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tviValue4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="18dp"
+                                android:text="0-30"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/tviHeading3"
-                            android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:elevation="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_group_1511"
-                            android:drawablePadding="10dp"
-                            android:text="C61_90"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/tviValue3"
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/tviHeading5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_group_1511"
+                                android:drawablePadding="10dp"
+                                android:text="C121_180"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
+
+                            <TextView
+                                android:id="@+id/tviValue5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="18dp"
+                                android:text="0-30"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:elevation="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="18dp"
-                            android:text="0-30"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:elevation="1dp">
+                            <TextView
+                                android:id="@+id/tviHeading6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_group_1511"
+                                android:drawablePadding="10dp"
+                                android:text="C181_270"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tviValue6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="18dp"
+                                android:text="0-30"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-                        <TextView
-                            android:id="@+id/tviHeading4"
-                            android:layout_width="wrap_content"
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:elevation="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_group_1511"
-                            android:drawablePadding="10dp"
-                            android:text="C91_120"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/tviValue4"
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/tviHeading7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_group_1511"
+                                android:drawablePadding="10dp"
+                                android:text="C270_"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
+
+                            <TextView
+                                android:id="@+id/tviValue7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="18dp"
+                                android:text="0-30"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:elevation="1dp"
+                        android:visibility="invisible">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="18dp"
-                            android:text="0-30"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tviHeading8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_group_1511"
+                                android:drawablePadding="10dp"
+                                android:text="0-30"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
+
+                            <TextView
+                                android:id="@+id/tviValue8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="18dp"
+                                android:text="0-30"
+                                android:textColor="@color/color_value"
+                                android:textSize="14sp"
+                                app:fontFamily="@font/roboto_medium" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:elevation="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tviHeading5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_group_1511"
-                            android:drawablePadding="10dp"
-                            android:text="C121_180"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
-
-                        <TextView
-                            android:id="@+id/tviValue5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="18dp"
-                            android:text="0-30"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:elevation="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tviHeading6"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_group_1511"
-                            android:drawablePadding="10dp"
-                            android:text="C181_270"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
-
-                        <TextView
-                            android:id="@+id/tviValue6"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="18dp"
-                            android:text="0-30"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:elevation="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tviHeading7"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_group_1511"
-                            android:drawablePadding="10dp"
-                            android:text="C270_"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
-
-                        <TextView
-                            android:id="@+id/tviValue7"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="18dp"
-                            android:text="0-30"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:elevation="1dp"
-                    android:visibility="invisible">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tviHeading8"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_group_1511"
-                            android:drawablePadding="10dp"
-                            android:text="0-30"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
-
-                        <TextView
-                            android:id="@+id/tviValue8"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="18dp"
-                            android:text="0-30"
-                            android:textColor="@color/color_value"
-                            android:textSize="14sp"
-                            app:fontFamily="@font/roboto_medium" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-
         </LinearLayout>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

@@ -136,6 +136,18 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.collectionOutstanding()?.let { KConnectionUtils().execute<Any>(it) }
     }
 
+    fun collectionTotalOutstanding(start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionTotalOutstanding(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionOutstandingCurrentMonth(start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionOutstandingCurrentMonth(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionOutstandingSubsequentMonth(start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionOutstandingSubsequentMonth(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
     fun collectionCollection(): ApiResponse<*>? {
         return getApiInterface()?.collectionCollection()?.let { KConnectionUtils().execute<Any>(it) }
     }
