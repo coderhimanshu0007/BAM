@@ -4,21 +4,36 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.OutstandingAdapter;
+import com.teamcomputers.bam.Adapters.Collection.KOutstandingAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Models.OutstandingModel;
+import com.teamcomputers.bam.Fragments.NewSalesReceivable.NewRSMTabFragment;
+import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
+import com.teamcomputers.bam.Models.Collection.OutstandingModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingRequester;
+import com.teamcomputers.bam.Utils.BAMUtil;
+import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.Utils.KBAMUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -31,28 +46,31 @@ public class OutstandingFragment extends BaseFragment {
     private View rootView;
     private Unbinder unbinder;
     private DashboardActivity dashboardActivityContext;
-    RecyclerView mRecyclerViewCals;
-    private LinearLayoutManager layoutManager;
 
-    @BindView(R.id.rviData)
-    RecyclerView rviData;
+    @BindView(R.id.pieChart)
+    PieChart pieChart;
 
-    private OutstandingAdapter mAdapter;
-    private ArrayList<OutstandingModel> outstandingModelArrayList = new ArrayList<>();
+    @BindView(R.id.tviTOInvoice)
+    TextView tviTOInvoice;
+    @BindView(R.id.tviTOAmount)
+    TextView tviTOAmount;
 
-    @BindView(R.id.tviNoofInvoice)
-    TextView tviNoofInvoice;
-    @BindView(R.id.tviAmounts)
-    TextView tviAmounts;
+    @BindView(R.id.tviCOInvoice)
+    TextView tviCOInvoice;
+    @BindView(R.id.tviCOAmount)
+    TextView tviCOAmount;
 
-    @BindView(R.id.viTotalOutstanding)
-    View viTotalOutstanding;
-    @BindView(R.id.viCollectableOutstanding)
-    View viCollectableOutstanding;
-    @BindView(R.id.viCollectableOutstandingCurrentMonth)
-    View viCollectableOutstandingCurrentMonth;
-    @BindView(R.id.viCollectableOutstandingSubsequentMonth)
-    View viCollectableOutstandingSubsequentMonth;
+    @BindView(R.id.tviCOCMInvoice)
+    TextView tviCOCMInvoice;
+    @BindView(R.id.tviCOCMAmount)
+    TextView tviCOCMAmount;
+
+    @BindView(R.id.tviCOSMInvoice)
+    TextView tviCOSMInvoice;
+    @BindView(R.id.tviCOSMAmount)
+    TextView tviCOSMAmount;
+
+    OutstandingModel model;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,22 +85,55 @@ public class OutstandingFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
 
-        layoutManager = new LinearLayoutManager(dashboardActivityContext);
-        rviData.setLayoutManager(layoutManager);
+        //layoutManager = new LinearLayoutManager(dashboardActivityContext);
+        //gviData.setLayoutManager(layoutManager);
 
         setData();
 
-        mAdapter = new OutstandingAdapter(dashboardActivityContext, outstandingModelArrayList);
-        rviData.setAdapter(mAdapter);
+        //mAdapter = new KOutstandingAdapter(dashboardActivityContext, outstandingModelArrayList);
+        //gviData.setAdapter(mAdapter);
+
+        showProgress(ProgressDialogTexts.LOADING);
+        BackgroundExecutor.getInstance().execute(new KCollectionOutstandingRequester());
 
         return rootView;
     }
 
     private void setData() {
-        for (int i = 0; i < 15; i++) {
-            OutstandingModel outstandingModel = new OutstandingModel("GST1920DL-19114", "NATIONAL INFRA", "9.81", "Binay Kumar", "4", "15-Nov-19", "25-Nov-19","FINANCE/ACCOUNT","Cartridge pending");
-            outstandingModelArrayList.add(outstandingModel);
-        }
+        ArrayList NoOfEmp = new ArrayList();
+
+        NoOfEmp.add(new PieEntry(945f, 2008));
+        NoOfEmp.add(new PieEntry(1040f, 2009));
+        NoOfEmp.add(new PieEntry(1133f, 2010));
+        NoOfEmp.add(new PieEntry(1240f, 2011));
+        NoOfEmp.add(new PieEntry(1369f, 2012));
+        NoOfEmp.add(new PieEntry(1487f, 2013));
+        NoOfEmp.add(new PieEntry(1501f, 2014));
+        NoOfEmp.add(new PieEntry(1645f, 2015));
+        NoOfEmp.add(new PieEntry(1578f, 2016));
+        NoOfEmp.add(new PieEntry(1695f, 2017));
+        PieDataSet dataSet = new PieDataSet(NoOfEmp, "Number Of Employees");
+
+        dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
+        ArrayList year = new ArrayList();
+
+        year.add("2008");
+        year.add("2009");
+        year.add("2010");
+        year.add("2011");
+        year.add("2012");
+        year.add("2013");
+        year.add("2014");
+        year.add("2015");
+        year.add("2016");
+        year.add("2017");
+        PieData data = new PieData(dataSet);
+        pieChart.setHoleRadius(80f);
+        pieChart.setData(data);
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieChart.animateXY(5000, 5000);
     }
 
     @Override
@@ -108,60 +159,77 @@ public class OutstandingFragment extends BaseFragment {
                 switch (eventObject.getId()) {
                     case Events.NO_INTERNET_CONNECTION:
                         dismissProgress();
-                        //showToast(ToastTexts.LOGIN_SUCCESSFULL);
-                        //((DashbordActivity) getActivity()).replaceFragment(Fragments.ASSIGN_CALLS_MAP_FRAGMENTS, assignedCallsBundle);
+                        break;
+                    case Events.GET_COLLECTION_OUTSTANDING_SUCCESSFULL:
+                        try {
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionDataResponse(eventObject.getObject().toString()));
+                            model = (OutstandingModel) BAMUtil.fromJson(String.valueOf(jsonObject), OutstandingModel.class);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        dismissProgress();
+                        tviTOInvoice.setText(model.getTable().get(0).getTotalOutStandingInvoice().toString());
+                        tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getTotalOutStandingAmount()));
+                        tviCOInvoice.setText(model.getTable().get(0).getCollectibleOutStandingInvoice().toString());
+                        tviCOAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getCollectibleOutStandingAmount()));
+                        tviCOCMInvoice.setText(model.getTable().get(0).getCollectibleOutStandingCurrentMonthInvoice().toString());
+                        tviCOCMAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getCollectibleOutStandingCurrentMonthAmount()));
+                        tviCOSMInvoice.setText(model.getTable().get(0).getCollectibleOutStandingSubsequentMonthInvoice().toString());
+                        tviCOSMAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getCollectibleOutStandingSubsequentMonthAmount()));
+
+                        //init();
+                        //chart.setData(generatePieData());
+                        //chart.notifyDataSetChanged();
+                        //chart.invalidate();
+                        break;
+                    case Events.GET_COLLECTION_OUTSTANDING_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                    case Events.OOPS_MESSAGE:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                    case Events.INTERNAL_ERROR:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
                         break;
                 }
             }
         });
     }
 
-    @OnClick(R.id.tviTotalOutstanding)
-    public void TotalOutstanding() {
-        viTotalOutstanding.setVisibility(View.VISIBLE);
-        viCollectableOutstanding.setVisibility(View.INVISIBLE);
-        viCollectableOutstandingCurrentMonth.setVisibility(View.INVISIBLE);
-        viCollectableOutstandingSubsequentMonth.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText("60513");
-        tviAmounts.setText(getString(R.string.Rs) + " 272.80");
-        tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount));
-        tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
+    @OnClick(R.id.txtBtnTODetails)
+    public void TotalOutstandingDetails() {
+        showToast("Work in progress...");
+        /*Bundle outstandingBundle = new Bundle();
+        outstandingBundle.putString(TotalOutstandingFragment.FROM, "TOTALOUTSTANDING");
+        outstandingBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        dashboardActivityContext.replaceFragment(Fragments.TOTAL_OUTSTANDING_FRAGMENT, outstandingBundle);*/
     }
 
-    @OnClick(R.id.tviCollectableOutstanding)
-    public void CollectableOutstanding() {
-        viTotalOutstanding.setVisibility(View.INVISIBLE);
-        viCollectableOutstanding.setVisibility(View.VISIBLE);
-        viCollectableOutstandingCurrentMonth.setVisibility(View.INVISIBLE);
-        viCollectableOutstandingSubsequentMonth.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText("9958");
-        tviAmounts.setText(getString(R.string.Rs) + " 132.40");
-        tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount));
-        tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
+    @OnClick(R.id.txtBtnCODetails)
+    public void CollectibleOutstandingDetails() {
+        Bundle outstandingBundle = new Bundle();
+        outstandingBundle.putString(TotalOutstandingFragment.FROM, "COLLECTIBLEOUTSTANDING");
+        outstandingBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        dashboardActivityContext.replaceFragment(Fragments.TOTAL_OUTSTANDING_FRAGMENT, outstandingBundle);
     }
 
-    @OnClick(R.id.tviCollectableOutstandingCurrentMonth)
-    public void CollectableOutstandingCurrentMonth() {
-        viTotalOutstanding.setVisibility(View.INVISIBLE);
-        viCollectableOutstanding.setVisibility(View.INVISIBLE);
-        viCollectableOutstandingCurrentMonth.setVisibility(View.VISIBLE);
-        viCollectableOutstandingSubsequentMonth.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText("9481");
-        tviAmounts.setText(getString(R.string.Rs) + " 107.06");
-        tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount));
-        tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
+    @OnClick(R.id.txtBtnCOCMDetails)
+    public void CollectibleOutstandingCurrentMonthDetails() {
+        Bundle outstandingBundle = new Bundle();
+        outstandingBundle.putString(TotalOutstandingFragment.FROM, "COCM");
+        outstandingBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        dashboardActivityContext.replaceFragment(Fragments.TOTAL_OUTSTANDING_FRAGMENT, outstandingBundle);
     }
 
-    @OnClick(R.id.tviCollectableOutstandingSubsequentMonth)
-    public void CollectableOutstandingSubsequentMonth() {
-        viTotalOutstanding.setVisibility(View.INVISIBLE);
-        viCollectableOutstanding.setVisibility(View.INVISIBLE);
-        viCollectableOutstandingCurrentMonth.setVisibility(View.INVISIBLE);
-        viCollectableOutstandingSubsequentMonth.setVisibility(View.VISIBLE);
-        tviNoofInvoice.setText("993");
-        tviAmounts.setText(getString(R.string.Rs) + " 25.33");
-        tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount));
-        tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
+    @OnClick(R.id.txtBtnCOSMDetails)
+    public void CollectibleOutstandingSubsequentDetails() {
+        Bundle outstandingBundle = new Bundle();
+        outstandingBundle.putString(TotalOutstandingFragment.FROM, "COSM");
+        outstandingBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        dashboardActivityContext.replaceFragment(Fragments.TOTAL_OUTSTANDING_FRAGMENT, outstandingBundle);
     }
 
     @Override

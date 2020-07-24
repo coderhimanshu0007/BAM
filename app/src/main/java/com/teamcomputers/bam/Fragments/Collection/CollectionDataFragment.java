@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.mikephil.charting.charts.PieChart;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.ExpectedCollectionAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
@@ -33,36 +33,34 @@ public class CollectionDataFragment extends BaseFragment {
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
 
-    @BindView(R.id.rviData)
-    RecyclerView rviData;
-
     private ExpectedCollectionAdapter mAdapter;
     private ArrayList<ExpectedCollectionModel> collectionModelArrayList = new ArrayList<>();
     private ArrayList<ExpectedCollectionModel> expectedCollectionModelArrayList = new ArrayList<>();
     private ArrayList<ExpectedCollectionModel> paymentCollectionModelArrayList = new ArrayList<>();
 
-    @BindView(R.id.tviNoofInvoice)
-    TextView tviNoofInvoice;
-    @BindView(R.id.tviAmounts)
-    TextView tviAmounts;
+    @BindView(R.id.pieChart)
+    PieChart pieChart;
 
-    @BindView(R.id.viExpectedCollectionthisWeek)
-    View viExpectedCollectionthisWeek;
-    @BindView(R.id.viExpectedCollectionthisMonth)
-    View viExpectedCollectionthisMonth;
-    @BindView(R.id.viPaymentCollectionthisWeek)
-    View viPaymentCollectionthisWeek;
-    @BindView(R.id.viPaymentCollectionthisMonth)
-    View viPaymentCollectionthisMonth;
+    @BindView(R.id.tviECWInvoice)
+    TextView tviECWInvoice;
+    @BindView(R.id.tviECWAmount)
+    TextView tviECWAmount;
 
-    @BindView(R.id.tviInvoiceNoHeading)
-    TextView tviInvoiceNoHeading;
-    @BindView(R.id.tviCustomerHeading)
-    TextView tviCustomerHeading;
-    @BindView(R.id.tviAmountHeading)
-    TextView tviAmountHeading;
-    @BindView(R.id.tviExpectedDateHeading)
-    TextView tviExpectedDateHeading;
+    @BindView(R.id.tviECMInvoice)
+    TextView tviECMInvoice;
+    @BindView(R.id.tviECMAmount)
+    TextView tviECMAmount;
+
+    @BindView(R.id.tviPCWInvoice)
+    TextView tviPCWInvoice;
+    @BindView(R.id.tviPCWAmount)
+    TextView tviPCWAmount;
+
+    @BindView(R.id.tviPCMInvoice)
+    TextView tviPCMInvoice;
+    @BindView(R.id.tviPCMAmount)
+    TextView tviPCMAmount;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,14 +75,8 @@ public class CollectionDataFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
 
-        layoutManager = new LinearLayoutManager(dashboardActivityContext);
-        rviData.setLayoutManager(layoutManager);
-
-        setData();
-        setPaymentData();
-        collectionModelArrayList.addAll(expectedCollectionModelArrayList);
-        mAdapter = new ExpectedCollectionAdapter(dashboardActivityContext, collectionModelArrayList);
-        rviData.setAdapter(mAdapter);
+        //setData();
+        //setPaymentData();
 
         return rootView;
     }
@@ -134,80 +126,36 @@ public class CollectionDataFragment extends BaseFragment {
         });
     }
 
-    @OnClick(R.id.tviExpectedCollectionthisWeek)
+    @OnClick(R.id.txtBtnECWDetails)
     public void ExpectedCollectionthisWeek() {
-        collectionModelArrayList.clear();
-        collectionModelArrayList.addAll(expectedCollectionModelArrayList);
-        mAdapter.notifyDataSetChanged();
-        viExpectedCollectionthisWeek.setVisibility(View.VISIBLE);
-        viExpectedCollectionthisMonth.setVisibility(View.INVISIBLE);
-        viPaymentCollectionthisWeek.setVisibility(View.INVISIBLE);
-        viPaymentCollectionthisMonth.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText("576");
-        tviAmounts.setText(getString(R.string.Rs) + " 6.58");
-        tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount));
-        tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
-        tviInvoiceNoHeading.setText("Invoice No");
-        tviCustomerHeading.setText("Customer");
-        tviAmountHeading.setText("Amount");
-        tviExpectedDateHeading.setText("Expected Date");
+        Bundle ECWBundle = new Bundle();
+        ECWBundle.putString(CollectionDetailsFragment.FROM, "ECW");
+        ECWBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, ECWBundle);
     }
 
-    @OnClick(R.id.tviExpectedCollectionthisMonth)
+    @OnClick(R.id.txtBtnECMDetails)
     public void ExpectedCollectionthisMonth() {
-        collectionModelArrayList.clear();
-        collectionModelArrayList.addAll(expectedCollectionModelArrayList);
-        mAdapter.notifyDataSetChanged();
-        viExpectedCollectionthisWeek.setVisibility(View.INVISIBLE);
-        viExpectedCollectionthisMonth.setVisibility(View.VISIBLE);
-        viPaymentCollectionthisWeek.setVisibility(View.INVISIBLE);
-        viPaymentCollectionthisMonth.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText("1643");
-        tviAmounts.setText(getString(R.string.Rs) + " 41.08");
-        tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount));
-        tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
-        tviInvoiceNoHeading.setText("Invoice No");
-        tviCustomerHeading.setText("Customer");
-        tviAmountHeading.setText("Amount");
-        tviExpectedDateHeading.setText("Expected Date");
+        Bundle ECMBundle = new Bundle();
+        ECMBundle.putString(CollectionDetailsFragment.FROM, "ECM");
+        ECMBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, ECMBundle);
     }
 
-    @OnClick(R.id.tviPaymentCollectionthisWeek)
+    @OnClick(R.id.txtBtnPCWDetails)
     public void PaymentCollectionthisWeek() {
-        collectionModelArrayList.clear();
-        collectionModelArrayList.addAll(paymentCollectionModelArrayList);
-        mAdapter.notifyDataSetChanged();
-        viExpectedCollectionthisWeek.setVisibility(View.INVISIBLE);
-        viExpectedCollectionthisMonth.setVisibility(View.INVISIBLE);
-        viPaymentCollectionthisWeek.setVisibility(View.VISIBLE);
-        viPaymentCollectionthisMonth.setVisibility(View.INVISIBLE);
-        tviNoofInvoice.setText("44");
-        tviAmounts.setText(getString(R.string.Rs) + " 1.25");
-        tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount));
-        tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
-        tviInvoiceNoHeading.setText("Document No");
-        tviCustomerHeading.setText("Name");
-        tviAmountHeading.setText("Amount");
-        tviExpectedDateHeading.setText("Posting Date");
+        Bundle PCWBundle = new Bundle();
+        PCWBundle.putString(CollectionDetailsFragment.FROM, "PCW");
+        PCWBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, PCWBundle);
     }
 
-    @OnClick(R.id.tviPaymentCollectionthisMonth)
+    @OnClick(R.id.txtBtnPCMDetails)
     public void PaymentCollectionthisMonth() {
-        collectionModelArrayList.clear();
-        collectionModelArrayList.addAll(paymentCollectionModelArrayList);
-        mAdapter.notifyDataSetChanged();
-        viExpectedCollectionthisWeek.setVisibility(View.INVISIBLE);
-        viExpectedCollectionthisMonth.setVisibility(View.INVISIBLE);
-        viPaymentCollectionthisWeek.setVisibility(View.INVISIBLE);
-        viPaymentCollectionthisMonth.setVisibility(View.VISIBLE);
-        tviNoofInvoice.setText("1161");
-        tviAmounts.setText(getString(R.string.Rs) + " 60.50");
-        tviNoofInvoice.setTextColor(getResources().getColor(R.color.logistics_amount));
-        tviAmounts.setTextColor(getResources().getColor(R.color.logistics_amount));
-        tviInvoiceNoHeading.setText("Document No");
-        tviCustomerHeading.setText("Name");
-        tviAmountHeading.setText("Amount");
-        tviExpectedDateHeading.setText("Posting Date");
+        Bundle PCMBundle = new Bundle();
+        PCMBundle.putString(CollectionDetailsFragment.FROM, "PCM");
+        PCMBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, PCMBundle);
     }
 
     @Override

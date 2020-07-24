@@ -24,7 +24,6 @@ import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.Collection.KCollectionAgeingAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.Collection.AgeingModel;
-import com.teamcomputers.bam.Models.OSAgeingModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionAgeingRequester;
@@ -98,7 +97,7 @@ public class OSAgeingFragment extends BaseFragment {
         //chart.setCenterTextTypeface(tf);
 
         // radius of the center hole in percent of maximum radius
-        chart.setHoleRadius(85f);
+        chart.setHoleRadius(80f);
         //chart.setTransparentCircleRadius(90f);
 
         Legend l = chart.getLegend();
@@ -131,8 +130,6 @@ public class OSAgeingFragment extends BaseFragment {
 
     protected PieData generatePieData() {
 
-        int count = 4;
-
         ArrayList<PieEntry> entries1 = new ArrayList<>();
 
         for (int i = 0; i < model.getProgress().size(); i++) {
@@ -157,13 +154,6 @@ public class OSAgeingFragment extends BaseFragment {
         return d;
     }
 
-    /*private void setData() {
-        for (int i = 0; i < 5; i++) {
-            OSAgeingModel osAgeingModel = new OSAgeingModel("LIC of India", "0.45", "15.15", "4.83", "1.92", "0.14", "0.10", "22.59");
-            osAgeingModelArrayList.add(osAgeingModel);
-        }
-    }*/
-
     @Override
     public void onResume() {
         super.onResume();
@@ -187,8 +177,6 @@ public class OSAgeingFragment extends BaseFragment {
                 switch (eventObject.getId()) {
                     case Events.NO_INTERNET_CONNECTION:
                         dismissProgress();
-                        //showToast(ToastTexts.LOGIN_SUCCESSFULL);
-                        //((DashbordActivity) getActivity()).replaceFragment(Fragments.ASSIGN_CALLS_MAP_FRAGMENTS, assignedCallsBundle);
                         break;
                     case Events.GET_COLLECTION_OS_AGEING_SUCCESSFULL:
                         try {
@@ -213,7 +201,7 @@ public class OSAgeingFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
-                    case Events.INTERNAL_ERROR:
+                    case Events.INTERNAL_SERVER_ERROR:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;

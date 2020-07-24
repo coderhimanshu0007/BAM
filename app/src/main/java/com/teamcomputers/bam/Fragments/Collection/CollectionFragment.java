@@ -24,7 +24,6 @@ import com.teamcomputers.bam.Models.SessionDataModel;
 import com.teamcomputers.bam.Models.SessionDetailsModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionRefreshRequester;
 import com.teamcomputers.bam.Requesters.KSaveSessionDetailRequester;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -53,8 +52,8 @@ public class CollectionFragment extends BaseFragment {
     private String[] navLabels = {
             "OS Ageing",
             "Outstanding",
-            "Collection",
-            "Delivery/Installation"
+            "WIP",
+            "Collection"
     };
 
     String toolbarTitle = "";
@@ -71,7 +70,7 @@ public class CollectionFragment extends BaseFragment {
         dashboardActivityContext = (DashboardActivity) context;
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
-        toolbarTitle = getString(R.string.Heading_Logistics);
+        toolbarTitle = getString(R.string.Collection);
         dashboardActivityContext.setToolBarTitle(toolbarTitle);
 
         activeEmployeeAccessModel = SharedPreferencesController.getInstance(BAMApplication.getInstance()).getActiveEmployeeAccess();
@@ -272,14 +271,14 @@ public class CollectionFragment extends BaseFragment {
                     OSAgeingFragment osAgeingFragment = new OSAgeingFragment();
                     return osAgeingFragment;
                 case 1:
-                    CollectionDataFragment collectionDataFragment = new CollectionDataFragment();
-                    return collectionDataFragment;
-                case 2:
                     OutstandingFragment outstandingFragment = new OutstandingFragment();
                     return outstandingFragment;
+                case 2:
+                    CollectionWIPFragment wipFragment = new CollectionWIPFragment();
+                    return wipFragment;
                 case 3:
-                    DeliveryInstallationFragment deliveryInstallationFragment = new DeliveryInstallationFragment();
-                    return deliveryInstallationFragment;
+                    CollectionDataFragment collectionDataFragment = new CollectionDataFragment();
+                    return collectionDataFragment;
                 default:
                     return null;
             }
