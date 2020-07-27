@@ -1,27 +1,23 @@
 package com.teamcomputers.bam.Fragments.Collection;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.core.content.ContextCompat;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.Collection.KOutstandingAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Fragments.NewSalesReceivable.NewRSMTabFragment;
-import com.teamcomputers.bam.Fragments.WSPages.WSRSMFragment;
 import com.teamcomputers.bam.Models.Collection.OutstandingModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
@@ -69,6 +65,18 @@ public class OutstandingFragment extends BaseFragment {
     TextView tviCOSMInvoice;
     @BindView(R.id.tviCOSMAmount)
     TextView tviCOSMAmount;
+
+    @BindView(R.id.llTOSelect)
+    LinearLayout llTOSelect;
+
+    @BindView(R.id.llCOSelect)
+    LinearLayout llCOSelect;
+
+    @BindView(R.id.llCOCMSelect)
+    LinearLayout llCOCMSelect;
+
+    @BindView(R.id.llCOSMSelect)
+    LinearLayout llCOSMSelect;
 
     OutstandingModel model;
 
@@ -190,13 +198,67 @@ public class OutstandingFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
-                    case Events.INTERNAL_ERROR:
+                    case Events.INTERNAL_SERVER_ERROR:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
                 }
             }
         });
+    }
+
+    @OnClick(R.id.cviTO)
+    public void TO() {
+        selectItem();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llTOSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        } else {
+            llTOSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        }
+    }
+
+    @OnClick(R.id.cviCO)
+    public void CO() {
+        selectItem();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llCOSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        } else {
+            llCOSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        }
+    }
+
+    @OnClick(R.id.cviCOCM)
+    public void COCM() {
+        selectItem();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llCOCMSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        } else {
+            llCOCMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        }
+    }
+
+    @OnClick(R.id.cviCOSM)
+    public void COSM() {
+        selectItem();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llCOSMSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        } else {
+            llCOSMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        }
+    }
+
+    private void selectItem() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llTOSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llCOSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llCOCMSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llCOSMSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+        } else {
+            llTOSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llCOSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llCOCMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llCOSMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+        }
     }
 
     @OnClick(R.id.txtBtnTODetails)

@@ -1,15 +1,22 @@
 package com.teamcomputers.bam.Fragments.Collection;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.ExpectedCollectionAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
@@ -61,6 +68,17 @@ public class CollectionDataFragment extends BaseFragment {
     @BindView(R.id.tviPCMAmount)
     TextView tviPCMAmount;
 
+    @BindView(R.id.llECWSelect)
+    LinearLayout llECWSelect;
+
+    @BindView(R.id.llECMSelect)
+    LinearLayout llECMSelect;
+
+    @BindView(R.id.llPCWSelect)
+    LinearLayout llPCWSelect;
+
+    @BindView(R.id.llPCMSelect)
+    LinearLayout llPCMSelect;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,24 +93,46 @@ public class CollectionDataFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
 
-        //setData();
-        //setPaymentData();
+        setData();
 
         return rootView;
     }
 
     private void setData() {
-        for (int i = 0; i < 15; i++) {
-            ExpectedCollectionModel expectedCollectionModel = new ExpectedCollectionModel("GST1819KR-3232", "LIC OF INDIA", "0.53", "22-Nov-19");
-            expectedCollectionModelArrayList.add(expectedCollectionModel);
-        }
-    }
+        ArrayList NoOfEmp = new ArrayList();
 
-    private void setPaymentData() {
-        for (int i = 0; i < 15; i++) {
-            ExpectedCollectionModel expectedCollectionModel = new ExpectedCollectionModel("CITCCR1920H....", "THE BOSTONC...", "0.53", "18-Nov-19");
-            paymentCollectionModelArrayList.add(expectedCollectionModel);
-        }
+        NoOfEmp.add(new PieEntry(945f, 2008));
+        NoOfEmp.add(new PieEntry(1040f, 2009));
+        NoOfEmp.add(new PieEntry(1133f, 2010));
+        NoOfEmp.add(new PieEntry(1240f, 2011));
+        NoOfEmp.add(new PieEntry(1369f, 2012));
+        NoOfEmp.add(new PieEntry(1487f, 2013));
+        NoOfEmp.add(new PieEntry(1501f, 2014));
+        NoOfEmp.add(new PieEntry(1645f, 2015));
+        NoOfEmp.add(new PieEntry(1578f, 2016));
+        NoOfEmp.add(new PieEntry(1695f, 2017));
+        PieDataSet dataSet = new PieDataSet(NoOfEmp, "Number Of Employees");
+
+        dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
+        ArrayList year = new ArrayList();
+
+        year.add("2008");
+        year.add("2009");
+        year.add("2010");
+        year.add("2011");
+        year.add("2012");
+        year.add("2013");
+        year.add("2014");
+        year.add("2015");
+        year.add("2016");
+        year.add("2017");
+        PieData data = new PieData(dataSet);
+        pieChart.setHoleRadius(80f);
+        pieChart.setData(data);
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieChart.animateXY(5000, 5000);
     }
 
     @Override
@@ -126,12 +166,66 @@ public class CollectionDataFragment extends BaseFragment {
         });
     }
 
+    @OnClick(R.id.cviECW)
+    public void ECW() {
+        selectItem();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llECWSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        } else {
+            llECWSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        }
+    }
+
+    @OnClick(R.id.cviECM)
+    public void ECM() {
+        selectItem();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llECMSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        } else {
+            llECMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        }
+    }
+
+    @OnClick(R.id.cviPCW)
+    public void PCW() {
+        selectItem();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llPCWSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        } else {
+            llPCWSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        }
+    }
+
+    @OnClick(R.id.cviPCM)
+    public void PCM() {
+        selectItem();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llPCMSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        } else {
+            llPCMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        }
+    }
+
+    private void selectItem() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llECWSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llECMSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llPCWSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llPCMSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+        } else {
+            llECWSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llECMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llPCWSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llPCMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+        }
+    }
+
     @OnClick(R.id.txtBtnECWDetails)
     public void ExpectedCollectionthisWeek() {
         Bundle ECWBundle = new Bundle();
         ECWBundle.putString(CollectionDetailsFragment.FROM, "ECW");
         ECWBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, ECWBundle);
+        //dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, ECWBundle);
     }
 
     @OnClick(R.id.txtBtnECMDetails)
@@ -139,7 +233,7 @@ public class CollectionDataFragment extends BaseFragment {
         Bundle ECMBundle = new Bundle();
         ECMBundle.putString(CollectionDetailsFragment.FROM, "ECM");
         ECMBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, ECMBundle);
+        //dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, ECMBundle);
     }
 
     @OnClick(R.id.txtBtnPCWDetails)
@@ -147,7 +241,7 @@ public class CollectionDataFragment extends BaseFragment {
         Bundle PCWBundle = new Bundle();
         PCWBundle.putString(CollectionDetailsFragment.FROM, "PCW");
         PCWBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, PCWBundle);
+        //dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, PCWBundle);
     }
 
     @OnClick(R.id.txtBtnPCMDetails)
@@ -155,7 +249,7 @@ public class CollectionDataFragment extends BaseFragment {
         Bundle PCMBundle = new Bundle();
         PCMBundle.putString(CollectionDetailsFragment.FROM, "PCM");
         PCMBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, PCMBundle);
+        //dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, PCMBundle);
     }
 
     @Override

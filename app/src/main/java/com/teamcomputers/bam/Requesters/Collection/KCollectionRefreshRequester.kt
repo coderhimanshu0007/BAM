@@ -20,7 +20,7 @@ class KCollectionRefreshRequester : BaseRequester {
                     EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_REFRESH_UNSUCCESSFULL, null))
                 }
             } else if (apiResponse.responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
-                EventBus.getDefault().post(EventObject(KBAMConstant.Events.INTERNAL_ERROR, null))
+                EventBus.getDefault().post(EventObject(KBAMConstant.Events.INTERNAL_SERVER_ERROR, null))
             } else {
                 EventBus.getDefault().post(EventObject(KBAMConstant.Events.OOPS_MESSAGE, null))
             }

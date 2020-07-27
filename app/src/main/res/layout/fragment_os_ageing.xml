@@ -76,7 +76,7 @@
                             android:minWidth="40dp"
                             android:text="Customer"
                             android:textColor="@color/color_value"
-                            android:textSize="13sp"
+                            android:textSize="12sp"
                             app:fontFamily="@font/roboto_medium" />
 
                         <TextView
@@ -87,7 +87,7 @@
                             android:minWidth="40dp"
                             android:text="Total"
                             android:textColor="@color/color_value"
-                            android:textSize="13sp"
+                            android:textSize="12sp"
                             app:fontFamily="@font/roboto_medium" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>

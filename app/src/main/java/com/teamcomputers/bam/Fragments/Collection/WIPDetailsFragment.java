@@ -133,7 +133,7 @@ public class WIPDetailsFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
-                    case Events.INTERNAL_ERROR:
+                    case Events.INTERNAL_SERVER_ERROR:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;

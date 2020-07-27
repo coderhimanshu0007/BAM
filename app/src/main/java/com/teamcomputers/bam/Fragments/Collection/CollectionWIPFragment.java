@@ -1,15 +1,22 @@
 package com.teamcomputers.bam.Fragments.Collection;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.OSAgeingModel;
@@ -62,6 +69,21 @@ public class CollectionWIPFragment extends BaseFragment {
     @BindView(R.id.tviPDOSGAmount)
     TextView tviPDOSGAmount;
 
+    @BindView(R.id.llWIP0Select)
+    LinearLayout llWIP0Select;
+
+    @BindView(R.id.llWIP16Select)
+    LinearLayout llWIP16Select;
+
+    @BindView(R.id.llWIP30Select)
+    LinearLayout llWIP30Select;
+
+    @BindView(R.id.llPDOSLSelect)
+    LinearLayout llPDOSLSelect;
+
+    @BindView(R.id.llPDOSGSelect)
+    LinearLayout llPDOSGSelect;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +100,7 @@ public class CollectionWIPFragment extends BaseFragment {
         //layoutManager = new LinearLayoutManager(dashboardActivityContext);
         //rviData.setLayoutManager(layoutManager);
 
-        //setData();
+        setData();
 
         //mAdapter = new OSAgeingAdapter(dashboardActivityContext, osAgeingModelArrayList);
         //rviData.setAdapter(mAdapter);
@@ -87,10 +109,40 @@ public class CollectionWIPFragment extends BaseFragment {
     }
 
     private void setData() {
-        for (int i = 0; i < 15; i++) {
-            OSAgeingModel osAgeingModel = new OSAgeingModel("GST1920KR1", "INTUIT IN...", "1.10", "11-Oct-19", "14-Oct-19", "36", "0.10", "22.59");
-            osAgeingModelArrayList.add(osAgeingModel);
-        }
+        ArrayList NoOfEmp = new ArrayList();
+
+        NoOfEmp.add(new PieEntry(945f, 2008));
+        NoOfEmp.add(new PieEntry(1040f, 2009));
+        NoOfEmp.add(new PieEntry(1133f, 2010));
+        NoOfEmp.add(new PieEntry(1240f, 2011));
+        NoOfEmp.add(new PieEntry(1369f, 2012));
+        NoOfEmp.add(new PieEntry(1487f, 2013));
+        NoOfEmp.add(new PieEntry(1501f, 2014));
+        NoOfEmp.add(new PieEntry(1645f, 2015));
+        NoOfEmp.add(new PieEntry(1578f, 2016));
+        NoOfEmp.add(new PieEntry(1695f, 2017));
+        PieDataSet dataSet = new PieDataSet(NoOfEmp, "Number Of Employees");
+
+        dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
+        ArrayList year = new ArrayList();
+
+        year.add("2008");
+        year.add("2009");
+        year.add("2010");
+        year.add("2011");
+        year.add("2012");
+        year.add("2013");
+        year.add("2014");
+        year.add("2015");
+        year.add("2016");
+        year.add("2017");
+        PieData data = new PieData(dataSet);
+        pieChart.setHoleRadius(80f);
+        pieChart.setData(data);
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieChart.animateXY(5000, 5000);
     }
 
     @Override
@@ -124,12 +176,78 @@ public class CollectionWIPFragment extends BaseFragment {
         });
     }
 
+    @OnClick(R.id.cviTotalOustanding)
+    public void totalOustanding() {
+        selectItem();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llWIP0Select.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        } else {
+            llWIP0Select.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        }
+    }
+
+    @OnClick(R.id.cviWIP16)
+    public void WIP16() {
+        selectItem();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llWIP16Select.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        } else {
+            llWIP16Select.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        }
+    }
+
+    @OnClick(R.id.cviWIP31)
+    public void WIP31() {
+        selectItem();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llWIP30Select.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        } else {
+            llWIP30Select.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        }
+    }
+
+    @OnClick(R.id.cviPDOSL)
+    public void PDOSL() {
+        selectItem();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llPDOSLSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        } else {
+            llPDOSLSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        }
+    }
+
+    @OnClick(R.id.cviPDOSG)
+    public void PDOSG() {
+        selectItem();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llPDOSGSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        } else {
+            llPDOSGSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
+        }
+    }
+
+    private void selectItem() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            llWIP0Select.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llWIP16Select.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llWIP30Select.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llPDOSLSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llPDOSGSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+        } else {
+            llWIP0Select.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llWIP16Select.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llWIP30Select.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llPDOSLSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+            llPDOSGSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5547));
+        }
+    }
+
     @OnClick(R.id.txtBtnWIP0Details)
     public void DeliveryInstallationPendingUpto15Days() {
         Bundle WIP0Bundle = new Bundle();
         WIP0Bundle.putString(WIPDetailsFragment.FROM, "WIP0");
         WIP0Bundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP0Bundle);
+        //dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP0Bundle);
     }
 
     @OnClick(R.id.txtBtnWIP16Details)
@@ -137,7 +255,7 @@ public class CollectionWIPFragment extends BaseFragment {
         Bundle WIP16Bundle = new Bundle();
         WIP16Bundle.putString(WIPDetailsFragment.FROM, "WIP16");
         WIP16Bundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP16Bundle);
+        //dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP16Bundle);
     }
 
     @OnClick(R.id.txtBtnWIP30Details)
@@ -145,7 +263,7 @@ public class CollectionWIPFragment extends BaseFragment {
         Bundle WIP30Bundle = new Bundle();
         WIP30Bundle.putString(WIPDetailsFragment.FROM, "WIP30");
         WIP30Bundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP30Bundle);
+        //dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP30Bundle);
     }
 
     @OnClick(R.id.txtBtnPDOSLDetails)
@@ -153,7 +271,7 @@ public class CollectionWIPFragment extends BaseFragment {
         Bundle PDOSLBundle = new Bundle();
         PDOSLBundle.putString(WIPDetailsFragment.FROM, "PDOSL");
         PDOSLBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, PDOSLBundle);
+        //dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, PDOSLBundle);
     }
 
     @OnClick(R.id.txtBtnPDOSGDetails)
@@ -161,7 +279,7 @@ public class CollectionWIPFragment extends BaseFragment {
         Bundle PDOSGBundle = new Bundle();
         PDOSGBundle.putString(WIPDetailsFragment.FROM, "PDOSG");
         PDOSGBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        dashboardActivityContext.replaceFragment(Fragments.TOTAL_OUTSTANDING_FRAGMENT, PDOSGBundle);
+        //dashboardActivityContext.replaceFragment(Fragments.TOTAL_OUTSTANDING_FRAGMENT, PDOSGBundle);
     }
 
     @Override

@@ -68,6 +68,7 @@
                         android:orientation="vertical">
 
                         <androidx.cardview.widget.CardView
+                            android:id="@+id/cviECW"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
@@ -91,15 +92,15 @@
                                         android:layout_height="wrap_content"
                                         android:text="@string/ExpectedCollectionthisWeek"
                                         android:textColor="@color/color_value"
-                                        android:textSize="13sp"
-                                        app:fontFamily="@font/roboto_medium" />
+                                        android:textSize="10sp"
+                                        app:fontFamily="@font/roboto_bold" />
 
                                     <LinearLayout
                                         android:id="@+id/llECWSelect"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentRight="true"
-                                        android:background="@drawable/ic_colapse"
+                                        android:background="@drawable/ic_path_5546"
                                         android:orientation="vertical" />
 
                                 </RelativeLayout>
@@ -134,8 +135,8 @@
                                                 android:drawablePadding="10dp"
                                                 android:text="@string/Invoice"
                                                 android:textColor="@color/color_value"
-                                                android:textSize="14sp"
-                                                app:fontFamily="@font/roboto_medium" />
+                                                android:textSize="13sp"
+                                                app:fontFamily="@font/roboto" />
 
                                             <TextView
                                                 android:id="@+id/tviECWInvoice"
@@ -162,8 +163,8 @@
                                                 android:drawablePadding="10dp"
                                                 android:text="Amount"
                                                 android:textColor="@color/color_value"
-                                                android:textSize="10sp"
-                                                app:fontFamily="@font/roboto_medium" />
+                                                android:textSize="13sp"
+                                                app:fontFamily="@font/roboto" />
 
                                             <TextView
                                                 android:id="@+id/tviECWAmount"
@@ -217,6 +218,7 @@
                         android:orientation="vertical">
 
                         <androidx.cardview.widget.CardView
+                            android:id="@+id/cviECM"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
@@ -240,15 +242,15 @@
                                         android:layout_height="wrap_content"
                                         android:text="@string/ExpectedCollectionthisMonth"
                                         android:textColor="@color/color_value"
-                                        android:textSize="13sp"
-                                        app:fontFamily="@font/roboto_medium" />
+                                        android:textSize="10sp"
+                                        app:fontFamily="@font/roboto_bold" />
 
                                     <LinearLayout
                                         android:id="@+id/llECMSelect"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentRight="true"
-                                        android:background="@drawable/ic_colapse"
+                                        android:background="@drawable/ic_path_5547"
                                         android:orientation="vertical" />
 
                                 </RelativeLayout>
@@ -283,8 +285,8 @@
                                                 android:drawablePadding="10dp"
                                                 android:text="@string/Invoice"
                                                 android:textColor="@color/color_value"
-                                                android:textSize="14sp"
-                                                app:fontFamily="@font/roboto_medium" />
+                                                android:textSize="13sp"
+                                                app:fontFamily="@font/roboto" />
 
                                             <TextView
                                                 android:id="@+id/tviECMInvoice"
@@ -311,8 +313,8 @@
                                                 android:drawablePadding="10dp"
                                                 android:text="Amount"
                                                 android:textColor="@color/color_value"
-                                                android:textSize="10sp"
-                                                app:fontFamily="@font/roboto_medium" />
+                                                android:textSize="13sp"
+                                                app:fontFamily="@font/roboto" />
 
                                             <TextView
                                                 android:id="@+id/tviECMAmount"
@@ -373,6 +375,7 @@
                         android:orientation="vertical">
 
                         <androidx.cardview.widget.CardView
+                            android:id="@+id/cviPCW"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
@@ -396,15 +399,15 @@
                                         android:layout_height="wrap_content"
                                         android:text="@string/PaymentCollectionthisWeek"
                                         android:textColor="@color/color_value"
-                                        android:textSize="13sp"
-                                        app:fontFamily="@font/roboto_medium" />
+                                        android:textSize="10sp"
+                                        app:fontFamily="@font/roboto_bold" />
 
                                     <LinearLayout
                                         android:id="@+id/llPCWSelect"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentRight="true"
-                                        android:background="@drawable/ic_colapse"
+                                        android:background="@drawable/ic_path_5547"
                                         android:orientation="vertical" />
 
                                 </RelativeLayout>
@@ -439,8 +442,8 @@
                                                 android:drawablePadding="10dp"
                                                 android:text="@string/Invoice"
                                                 android:textColor="@color/color_value"
-                                                android:textSize="14sp"
-                                                app:fontFamily="@font/roboto_medium" />
+                                                android:textSize="13sp"
+                                                app:fontFamily="@font/roboto" />
 
                                             <TextView
                                                 android:id="@+id/tviPCWInvoice"
@@ -467,8 +470,8 @@
                                                 android:drawablePadding="10dp"
                                                 android:text="Amount"
                                                 android:textColor="@color/color_value"
-                                                android:textSize="10sp"
-                                                app:fontFamily="@font/roboto_medium" />
+                                                android:textSize="13sp"
+                                                app:fontFamily="@font/roboto" />
 
                                             <TextView
                                                 android:id="@+id/tviPCWAmount"
@@ -522,6 +525,7 @@
                         android:orientation="vertical">
 
                         <androidx.cardview.widget.CardView
+                            android:id="@+id/cviPCM"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
@@ -545,15 +549,15 @@
                                         android:layout_height="wrap_content"
                                         android:text="@string/PaymentCollectionthisMonth"
                                         android:textColor="@color/color_value"
-                                        android:textSize="13sp"
-                                        app:fontFamily="@font/roboto_medium" />
+                                        android:textSize="10sp"
+                                        app:fontFamily="@font/roboto_bold" />
 
                                     <LinearLayout
                                         android:id="@+id/llPCMSelect"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentRight="true"
-                                        android:background="@drawable/ic_colapse"
+                                        android:background="@drawable/ic_path_5547"
                                         android:orientation="vertical" />
 
                                 </RelativeLayout>
@@ -588,8 +592,8 @@
                                                 android:drawablePadding="10dp"
                                                 android:text="@string/Invoice"
                                                 android:textColor="@color/color_value"
-                                                android:textSize="14sp"
-                                                app:fontFamily="@font/roboto_medium" />
+                                                android:textSize="13sp"
+                                                app:fontFamily="@font/roboto" />
 
                                             <TextView
                                                 android:id="@+id/tviPCMInvoice"
@@ -616,8 +620,8 @@
                                                 android:drawablePadding="10dp"
                                                 android:text="Amount"
                                                 android:textColor="@color/color_value"
-                                                android:textSize="10sp"
-                                                app:fontFamily="@font/roboto_medium" />
+                                                android:textSize="13sp"
+                                                app:fontFamily="@font/roboto" />
 
                                             <TextView
                                                 android:id="@+id/tviPCMAmount"
