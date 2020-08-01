@@ -72,13 +72,13 @@ public class TotalOutstandingFragment extends BaseFragment {
 
         showProgress(ProgressDialogTexts.LOADING);
         if (from.equals("TOTALOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "100"));
+            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "10"));
         } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "100"));
+            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "10"));
         } else if (from.equals("COCM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "100"));
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "10"));
         } else if (from.equals("COSM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "100"));
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10"));
         }
         return rootView;
     }

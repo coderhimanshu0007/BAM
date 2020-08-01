@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -93,45 +94,41 @@ public class CollectionDataFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
 
+        pieChart.getDescription().setEnabled(false);
+        Legend l = pieChart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
+        l.setDrawInside(false);
         setData();
 
         return rootView;
     }
 
     private void setData() {
-        ArrayList NoOfEmp = new ArrayList();
+        ArrayList<PieEntry> NoOfEmp = new ArrayList<>();
 
-        NoOfEmp.add(new PieEntry(945f, 2008));
-        NoOfEmp.add(new PieEntry(1040f, 2009));
-        NoOfEmp.add(new PieEntry(1133f, 2010));
-        NoOfEmp.add(new PieEntry(1240f, 2011));
-        NoOfEmp.add(new PieEntry(1369f, 2012));
-        NoOfEmp.add(new PieEntry(1487f, 2013));
-        NoOfEmp.add(new PieEntry(1501f, 2014));
-        NoOfEmp.add(new PieEntry(1645f, 2015));
-        NoOfEmp.add(new PieEntry(1578f, 2016));
-        NoOfEmp.add(new PieEntry(1695f, 2017));
-        PieDataSet dataSet = new PieDataSet(NoOfEmp, "Number Of Employees");
+        NoOfEmp.add(new PieEntry(945f, "2008"));
+        NoOfEmp.add(new PieEntry(1040f, "2009"));
+        NoOfEmp.add(new PieEntry(1133f, "2010"));
+        NoOfEmp.add(new PieEntry(1240f, "2011"));
+        NoOfEmp.add(new PieEntry(1369f, "2012"));
+        NoOfEmp.add(new PieEntry(1487f, "2013"));
+        NoOfEmp.add(new PieEntry(1501f, "2014"));
+        NoOfEmp.add(new PieEntry(1645f, "2015"));
+        NoOfEmp.add(new PieEntry(1578f, "2016"));
+        NoOfEmp.add(new PieEntry(1695f, "2017"));
+
+        PieDataSet dataSet = new PieDataSet(NoOfEmp, "");
 
         dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
-        ArrayList year = new ArrayList();
-
-        year.add("2008");
-        year.add("2009");
-        year.add("2010");
-        year.add("2011");
-        year.add("2012");
-        year.add("2013");
-        year.add("2014");
-        year.add("2015");
-        year.add("2016");
-        year.add("2017");
         PieData data = new PieData(dataSet);
         pieChart.setHoleRadius(80f);
         pieChart.setData(data);
-        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
+        dataSet.setColors(rainbow);
         pieChart.animateXY(5000, 5000);
     }
 

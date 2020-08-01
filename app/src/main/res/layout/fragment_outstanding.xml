@@ -41,7 +41,9 @@
                         <com.github.mikephil.charting.charts.PieChart
                             android:id="@+id/pieChart"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            android:paddingTop="20dp"
+                            android:paddingBottom="20dp" />
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -100,7 +102,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentRight="true"
-                                        android:background="@drawable/ic_path_5546"
+                                        android:background="@drawable/ic_path_5547"
                                         android:orientation="vertical" />
 
                                 </RelativeLayout>
@@ -250,7 +252,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentRight="true"
-                                        android:background="@drawable/ic_path_5547"
+                                        android:background="@drawable/ic_path_5546"
                                         android:orientation="vertical" />
 
                                 </RelativeLayout>

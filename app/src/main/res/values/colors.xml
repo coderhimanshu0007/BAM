@@ -76,4 +76,19 @@
     <color name="text_color_courier">#FC674C</color>
     <color name="text_color_reason">#DFBA69</color>
 
+    <array name="COLORFUL_COLORS">
+        <item>@color/color_progress_start</item>
+        <item>@color/color_progress_mid</item>
+        <item>@color/color_progress_end</item>
+        <item>@color/color_amber</item>
+        <item>@color/color_orange</item>
+        <item>@color/color_third_item_value</item>
+        <item>@color/color_td</item>
+        <item>@color/color_sr_end</item>
+        <item>@color/colorPercentGreen</item>
+        <item>@color/colorheader2</item>
+        <item>@color/end_header_color_bg</item>
+        <item>@color/logistics_amount_red</item>
+    </array>
+
 </resources>

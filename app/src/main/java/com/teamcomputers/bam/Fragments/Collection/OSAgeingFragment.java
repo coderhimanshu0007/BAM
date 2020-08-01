@@ -141,15 +141,18 @@ public class OSAgeingFragment extends BaseFragment {
         }
 
         PieDataSet ds1 = new PieDataSet(entries1, "");
-        ds1.setColors(ColorTemplate.VORDIPLOM_COLORS);
+
+        ds1.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        ds1.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
+        int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
+        ds1.setColors(rainbow);
         //ds1.setSliceSpace(2f);
         ds1.setValueTextColor(Color.BLACK);
         ds1.setValueTextSize(12f);
 
         PieData d = new PieData(ds1);
         //d.setValueTypeface(tf);
-        ds1.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-        ds1.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
         return d;
     }

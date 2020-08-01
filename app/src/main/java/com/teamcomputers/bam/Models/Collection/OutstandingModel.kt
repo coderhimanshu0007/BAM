@@ -7,16 +7,16 @@ import com.google.gson.annotations.SerializedName
 class OutstandingModel {
     @SerializedName("Progress")
     @Expose
-    private var progress: List<Progress>? = null
+    private var progress: Progress? = null
     @SerializedName("Table")
     @Expose
     private var table: List<Table>? = null
 
-    fun getProgress(): List<Progress>? {
+    fun getProgress(): Progress? {
         return progress
     }
 
-    fun setProgress(progress: List<Progress>) {
+    fun setProgress(progress: Progress) {
         this.progress = progress
     }
 
@@ -29,14 +29,65 @@ class OutstandingModel {
     }
 
     inner class Progress {
+        @SerializedName("CurrentMonth")
+        @Expose
+        private var currentMonth: List<ProgressInfo>? = null
+        @SerializedName("SubsequentMonth")
+        @Expose
+        private var subsequentMonth: List<ProgressInfo>? = null
+        @SerializedName("CollectibleOutstanding")
+        @Expose
+        private var collectibleOutstanding: List<ProgressInfo>? = null
+
+        fun getCurrentMonth(): List<ProgressInfo>? {
+            return currentMonth
+        }
+
+        fun setCurrentMonth(currentMonth: List<ProgressInfo>) {
+            this.currentMonth = currentMonth
+        }
+
+        fun getSubsequentMonth(): List<ProgressInfo>? {
+            return subsequentMonth
+        }
+
+        fun setSubsequentMonth(subsequentMonth: List<ProgressInfo>) {
+            this.subsequentMonth = subsequentMonth
+        }
+
+        fun getCollectibleOutstanding(): List<ProgressInfo>? {
+            return collectibleOutstanding
+        }
+
+        fun setCollectibleOutstanding(collectibleOutstanding: List<ProgressInfo>) {
+            this.collectibleOutstanding = collectibleOutstanding
+        }
+    }
+
+    inner class ProgressInfo {
 
         @SerializedName("BU")
         @Expose
-        var bu: String? = null
-        @SerializedName("Invoice")
+        private var bU: String? = null
+        @SerializedName("Amount")
         @Expose
-        var invoice: Int? = null
+        private var amount: Double? = null
 
+        fun getBU(): String? {
+            return bU
+        }
+
+        fun setBU(bU: String) {
+            this.bU = bU
+        }
+
+        fun getAmount(): Double? {
+            return amount
+        }
+
+        fun setAmount(amount: Double?) {
+            this.amount = amount
+        }
     }
 
     inner class Table {

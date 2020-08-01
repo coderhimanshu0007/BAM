@@ -25,10 +25,10 @@ class KCollectionTotalOutstandingAdapter(val mContext: DashboardActivity, val da
         }
 
         fun setData(mContext: Context, dataList: TotalOutstandingModel.Table?) {
-            itemView.tviCustomer.setText(dataList?.customerName)
+            itemView.tviCustomer.setText(dataList?.name)
             itemView.tviTotal.setText(dataList?.amount?.let { KBAMUtils.getRoundOffValue(it) })
 
-            itemView.tviValue11.setText(dataList?.financePerson)
+            /*itemView.tviValue11.setText(dataList?.financePerson)
             itemView.tviValue12.setText(dataList?.nod.toString())
 
             itemView.tviValue21.setText(dataList?.docSubmissionDate)
@@ -46,7 +46,7 @@ class KCollectionTotalOutstandingAdapter(val mContext: DashboardActivity, val da
 
             itemView.tviValue61.setText(dataList?.invoiceNo)
             itemView.tviValue62.setText(dataList?.actualDeliveryDate)
-            itemView.tviValue63.setText(dataList?.percentage.toString())
+            itemView.tviValue63.setText(dataList?.percentage.toString())*/
 
             itemView.rlCustomerItem.setOnClickListener {
                 if (dataList?.open == 0) {

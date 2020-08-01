@@ -64,7 +64,7 @@
                 android:layout_marginRight="13dp"
                 android:layout_marginBottom="5dp"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"

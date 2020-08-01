@@ -166,9 +166,14 @@ class KBAMUtils : KBAMApplication() {
         }
 
         @JvmStatic
+        fun replaceCollectionOutstandingData(response: String):String{
+            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"{\"","{\"").replace("\"}\"","}").replace("\"[{\"","[{\"").replace("]\"","]")
+        }
+
+        @JvmStatic
         fun replaceTotalOutstandingDataResponse(response: String):String{
             //return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}")
-            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}").replace("]\", \"Table\"","], \"Table\"").replace(" \", \"", "\", \"").replace("signed\", \"waiting","signed, waiting")
+            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("]\"}", "]}").replace("]\", \"Table\"","], \"Table\"").replace(" \", \"", "\", \"").replace("signed\", \"waiting","signed, waiting")
         }
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)

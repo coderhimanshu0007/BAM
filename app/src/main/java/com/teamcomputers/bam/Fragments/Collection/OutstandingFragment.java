@@ -1,7 +1,13 @@
 package com.teamcomputers.bam.Fragments.Collection;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +18,10 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.Collection.OutstandingModel;
@@ -32,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -96,7 +103,7 @@ public class OutstandingFragment extends BaseFragment {
         //layoutManager = new LinearLayoutManager(dashboardActivityContext);
         //gviData.setLayoutManager(layoutManager);
 
-        setData();
+        //setData();
 
         //mAdapter = new KOutstandingAdapter(dashboardActivityContext, outstandingModelArrayList);
         //gviData.setAdapter(mAdapter);
@@ -107,41 +114,75 @@ public class OutstandingFragment extends BaseFragment {
         return rootView;
     }
 
-    private void setData() {
-        ArrayList NoOfEmp = new ArrayList();
+    private void init(List<OutstandingModel.ProgressInfo> progress) {
+        pieChart.getDescription().setEnabled(false);
 
-        NoOfEmp.add(new PieEntry(945f, 2008));
-        NoOfEmp.add(new PieEntry(1040f, 2009));
-        NoOfEmp.add(new PieEntry(1133f, 2010));
-        NoOfEmp.add(new PieEntry(1240f, 2011));
-        NoOfEmp.add(new PieEntry(1369f, 2012));
-        NoOfEmp.add(new PieEntry(1487f, 2013));
-        NoOfEmp.add(new PieEntry(1501f, 2014));
-        NoOfEmp.add(new PieEntry(1645f, 2015));
-        NoOfEmp.add(new PieEntry(1578f, 2016));
-        NoOfEmp.add(new PieEntry(1695f, 2017));
-        PieDataSet dataSet = new PieDataSet(NoOfEmp, "Number Of Employees");
+        //chart.setCenterTextTypeface(tf);
+        pieChart.setCenterText(generateCenterText(progress));
+        pieChart.setCenterTextSize(10f);
+        //chart.setCenterTextTypeface(tf);
 
-        dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-        dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-
-        ArrayList year = new ArrayList();
-
-        year.add("2008");
-        year.add("2009");
-        year.add("2010");
-        year.add("2011");
-        year.add("2012");
-        year.add("2013");
-        year.add("2014");
-        year.add("2015");
-        year.add("2016");
-        year.add("2017");
-        PieData data = new PieData(dataSet);
+        // radius of the center hole in percent of maximum radius
         pieChart.setHoleRadius(80f);
-        pieChart.setData(data);
-        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieChart.animateXY(5000, 5000);
+        //chart.setTransparentCircleRadius(90f);
+
+        Legend l = pieChart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
+        l.setDrawInside(false);
+
+        pieChart.setData(generatePieData(progress));
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private SpannableString generateCenterText(List<OutstandingModel.ProgressInfo> progress) {
+        double total = 0;
+        for (int i = 0; i < progress.size(); i++) {
+            //OutstandingModel.ProgressInfo progress = model.getProgress().getCollectibleOutstanding().get(i);
+            //if (!progress.getBu().equals("null")) {
+            Double x = progress.get(i).getAmount();
+            total = total + x;
+            //}
+        }
+        String tot = KBAMUtils.getRoundOffValue(total);
+        int len = tot.length() + 1;
+        SpannableString s = new SpannableString(tot + "\nCOLLECTIBLE\nOUTSTANDING");
+        s.setSpan(new RelativeSizeSpan(2.5f), 0, len, 0);
+        //s.setSpan(new ForegroundColorSpan(R.color.color_progress_end), 0, len, 0);
+        s.setSpan(new RelativeSizeSpan(1f), len, s.length(), 0);
+        s.setSpan(new ForegroundColorSpan(R.color.text_color_login), len, s.length(), 0);
+        return s;
+    }
+
+    protected PieData generatePieData(List<OutstandingModel.ProgressInfo> progress) {
+
+        ArrayList<PieEntry> entries1 = new ArrayList<>();
+
+        for (int i = 0; i < model.getProgress().getCollectibleOutstanding().size(); i++) {
+            //OutstandingModel.ProgressInfo progress = model.getProgress().getCollectibleOutstanding().get(i);
+            //if (!progress.getBu().equals("null")) {
+            String val = KBAMUtils.getRoundOffValue(progress.get(i).getAmount());
+            float x = Float.parseFloat(val);
+            entries1.add(new PieEntry(x, progress.get(i).getBU()));
+            //}
+        }
+
+        PieDataSet ds1 = new PieDataSet(entries1, "");
+
+        ds1.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        ds1.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
+        int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
+        ds1.setColors(rainbow);
+        //ds1.setSliceSpace(2f);
+        ds1.setValueTextColor(Color.BLACK);
+        ds1.setValueTextSize(12f);
+
+        PieData d = new PieData(ds1);
+        //d.setValueTypeface(tf);
+
+        return d;
     }
 
     @Override
@@ -169,8 +210,9 @@ public class OutstandingFragment extends BaseFragment {
                         dismissProgress();
                         break;
                     case Events.GET_COLLECTION_OUTSTANDING_SUCCESSFULL:
+                        Log.e("Outstanding", eventObject.getObject().toString());
                         try {
-                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionDataResponse(eventObject.getObject().toString()));
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionOutstandingData(eventObject.getObject().toString()));
                             model = (OutstandingModel) BAMUtil.fromJson(String.valueOf(jsonObject), OutstandingModel.class);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -185,10 +227,10 @@ public class OutstandingFragment extends BaseFragment {
                         tviCOSMInvoice.setText(model.getTable().get(0).getCollectibleOutStandingSubsequentMonthInvoice().toString());
                         tviCOSMAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getCollectibleOutStandingSubsequentMonthAmount()));
 
-                        //init();
+                        init(model.getProgress().getCollectibleOutstanding());
                         //chart.setData(generatePieData());
                         //chart.notifyDataSetChanged();
-                        //chart.invalidate();
+                        pieChart.invalidate();
                         break;
                     case Events.GET_COLLECTION_OUTSTANDING_UNSUCCESSFULL:
                         dismissProgress();
@@ -209,12 +251,13 @@ public class OutstandingFragment extends BaseFragment {
 
     @OnClick(R.id.cviTO)
     public void TO() {
-        selectItem();
+        /*selectItem();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             llTOSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         } else {
             llTOSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
-        }
+        }*/
+        showToast("Work in progress...");
     }
 
     @OnClick(R.id.cviCO)
@@ -225,6 +268,8 @@ public class OutstandingFragment extends BaseFragment {
         } else {
             llCOSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
+        init(model.getProgress().getCollectibleOutstanding());
+        pieChart.invalidate();
     }
 
     @OnClick(R.id.cviCOCM)
@@ -235,6 +280,8 @@ public class OutstandingFragment extends BaseFragment {
         } else {
             llCOCMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
+        init(model.getProgress().getCurrentMonth());
+        pieChart.invalidate();
     }
 
     @OnClick(R.id.cviCOSM)
@@ -245,6 +292,8 @@ public class OutstandingFragment extends BaseFragment {
         } else {
             llCOSMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
+        init(model.getProgress().getSubsequentMonth());
+        pieChart.invalidate();
     }
 
     private void selectItem() {
