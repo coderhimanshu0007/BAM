@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +29,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -40,6 +44,8 @@ public class TotalOutstandingFragment extends BaseFragment {
     private LinearLayoutManager layoutManager;
 
     String from = "";
+    boolean isLoading = false;
+    int nextLimit = 0;
 
     @BindView(R.id.rviData)
     RecyclerView rviData;
@@ -51,6 +57,7 @@ public class TotalOutstandingFragment extends BaseFragment {
 
     private KCollectionTotalOutstandingAdapter mAdapter;
     TotalOutstandingModel model;
+    List<TotalOutstandingModel.Table> tosDataList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,15 +79,57 @@ public class TotalOutstandingFragment extends BaseFragment {
 
         showProgress(ProgressDialogTexts.LOADING);
         if (from.equals("TOTALOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "10"));
+            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "10", 0));
         } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "10"));
+            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "10", 0));
         } else if (from.equals("COCM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "10"));
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "10", 0));
         } else if (from.equals("COSM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10"));
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10", 0));
         }
+
+        rviData.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                if (!isLoading) {
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == model.getTable().size() - 1) {
+                        //bottom of list!
+                        loadMore();
+                    }
+                } else {
+                    isLoading = false;
+                }
+            }
+        });
+
         return rootView;
+    }
+
+    private void loadMore() {
+        model.getTable().add(null);
+        mAdapter.notifyItemInserted(model.getTable().size() - 1);
+        showProgress(ProgressDialogTexts.LOADING);
+        String start = String.valueOf(nextLimit);
+        String end = String.valueOf(nextLimit + 10);
+        if (from.equals("TOTALOUTSTANDING")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester(start, end, 1));
+        } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester(start, end, 1));
+        } else if (from.equals("COCM")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester(start, end, 1));
+        } else if (from.equals("COSM")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester(start, end, 1));
+        }
+        isLoading = true;
     }
 
     @Override
@@ -111,21 +160,44 @@ public class TotalOutstandingFragment extends BaseFragment {
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceTotalOutstandingDataResponse(eventObject.getObject().toString()));
                             model = (TotalOutstandingModel) BAMUtil.fromJson(String.valueOf(jsonObject), TotalOutstandingModel.class);
+                            tosDataList = model.getTable();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         dismissProgress();
-                        tviTOInvoice.setText(model.getInvoice().toString());
-                        tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getAmount()));
+                        if (model != null) {
+                            tviTOInvoice.setText(model.getInvoice().toString());
+                            tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getAmount()));
 
-                        mAdapter = new KCollectionTotalOutstandingAdapter(dashboardActivityContext, model.getTable());
-                        rviData.setAdapter(mAdapter);
-                        //init();
-                        //chart.setData(generatePieData());
-                        //chart.notifyDataSetChanged();
-                        //chart.invalidate();
+                            mAdapter = new KCollectionTotalOutstandingAdapter(dashboardActivityContext, tosDataList);
+                            rviData.setAdapter(mAdapter);
+                            //isLoading = true;
+                        }
                         break;
                     case Events.GET_COLLECTION_TOTAL_OUTSTANDING_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                    case Events.GET_CTOS_LOAD_MORE_SUCCESSFULL:
+                        model.getTable().remove(model.getTable().size() - 1);
+                        int scrollPosition = model.getTable().size();
+                        mAdapter.notifyItemRemoved(scrollPosition);
+                        int currentSize = scrollPosition;
+                        nextLimit = currentSize + 11;
+                        try {
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceTotalOutstandingDataResponse(eventObject.getObject().toString()));
+                            model = (TotalOutstandingModel) BAMUtil.fromJson(String.valueOf(jsonObject), TotalOutstandingModel.class);
+                            if (model != null) {
+                                tosDataList.addAll(model.getTable());
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        mAdapter.notifyDataSetChanged();
+                        isLoading = false;
+                        dismissProgress();
+                        break;
+                    case Events.GET_CTOS_LOAD_MORE_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;

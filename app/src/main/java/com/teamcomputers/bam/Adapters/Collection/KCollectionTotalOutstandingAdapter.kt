@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.teamcomputers.bam.Activities.DashboardActivity
+import com.teamcomputers.bam.Adapters.WSAdapters.SalesAdapter.KSalesStateAdapter
 import com.teamcomputers.bam.Models.Collection.TotalOutstandingModel
 import com.teamcomputers.bam.R
 import com.teamcomputers.bam.Utils.KBAMUtils
@@ -48,6 +50,11 @@ class KCollectionTotalOutstandingAdapter(val mContext: DashboardActivity, val da
             itemView.tviValue62.setText(dataList?.actualDeliveryDate)
             itemView.tviValue63.setText(dataList?.percentage.toString())*/
 
+            val aa = dataList?.data?.let { KCollectionOutstandingDetailsAdapter(mContext, it) }
+            var layoutManager: LinearLayoutManager? = LinearLayoutManager(mContext)
+            itemView.rviData.layoutManager = layoutManager
+            itemView.rviData.adapter = aa
+
             itemView.rlCustomerItem.setOnClickListener {
                 if (dataList?.open == 0) {
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
@@ -56,7 +63,7 @@ class KCollectionTotalOutstandingAdapter(val mContext: DashboardActivity, val da
                         itemView.llExpand.background = ContextCompat.getDrawable(mContext, R.drawable.ic_expand)
                     }
                     dataList?.open = 1
-                    itemView.llCustomerDetail.visibility = View.VISIBLE
+                    itemView.rviData.visibility = View.VISIBLE
                 } else if (dataList?.open == 1) {
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
                         itemView.llExpand.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_colapse))
@@ -64,7 +71,7 @@ class KCollectionTotalOutstandingAdapter(val mContext: DashboardActivity, val da
                         itemView.llExpand.background = ContextCompat.getDrawable(mContext, R.drawable.ic_colapse)
                     }
                     dataList?.open = 0
-                    itemView.llCustomerDetail.visibility = View.GONE
+                    itemView.rviData.visibility = View.GONE
                 }
             }
         }

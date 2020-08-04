@@ -108,8 +108,6 @@ public class CollectionDataFragment extends BaseFragment {
     private void setData() {
         ArrayList<PieEntry> NoOfEmp = new ArrayList<>();
 
-        NoOfEmp.add(new PieEntry(945f, "2008"));
-        NoOfEmp.add(new PieEntry(1040f, "2009"));
         NoOfEmp.add(new PieEntry(1133f, "2010"));
         NoOfEmp.add(new PieEntry(1240f, "2011"));
         NoOfEmp.add(new PieEntry(1369f, "2012"));
@@ -129,6 +127,7 @@ public class CollectionDataFragment extends BaseFragment {
         pieChart.setData(data);
         int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
         dataSet.setColors(rainbow);
+        dataSet.setSelectionShift(30);
         pieChart.animateXY(5000, 5000);
     }
 

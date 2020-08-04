@@ -175,7 +175,9 @@ public class OutstandingFragment extends BaseFragment {
 
         int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
         ds1.setColors(rainbow);
+        pieChart.animateXY(5000, 5000);
         //ds1.setSliceSpace(2f);
+        ds1.setSelectionShift(30);
         ds1.setValueTextColor(Color.BLACK);
         ds1.setValueTextSize(12f);
 
@@ -218,19 +220,21 @@ public class OutstandingFragment extends BaseFragment {
                             e.printStackTrace();
                         }
                         dismissProgress();
-                        tviTOInvoice.setText(model.getTable().get(0).getTotalOutStandingInvoice().toString());
-                        tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getTotalOutStandingAmount()));
-                        tviCOInvoice.setText(model.getTable().get(0).getCollectibleOutStandingInvoice().toString());
-                        tviCOAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getCollectibleOutStandingAmount()));
-                        tviCOCMInvoice.setText(model.getTable().get(0).getCollectibleOutStandingCurrentMonthInvoice().toString());
-                        tviCOCMAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getCollectibleOutStandingCurrentMonthAmount()));
-                        tviCOSMInvoice.setText(model.getTable().get(0).getCollectibleOutStandingSubsequentMonthInvoice().toString());
-                        tviCOSMAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getCollectibleOutStandingSubsequentMonthAmount()));
+                        if (model != null) {
+                            tviTOInvoice.setText(model.getTable().get(0).getTotalOutStandingInvoice().toString());
+                            tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getTotalOutStandingAmount()));
+                            tviCOInvoice.setText(model.getTable().get(0).getCollectibleOutStandingInvoice().toString());
+                            tviCOAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getCollectibleOutStandingAmount()));
+                            tviCOCMInvoice.setText(model.getTable().get(0).getCollectibleOutStandingCurrentMonthInvoice().toString());
+                            tviCOCMAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getCollectibleOutStandingCurrentMonthAmount()));
+                            tviCOSMInvoice.setText(model.getTable().get(0).getCollectibleOutStandingSubsequentMonthInvoice().toString());
+                            tviCOSMAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getCollectibleOutStandingSubsequentMonthAmount()));
 
-                        init(model.getProgress().getCollectibleOutstanding());
-                        //chart.setData(generatePieData());
-                        //chart.notifyDataSetChanged();
-                        pieChart.invalidate();
+                            init(model.getProgress().getCollectibleOutstanding());
+                            //chart.setData(generatePieData());
+                            //chart.notifyDataSetChanged();
+                            pieChart.invalidate();
+                        }
                         break;
                     case Events.GET_COLLECTION_OUTSTANDING_UNSUCCESSFULL:
                         dismissProgress();

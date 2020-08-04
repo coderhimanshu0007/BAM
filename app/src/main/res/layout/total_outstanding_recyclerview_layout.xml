@@ -55,6 +55,13 @@
                     app:fontFamily="@font/roboto_medium" />
             </RelativeLayout>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rviData"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:minHeight="200dp" />
+
             <LinearLayout
                 android:id="@+id/llCustomerDetail"
                 android:layout_width="match_parent"

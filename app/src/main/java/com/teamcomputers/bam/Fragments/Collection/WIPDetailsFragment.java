@@ -72,13 +72,13 @@ public class WIPDetailsFragment extends BaseFragment {
 
         showProgress(ProgressDialogTexts.LOADING);
         if (from.equals("TOTALOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "100"));
+            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "100",0));
         } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "100"));
+            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "100",0));
         } else if (from.equals("COCM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "100"));
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "100",0));
         } else if (from.equals("COSM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "100"));
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "100",0));
         }
         return rootView;
     }

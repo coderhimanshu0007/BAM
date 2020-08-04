@@ -219,6 +219,9 @@ public interface BAMConstant {
 
         int ITEM_SELECTED = 154;
         int ITEM_UNSELECTED = 155;
+
+        int GET_CTOS_LOAD_MORE_SUCCESSFULL = 156;
+        int GET_CTOS_LOAD_MORE_UNSUCCESSFULL = 157;
     }
 
     interface ToastTexts {

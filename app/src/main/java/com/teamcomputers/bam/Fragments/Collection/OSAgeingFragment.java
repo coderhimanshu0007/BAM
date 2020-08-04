@@ -147,9 +147,11 @@ public class OSAgeingFragment extends BaseFragment {
 
         int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
         ds1.setColors(rainbow);
+        chart.animateXY(5000, 5000);
         //ds1.setSliceSpace(2f);
         ds1.setValueTextColor(Color.BLACK);
         ds1.setValueTextSize(12f);
+        ds1.setSelectionShift(30);
 
         PieData d = new PieData(ds1);
         //d.setValueTypeface(tf);

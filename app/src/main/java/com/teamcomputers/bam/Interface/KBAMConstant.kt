@@ -228,6 +228,9 @@ public interface KBAMConstant {
 
             val ITEM_SELECTED = 154
             val ITEM_UNSELECTED = 155
+
+            val GET_CTOS_LOAD_MORE_SUCCESSFULL = 156
+            val GET_CTOS_LOAD_MORE_UNSUCCESSFULL = 157
         }
     }
 

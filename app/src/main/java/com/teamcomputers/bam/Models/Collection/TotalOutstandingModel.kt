@@ -52,7 +52,7 @@ class TotalOutstandingModel {
         var data: List<Datum>? = null
         @SerializedName("Open")
         @Expose
-        var open: Int? = 0
+        var open: Int = 0
 
         /*fun getName(): String? {
             return name

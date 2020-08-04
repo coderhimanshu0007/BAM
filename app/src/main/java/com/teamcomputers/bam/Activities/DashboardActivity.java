@@ -824,10 +824,10 @@ public class DashboardActivity extends BaseActivity {
                         }
                         break;
                     case Fragments.COLLECTION_FRAGMENTS:
-                        //if (activeEmployeeAccessModel.getData().getCollectionModule() == 1) {
+                        if (activeEmployeeAccessModel.getData().getCollectionModule() == 1) {
                             fragment = new CollectionFragment();
                         //    showToast(ToastTexts.WORK_PROGRESS);
-                        //}
+                        }
                         break;
                     case Fragments.COLLECTION_FRAGMENTS1:
                         if (activeEmployeeAccessModel.getData().getCollectionModule() == 1) {
