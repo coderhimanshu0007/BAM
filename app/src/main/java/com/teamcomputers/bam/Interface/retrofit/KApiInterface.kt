@@ -137,6 +137,36 @@ interface KApiInterface {
     abstract fun collectionOutstandingSubsequentMonth(@Field("Start") start: String,
                                             @Field("End") end: String): Call<Any>
 
+    // Collection Total Outstanding
+    @FormUrlEncoded
+    @POST("WIP015Days")
+    abstract fun collectionWIP0(@Field("Start") start: String,
+                                            @Field("End") end: String): Call<Any>
+
+    // Collection Total Outstanding
+    @FormUrlEncoded
+    @POST("WIP015Days")
+    abstract fun collectionWIP16(@Field("Start") start: String,
+                                            @Field("End") end: String): Call<Any>
+
+    // Collection Total Outstanding
+    @FormUrlEncoded
+    @POST("WIP015Days")
+    abstract fun collectionWIP31(@Field("Start") start: String,
+                                            @Field("End") end: String): Call<Any>
+
+    // Collection Total Outstanding
+    @FormUrlEncoded
+    @POST("WIP015Days")
+    abstract fun collectionWIPPDOSL(@Field("Start") start: String,
+                                            @Field("End") end: String): Call<Any>
+
+    // Collection Total Outstanding
+    @FormUrlEncoded
+    @POST("WIP015Days")
+    abstract fun collectionWIPPDOSG(@Field("Start") start: String,
+                                            @Field("End") end: String): Call<Any>
+
     // Collection Collection
     @POST("OrderProcessingLowMargin")
     abstract fun collectionCollection(): Call<Any>
@@ -146,7 +176,7 @@ interface KApiInterface {
     abstract fun collectionOSAgeing(): Call<Any>
 
     // Collection Delivery/Installation
-    @POST("OrderProcessingSPCSubmission")
+    @POST("WIP")
     abstract fun collectionDeliveryInstallation(): Call<Any>
 
     // Fiscal year list

@@ -100,31 +100,20 @@ public class OutstandingFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
 
-        //layoutManager = new LinearLayoutManager(dashboardActivityContext);
-        //gviData.setLayoutManager(layoutManager);
-
-        //setData();
-
-        //mAdapter = new KOutstandingAdapter(dashboardActivityContext, outstandingModelArrayList);
-        //gviData.setAdapter(mAdapter);
-
-        showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new KCollectionOutstandingRequester());
-
         return rootView;
     }
 
-    private void init(List<OutstandingModel.ProgressInfo> progress) {
+    private void init(List<OutstandingModel.ProgressInfo> progress, double totalAmount) {
         pieChart.getDescription().setEnabled(false);
 
-        //chart.setCenterTextTypeface(tf);
-        pieChart.setCenterText(generateCenterText(progress));
+        pieChart.setCenterText(generateCenterText(totalAmount));
         pieChart.setCenterTextSize(10f);
         //chart.setCenterTextTypeface(tf);
 
         // radius of the center hole in percent of maximum radius
-        pieChart.setHoleRadius(80f);
-        //chart.setTransparentCircleRadius(90f);
+        pieChart.setHoleRadius(75f);
+        pieChart.setTransparentCircleRadius(78f);
+        pieChart.setEntryLabelColor(R.color.graph_color1);
 
         Legend l = pieChart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
@@ -136,15 +125,7 @@ public class OutstandingFragment extends BaseFragment {
     }
 
     @SuppressLint("ResourceAsColor")
-    private SpannableString generateCenterText(List<OutstandingModel.ProgressInfo> progress) {
-        double total = 0;
-        for (int i = 0; i < progress.size(); i++) {
-            //OutstandingModel.ProgressInfo progress = model.getProgress().getCollectibleOutstanding().get(i);
-            //if (!progress.getBu().equals("null")) {
-            Double x = progress.get(i).getAmount();
-            total = total + x;
-            //}
-        }
+    private SpannableString generateCenterText(double total) {
         String tot = KBAMUtils.getRoundOffValue(total);
         int len = tot.length() + 1;
         SpannableString s = new SpannableString(tot + "\nCOLLECTIBLE\nOUTSTANDING");
@@ -159,7 +140,7 @@ public class OutstandingFragment extends BaseFragment {
 
         ArrayList<PieEntry> entries1 = new ArrayList<>();
 
-        for (int i = 0; i < model.getProgress().getCollectibleOutstanding().size(); i++) {
+        for (int i = 0; i < progress.size(); i++) {
             //OutstandingModel.ProgressInfo progress = model.getProgress().getCollectibleOutstanding().get(i);
             //if (!progress.getBu().equals("null")) {
             String val = KBAMUtils.getRoundOffValue(progress.get(i).getAmount());
@@ -190,6 +171,8 @@ public class OutstandingFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        showProgress(ProgressDialogTexts.LOADING);
+        BackgroundExecutor.getInstance().execute(new KCollectionOutstandingRequester());
     }
 
     @Override
@@ -230,7 +213,7 @@ public class OutstandingFragment extends BaseFragment {
                             tviCOSMInvoice.setText(model.getTable().get(0).getCollectibleOutStandingSubsequentMonthInvoice().toString());
                             tviCOSMAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getCollectibleOutStandingSubsequentMonthAmount()));
 
-                            init(model.getProgress().getCollectibleOutstanding());
+                            init(model.getProgress().getCollectibleOutstanding(), model.getTable().get(0).getCollectibleOutStandingAmount());
                             //chart.setData(generatePieData());
                             //chart.notifyDataSetChanged();
                             pieChart.invalidate();
@@ -272,7 +255,7 @@ public class OutstandingFragment extends BaseFragment {
         } else {
             llCOSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
-        init(model.getProgress().getCollectibleOutstanding());
+        init(model.getProgress().getCollectibleOutstanding(), model.getTable().get(0).getCollectibleOutStandingAmount());
         pieChart.invalidate();
     }
 
@@ -284,7 +267,7 @@ public class OutstandingFragment extends BaseFragment {
         } else {
             llCOCMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
-        init(model.getProgress().getCurrentMonth());
+        init(model.getProgress().getCurrentMonth(), model.getTable().get(0).getCollectibleOutStandingCurrentMonthAmount());
         pieChart.invalidate();
     }
 
@@ -296,7 +279,7 @@ public class OutstandingFragment extends BaseFragment {
         } else {
             llCOSMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
-        init(model.getProgress().getSubsequentMonth());
+        init(model.getProgress().getSubsequentMonth(), model.getTable().get(0).getCollectibleOutStandingSubsequentMonthAmount());
         pieChart.invalidate();
     }
 

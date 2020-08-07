@@ -559,7 +559,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentLeft="true"
                                         android:layout_toLeftOf="@+id/llCOSMSelect"
-                                        android:text="Collectible Outstanding in Subsequest Month"
+                                        android:text="Collectible Outstanding in Subsequent Month"
                                         android:textColor="@color/color_value"
                                         android:textSize="10sp"
                                         app:fontFamily="@font/roboto_bold" />

@@ -12,13 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.Collection.KCollectionTotalOutstandingAdapter;
+import com.teamcomputers.bam.Adapters.Collection.KCollectionWIPDetailsAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.Collection.CollectionWIPDetailModel;
 import com.teamcomputers.bam.Models.Collection.TotalOutstandingModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingCurrentMonthRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingSubsequentMonthRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionTotalOutstandingRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionWIP0DetailRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -44,13 +47,16 @@ public class WIPDetailsFragment extends BaseFragment {
     @BindView(R.id.rviData)
     RecyclerView rviData;
 
+    @BindView(R.id.tviWIPDetailHeading)
+    TextView tviWIPDetailHeading;
+
     @BindView(R.id.tviTOInvoice)
     TextView tviTOInvoice;
     @BindView(R.id.tviTOAmount)
     TextView tviTOAmount;
 
-    private KCollectionTotalOutstandingAdapter mAdapter;
-    TotalOutstandingModel model;
+    private KCollectionWIPDetailsAdapter mAdapter;
+    CollectionWIPDetailModel model;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,14 +77,21 @@ public class WIPDetailsFragment extends BaseFragment {
         rviData.setLayoutManager(layoutManager);
 
         showProgress(ProgressDialogTexts.LOADING);
-        if (from.equals("TOTALOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "100",0));
-        } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "100",0));
-        } else if (from.equals("COCM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "100",0));
-        } else if (from.equals("COSM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "100",0));
+        if (from.equals("WIP0")) {
+            tviWIPDetailHeading.setText("WIP 0-15 Days");
+            BackgroundExecutor.getInstance().execute(new KCollectionWIP0DetailRequester("0", "10",0));
+        } else if (from.equals("WIP16")) {
+            tviWIPDetailHeading.setText("WIP 16-30 Days");
+            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "10",0));
+        } else if (from.equals("WIP30")) {
+            tviWIPDetailHeading.setText("WIP 31-60 Days");
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "10",0));
+        } else if (from.equals("PDOSL")) {
+            tviWIPDetailHeading.setText("WIP 0-15 Days");
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
+        } else if (from.equals("PDOSG")) {
+            tviWIPDetailHeading.setText("WIP 0-15 Days");
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
         }
         return rootView;
     }
@@ -107,10 +120,10 @@ public class WIPDetailsFragment extends BaseFragment {
                     case Events.NO_INTERNET_CONNECTION:
                         dismissProgress();
                         break;
-                    case Events.GET_COLLECTION_TOTAL_OUTSTANDING_SUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_DETAIL_SUCCESSFULL:
                         try {
-                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceTotalOutstandingDataResponse(eventObject.getObject().toString()));
-                            model = (TotalOutstandingModel) BAMUtil.fromJson(String.valueOf(jsonObject), TotalOutstandingModel.class);
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
+                            model = (CollectionWIPDetailModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionWIPDetailModel.class);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -118,14 +131,14 @@ public class WIPDetailsFragment extends BaseFragment {
                         tviTOInvoice.setText(model.getInvoice().toString());
                         tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getAmount()));
 
-                        mAdapter = new KCollectionTotalOutstandingAdapter(dashboardActivityContext, model.getTable());
+                        mAdapter = new KCollectionWIPDetailsAdapter(dashboardActivityContext, model.getTable());
                         rviData.setAdapter(mAdapter);
                         //init();
                         //chart.setData(generatePieData());
                         //chart.notifyDataSetChanged();
                         //chart.invalidate();
                         break;
-                    case Events.GET_COLLECTION_TOTAL_OUTSTANDING_UNSUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_DETAIL_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;

@@ -76,17 +76,24 @@
     <color name="text_color_courier">#FC674C</color>
     <color name="text_color_reason">#DFBA69</color>
 
-    <color name="graph_color5">#FFD24A</color>
+    <color name="graph_color1">#2e7d32</color>
+    <color name="graph_color2">#43a047</color>
+    <color name="graph_color3">#ffbf00</color>
+    <color name="graph_color4">#ff8f00</color>
+    <color name="graph_color5">#ef6c00</color>
+    <color name="graph_color6">#ef3935</color>
+    <color name="graph_color7">#C00</color>
+    <color name="graph_color8">#266ECD</color>
 
     <array name="COLORFUL_COLORS">
-        <item>@color/logistics_amount</item>
-        <item>@color/start_header_color_bg</item>
-        <item>@color/end_header_color_bg</item>
-        <item>@color/text_color_courier</item>
+        <item>@color/graph_color1</item>
+        <item>@color/graph_color2</item>
+        <item>@color/graph_color3</item>
+        <item>@color/graph_color4</item>
         <item>@color/graph_color5</item>
-        <item>@color/color_third_item_value</item>
-        <item>@color/color_sr_end</item>
-        <item>@color/colorPercentGreen</item>
+        <item>@color/graph_color6</item>
+        <item>@color/graph_color7</item>
+        <item>@color/graph_color8</item>
     </array>
 
 </resources>

@@ -160,20 +160,25 @@ class KBAMUtils : KBAMApplication() {
         }
 
         @JvmStatic
-        fun replaceCollectionDataResponse(response: String):String{
+        fun replaceCollectionDataResponse(response: String): String {
             //return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}")
-            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}").replace("]\", \"Table\"","], \"Table\"").replace(" \", \"", "\", \"")
+            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}").replace("]\", \"Table\"", "], \"Table\"").replace(" \", \"", "\", \"")
         }
 
         @JvmStatic
-        fun replaceCollectionOutstandingData(response: String):String{
-            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"{\"","{\"").replace("\"}\"","}").replace("\"[{\"","[{\"").replace("]\"","]")
+        fun replaceCollectionOutstandingData(response: String): String {
+            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"{\"", "{\"").replace("\"}\"", "}").replace("\"[{\"", "[{\"").replace("]\"", "]")
         }
 
         @JvmStatic
-        fun replaceTotalOutstandingDataResponse(response: String):String{
+        fun replaceTotalOutstandingDataResponse(response: String): String {
             //return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("}]\"}", "}]}")
-            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("]\"}", "]}").replace("]\", \"Table\"","], \"Table\"").replace(" \", \"", "\", \"").replace("signed\", \"waiting","signed, waiting")
+            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("]\"}", "]}").replace("]\", \"Table\"", "], \"Table\"").replace(" \", \"", "\", \"").replace("signed\", \"waiting", "signed, waiting")
+        }
+
+        @JvmStatic
+        fun replaceCollectionWIPDataResponse(response: String): String {
+            return response.replace("{", "{\"").replace("}", "\"}").replace("=", "\"=\"").replace(", ", "\", \"").replace("}\", \"{", "}, {").replace("=", ": ").replace("\"[", "[").replace("\\", " ").replace("[]\"", "[]").replace("]\"", "]").replace("]\", \"Table\"", "], \"Table\"").replace(" \", \"", "\", \"").replace("\"{\"", "{\"").replace("}\",", "},")
         }
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)

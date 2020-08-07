@@ -1,7 +1,13 @@
 package com.teamcomputers.bam.Fragments.Collection;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +23,24 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.Collection.CollectionWIPModel;
 import com.teamcomputers.bam.Models.OSAgeingModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionWIPRequester;
+import com.teamcomputers.bam.Utils.BAMUtil;
+import com.teamcomputers.bam.Utils.BackgroundExecutor;
+import com.teamcomputers.bam.Utils.KBAMUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,6 +98,8 @@ public class CollectionWIPFragment extends BaseFragment {
     @BindView(R.id.llPDOSGSelect)
     LinearLayout llPDOSGSelect;
 
+    CollectionWIPModel model;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,23 +113,76 @@ public class CollectionWIPFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
 
-        //layoutManager = new LinearLayoutManager(dashboardActivityContext);
-        //rviData.setLayoutManager(layoutManager);
+        return rootView;
+    }
+
+    private void init(List<CollectionWIPModel.ProgressData> progress, double totalAmount) {
+        pieChart.getDescription().setEnabled(false);
+
+        pieChart.setCenterText(generateCenterText(totalAmount));
+        pieChart.setCenterTextSize(10f);
+        //chart.setCenterTextTypeface(tf);
+
+        // radius of the center hole in percent of maximum radius
+        pieChart.setHoleRadius(75f);
+        pieChart.setTransparentCircleRadius(78f);
+        pieChart.setEntryLabelColor(R.color.graph_color1);
+
         pieChart.getDescription().setEnabled(false);
         Legend l = pieChart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setDrawInside(false);
-        setData();
 
-        //mAdapter = new OSAgeingAdapter(dashboardActivityContext, osAgeingModelArrayList);
-        //rviData.setAdapter(mAdapter);
-
-        return rootView;
+        pieChart.setData(generatePieData(progress));
     }
 
-    private void setData() {
+    @SuppressLint("ResourceAsColor")
+    private SpannableString generateCenterText(double total) {
+        String tot = KBAMUtils.getRoundOffValue(total);
+        int len = tot.length() + 1;
+        SpannableString s = new SpannableString(tot + "\nCOLLECTIBLE\nOUTSTANDING");
+        s.setSpan(new RelativeSizeSpan(2.5f), 0, len, 0);
+        //s.setSpan(new ForegroundColorSpan(R.color.color_progress_end), 0, len, 0);
+        s.setSpan(new RelativeSizeSpan(1f), len, s.length(), 0);
+        s.setSpan(new ForegroundColorSpan(R.color.text_color_login), len, s.length(), 0);
+        return s;
+    }
+
+    protected PieData generatePieData(List<CollectionWIPModel.ProgressData> progress) {
+
+        ArrayList<PieEntry> entries1 = new ArrayList<>();
+
+        for (int i = 0; i < progress.size(); i++) {
+            //OutstandingModel.ProgressInfo progress = model.getProgress().getCollectibleOutstanding().get(i);
+            //if (!progress.getBu().equals("null")) {
+            String val = KBAMUtils.getRoundOffValue(progress.get(i).getAmount());
+            float x = Float.parseFloat(val);
+            entries1.add(new PieEntry(x, progress.get(i).getBu()));
+            //}
+        }
+
+        PieDataSet ds1 = new PieDataSet(entries1, "");
+
+        ds1.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        ds1.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
+        int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
+        ds1.setColors(rainbow);
+        pieChart.animateXY(5000, 5000);
+        //ds1.setSliceSpace(2f);
+        ds1.setSelectionShift(30);
+        ds1.setValueTextColor(Color.BLACK);
+        ds1.setValueTextSize(12f);
+
+        PieData d = new PieData(ds1);
+        //d.setValueTypeface(tf);
+
+        return d;
+    }
+
+   /* private void setData() {
         ArrayList<PieEntry> NoOfEmp = new ArrayList<>();
 
         NoOfEmp.add(new PieEntry(1133f, "2010"));
@@ -132,17 +200,20 @@ public class CollectionWIPFragment extends BaseFragment {
         dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
         PieData data = new PieData(dataSet);
-        pieChart.setHoleRadius(80f);
+        pieChart.setHoleRadius(75f);
+        pieChart.setTransparentCircleRadius(78f);
         pieChart.setData(data);
         int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
         dataSet.setColors(rainbow);
         dataSet.setSelectionShift(30);
         pieChart.animateXY(5000, 5000);
-    }
+    }*/
 
     @Override
     public void onResume() {
         super.onResume();
+        showProgress(ProgressDialogTexts.LOADING);
+        BackgroundExecutor.getInstance().execute(new KCollectionWIPRequester());
     }
 
     @Override
@@ -166,19 +237,62 @@ public class CollectionWIPFragment extends BaseFragment {
                         //showToast(ToastTexts.LOGIN_SUCCESSFULL);
                         //((DashbordActivity) getActivity()).replaceFragment(Fragments.ASSIGN_CALLS_MAP_FRAGMENTS, assignedCallsBundle);
                         break;
+                    case Events.GET_COLLECTION_DELIVERY_INSTALLATION_SUCCESSFULL:
+                        Log.e("WIP", eventObject.getObject().toString());
+                        try {
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
+                            model = (CollectionWIPModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionWIPModel.class);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        dismissProgress();
+                        if (model != null) {
+                            tviWIP0Invoice.setText(model.getTable().get(0).getWiP015DaysInvoice().toString());
+                            tviWIP0Amount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getWiP015DaysAmount()));
+
+                            tviWIP16Invoice.setText(model.getTable().get(0).getWiP1630DaysInvoice().toString());
+                            tviWIP16Amount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getWiP1630aysAmount()));
+
+                            tviWIP30Invoice.setText(model.getTable().get(0).getWiP30DaysInvoice().toString());
+                            tviWIP30Amount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getWiP30DaysAmount()));
+
+                            tviPDOSLInvoice.setText(model.getTable().get(0).getWipPendingDocSubmissionLessThan2DaysInvoice().toString());
+                            tviPDOSLAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getWipPendingDocSubmissionLessThan2DaysAmount()));
+
+                            tviPDOSGInvoice.setText(model.getTable().get(0).getWipPendingDocSubmissionGreaterThan2DaysInvoice().toString());
+                            tviPDOSGAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getWipPendingDocSubmissionGreaterThan2DaysAmount()));
+
+                            init(model.getProgress().getWiP015Days(), model.getTable().get(0).getWiP015DaysAmount());
+                            pieChart.invalidate();
+                        }
+                        break;
+                    case Events.GET_COLLECTION_DELIVERY_INSTALLATION_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                    case Events.OOPS_MESSAGE:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                    case Events.INTERNAL_SERVER_ERROR:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
                 }
             }
         });
     }
 
-    @OnClick(R.id.cviTotalOustanding)
-    public void totalOustanding() {
+    @OnClick(R.id.cviWIP0)
+    public void WIP0() {
         selectItem();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             llWIP0Select.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         } else {
             llWIP0Select.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
+        init(model.getProgress().getWiP015Days(), model.getTable().get(0).getWiP015DaysAmount());
+        pieChart.invalidate();
     }
 
     @OnClick(R.id.cviWIP16)
@@ -189,6 +303,8 @@ public class CollectionWIPFragment extends BaseFragment {
         } else {
             llWIP16Select.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
+        init(model.getProgress().getWiP1630Days(), model.getTable().get(0).getWiP1630aysAmount());
+        pieChart.invalidate();
     }
 
     @OnClick(R.id.cviWIP31)
@@ -199,6 +315,8 @@ public class CollectionWIPFragment extends BaseFragment {
         } else {
             llWIP30Select.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
+        init(model.getProgress().getWiP30Days(), model.getTable().get(0).getWiP30DaysAmount());
+        pieChart.invalidate();
     }
 
     @OnClick(R.id.cviPDOSL)
@@ -209,6 +327,8 @@ public class CollectionWIPFragment extends BaseFragment {
         } else {
             llPDOSLSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
+        init(model.getProgress().getWipPendingDocLessThan2Days(), model.getTable().get(0).getWipPendingDocSubmissionLessThan2DaysAmount());
+        pieChart.invalidate();
     }
 
     @OnClick(R.id.cviPDOSG)
@@ -219,6 +339,8 @@ public class CollectionWIPFragment extends BaseFragment {
         } else {
             llPDOSGSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
+        init(model.getProgress().getWipPendingDocGreaterThan2Days(), model.getTable().get(0).getWipPendingDocSubmissionGreaterThan2DaysAmount());
+        pieChart.invalidate();
     }
 
     private void selectItem() {
@@ -242,11 +364,12 @@ public class CollectionWIPFragment extends BaseFragment {
         Bundle WIP0Bundle = new Bundle();
         WIP0Bundle.putString(WIPDetailsFragment.FROM, "WIP0");
         WIP0Bundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        //dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP0Bundle);
+        dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP0Bundle);
     }
 
     @OnClick(R.id.txtBtnWIP16Details)
     public void DeliveryInstallationPendingMore15Days() {
+        showToast("Work in progress...");
         Bundle WIP16Bundle = new Bundle();
         WIP16Bundle.putString(WIPDetailsFragment.FROM, "WIP16");
         WIP16Bundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
@@ -255,6 +378,7 @@ public class CollectionWIPFragment extends BaseFragment {
 
     @OnClick(R.id.txtBtnWIP30Details)
     public void DeliveryInstallationPendingMore30Days() {
+        showToast("Work in progress...");
         Bundle WIP30Bundle = new Bundle();
         WIP30Bundle.putString(WIPDetailsFragment.FROM, "WIP30");
         WIP30Bundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
@@ -263,6 +387,7 @@ public class CollectionWIPFragment extends BaseFragment {
 
     @OnClick(R.id.txtBtnPDOSLDetails)
     public void PendingDocSubmissionUpto2Days() {
+        showToast("Work in progress...");
         Bundle PDOSLBundle = new Bundle();
         PDOSLBundle.putString(WIPDetailsFragment.FROM, "PDOSL");
         PDOSLBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
@@ -271,6 +396,7 @@ public class CollectionWIPFragment extends BaseFragment {
 
     @OnClick(R.id.txtBtnPDOSGDetails)
     public void PendingDocSubmissionGT2Days() {
+        showToast("Work in progress...");
         Bundle PDOSGBundle = new Bundle();
         PDOSGBundle.putString(WIPDetailsFragment.FROM, "PDOSG");
         PDOSGBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);

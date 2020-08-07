@@ -49,7 +49,7 @@ public class OSAgeingFragment extends BaseFragment {
     private LinearLayoutManager layoutManager;
 
     @BindView(R.id.pieChart)
-    PieChart chart;
+    PieChart pieChart;
 
     @BindView(R.id.rviData)
     RecyclerView rviData;
@@ -76,37 +76,29 @@ public class OSAgeingFragment extends BaseFragment {
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviData.setLayoutManager(layoutManager);
 
-        //tf = Typeface.createFromAsset(context.getAssets(), "OpenSans-Light.ttf");
-
-        showProgress(ProgressDialogTexts.LOADING);
-        BackgroundExecutor.getInstance().execute(new KCollectionAgeingRequester());
-
-        //init();
-
-        //setData();
-
         return rootView;
     }
 
     private void init() {
-        chart.getDescription().setEnabled(false);
+        pieChart.getDescription().setEnabled(false);
 
-        //chart.setCenterTextTypeface(tf);
-        chart.setCenterText(generateCenterText());
-        chart.setCenterTextSize(10f);
-        //chart.setCenterTextTypeface(tf);
+        //pieChart.setCenterTextTypeface(tf);
+        pieChart.setCenterText(generateCenterText());
+        pieChart.setCenterTextSize(10f);
+        //pieChart.setCenterTextTypeface(tf);
 
         // radius of the center hole in percent of maximum radius
-        chart.setHoleRadius(80f);
-        //chart.setTransparentCircleRadius(90f);
+        pieChart.setHoleRadius(75f);
+        pieChart.setTransparentCircleRadius(78f);
+        //pieChart.setEntryLabelColor(R.color.graph_color1);
 
-        Legend l = chart.getLegend();
+        Legend l = pieChart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setDrawInside(false);
 
-        chart.setData(generatePieData());
+        pieChart.setData(generatePieData());
     }
 
     @SuppressLint("ResourceAsColor")
@@ -137,7 +129,11 @@ public class OSAgeingFragment extends BaseFragment {
             //entries1.add(new PieEntry((float) ((Math.random() * 60) + 40), "Quarter " + (i + 1)));
             String val = KBAMUtils.getRoundOffValue(progress.getAmount());
             float x = (float) Double.parseDouble(val);
-            entries1.add(new PieEntry(x, progress.getInterval()));
+            if (progress.getInterval().equals("DUE")) {
+                entries1.add(new PieEntry(x, "NOTDUE"));
+            } else {
+                entries1.add(new PieEntry(x, progress.getInterval()));
+            }
         }
 
         PieDataSet ds1 = new PieDataSet(entries1, "");
@@ -147,7 +143,8 @@ public class OSAgeingFragment extends BaseFragment {
 
         int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
         ds1.setColors(rainbow);
-        chart.animateXY(5000, 5000);
+        //ds1.setGradientColors(rainbow);
+        pieChart.animateXY(5000, 5000);
         //ds1.setSliceSpace(2f);
         ds1.setValueTextColor(Color.BLACK);
         ds1.setValueTextSize(12f);
@@ -162,6 +159,8 @@ public class OSAgeingFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        showProgress(ProgressDialogTexts.LOADING);
+        BackgroundExecutor.getInstance().execute(new KCollectionAgeingRequester());
     }
 
     @Override
@@ -196,7 +195,7 @@ public class OSAgeingFragment extends BaseFragment {
                         init();
                         //chart.setData(generatePieData());
                         //chart.notifyDataSetChanged();
-                        chart.invalidate();
+                        pieChart.invalidate();
                         break;
                     case Events.GET_COLLECTION_OS_AGEING_UNSUCCESSFULL:
                         dismissProgress();

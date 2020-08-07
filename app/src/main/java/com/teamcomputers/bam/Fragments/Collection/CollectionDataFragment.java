@@ -94,18 +94,19 @@ public class CollectionDataFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
 
-        pieChart.getDescription().setEnabled(false);
-        Legend l = pieChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        l.setOrientation(Legend.LegendOrientation.VERTICAL);
-        l.setDrawInside(false);
         setData();
 
         return rootView;
     }
 
     private void setData() {
+        pieChart.getDescription().setEnabled(false);
+        Legend l = pieChart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
+        l.setDrawInside(false);
+
         ArrayList<PieEntry> NoOfEmp = new ArrayList<>();
 
         NoOfEmp.add(new PieEntry(1133f, "2010"));
@@ -123,7 +124,10 @@ public class CollectionDataFragment extends BaseFragment {
         dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
         PieData data = new PieData(dataSet);
-        pieChart.setHoleRadius(80f);
+        pieChart.setHoleRadius(75f);
+        pieChart.setTransparentCircleRadius(78f);
+        pieChart.setEntryLabelColor(R.color.graph_color1);
+
         pieChart.setData(data);
         int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
         dataSet.setColors(rainbow);

@@ -69,9 +69,12 @@ class AgeingModel {
         @SerializedName("C270_")
         @Expose
         var c270: Double? = null
-        @SerializedName("DUE")
+        @SerializedName("NOTDUE")
         @Expose
-        var due: Double? = null
+        val nOTDUE: Double? = null
+        @SerializedName("Total")
+        @Expose
+        val total: Double? = null
         @SerializedName("open")
         @Expose
         var open: Int = 0

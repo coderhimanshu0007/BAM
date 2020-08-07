@@ -160,6 +160,26 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.collectionDeliveryInstallation()?.let { KConnectionUtils().execute<Any>(it) }
     }
 
+    fun collectionWIP0(start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionWIP0(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionWIP16(start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionWIP16(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionWIP31(start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionWIP31(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionWIPPDOSL(start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionWIPPDOSL(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionWIPPDOSG(start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionWIPPDOSG(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
     fun activeEmployeeAccess(userId: String, userName: String): ApiResponse<*>? {
         return getApiInterface()?.activeEmployeeAccess(userId, userName)?.let { KConnectionUtils().execute<LoginModel>(it) }
     }

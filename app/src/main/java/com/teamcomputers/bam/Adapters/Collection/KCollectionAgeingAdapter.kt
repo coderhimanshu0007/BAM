@@ -21,7 +21,7 @@ class KCollectionAgeingAdapter(val mContext: DashboardActivity, val dataList: Li
 
         fun setData(mContext: Context, dataList: AgeingModel.Table?) {
             itemView.tviCustomer.setText(dataList?.customerName)
-            itemView.tviTotal.setText(dataList?.due?.let { KBAMUtils.getRoundOffValue(it) })
+            itemView.tviTotal.setText(dataList?.total?.let { KBAMUtils.getRoundOffValue(it) })
             itemView.tviValue1.setText(dataList?.c030.toString())
             itemView.tviValue2.setText(dataList?.c3160.toString())
             itemView.tviValue3.setText(dataList?.c6190.toString())
@@ -29,6 +29,7 @@ class KCollectionAgeingAdapter(val mContext: DashboardActivity, val dataList: Li
             itemView.tviValue5.setText(dataList?.c121180.toString())
             itemView.tviValue6.setText(dataList?.c181270.toString())
             itemView.tviValue7.setText(dataList?.c270.toString())
+            itemView.tviValue8.setText(dataList?.nOTDUE.toString())
 
             itemView.rlCustomerItem.setOnClickListener {
                 if (dataList?.open == 0) {
