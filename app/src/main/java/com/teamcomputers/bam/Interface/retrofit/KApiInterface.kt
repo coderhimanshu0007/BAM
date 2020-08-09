@@ -125,47 +125,74 @@ interface KApiInterface {
     abstract fun collectionTotalOutstanding(@Field("Start") start: String,
                                             @Field("End") end: String): Call<Any>
 
+    // Collection Total Outstanding
+    @FormUrlEncoded
+    @POST("CollectionCollectibleTotalOutStandingCustomerSearch")
+    abstract fun collectionTotalOutstandingSearch(@Field("Customer") customer: String): Call<Any>
+
     // Collection Outstanding Current Month
     @FormUrlEncoded
     @POST("CollectionCollectibleOutStandingCurrentMonthCustomer")
     abstract fun collectionOutstandingCurrentMonth(@Field("Start") start: String,
-                                            @Field("End") end: String): Call<Any>
+                                                   @Field("End") end: String): Call<Any>
+
+    // Collection Outstanding Current Month
+    @FormUrlEncoded
+    @POST("CollectionCollectibleOutStandingCurrentMonthCustomerSearch")
+    abstract fun collectionOutstandingCurrentMonthSearch(@Field("Customer") customer: String): Call<Any>
 
     // Collection Outstanding
     @FormUrlEncoded
     @POST("CollectionCollectibleOutStandingSubsequentMonthCustomer")
     abstract fun collectionOutstandingSubsequentMonth(@Field("Start") start: String,
-                                            @Field("End") end: String): Call<Any>
+                                                      @Field("End") end: String): Call<Any>
+
+    // Collection Outstanding
+    @FormUrlEncoded
+    @POST("CollectionCollectibleOutStandingSubsequentMonthCustomerSearch")
+    abstract fun collectionOutstandingSubsequentMonthSearch(@Field("Customer") customer: String): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
     @POST("WIP015Days")
     abstract fun collectionWIP0(@Field("Start") start: String,
-                                            @Field("End") end: String): Call<Any>
+                                @Field("End") end: String): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
-    @POST("WIP015Days")
+    @POST("WIP015DaysSearch")
+    abstract fun collectionWIP0Search(@Field("Customer") customer: String,
+                                      @Field("Invoice") invoice: String): Call<Any>
+
+    // Collection Total Outstanding
+    @FormUrlEncoded
+    @POST("WIP1630Days")
     abstract fun collectionWIP16(@Field("Start") start: String,
-                                            @Field("End") end: String): Call<Any>
+                                 @Field("End") end: String): Call<Any>
+
+    // Collection Total Outstanding
+    @FormUrlEncoded
+    @POST("WIP1630DaysSearch")
+    abstract fun collectionWIP16Search(@Field("Customer") customer: String,
+                                       @Field("Invoice") invoice: String): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
     @POST("WIP015Days")
     abstract fun collectionWIP31(@Field("Start") start: String,
-                                            @Field("End") end: String): Call<Any>
+                                 @Field("End") end: String): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
     @POST("WIP015Days")
     abstract fun collectionWIPPDOSL(@Field("Start") start: String,
-                                            @Field("End") end: String): Call<Any>
+                                    @Field("End") end: String): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
     @POST("WIP015Days")
     abstract fun collectionWIPPDOSG(@Field("Start") start: String,
-                                            @Field("End") end: String): Call<Any>
+                                    @Field("End") end: String): Call<Any>
 
     // Collection Collection
     @POST("OrderProcessingLowMargin")

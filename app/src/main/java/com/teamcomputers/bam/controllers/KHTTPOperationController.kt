@@ -140,12 +140,24 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.collectionTotalOutstanding(start, end)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
+    fun collectionTotalOutstandingSearch(customer: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionTotalOutstandingSearch(customer)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
     fun collectionOutstandingCurrentMonth(start: String, end: String): ApiResponse<*>? {
         return getApiInterface()?.collectionOutstandingCurrentMonth(start, end)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
+    fun collectionOutstandingCurrentMonthSearch(customer: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionOutstandingCurrentMonthSearch(customer)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
     fun collectionOutstandingSubsequentMonth(start: String, end: String): ApiResponse<*>? {
         return getApiInterface()?.collectionOutstandingSubsequentMonth(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionOutstandingSubsequentMonthSearch(customer: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionOutstandingSubsequentMonthSearch(customer)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
     fun collectionCollection(): ApiResponse<*>? {
@@ -164,8 +176,16 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.collectionWIP0(start, end)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
+    fun collectionWIP0Search(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionWIP0Search(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
     fun collectionWIP16(start: String, end: String): ApiResponse<*>? {
         return getApiInterface()?.collectionWIP16(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionWIP16Search(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionWIP16Search(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
     fun collectionWIP31(start: String, end: String): ApiResponse<*>? {

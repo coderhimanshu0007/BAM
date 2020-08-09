@@ -182,33 +182,6 @@ public class CollectionWIPFragment extends BaseFragment {
         return d;
     }
 
-   /* private void setData() {
-        ArrayList<PieEntry> NoOfEmp = new ArrayList<>();
-
-        NoOfEmp.add(new PieEntry(1133f, "2010"));
-        NoOfEmp.add(new PieEntry(1240f, "2011"));
-        NoOfEmp.add(new PieEntry(1369f, "2012"));
-        NoOfEmp.add(new PieEntry(1487f, "2013"));
-        NoOfEmp.add(new PieEntry(1501f, "2014"));
-        NoOfEmp.add(new PieEntry(1645f, "2015"));
-        NoOfEmp.add(new PieEntry(1578f, "2016"));
-        NoOfEmp.add(new PieEntry(1695f, "2017"));
-
-        PieDataSet dataSet = new PieDataSet(NoOfEmp, "");
-
-        dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-        dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-
-        PieData data = new PieData(dataSet);
-        pieChart.setHoleRadius(75f);
-        pieChart.setTransparentCircleRadius(78f);
-        pieChart.setData(data);
-        int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
-        dataSet.setColors(rainbow);
-        dataSet.setSelectionShift(30);
-        pieChart.animateXY(5000, 5000);
-    }*/
-
     @Override
     public void onResume() {
         super.onResume();
@@ -369,38 +342,37 @@ public class CollectionWIPFragment extends BaseFragment {
 
     @OnClick(R.id.txtBtnWIP16Details)
     public void DeliveryInstallationPendingMore15Days() {
-        showToast("Work in progress...");
         Bundle WIP16Bundle = new Bundle();
         WIP16Bundle.putString(WIPDetailsFragment.FROM, "WIP16");
         WIP16Bundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        //dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP16Bundle);
+        dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP16Bundle);
     }
 
     @OnClick(R.id.txtBtnWIP30Details)
     public void DeliveryInstallationPendingMore30Days() {
-        showToast("Work in progress...");
+        //showToast("Work in progress...");
         Bundle WIP30Bundle = new Bundle();
         WIP30Bundle.putString(WIPDetailsFragment.FROM, "WIP30");
         WIP30Bundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        //dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP30Bundle);
+        dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP30Bundle);
     }
 
     @OnClick(R.id.txtBtnPDOSLDetails)
     public void PendingDocSubmissionUpto2Days() {
-        showToast("Work in progress...");
+        //showToast("Work in progress...");
         Bundle PDOSLBundle = new Bundle();
         PDOSLBundle.putString(WIPDetailsFragment.FROM, "PDOSL");
         PDOSLBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        //dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, PDOSLBundle);
+        dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, PDOSLBundle);
     }
 
     @OnClick(R.id.txtBtnPDOSGDetails)
     public void PendingDocSubmissionGT2Days() {
-        showToast("Work in progress...");
+        //showToast("Work in progress...");
         Bundle PDOSGBundle = new Bundle();
         PDOSGBundle.putString(WIPDetailsFragment.FROM, "PDOSG");
         PDOSGBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        //dashboardActivityContext.replaceFragment(Fragments.TOTAL_OUTSTANDING_FRAGMENT, PDOSGBundle);
+        dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, PDOSGBundle);
     }
 
     @Override

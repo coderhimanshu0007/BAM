@@ -54,30 +54,6 @@ class TotalOutstandingModel {
         @Expose
         var open: Int = 0
 
-        /*fun getName(): String? {
-            return name
-        }
-
-        fun setName(name: String) {
-            this.name = name
-        }
-
-        fun getAmount(): Double? {
-            return amount
-        }
-
-        fun setAmount(amount: Double?) {
-            this.amount = amount
-        }
-
-        fun getData(): List<Datum>? {
-            return data
-        }
-
-        fun setData(data: List<Datum>) {
-            this.data = data
-        }*/
-
     }
 
     inner class Datum {

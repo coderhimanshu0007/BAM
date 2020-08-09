@@ -6,19 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.Collection.KCollectionTotalOutstandingAdapter;
+import com.teamcomputers.bam.Adapters.Collection.KCollectionWIPDetailsAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Models.Collection.CollectionWIPDetailModel;
 import com.teamcomputers.bam.Models.Collection.TotalOutstandingModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingCurrentMonthRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingSubsequentMonthRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionTotalOutstandingRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionWIP0DetailRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionWIP16DetailRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -27,6 +32,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,17 +48,25 @@ public class CollectionDetailsFragment extends BaseFragment {
     private LinearLayoutManager layoutManager;
 
     String from = "";
+    boolean isLoading = false;
+    int nextLimit = 0;
 
     @BindView(R.id.rviData)
     RecyclerView rviData;
+
+    @BindView(R.id.tviWIPDetailHeading)
+    TextView tviWIPDetailHeading;
 
     @BindView(R.id.tviTOInvoice)
     TextView tviTOInvoice;
     @BindView(R.id.tviTOAmount)
     TextView tviTOAmount;
 
-    private KCollectionTotalOutstandingAdapter mAdapter;
-    TotalOutstandingModel model;
+    /*private KCollectionTotalOutstandingAdapter mAdapter;
+    TotalOutstandingModel model;*/
+    private KCollectionWIPDetailsAdapter mAdapter;
+    CollectionWIPDetailModel model;
+    List<CollectionWIPDetailModel.Table> wipDataList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,16 +87,65 @@ public class CollectionDetailsFragment extends BaseFragment {
         rviData.setLayoutManager(layoutManager);
 
         showProgress(ProgressDialogTexts.LOADING);
-        if (from.equals("TOTALOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "100", 0));
-        } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "100", 0));
-        } else if (from.equals("COCM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "100", 0));
-        } else if (from.equals("COSM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "100", 0));
+        showProgress(ProgressDialogTexts.LOADING);
+        if (from.equals("ECW")) {
+            tviWIPDetailHeading.setText("Expected Collection this Week");
+            BackgroundExecutor.getInstance().execute(new KCollectionWIP0DetailRequester("0", "10",0));
+        } else if (from.equals("ECM")) {
+            tviWIPDetailHeading.setText("Expected Collection this Month");
+            BackgroundExecutor.getInstance().execute(new KCollectionWIP16DetailRequester("0", "10",0));
+        } else if (from.equals("PCW")) {
+            tviWIPDetailHeading.setText("Payment Collection this Week");
+            BackgroundExecutor.getInstance().execute(new KCollectionWIP16DetailRequester("0", "10",0));
+        } else if (from.equals("PCM")) {
+            tviWIPDetailHeading.setText("Payment Collection this Month");
+            BackgroundExecutor.getInstance().execute(new KCollectionWIP16DetailRequester("0", "10",0));
         }
+
+        /*rviData.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                if (!isLoading) {
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == model.getTable().size() - 1) {
+                        //bottom of list!
+                        loadMore();
+                    }
+                } else {
+                    isLoading = false;
+                }
+            }
+        });*/
+
         return rootView;
+    }
+
+    private void loadMore() {
+        model.getTable().add(null);
+        mAdapter.notifyItemInserted(model.getTable().size() - 1);
+        showProgress(ProgressDialogTexts.LOADING);
+        String start = String.valueOf(nextLimit);
+        String end = String.valueOf(nextLimit + 10);
+        if (from.equals("WIP0")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionWIP0DetailRequester("0", "10",0));
+        } else if (from.equals("WIP16")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionWIP16DetailRequester("0", "10",0));
+        } else if (from.equals("WIP30")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "10",0));
+        } else if (from.equals("PDOSL")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
+        } else if (from.equals("PDOSG")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
+        }
+        isLoading = true;
     }
 
     @Override
@@ -107,25 +172,47 @@ public class CollectionDetailsFragment extends BaseFragment {
                     case Events.NO_INTERNET_CONNECTION:
                         dismissProgress();
                         break;
-                    case Events.GET_COLLECTION_TOTAL_OUTSTANDING_SUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_DETAIL_SUCCESSFULL:
                         try {
-                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceTotalOutstandingDataResponse(eventObject.getObject().toString()));
-                            model = (TotalOutstandingModel) BAMUtil.fromJson(String.valueOf(jsonObject), TotalOutstandingModel.class);
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
+                            model = (CollectionWIPDetailModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionWIPDetailModel.class);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         dismissProgress();
-                        tviTOInvoice.setText(model.getInvoice().toString());
-                        tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getAmount()));
+                        if (model != null) {
+                            wipDataList = model.getTable();
+                            tviTOInvoice.setText(model.getInvoice().toString());
+                            tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getAmount()));
 
-                        mAdapter = new KCollectionTotalOutstandingAdapter(dashboardActivityContext, model.getTable());
-                        rviData.setAdapter(mAdapter);
-                        //init();
-                        //chart.setData(generatePieData());
-                        //chart.notifyDataSetChanged();
-                        //chart.invalidate();
+                            mAdapter = new KCollectionWIPDetailsAdapter(dashboardActivityContext, wipDataList);
+                            rviData.setAdapter(mAdapter);
+                        }
                         break;
-                    case Events.GET_COLLECTION_TOTAL_OUTSTANDING_UNSUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_DETAIL_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
+                    case Events.GET_WIP_DETAIL_LOAD_MORE_SUCCESSFULL:
+                        model.getTable().remove(model.getTable().size() - 1);
+                        int scrollPosition = model.getTable().size();
+                        mAdapter.notifyItemRemoved(scrollPosition);
+                        int currentSize = scrollPosition;
+                        nextLimit = currentSize + 11;
+                        try {
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
+                            model = (CollectionWIPDetailModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionWIPDetailModel.class);
+                            if (model != null) {
+                                wipDataList.addAll(model.getTable());
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        mAdapter.notifyDataSetChanged();
+                        isLoading = false;
+                        dismissProgress();
+                        break;
+                    case Events.GET_WIP_DETAIL_LOAD_MORE_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
