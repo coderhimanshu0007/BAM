@@ -154,7 +154,7 @@ public class OutstandingFragment extends BaseFragment {
         ds1.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         ds1.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
-        int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
+        int[] rainbow = context.getResources().getIntArray(R.array.COLLECTION_COLORS);
         ds1.setColors(rainbow);
         pieChart.animateXY(5000, 5000);
         //ds1.setSliceSpace(2f);

@@ -141,12 +141,12 @@ public class CollectionWIPFragment extends BaseFragment {
     @SuppressLint("ResourceAsColor")
     private SpannableString generateCenterText(double total) {
         String tot = KBAMUtils.getRoundOffValue(total);
-        int len = tot.length() + 1;
-        SpannableString s = new SpannableString(tot + "\nCOLLECTIBLE\nOUTSTANDING");
+        int len = tot.length();
+        SpannableString s = new SpannableString(tot);
         s.setSpan(new RelativeSizeSpan(2.5f), 0, len, 0);
         //s.setSpan(new ForegroundColorSpan(R.color.color_progress_end), 0, len, 0);
-        s.setSpan(new RelativeSizeSpan(1f), len, s.length(), 0);
-        s.setSpan(new ForegroundColorSpan(R.color.text_color_login), len, s.length(), 0);
+        //s.setSpan(new RelativeSizeSpan(1f), len, s.length(), 0);
+        //s.setSpan(new ForegroundColorSpan(R.color.text_color_login), len, s.length(), 0);
         return s;
     }
 
@@ -168,7 +168,7 @@ public class CollectionWIPFragment extends BaseFragment {
         ds1.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         ds1.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
-        int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
+        int[] rainbow = context.getResources().getIntArray(R.array.COLLECTION_COLORS);
         ds1.setColors(rainbow);
         pieChart.animateXY(5000, 5000);
         //ds1.setSliceSpace(2f);

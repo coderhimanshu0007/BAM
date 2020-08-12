@@ -26,15 +26,6 @@
                 android:orientation="horizontal"
                 android:padding="5dp">
 
-                <TextView
-                    android:id="@+id/tviCustomer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Customer"
-                    android:textColor="@color/color_value"
-                    android:textSize="12sp"
-                    app:fontFamily="@font/roboto_medium" />
-
                 <LinearLayout
                     android:id="@+id/llExpand"
                     android:layout_width="wrap_content"
@@ -53,6 +44,17 @@
                     android:textColor="@color/color_value"
                     android:textSize="12sp"
                     app:fontFamily="@font/roboto" />
+
+                <TextView
+                    android:id="@+id/tviCustomer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/tviTotal"
+                    android:text="Customer"
+                    android:textColor="@color/color_value"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/roboto_medium" />
             </RelativeLayout>
 
             <LinearLayout
@@ -96,7 +98,7 @@
                                 android:layout_height="wrap_content"
                                 android:drawableLeft="@drawable/ic_group_1511"
                                 android:drawablePadding="10dp"
-                                android:text="C0_30"
+                                android:text="0-30"
                                 android:textColor="@color/color_value"
                                 android:textSize="10sp"
                                 app:fontFamily="@font/roboto" />
@@ -132,7 +134,7 @@
                                 android:layout_height="wrap_content"
                                 android:drawableLeft="@drawable/ic_group_1511"
                                 android:drawablePadding="10dp"
-                                android:text="C31_60"
+                                android:text="31-60"
                                 android:textColor="@color/color_value"
                                 android:textSize="10sp"
                                 app:fontFamily="@font/roboto" />
@@ -168,7 +170,7 @@
                                 android:layout_height="wrap_content"
                                 android:drawableLeft="@drawable/ic_group_1511"
                                 android:drawablePadding="10dp"
-                                android:text="C61_90"
+                                android:text="61-90"
                                 android:textColor="@color/color_value"
                                 android:textSize="10sp"
                                 app:fontFamily="@font/roboto" />
@@ -204,7 +206,7 @@
                                 android:layout_height="wrap_content"
                                 android:drawableLeft="@drawable/ic_group_1511"
                                 android:drawablePadding="10dp"
-                                android:text="C91_120"
+                                android:text="91-120"
                                 android:textColor="@color/color_value"
                                 android:textSize="10sp"
                                 app:fontFamily="@font/roboto" />
@@ -246,7 +248,7 @@
                                 android:layout_height="wrap_content"
                                 android:drawableLeft="@drawable/ic_group_1511"
                                 android:drawablePadding="10dp"
-                                android:text="C121_180"
+                                android:text="121-180"
                                 android:textColor="@color/color_value"
                                 android:textSize="10sp"
                                 app:fontFamily="@font/roboto" />
@@ -282,7 +284,7 @@
                                 android:layout_height="wrap_content"
                                 android:drawableLeft="@drawable/ic_group_1511"
                                 android:drawablePadding="10dp"
-                                android:text="C181_270"
+                                android:text="181-270"
                                 android:textColor="@color/color_value"
                                 android:textSize="10sp"
                                 app:fontFamily="@font/roboto" />
@@ -318,7 +320,7 @@
                                 android:layout_height="wrap_content"
                                 android:drawableLeft="@drawable/ic_group_1511"
                                 android:drawablePadding="10dp"
-                                android:text="C270_"
+                                android:text="270+"
                                 android:textColor="@color/color_value"
                                 android:textSize="10sp"
                                 app:fontFamily="@font/roboto" />

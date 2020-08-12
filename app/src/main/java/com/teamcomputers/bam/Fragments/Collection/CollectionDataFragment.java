@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,22 +15,20 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.ExpectedCollectionAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Models.Collection.CollectionWIPModel;
-import com.teamcomputers.bam.Models.ExpectedCollectionModel;
+import com.teamcomputers.bam.Models.Collection.CollectionCollectionModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionCollectionRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
+import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -52,7 +49,7 @@ public class CollectionDataFragment extends BaseFragment {
     private Unbinder unbinder;
     private DashboardActivity dashboardActivityContext;
 
-    CollectionWIPModel model;
+    CollectionCollectionModel model;
 
     @BindView(R.id.pieChart)
     PieChart pieChart;
@@ -105,7 +102,7 @@ public class CollectionDataFragment extends BaseFragment {
         return rootView;
     }
 
-    private void init(List<CollectionWIPModel.ProgressData> progress, double totalAmount) {
+    private void init(List<CollectionCollectionModel.CollectedData> progress, double totalAmount) {
         pieChart.getDescription().setEnabled(false);
 
         pieChart.setCenterText(generateCenterText(totalAmount));
@@ -130,16 +127,16 @@ public class CollectionDataFragment extends BaseFragment {
     @SuppressLint("ResourceAsColor")
     private SpannableString generateCenterText(double total) {
         String tot = KBAMUtils.getRoundOffValue(total);
-        int len = tot.length() + 1;
-        SpannableString s = new SpannableString(tot + "\nCOLLECTIBLE\nOUTSTANDING");
+        int len = tot.length();
+        SpannableString s = new SpannableString(tot);
         s.setSpan(new RelativeSizeSpan(2.5f), 0, len, 0);
         //s.setSpan(new ForegroundColorSpan(R.color.color_progress_end), 0, len, 0);
-        s.setSpan(new RelativeSizeSpan(1f), len, s.length(), 0);
-        s.setSpan(new ForegroundColorSpan(R.color.text_color_login), len, s.length(), 0);
+        //s.setSpan(new RelativeSizeSpan(1f), len, s.length(), 0);
+        //s.setSpan(new ForegroundColorSpan(R.color.text_color_login), len, s.length(), 0);
         return s;
     }
 
-    protected PieData generatePieData(List<CollectionWIPModel.ProgressData> progress) {
+    protected PieData generatePieData(List<CollectionCollectionModel.CollectedData> progress) {
 
         ArrayList<PieEntry> entries1 = new ArrayList<>();
 
@@ -157,7 +154,7 @@ public class CollectionDataFragment extends BaseFragment {
         ds1.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         ds1.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
-        int[] rainbow = context.getResources().getIntArray(R.array.COLORFUL_COLORS);
+        int[] rainbow = context.getResources().getIntArray(R.array.COLLECTION_COLORS);
         ds1.setColors(rainbow);
         pieChart.animateXY(5000, 5000);
         //ds1.setSliceSpace(2f);
@@ -174,6 +171,8 @@ public class CollectionDataFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        showProgress(ProgressDialogTexts.LOADING);
+        BackgroundExecutor.getInstance().execute(new KCollectionCollectionRequester());
     }
 
     @Override
@@ -195,33 +194,33 @@ public class CollectionDataFragment extends BaseFragment {
                     case Events.NO_INTERNET_CONNECTION:
                         dismissProgress();
                         break;
-                    case Events.GET_COLLECTION_DELIVERY_INSTALLATION_SUCCESSFULL:
-                        Log.e("WIP", eventObject.getObject().toString());
+                    case Events.GET_COLLECTION_COLLECTION_SUCCESSFULL:
+                        Log.e("Collection", eventObject.getObject().toString());
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
-                            model = (CollectionWIPModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionWIPModel.class);
+                            model = (CollectionCollectionModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionCollectionModel.class);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         dismissProgress();
                         if (model != null) {
-                            tviECWInvoice.setText(model.getTable().get(0).getWiP015DaysInvoice().toString());
-                            tviECWAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getWiP015DaysAmount()));
+                            tviECWInvoice.setText(model.getTable().get(0).getExpectedCollectionThisWeekInvoice().toString());
+                            tviECWAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getExpectedCollectionThisWeekAmount()));
 
-                            tviECMInvoice.setText(model.getTable().get(0).getWiP1630DaysInvoice().toString());
-                            tviECMAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getWiP1630aysAmount()));
+                            tviECMInvoice.setText(model.getTable().get(0).getExpectedCollectionThisMonthInvoice().toString());
+                            tviECMAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getExpectedCollectionThisMonthAmount()));
 
-                            tviPCWInvoice.setText(model.getTable().get(0).getWiP30DaysInvoice().toString());
-                            tviPCWAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getWiP30DaysAmount()));
+                            tviPCWInvoice.setText(model.getTable().get(0).getPaymentCollectedThisWeekhInvoice().toString());
+                            tviPCWAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getPaymentCollectedThisWeekAmount()));
 
-                            tviPCMInvoice.setText(model.getTable().get(0).getWipPendingDocSubmissionLessThan2DaysInvoice().toString());
-                            tviPCMAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getWipPendingDocSubmissionLessThan2DaysAmount()));
+                            tviPCMInvoice.setText(model.getTable().get(0).getPaymentCollectedThisMonthInvoice().toString());
+                            tviPCMAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getPaymentCollectedThisMonthAmount()));
 
-                            init(model.getProgress().getWiP015Days(), model.getTable().get(0).getWiP015DaysAmount());
+                            init(model.getProgress().getExpectedCollectionThisWeek(), model.getTable().get(0).getExpectedCollectionThisWeekAmount());
                             pieChart.invalidate();
                         }
                         break;
-                    case Events.GET_COLLECTION_DELIVERY_INSTALLATION_UNSUCCESSFULL:
+                    case Events.GET_COLLECTION_COLLECTION_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
@@ -246,7 +245,7 @@ public class CollectionDataFragment extends BaseFragment {
         } else {
             llECWSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
-        init(model.getProgress().getWiP015Days(), model.getTable().get(0).getWiP015DaysAmount());
+        init(model.getProgress().getExpectedCollectionThisWeek(), model.getTable().get(0).getExpectedCollectionThisWeekAmount());
         pieChart.invalidate();
     }
 
@@ -258,7 +257,7 @@ public class CollectionDataFragment extends BaseFragment {
         } else {
             llECMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
-        init(model.getProgress().getWiP1630Days(), model.getTable().get(0).getWiP1630aysAmount());
+        init(model.getProgress().getExpectedCollectionThisMonth(), model.getTable().get(0).getExpectedCollectionThisMonthAmount());
         pieChart.invalidate();
     }
 
@@ -270,7 +269,7 @@ public class CollectionDataFragment extends BaseFragment {
         } else {
             llPCWSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
-        init(model.getProgress().getWiP30Days(), model.getTable().get(0).getWiP30DaysAmount());
+        init(model.getProgress().getPaymentCollectedThisWeek(), model.getTable().get(0).getPaymentCollectedThisWeekAmount());
         pieChart.invalidate();
     }
 
@@ -282,7 +281,7 @@ public class CollectionDataFragment extends BaseFragment {
         } else {
             llPCMSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         }
-        init(model.getProgress().getWipPendingDocLessThan2Days(), model.getTable().get(0).getWipPendingDocSubmissionLessThan2DaysAmount());
+        init(model.getProgress().getPaymentCollectedThisMonth(), model.getTable().get(0).getPaymentCollectedThisMonthAmount());
         pieChart.invalidate();
     }
 
@@ -304,6 +303,7 @@ public class CollectionDataFragment extends BaseFragment {
     public void ExpectedCollectionthisWeek() {
         Bundle ECWBundle = new Bundle();
         ECWBundle.putString(CollectionDetailsFragment.FROM, "ECW");
+        ECWBundle.putParcelable(CollectionDetailsFragment.COLLECTIONDATA,  model.getTable().get(0));
         ECWBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, ECWBundle);
     }
@@ -312,6 +312,7 @@ public class CollectionDataFragment extends BaseFragment {
     public void ExpectedCollectionthisMonth() {
         Bundle ECMBundle = new Bundle();
         ECMBundle.putString(CollectionDetailsFragment.FROM, "ECM");
+        ECMBundle.putParcelable(CollectionDetailsFragment.COLLECTIONDATA,  model.getTable().get(0));
         ECMBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, ECMBundle);
     }
@@ -320,6 +321,7 @@ public class CollectionDataFragment extends BaseFragment {
     public void PaymentCollectionthisWeek() {
         Bundle PCWBundle = new Bundle();
         PCWBundle.putString(CollectionDetailsFragment.FROM, "PCW");
+        PCWBundle.putParcelable(CollectionDetailsFragment.COLLECTIONDATA,  model.getTable().get(0));
         PCWBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, PCWBundle);
     }
@@ -328,6 +330,7 @@ public class CollectionDataFragment extends BaseFragment {
     public void PaymentCollectionthisMonth() {
         Bundle PCMBundle = new Bundle();
         PCMBundle.putString(CollectionDetailsFragment.FROM, "PCM");
+        PCMBundle.putParcelable(CollectionDetailsFragment.COLLECTIONDATA,  model.getTable().get(0));
         PCMBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, PCMBundle);
     }

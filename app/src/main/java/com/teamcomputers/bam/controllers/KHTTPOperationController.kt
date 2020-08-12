@@ -164,6 +164,54 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.collectionCollection()?.let { KConnectionUtils().execute<Any>(it) }
     }
 
+    fun collectionECW(): ApiResponse<*>? {
+        return getApiInterface()?.collectionECW()?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionECWInvoice(customer: String, start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionECWInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionECWInvoiceSearch(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionECWInvoiceSearch(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionECM(): ApiResponse<*>? {
+        return getApiInterface()?.collectionECM()?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionECMInvoice(customer: String, start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionECMInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionECMInvoiceSearch(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionECMInvoiceSearch(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionPCW(): ApiResponse<*>? {
+        return getApiInterface()?.collectionPCW()?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionPCWInvice(customer: String, start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionPCWInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionPCWInvoiceSearch(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionPCWInvoiceSearch(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionPCM(): ApiResponse<*>? {
+        return getApiInterface()?.collectionPCM()?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionPCMInvoice(customer: String, start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionPCMInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionPCMInvoiceSearch(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionPCMInvoiceSearch(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
     fun collectionOSAgeing(): ApiResponse<*>? {
         return getApiInterface()?.collectionOSAgeing()?.let { KConnectionUtils().execute<Any>(it) }
     }

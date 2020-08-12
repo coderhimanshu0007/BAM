@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -51,6 +52,9 @@ public class WIPDetailsFragment extends BaseFragment {
     boolean isLoading = false;
     int nextLimit = 0;
 
+    @BindView(R.id.rlSearch)
+    RelativeLayout rlSearch;
+
     @BindView(R.id.rviData)
     RecyclerView rviData;
 
@@ -80,6 +84,7 @@ public class WIPDetailsFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, rootView);
 
         from = getArguments().getString(FROM);
+        rlSearch.setVisibility(View.GONE);
 
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviData.setLayoutManager(layoutManager);

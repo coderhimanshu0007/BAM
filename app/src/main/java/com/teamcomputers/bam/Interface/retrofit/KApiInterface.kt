@@ -195,8 +195,76 @@ interface KApiInterface {
                                     @Field("End") end: String): Call<Any>
 
     // Collection Collection
-    @POST("OrderProcessingLowMargin")
+    @POST("CollectionCollection")
     abstract fun collectionCollection(): Call<Any>
+
+    // Collection Collection
+    @POST("ExpectedCollectionThisWeekCustomer")
+    abstract fun collectionECW(): Call<Any>
+
+    // Collection Collection
+    @FormUrlEncoded
+    @POST("ExpectedCollectionThisWeekCustomerInvoice")
+    abstract fun collectionECWInvoice(@Field("Customer") customer: String,
+                                      @Field("Start") start: String,
+                                      @Field("End") end: String): Call<Any>
+
+    // Collection Collection
+    @FormUrlEncoded
+    @POST("ExpectedCollectionThisWeekCustomerInvoiceSearch")
+    abstract fun collectionECWInvoiceSearch(@Field("Customer") customer: String,
+                                            @Field("Invoice") invoice: String): Call<Any>
+
+    // Collection Collection
+    @POST("ExpectedCollectionThisMonthCustomer")
+    abstract fun collectionECM(): Call<Any>
+
+    // Collection Collection
+    @FormUrlEncoded
+    @POST("ExpectedCollectionThisMonthCustomerInvoice")
+    abstract fun collectionECMInvoice(@Field("Customer") customer: String,
+                                      @Field("Start") start: String,
+                                      @Field("End") end: String): Call<Any>
+
+    // Collection Collection
+    @FormUrlEncoded
+    @POST("ExpectedCollectionThisMonthCustomerInvoiceSearch")
+    abstract fun collectionECMInvoiceSearch(@Field("Customer") customer: String,
+                                            @Field("Invoice") invoice: String): Call<Any>
+
+    // Collection Collection
+    @POST("PaymentCollectedThisWeekCustomer")
+    abstract fun collectionPCW(): Call<Any>
+
+    // Collection Collection
+    @FormUrlEncoded
+    @POST("PaymentCollectedThisWeekCustomerInvoice")
+    abstract fun collectionPCWInvoice(@Field("Customer") customer: String,
+                                      @Field("Start") start: String,
+                                      @Field("End") end: String): Call<Any>
+
+    // Collection Collection
+    @FormUrlEncoded
+    @POST("PaymentCollectedThisWeekCustomerInvoiceSearch")
+    abstract fun collectionPCWInvoiceSearch(@Field("Customer") customer: String,
+                                            @Field("Invoice") invoice: String): Call<Any>
+
+    // Collection Collection
+    @POST("PaymentCollectedThisMonthCustomer")
+    abstract fun collectionPCM(): Call<Any>
+
+    // Collection Collection
+    @FormUrlEncoded
+    @POST("PaymentCollectedThisMonthCustomerInvoice")
+    abstract fun collectionPCMInvoice(@Field("Customer") customer: String,
+                                      @Field("Start") start: String,
+                                      @Field("End") end: String): Call<Any>
+
+    // Collection Collection
+    @FormUrlEncoded
+    @POST("PaymentCollectedThisMonthCustomerInvoiceSearch")
+    abstract fun collectionPCMInvoiceSearch(@Field("Customer") customer: String,
+                                            @Field("Invoice") invoice: String): Call<Any>
 
     // Collection OS Ageing
     @POST("CollectionAgeing")

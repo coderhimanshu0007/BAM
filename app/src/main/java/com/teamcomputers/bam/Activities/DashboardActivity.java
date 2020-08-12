@@ -44,6 +44,7 @@ import com.teamcomputers.bam.ExpandableRecyclerview.expandables.NavigationExpand
 import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItem;
 import com.teamcomputers.bam.ExpandableRecyclerview.models.NavigationItemParentModel;
 import com.teamcomputers.bam.Fragments.BaseFragment;
+import com.teamcomputers.bam.Fragments.Collection.CollectionCustomerDetailsFragment;
 import com.teamcomputers.bam.Fragments.Collection.CollectionDetailsFragment;
 import com.teamcomputers.bam.Fragments.Collection.CollectionFragment;
 import com.teamcomputers.bam.Fragments.Collection.TotalOutstandingFragment;
@@ -918,6 +919,9 @@ public class DashboardActivity extends BaseActivity {
                         break;
                     case Fragments.COLLECTION_FRAGMENT:
                         fragment = new CollectionDetailsFragment();
+                        break;
+                    case Fragments.COLLECTION_CUSTOMER_DETAIL_FRAGMENT:
+                        fragment = new CollectionCustomerDetailsFragment();
                         break;
                     case Fragments.WS_RSM_FRAGMENT:
                         if (bundle.get("USER_LEVEL").equals("R0") || bundle.get("USER_LEVEL").equals("R1")) {

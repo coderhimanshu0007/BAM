@@ -7,9 +7,9 @@ import com.teamcomputers.bam.controllers.KHTTPOperationController
 import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
 
-class KCollectionOutstandingCurrentMonthSearchRequester(var start: String, var end: String) : BaseRequester {
+class KCollectionOutstandingCurrentMonthSearchRequester(var customer: String) : BaseRequester {
     override fun run() {
-        val apiResponse = KHTTPOperationController().collectionOutstandingCurrentMonth(start, end)
+        val apiResponse = KHTTPOperationController().collectionOutstandingCurrentMonthSearch(customer)
         if (apiResponse != null) {
             if (apiResponse.responseCode == HttpURLConnection.HTTP_OK) {
                 if (apiResponse.response != null) {

@@ -26,15 +26,6 @@
                 android:orientation="horizontal"
                 android:padding="5dp">
 
-                <TextView
-                    android:id="@+id/tviCustomer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Customer"
-                    android:textColor="@color/color_value"
-                    android:textSize="13sp"
-                    app:fontFamily="@font/roboto_medium" />
-
                 <LinearLayout
                     android:id="@+id/llExpand"
                     android:layout_width="wrap_content"
@@ -53,14 +44,26 @@
                     android:textColor="@color/color_value"
                     android:textSize="13sp"
                     app:fontFamily="@font/roboto_medium" />
+
+                <TextView
+                    android:id="@+id/tviCustomer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/tviTotal"
+                    android:text="Customer"
+                    android:textColor="@color/color_value"
+                    android:textSize="13sp"
+                    app:fontFamily="@font/roboto_medium" />
+
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rviData"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
-                android:minHeight="200dp" />
+                android:minHeight="200dp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/llCustomerDetail"

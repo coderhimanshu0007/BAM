@@ -96,4 +96,15 @@
         <item>@color/graph_color8</item>
     </array>
 
+    <array name="COLLECTION_COLORS">
+        <item>@color/graph_color5</item>
+        <item>@color/graph_color8</item>
+        <item>@color/graph_color2</item>
+        <item>@color/graph_color4</item>
+        <item>@color/graph_color7</item>
+        <item>@color/graph_color1</item>
+        <item>@color/graph_color6</item>
+        <item>@color/graph_color3</item>
+    </array>
+
 </resources>

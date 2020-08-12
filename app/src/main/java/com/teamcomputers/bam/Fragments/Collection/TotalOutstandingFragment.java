@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,8 +20,13 @@ import com.teamcomputers.bam.Models.Collection.TotalOutstandingModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingCurrentMonthRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingCurrentMonthSearchRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingSubsequentMonthRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingSubsequentMonthSearchRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionTotalOutstandingRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionTotalOutstandingSearchRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderJunRequester;
+import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderSearchRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -34,6 +41,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class TotalOutstandingFragment extends BaseFragment {
@@ -46,6 +55,15 @@ public class TotalOutstandingFragment extends BaseFragment {
     String from = "";
     boolean isLoading = false;
     int nextLimit = 0;
+
+    @BindView(R.id.rlSearch)
+    RelativeLayout rlSearch;
+
+    @BindView(R.id.txtSearch)
+    EditText txtSearch;
+
+    @BindView(R.id.tviWIPDetailHeading)
+    TextView tviWIPDetailHeading;
 
     @BindView(R.id.rviData)
     RecyclerView rviData;
@@ -73,20 +91,12 @@ public class TotalOutstandingFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, rootView);
 
         from = getArguments().getString(FROM);
+        rlSearch.setVisibility(View.GONE);
 
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviData.setLayoutManager(layoutManager);
 
-        showProgress(ProgressDialogTexts.LOADING);
-        if (from.equals("TOTALOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "10", 0));
-        } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "10", 0));
-        } else if (from.equals("COCM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "10", 0));
-        } else if (from.equals("COSM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10", 0));
-        }
+        fetchData();
 
         rviData.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -101,7 +111,7 @@ public class TotalOutstandingFragment extends BaseFragment {
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
                 if (!isLoading) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == model.getTable().size() - 1) {
+                    if (nextLimit > 5 && linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == model.getTable().size() - 1) {
                         //bottom of list!
                         loadMore();
                     }
@@ -114,12 +124,29 @@ public class TotalOutstandingFragment extends BaseFragment {
         return rootView;
     }
 
+    private void fetchData() {
+        showProgress(ProgressDialogTexts.LOADING);
+        if (from.equals("TOTALOUTSTANDING")) {
+            tviWIPDetailHeading.setText("Total Outstanding");
+            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "5", 0));
+        } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
+            tviWIPDetailHeading.setText("Collectible Outstanding");
+            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "5", 0));
+        } else if (from.equals("COCM")) {
+            tviWIPDetailHeading.setText("Collectible Outstanding in Current Month");
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "5", 0));
+        } else if (from.equals("COSM")) {
+            tviWIPDetailHeading.setText("Collectible Outstanding in Subsequent Month");
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "5", 0));
+        }
+    }
+
     private void loadMore() {
         model.getTable().add(null);
         mAdapter.notifyItemInserted(model.getTable().size() - 1);
         showProgress(ProgressDialogTexts.LOADING);
         String start = String.valueOf(nextLimit);
-        String end = String.valueOf(nextLimit + 10);
+        String end = String.valueOf(nextLimit + 5);
         if (from.equals("TOTALOUTSTANDING")) {
             BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester(start, end, 1));
         } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
@@ -183,7 +210,7 @@ public class TotalOutstandingFragment extends BaseFragment {
                         int scrollPosition = model.getTable().size();
                         mAdapter.notifyItemRemoved(scrollPosition);
                         int currentSize = scrollPosition;
-                        nextLimit = currentSize + 11;
+                        nextLimit = currentSize + 6;
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceTotalOutstandingDataResponse(eventObject.getObject().toString()));
                             model = (TotalOutstandingModel) BAMUtil.fromJson(String.valueOf(jsonObject), TotalOutstandingModel.class);
@@ -221,5 +248,37 @@ public class TotalOutstandingFragment extends BaseFragment {
         unbinder.unbind();
         EventBus.getDefault().unregister(this);
     }
+
+    @OnTextChanged(R.id.txtSearch)
+    public void search() {
+        if (txtSearch.getText().toString().length() > 2) {
+            isLoading = true;
+            fetchData();
+        } else if (txtSearch.getText().toString().length() == 0) {
+            isLoading = false;
+            KBAMUtils.hideSoftKeyboard(dashboardActivityContext);
+            showProgress(ProgressDialogTexts.LOADING);
+            if (from.equals("TOTALOUTSTANDING")) {
+                BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "10", 0));
+            } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
+                BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingSearchRequester(txtSearch.getText().toString()));
+            } else if (from.equals("COCM")) {
+                BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthSearchRequester(txtSearch.getText().toString()));
+            } else if (from.equals("COSM")) {
+                BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthSearchRequester(txtSearch.getText().toString()));
+            }
+        }
+    }
+
+    /*@OnClick(R.id.iviSearch)
+    public void Search() {
+        if (!search) {
+            txtSearch.setVisibility(View.VISIBLE);
+            search = true;
+        } else if (search) {
+            txtSearch.setVisibility(View.GONE);
+            search = false;
+        }
+    }*/
 
 }

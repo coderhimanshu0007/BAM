@@ -124,7 +124,7 @@ public class OSAgeingFragment extends BaseFragment {
 
         ArrayList<PieEntry> entries1 = new ArrayList<>();
 
-        for (int i = 0; i < model.getProgress().size(); i++) {
+        /*for (int i = 0; i < model.getProgress().size(); i++) {
             AgeingModel.Progress progress = model.getProgress().get(i);
             //entries1.add(new PieEntry((float) ((Math.random() * 60) + 40), "Quarter " + (i + 1)));
             String val = KBAMUtils.getRoundOffValue(progress.getAmount());
@@ -133,6 +133,70 @@ public class OSAgeingFragment extends BaseFragment {
                 entries1.add(new PieEntry(x, "NOTDUE"));
             } else {
                 entries1.add(new PieEntry(x, progress.getInterval()));
+            }
+        }*/
+        for (int i = 0; i < model.getProgress().size(); i++) {
+            AgeingModel.Progress progress = model.getProgress().get(i);
+            if (progress.getInterval().equals("DUE")) {
+                String val = KBAMUtils.getRoundOffValue(progress.getAmount());
+                float x = (float) Double.parseDouble(val);
+                entries1.add(new PieEntry(x, "NOTDUE"));
+            }
+        }
+        for (int i = 0; i < model.getProgress().size(); i++) {
+            AgeingModel.Progress progress = model.getProgress().get(i);
+            if (progress.getInterval().equals("0-30")) {
+                String val = KBAMUtils.getRoundOffValue(progress.getAmount());
+                float x = (float) Double.parseDouble(val);
+                entries1.add(new PieEntry(x, "0-30"));
+            }
+        }
+        for (int i = 0; i < model.getProgress().size(); i++) {
+            AgeingModel.Progress progress = model.getProgress().get(i);
+            if (progress.getInterval().equals("31-60")) {
+                String val = KBAMUtils.getRoundOffValue(progress.getAmount());
+                float x = (float) Double.parseDouble(val);
+                entries1.add(new PieEntry(x, "31-60"));
+            }
+        }
+        for (int i = 0; i < model.getProgress().size(); i++) {
+            AgeingModel.Progress progress = model.getProgress().get(i);
+            if (progress.getInterval().equals("61-90")) {
+                String val = KBAMUtils.getRoundOffValue(progress.getAmount());
+                float x = (float) Double.parseDouble(val);
+                entries1.add(new PieEntry(x, "61-90"));
+            }
+        }
+        for (int i = 0; i < model.getProgress().size(); i++) {
+            AgeingModel.Progress progress = model.getProgress().get(i);
+            if (progress.getInterval().equals("91-120")) {
+                String val = KBAMUtils.getRoundOffValue(progress.getAmount());
+                float x = (float) Double.parseDouble(val);
+                entries1.add(new PieEntry(x, "91-120"));
+            }
+        }
+        for (int i = 0; i < model.getProgress().size(); i++) {
+            AgeingModel.Progress progress = model.getProgress().get(i);
+            if (progress.getInterval().equals("121-180")) {
+                String val = KBAMUtils.getRoundOffValue(progress.getAmount());
+                float x = (float) Double.parseDouble(val);
+                entries1.add(new PieEntry(x, "121-180"));
+            }
+        }
+        for (int i = 0; i < model.getProgress().size(); i++) {
+            AgeingModel.Progress progress = model.getProgress().get(i);
+            if (progress.getInterval().equals("181-270")) {
+                String val = KBAMUtils.getRoundOffValue(progress.getAmount());
+                float x = (float) Double.parseDouble(val);
+                entries1.add(new PieEntry(x, "181-270"));
+            }
+        }
+        for (int i = 0; i < model.getProgress().size(); i++) {
+            AgeingModel.Progress progress = model.getProgress().get(i);
+            if (progress.getInterval().equals("270+")) {
+                String val = KBAMUtils.getRoundOffValue(progress.getAmount());
+                float x = (float) Double.parseDouble(val);
+                entries1.add(new PieEntry(x, "270+"));
             }
         }
 

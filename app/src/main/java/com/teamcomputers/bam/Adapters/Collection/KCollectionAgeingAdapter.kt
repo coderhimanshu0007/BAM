@@ -22,14 +22,14 @@ class KCollectionAgeingAdapter(val mContext: DashboardActivity, val dataList: Li
         fun setData(mContext: Context, dataList: AgeingModel.Table?) {
             itemView.tviCustomer.setText(dataList?.customerName)
             itemView.tviTotal.setText(dataList?.total?.let { KBAMUtils.getRoundOffValue(it) })
-            itemView.tviValue1.setText(dataList?.c030.toString())
-            itemView.tviValue2.setText(dataList?.c3160.toString())
-            itemView.tviValue3.setText(dataList?.c6190.toString())
-            itemView.tviValue4.setText(dataList?.c91120.toString())
-            itemView.tviValue5.setText(dataList?.c121180.toString())
-            itemView.tviValue6.setText(dataList?.c181270.toString())
-            itemView.tviValue7.setText(dataList?.c270.toString())
-            itemView.tviValue8.setText(dataList?.nOTDUE.toString())
+            itemView.tviValue1.setText(dataList?.c030?.let { KBAMUtils.getRoundOffValue(it) })
+            itemView.tviValue2.setText(dataList?.c3160?.let { KBAMUtils.getRoundOffValue(it) })
+            itemView.tviValue3.setText(dataList?.c6190?.let { KBAMUtils.getRoundOffValue(it) })
+            itemView.tviValue4.setText(dataList?.c91120?.let { KBAMUtils.getRoundOffValue(it) })
+            itemView.tviValue5.setText(dataList?.c121180?.let { KBAMUtils.getRoundOffValue(it) })
+            itemView.tviValue6.setText(dataList?.c181270?.let { KBAMUtils.getRoundOffValue(it) })
+            itemView.tviValue7.setText(dataList?.c270?.let { KBAMUtils.getRoundOffValue(it) })
+            itemView.tviValue8.setText(dataList?.nOTDUE?.let { KBAMUtils.getRoundOffValue(it) })
 
             itemView.rlCustomerItem.setOnClickListener {
                 if (dataList?.open == 0) {

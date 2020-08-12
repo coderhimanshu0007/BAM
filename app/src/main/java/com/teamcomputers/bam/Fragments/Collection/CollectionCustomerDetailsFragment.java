@@ -4,24 +4,26 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.Collection.KCollectionCollectionDetailsAdapter;
+import com.teamcomputers.bam.Adapters.Collection.KCollectionCustomerDetailListAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.Collection.CollectionCollectionDetailModel;
-import com.teamcomputers.bam.Models.Collection.CollectionCollectionModel;
+import com.teamcomputers.bam.Models.Collection.CollectionCustomerDetailsModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionECMRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionECWRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionPCMRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionPCWRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionECMInvoiceRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionECWInvoiceRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionPCMInvoiceRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionPCWInvoiceRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -38,10 +40,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class CollectionDetailsFragment extends BaseFragment {
+public class CollectionCustomerDetailsFragment extends BaseFragment {
     private View rootView;
     public static final String FROM = "FROM";
-    public static final String COLLECTIONDATA = "COLLECTIONDATA";
+    public static final String CUSTOMER_DATA = "CUSTOMER_DATA";
     private Unbinder unbinder;
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
@@ -59,17 +61,21 @@ public class CollectionDetailsFragment extends BaseFragment {
     @BindView(R.id.tviWIPDetailHeading)
     TextView tviWIPDetailHeading;
 
+    @BindView(R.id.llInvoice)
+    LinearLayout llInvoice;
+
     @BindView(R.id.tviTOInvoice)
     TextView tviTOInvoice;
     @BindView(R.id.tviTOAmount)
     TextView tviTOAmount;
 
-    private KCollectionCollectionDetailsAdapter mAdapter;
-    CollectionCollectionDetailModel model;
-    List<CollectionCollectionDetailModel.Datum> collectionDataList = new ArrayList<>();
-    CollectionCollectionDetailModel.Datum selectedCustomer;
+    @BindView(R.id.cviHeading)
+    CardView cviHeading;
 
-    CollectionCollectionModel.Table collectionData;
+    private KCollectionCustomerDetailListAdapter mAdapter;
+    CollectionCustomerDetailsModel model;
+    List<CollectionCustomerDetailsModel.Datum> invoiceDataList = new ArrayList<>();
+    CollectionCollectionDetailModel.Datum selectedCustomer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,36 +92,33 @@ public class CollectionDetailsFragment extends BaseFragment {
 
         from = getArguments().getString(FROM);
 
-        collectionData = getArguments().getParcelable(COLLECTIONDATA);
+        selectedCustomer = getArguments().getParcelable(CUSTOMER_DATA);
 
         rlSearch.setVisibility(View.GONE);
+        llInvoice.setVisibility(View.INVISIBLE);
+        cviHeading.setVisibility(View.GONE);
+
+        tviWIPDetailHeading.setText(selectedCustomer.getCustomerName());
+        tviTOAmount.setText(KBAMUtils.getRoundOffValue(selectedCustomer.getAmount()));
 
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviData.setLayoutManager(layoutManager);
 
         showProgress(ProgressDialogTexts.LOADING);
         if (from.equals("ECW")) {
-            tviWIPDetailHeading.setText("Expected Collection this Week");
-            tviTOInvoice.setText(collectionData.getExpectedCollectionThisWeekInvoice().toString());
-            tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getExpectedCollectionThisWeekAmount()));
-            BackgroundExecutor.getInstance().execute(new KCollectionECWRequester());
+            //tviWIPDetailHeading.setText("Expected Collection this Week");
+            BackgroundExecutor.getInstance().execute(new KCollectionECWInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
         } else if (from.equals("ECM")) {
-            tviWIPDetailHeading.setText("Expected Collection this Month");
-            tviTOInvoice.setText(collectionData.getExpectedCollectionThisMonthInvoice().toString());
-            tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getExpectedCollectionThisMonthAmount()));
-            BackgroundExecutor.getInstance().execute(new KCollectionECMRequester());
+            //tviWIPDetailHeading.setText("Expected Collection this Month");
+            BackgroundExecutor.getInstance().execute(new KCollectionECMInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
         } else if (from.equals("PCW")) {
-            tviWIPDetailHeading.setText("Payment Collection this Week");
-            tviTOInvoice.setText(collectionData.getPaymentCollectedThisWeekhInvoice().toString());
-            tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getPaymentCollectedThisWeekAmount()));
-            //BackgroundExecutor.getInstance().execute(new KCollectionPCWRequester());
-            BackgroundExecutor.getInstance().execute(new KCollectionECWRequester());
+            //tviWIPDetailHeading.setText("Payment Collection this Week");
+            //BackgroundExecutor.getInstance().execute(new KCollectionPCWInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
+            BackgroundExecutor.getInstance().execute(new KCollectionECWInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
         } else if (from.equals("PCM")) {
-            tviWIPDetailHeading.setText("Payment Collection this Month");
-            tviTOInvoice.setText(collectionData.getPaymentCollectedThisMonthInvoice().toString());
-            tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getPaymentCollectedThisMonthAmount()));
-            //BackgroundExecutor.getInstance().execute(new KCollectionPCMRequester());
-            BackgroundExecutor.getInstance().execute(new KCollectionECMRequester());
+            //tviWIPDetailHeading.setText("Payment Collection this Month");
+            //BackgroundExecutor.getInstance().execute(new KCollectionPCMInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
+            BackgroundExecutor.getInstance().execute(new KCollectionECMInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
         }
 
         /*rviData.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -176,7 +179,7 @@ public class CollectionDetailsFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return CollectionDetailsFragment.class.getSimpleName();
+        return CollectionCustomerDetailsFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -188,36 +191,26 @@ public class CollectionDetailsFragment extends BaseFragment {
                     case Events.NO_INTERNET_CONNECTION:
                         dismissProgress();
                         break;
-                    case Events.GET_COLLECTION_COLLECTION_DETAIL_SUCCESSFULL:
+                    case Events.GET_COLLECTION_CUSTOMER_DETAIL_SUCCESSFULL:
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
-                            model = (CollectionCollectionDetailModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionCollectionDetailModel.class);
+                            model = (CollectionCustomerDetailsModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionCustomerDetailsModel.class);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         dismissProgress();
                         if (model != null) {
-                            collectionDataList = model.getData();
+                            invoiceDataList = model.getData();
                             //tviTOInvoice.setText(model.getInvoice().toString());
                             //tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getAmount()));
 
-                            mAdapter = new KCollectionCollectionDetailsAdapter(dashboardActivityContext, collectionDataList);
+                            mAdapter = new KCollectionCustomerDetailListAdapter(dashboardActivityContext, invoiceDataList);
                             rviData.setAdapter(mAdapter);
                         }
                         break;
-                    case Events.GET_COLLECTION_COLLECTION_DETAIL_UNSUCCESSFULL:
+                    case Events.GET_COLLECTION_CUSTOMER_DETAIL_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
-                        break;
-                    case ClickEvents.COLLECTION_CUSTOMER_SELECT:
-                        selectedCustomer = (CollectionCollectionDetailModel.Datum) eventObject.getObject();
-                        Bundle customerBundle = new Bundle();
-                        //customerBundle.putString(CollectionCustomerDetailsFragment.USER_ID, userId);
-                        customerBundle.putString(CollectionCustomerDetailsFragment.FROM, from);
-                        customerBundle.putParcelable(CollectionCustomerDetailsFragment.CUSTOMER_DATA, selectedCustomer);
-
-                        customerBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-                        dashboardActivityContext.replaceFragment(Fragments.COLLECTION_CUSTOMER_DETAIL_FRAGMENT, customerBundle);
                         break;
                     /*case Events.GET_WIP_DETAIL_LOAD_MORE_SUCCESSFULL:
                         model.getTable().remove(model.getTable().size() - 1);
