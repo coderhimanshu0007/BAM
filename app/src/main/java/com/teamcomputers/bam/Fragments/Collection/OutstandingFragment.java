@@ -139,13 +139,34 @@ public class OutstandingFragment extends BaseFragment {
     protected PieData generatePieData(List<OutstandingModel.ProgressInfo> progress) {
 
         ArrayList<PieEntry> entries1 = new ArrayList<>();
-
+        ArrayList<Integer> colors = new ArrayList<>();
+        //int[] rainbow = context.getResources().getIntArray(R.array.COLLECTION_COLORS);
         for (int i = 0; i < progress.size(); i++) {
             //OutstandingModel.ProgressInfo progress = model.getProgress().getCollectibleOutstanding().get(i);
             //if (!progress.getBu().equals("null")) {
             String val = KBAMUtils.getRoundOffValue(progress.get(i).getAmount());
             float x = Float.parseFloat(val);
             entries1.add(new PieEntry(x, progress.get(i).getBU()));
+            switch (progress.get(i).getBU()) {
+                case "ES":
+                    colors.add(context.getResources().getColor(R.color.graph_color5));
+                    break;
+                case "IMS":
+                    colors.add(context.getResources().getColor(R.color.graph_color7));
+                    break;
+                case "Shared":
+                    colors.add(context.getResources().getColor(R.color.graph_color2));
+                    break;
+                case "TDE":
+                    colors.add(context.getResources().getColor(R.color.graph_color4));
+                    break;
+                case "Work Space":
+                    colors.add(context.getResources().getColor(R.color.graph_color8));
+                    break;
+                default:
+                    colors.add(context.getResources().getColor(R.color.graph_color1));
+                    break;
+            }
             //}
         }
 
@@ -154,8 +175,7 @@ public class OutstandingFragment extends BaseFragment {
         ds1.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         ds1.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
-        int[] rainbow = context.getResources().getIntArray(R.array.COLLECTION_COLORS);
-        ds1.setColors(rainbow);
+        ds1.setColors(colors);
         pieChart.animateXY(5000, 5000);
         //ds1.setSliceSpace(2f);
         ds1.setSelectionShift(30);
@@ -213,9 +233,7 @@ public class OutstandingFragment extends BaseFragment {
                             tviCOSMInvoice.setText(model.getTable().get(0).getCollectibleOutStandingSubsequentMonthInvoice().toString());
                             tviCOSMAmount.setText(KBAMUtils.getRoundOffValue(model.getTable().get(0).getCollectibleOutStandingSubsequentMonthAmount()));
 
-                            init(model.getProgress().getCollectibleOutstanding(), model.getTable().get(0).getCollectibleOutStandingAmount());
-                            //chart.setData(generatePieData());
-                            //chart.notifyDataSetChanged();
+                            init(model.getProgress().getTotalOutStanding(), model.getTable().get(0).getTotalOutStandingAmount());
                             pieChart.invalidate();
                         }
                         break;
@@ -238,13 +256,15 @@ public class OutstandingFragment extends BaseFragment {
 
     @OnClick(R.id.cviTO)
     public void TO() {
-        /*selectItem();
+        selectItem();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             llTOSelect.setBackgroundDrawable(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
         } else {
             llTOSelect.setBackground(ContextCompat.getDrawable(dashboardActivityContext, R.drawable.ic_path_5546));
-        }*/
-        showToast("Work in progress...");
+        }
+        init(model.getProgress().getTotalOutStanding(), model.getTable().get(0).getTotalOutStandingAmount());
+        pieChart.invalidate();
+        //showToast("Work in progress...");
     }
 
     @OnClick(R.id.cviCO)
@@ -302,6 +322,7 @@ public class OutstandingFragment extends BaseFragment {
         showToast("Work in progress...");
         /*Bundle outstandingBundle = new Bundle();
         outstandingBundle.putString(TotalOutstandingFragment.FROM, "TOTALOUTSTANDING");
+        outstandingBundle.putParcelable(TotalOutstandingFragment.COLLECTIONDATA, model.getTable().get(0));
         outstandingBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         dashboardActivityContext.replaceFragment(Fragments.TOTAL_OUTSTANDING_FRAGMENT, outstandingBundle);*/
     }
@@ -310,6 +331,7 @@ public class OutstandingFragment extends BaseFragment {
     public void CollectibleOutstandingDetails() {
         Bundle outstandingBundle = new Bundle();
         outstandingBundle.putString(TotalOutstandingFragment.FROM, "COLLECTIBLEOUTSTANDING");
+        outstandingBundle.putParcelable(TotalOutstandingFragment.COLLECTIONDATA, model.getTable().get(0));
         outstandingBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         dashboardActivityContext.replaceFragment(Fragments.TOTAL_OUTSTANDING_FRAGMENT, outstandingBundle);
     }
@@ -318,6 +340,7 @@ public class OutstandingFragment extends BaseFragment {
     public void CollectibleOutstandingCurrentMonthDetails() {
         Bundle outstandingBundle = new Bundle();
         outstandingBundle.putString(TotalOutstandingFragment.FROM, "COCM");
+        outstandingBundle.putParcelable(TotalOutstandingFragment.COLLECTIONDATA, model.getTable().get(0));
         outstandingBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         dashboardActivityContext.replaceFragment(Fragments.TOTAL_OUTSTANDING_FRAGMENT, outstandingBundle);
     }
@@ -326,6 +349,7 @@ public class OutstandingFragment extends BaseFragment {
     public void CollectibleOutstandingSubsequentDetails() {
         Bundle outstandingBundle = new Bundle();
         outstandingBundle.putString(TotalOutstandingFragment.FROM, "COSM");
+        outstandingBundle.putParcelable(TotalOutstandingFragment.COLLECTIONDATA, model.getTable().get(0));
         outstandingBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         dashboardActivityContext.replaceFragment(Fragments.TOTAL_OUTSTANDING_FRAGMENT, outstandingBundle);
     }

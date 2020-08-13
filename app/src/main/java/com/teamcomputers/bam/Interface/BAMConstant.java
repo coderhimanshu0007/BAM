@@ -320,6 +320,7 @@ public interface BAMConstant {
         int WIP_FRAGMENT = 1016;
         int COLLECTION_FRAGMENT = 1017;
         int COLLECTION_CUSTOMER_DETAIL_FRAGMENT = 1018;
+        int OUTSTANDING_CUSTOMER_DETAIL_FRAGMENT = 1019;
     }
 
     interface ClickEvents {

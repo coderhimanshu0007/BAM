@@ -136,24 +136,44 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.collectionOutstanding()?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun collectionTotalOutstanding(start: String, end: String): ApiResponse<*>? {
-        return getApiInterface()?.collectionTotalOutstanding(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    fun collectionTotalOutstanding(): ApiResponse<*>? {
+        return getApiInterface()?.collectionTotalOutstanding()?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionTotalOutstandingInvice(customer: String, start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionTotalOutstandingInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionCollectibleOutstanding(): ApiResponse<*>? {
+        return getApiInterface()?.collectionCollectibleOutstanding()?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionCollectibleOutstandingInvice(customer: String, start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionCollectibleOutstandingInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
     fun collectionTotalOutstandingSearch(customer: String): ApiResponse<*>? {
         return getApiInterface()?.collectionTotalOutstandingSearch(customer)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun collectionOutstandingCurrentMonth(start: String, end: String): ApiResponse<*>? {
-        return getApiInterface()?.collectionOutstandingCurrentMonth(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    fun collectionOutstandingCurrentMonth(): ApiResponse<*>? {
+        return getApiInterface()?.collectionOutstandingCurrentMonth()?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionOutstandingCurrentMonthInvice(customer: String, start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionOutstandingCurrentMonthInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
     fun collectionOutstandingCurrentMonthSearch(customer: String): ApiResponse<*>? {
         return getApiInterface()?.collectionOutstandingCurrentMonthSearch(customer)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun collectionOutstandingSubsequentMonth(start: String, end: String): ApiResponse<*>? {
-        return getApiInterface()?.collectionOutstandingSubsequentMonth(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    fun collectionOutstandingSubsequentMonth(): ApiResponse<*>? {
+        return getApiInterface()?.collectionOutstandingSubsequentMonth()?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun collectionOutstandingSubsequentMonthInvoice(customer: String, start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionOutstandingSubsequentMonthInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
     fun collectionOutstandingSubsequentMonthSearch(customer: String): ApiResponse<*>? {

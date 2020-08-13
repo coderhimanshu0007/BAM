@@ -179,7 +179,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No. of Invoices"
+                        android:text="@string/NoofInvoice"
                         android:textSize="12sp"
                         app:fontFamily="@font/source_sans_pro" />
 
@@ -244,7 +244,7 @@
                         android:layout_marginLeft="10dp"
                         android:drawableLeft="@drawable/ic_forma_invoice"
                         android:drawablePadding="5dp"
-                        android:text="No. of Invoices"
+                        android:text="@string/NoofInvoice"
                         android:textSize="12sp"
                         app:fontFamily="@font/source_sans_pro" />
 

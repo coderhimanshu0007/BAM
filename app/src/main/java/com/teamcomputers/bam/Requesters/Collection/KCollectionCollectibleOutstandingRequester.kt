@@ -7,15 +7,15 @@ import com.teamcomputers.bam.controllers.KHTTPOperationController
 import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
 
-class KCollectionOutstandingSubsequentMonthRequester() : BaseRequester {
+class KCollectionCollectibleOutstandingRequester() : BaseRequester {
     override fun run() {
-        val apiResponse = KHTTPOperationController().collectionOutstandingSubsequentMonth()
+        val apiResponse = KHTTPOperationController().collectionCollectibleOutstanding()
         if (apiResponse != null) {
             if (apiResponse.responseCode == HttpURLConnection.HTTP_OK) {
                 if (apiResponse.response != null) {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_TOTAL_OUTSTANDING_SUCCESSFULL, apiResponse.response))
+                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_TOTAL_OUTSTANDING_SUCCESSFULL, apiResponse.response))
                 } else {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_TOTAL_OUTSTANDING_UNSUCCESSFULL, null))
+                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_TOTAL_OUTSTANDING_UNSUCCESSFULL, null))
                 }
             } else if (apiResponse.responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                 EventBus.getDefault().post(EventObject(KBAMConstant.Events.INTERNAL_SERVER_ERROR, null))

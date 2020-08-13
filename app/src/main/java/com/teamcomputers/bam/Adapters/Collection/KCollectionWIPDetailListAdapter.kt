@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamcomputers.bam.Activities.DashboardActivity
 import com.teamcomputers.bam.Models.Collection.CollectionWIPDetailModel
-import com.teamcomputers.bam.Models.Collection.TotalOutstandingModel
 import com.teamcomputers.bam.R
 import kotlinx.android.synthetic.main.total_outstanding_details_recyclerview_layout.view.*
 

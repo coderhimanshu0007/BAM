@@ -13,16 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.Collection.KCollectionTotalOutstandingAdapter;
 import com.teamcomputers.bam.Adapters.Collection.KCollectionWIPDetailsAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.Collection.CollectionWIPDetailModel;
-import com.teamcomputers.bam.Models.Collection.TotalOutstandingModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingCurrentMonthRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingSubsequentMonthRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionTotalOutstandingRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionWIP0DetailRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionWIP16DetailRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
@@ -147,11 +142,11 @@ public class WIPDetailsFragment extends BaseFragment {
         } else if (from.equals("WIP16")) {
             BackgroundExecutor.getInstance().execute(new KCollectionWIP16DetailRequester("0", "10",0));
         } else if (from.equals("WIP30")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "10",0));
+            //BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "10",0));
         } else if (from.equals("PDOSL")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
+            //BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
         } else if (from.equals("PDOSG")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
+            //BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
         }
         isLoading = true;
     }

@@ -114,7 +114,7 @@
                                     android:drawableLeft="@drawable/ic_forma_invoice"
                                     android:drawablePadding="10dp"
                                     android:drawableTint="@color/white"
-                                    android:text="@string/Invoice"
+                                    android:text="@string/NoofInvoice"
                                     android:textColor="@color/white"
                                     android:textSize="10sp"
                                     app:fontFamily="@font/roboto_medium" />

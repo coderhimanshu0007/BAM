@@ -5,12 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamcomputers.bam.Activities.DashboardActivity
 import com.teamcomputers.bam.Models.Collection.TotalOutstandingModel
 import com.teamcomputers.bam.R
 import kotlinx.android.synthetic.main.total_outstanding_details_recyclerview_layout.view.*
 
-class KCollectionOutstandingDetailsAdapter(val mContext: Context,val dataList: List<TotalOutstandingModel.Datum>) : RecyclerView.Adapter<KCollectionOutstandingDetailsAdapter.ViewHolder>() {
+class KCollectionOutstandingDetailsAdapter(val mContext: Context, val from: String, val dataList: List<TotalOutstandingModel.Datum>) : RecyclerView.Adapter<KCollectionOutstandingDetailsAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {

@@ -99,10 +99,10 @@
     <string name="CollectableOutstandingCurrentMonth">Collectable Outstanding\nCurrent Month</string>
     <string name="CollectableOutstandingSubsequentMonth">Collectable Outstanding in\nSubsequent Month</string>
     <string name="Collection2">-Collection</string>
-    <string name="ExpectedCollectionthisWeek">Expected Collection this Week</string>
-    <string name="ExpectedCollectionthisMonth">Expected Collection this Month</string>
-    <string name="PaymentCollectionthisWeek">Payment Collection this Week</string>
-    <string name="PaymentCollectionthisMonth">Payment Collection this Month</string>
+    <string name="ExpectedCollectionthisWeek">Follow-up this Week</string>
+    <string name="ExpectedCollectionthisMonth">Follow-up this Month</string>
+    <string name="PaymentCollectionthisWeek">Payment Collected this Week</string>
+    <string name="PaymentCollectionthisMonth">Payment Collected this Month</string>
     <string name="Collection3">-OS Ageing</string>
     <string name="upto30Days">0-30 Days</string>
     <string name="upto60Days">31-60 Days</string>
@@ -126,6 +126,7 @@
     <string name="Product">Product</string>
     <string name="SO">SO</string>
     <string name="Invoice">Invoice</string>
+    <string name="NoofInvoice">No. of Invoices</string>
 
     <string name="user_name">User Name</string>
     <string name="user_email">user@teamcomputers.com</string>

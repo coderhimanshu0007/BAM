@@ -47,6 +47,7 @@ import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.Collection.CollectionCustomerDetailsFragment;
 import com.teamcomputers.bam.Fragments.Collection.CollectionDetailsFragment;
 import com.teamcomputers.bam.Fragments.Collection.CollectionFragment;
+import com.teamcomputers.bam.Fragments.Collection.OutstandingCustomerDetailsFragment;
 import com.teamcomputers.bam.Fragments.Collection.TotalOutstandingFragment;
 import com.teamcomputers.bam.Fragments.Collection.WIPDetailsFragment;
 import com.teamcomputers.bam.Fragments.FeedbackFragment;
@@ -919,6 +920,9 @@ public class DashboardActivity extends BaseActivity {
                         break;
                     case Fragments.COLLECTION_FRAGMENT:
                         fragment = new CollectionDetailsFragment();
+                        break;
+                    case Fragments.OUTSTANDING_CUSTOMER_DETAIL_FRAGMENT:
+                        fragment = new OutstandingCustomerDetailsFragment();
                         break;
                     case Fragments.COLLECTION_CUSTOMER_DETAIL_FRAGMENT:
                         fragment = new CollectionCustomerDetailsFragment();

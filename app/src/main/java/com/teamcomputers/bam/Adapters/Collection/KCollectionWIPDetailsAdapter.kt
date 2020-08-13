@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.teamcomputers.bam.Activities.DashboardActivity
 import com.teamcomputers.bam.Models.Collection.CollectionWIPDetailModel
-import com.teamcomputers.bam.Models.Collection.TotalOutstandingModel
 import com.teamcomputers.bam.R
 import com.teamcomputers.bam.Utils.KBAMUtils
 import kotlinx.android.synthetic.main.os_ageing_recyclerview_layout.view.llExpand

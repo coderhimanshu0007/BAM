@@ -14,15 +14,22 @@ class CollectionCustomerDetailsModel {
         @SerializedName("Invoice_No_")
         @Expose
         var invoiceNo: String? = null
+        @SerializedName("Document_No_")
+        @Expose
+        var documentNo: String? = null
         @SerializedName("Amount")
         @Expose
         var amount: Double? = null
         @SerializedName("ExpectedDate")
         @Expose
         var expectedDate: String? = null
+        @SerializedName("PostingDate")
+        @Expose
+        var postingDate: String? = null
         @SerializedName("BU")
         @Expose
         var bu: String? = null
+
 
     }
 

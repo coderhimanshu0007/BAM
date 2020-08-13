@@ -139,6 +139,7 @@ public class CollectionDataFragment extends BaseFragment {
     protected PieData generatePieData(List<CollectionCollectionModel.CollectedData> progress) {
 
         ArrayList<PieEntry> entries1 = new ArrayList<>();
+        ArrayList<Integer> colors = new ArrayList<>();
 
         for (int i = 0; i < progress.size(); i++) {
             //OutstandingModel.ProgressInfo progress = model.getProgress().getCollectibleOutstanding().get(i);
@@ -146,6 +147,26 @@ public class CollectionDataFragment extends BaseFragment {
             String val = KBAMUtils.getRoundOffValue(progress.get(i).getAmount());
             float x = Float.parseFloat(val);
             entries1.add(new PieEntry(x, progress.get(i).getBu()));
+            switch (progress.get(i).getBu()) {
+                case "ES":
+                    colors.add(context.getResources().getColor(R.color.graph_color5));
+                    break;
+                case "IMS":
+                    colors.add(context.getResources().getColor(R.color.graph_color7));
+                    break;
+                case "Shared":
+                    colors.add(context.getResources().getColor(R.color.graph_color2));
+                    break;
+                case "TDE":
+                    colors.add(context.getResources().getColor(R.color.graph_color4));
+                    break;
+                case "Work Space":
+                    colors.add(context.getResources().getColor(R.color.graph_color8));
+                    break;
+                default:
+                    colors.add(context.getResources().getColor(R.color.graph_color1));
+                    break;
+            }
             //}
         }
 
@@ -154,8 +175,7 @@ public class CollectionDataFragment extends BaseFragment {
         ds1.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         ds1.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
-        int[] rainbow = context.getResources().getIntArray(R.array.COLLECTION_COLORS);
-        ds1.setColors(rainbow);
+        ds1.setColors(colors);
         pieChart.animateXY(5000, 5000);
         //ds1.setSliceSpace(2f);
         ds1.setSelectionShift(30);
@@ -303,7 +323,7 @@ public class CollectionDataFragment extends BaseFragment {
     public void ExpectedCollectionthisWeek() {
         Bundle ECWBundle = new Bundle();
         ECWBundle.putString(CollectionDetailsFragment.FROM, "ECW");
-        ECWBundle.putParcelable(CollectionDetailsFragment.COLLECTIONDATA,  model.getTable().get(0));
+        ECWBundle.putParcelable(CollectionDetailsFragment.COLLECTIONDATA, model.getTable().get(0));
         ECWBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, ECWBundle);
     }
@@ -312,7 +332,7 @@ public class CollectionDataFragment extends BaseFragment {
     public void ExpectedCollectionthisMonth() {
         Bundle ECMBundle = new Bundle();
         ECMBundle.putString(CollectionDetailsFragment.FROM, "ECM");
-        ECMBundle.putParcelable(CollectionDetailsFragment.COLLECTIONDATA,  model.getTable().get(0));
+        ECMBundle.putParcelable(CollectionDetailsFragment.COLLECTIONDATA, model.getTable().get(0));
         ECMBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, ECMBundle);
     }
@@ -321,7 +341,7 @@ public class CollectionDataFragment extends BaseFragment {
     public void PaymentCollectionthisWeek() {
         Bundle PCWBundle = new Bundle();
         PCWBundle.putString(CollectionDetailsFragment.FROM, "PCW");
-        PCWBundle.putParcelable(CollectionDetailsFragment.COLLECTIONDATA,  model.getTable().get(0));
+        PCWBundle.putParcelable(CollectionDetailsFragment.COLLECTIONDATA, model.getTable().get(0));
         PCWBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, PCWBundle);
     }
@@ -330,7 +350,7 @@ public class CollectionDataFragment extends BaseFragment {
     public void PaymentCollectionthisMonth() {
         Bundle PCMBundle = new Bundle();
         PCMBundle.putString(CollectionDetailsFragment.FROM, "PCM");
-        PCMBundle.putParcelable(CollectionDetailsFragment.COLLECTIONDATA,  model.getTable().get(0));
+        PCMBundle.putParcelable(CollectionDetailsFragment.COLLECTIONDATA, model.getTable().get(0));
         PCMBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         dashboardActivityContext.replaceFragment(Fragments.COLLECTION_FRAGMENT, PCMBundle);
     }

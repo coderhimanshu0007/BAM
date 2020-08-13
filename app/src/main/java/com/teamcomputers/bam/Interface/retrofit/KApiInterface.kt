@@ -120,10 +120,26 @@ interface KApiInterface {
     abstract fun collectionOutstanding(): Call<Any>
 
     // Collection Total Outstanding
+    @POST("CollectionTotalOutStandingCustomer")
+    abstract fun collectionTotalOutstanding(): Call<Any>
+
+    // Collection Outstanding
     @FormUrlEncoded
-    @POST("CollectionCollectibleTotalOutStandingCustomer")
-    abstract fun collectionTotalOutstanding(@Field("Start") start: String,
-                                            @Field("End") end: String): Call<Any>
+    @POST("CollectionTotalOutStandingCustomerInvoice")
+    abstract fun collectionTotalOutstandingInvoice(@Field("Customer") customer: String,
+                                                          @Field("Start") start: String,
+                                                          @Field("End") end: String): Call<Any>
+
+    // Collection Total Outstanding
+    @POST("CollectionCollectibleOutStandingCustomerNew")
+    abstract fun collectionCollectibleOutstanding(): Call<Any>
+
+    // Collection Outstanding
+    @FormUrlEncoded
+    @POST("CollectionCollectibleOutStandingCustomerInvoiceNew")
+    abstract fun collectionCollectibleOutstandingInvoice(@Field("Customer") customer: String,
+                                                          @Field("Start") start: String,
+                                                          @Field("End") end: String): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
@@ -131,10 +147,15 @@ interface KApiInterface {
     abstract fun collectionTotalOutstandingSearch(@Field("Customer") customer: String): Call<Any>
 
     // Collection Outstanding Current Month
+    @POST("CollectionCollectibleOutStandingCurrentMonthCustomerNew")
+    abstract fun collectionOutstandingCurrentMonth(): Call<Any>
+
+    // Collection Outstanding
     @FormUrlEncoded
-    @POST("CollectionCollectibleOutStandingCurrentMonthCustomer")
-    abstract fun collectionOutstandingCurrentMonth(@Field("Start") start: String,
-                                                   @Field("End") end: String): Call<Any>
+    @POST("CollectionCollectibleOutStandingCurrentMonthCustomerInvoiceNew")
+    abstract fun collectionOutstandingCurrentMonthInvoice(@Field("Customer") customer: String,
+                                                             @Field("Start") start: String,
+                                                             @Field("End") end: String): Call<Any>
 
     // Collection Outstanding Current Month
     @FormUrlEncoded
@@ -142,10 +163,15 @@ interface KApiInterface {
     abstract fun collectionOutstandingCurrentMonthSearch(@Field("Customer") customer: String): Call<Any>
 
     // Collection Outstanding
+    @POST("CollectionCollectibleOutStandingSubsequentMonthCustomerNew")
+    abstract fun collectionOutstandingSubsequentMonth(): Call<Any>
+
+    // Collection Outstanding
     @FormUrlEncoded
-    @POST("CollectionCollectibleOutStandingSubsequentMonthCustomer")
-    abstract fun collectionOutstandingSubsequentMonth(@Field("Start") start: String,
-                                                      @Field("End") end: String): Call<Any>
+    @POST("CollectionCollectibleOutStandingSubsequentMonthCustomerInvoiceNew")
+    abstract fun collectionOutstandingSubsequentMonthInvoice(@Field("Customer") customer: String,
+                                                             @Field("Start") start: String,
+                                                             @Field("End") end: String): Call<Any>
 
     // Collection Outstanding
     @FormUrlEncoded

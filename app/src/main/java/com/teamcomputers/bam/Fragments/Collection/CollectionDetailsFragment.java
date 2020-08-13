@@ -95,12 +95,12 @@ public class CollectionDetailsFragment extends BaseFragment {
 
         showProgress(ProgressDialogTexts.LOADING);
         if (from.equals("ECW")) {
-            tviWIPDetailHeading.setText("Expected Collection this Week");
+            tviWIPDetailHeading.setText("Follow-up this Week");
             tviTOInvoice.setText(collectionData.getExpectedCollectionThisWeekInvoice().toString());
             tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getExpectedCollectionThisWeekAmount()));
             BackgroundExecutor.getInstance().execute(new KCollectionECWRequester());
         } else if (from.equals("ECM")) {
-            tviWIPDetailHeading.setText("Expected Collection this Month");
+            tviWIPDetailHeading.setText("Follow-up this Month");
             tviTOInvoice.setText(collectionData.getExpectedCollectionThisMonthInvoice().toString());
             tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getExpectedCollectionThisMonthAmount()));
             BackgroundExecutor.getInstance().execute(new KCollectionECMRequester());
@@ -108,14 +108,12 @@ public class CollectionDetailsFragment extends BaseFragment {
             tviWIPDetailHeading.setText("Payment Collection this Week");
             tviTOInvoice.setText(collectionData.getPaymentCollectedThisWeekhInvoice().toString());
             tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getPaymentCollectedThisWeekAmount()));
-            //BackgroundExecutor.getInstance().execute(new KCollectionPCWRequester());
-            BackgroundExecutor.getInstance().execute(new KCollectionECWRequester());
+            BackgroundExecutor.getInstance().execute(new KCollectionPCWRequester());
         } else if (from.equals("PCM")) {
             tviWIPDetailHeading.setText("Payment Collection this Month");
             tviTOInvoice.setText(collectionData.getPaymentCollectedThisMonthInvoice().toString());
             tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getPaymentCollectedThisMonthAmount()));
-            //BackgroundExecutor.getInstance().execute(new KCollectionPCMRequester());
-            BackgroundExecutor.getInstance().execute(new KCollectionECMRequester());
+            BackgroundExecutor.getInstance().execute(new KCollectionPCMRequester());
         }
 
         /*rviData.addOnScrollListener(new RecyclerView.OnScrollListener() {

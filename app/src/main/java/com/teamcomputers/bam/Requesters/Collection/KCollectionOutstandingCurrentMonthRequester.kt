@@ -7,23 +7,15 @@ import com.teamcomputers.bam.controllers.KHTTPOperationController
 import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
 
-class KCollectionOutstandingCurrentMonthRequester(var start: String, var end: String, var more: Int) : BaseRequester {
+class KCollectionOutstandingCurrentMonthRequester() : BaseRequester {
     override fun run() {
-        val apiResponse = KHTTPOperationController().collectionOutstandingCurrentMonth(start, end)
+        val apiResponse = KHTTPOperationController().collectionOutstandingCurrentMonth()
         if (apiResponse != null) {
             if (apiResponse.responseCode == HttpURLConnection.HTTP_OK) {
                 if (apiResponse.response != null) {
-                    if (more == 0) {
-                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_TOTAL_OUTSTANDING_SUCCESSFULL, apiResponse.response))
-                    } else if (more == 1) {
-                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_CTOS_LOAD_MORE_SUCCESSFULL, apiResponse.response))
-                    }
+                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_TOTAL_OUTSTANDING_SUCCESSFULL, apiResponse.response))
                 } else {
-                    if (more == 0) {
-                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_TOTAL_OUTSTANDING_UNSUCCESSFULL, null))
-                    } else if (more == 1) {
-                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_CTOS_LOAD_MORE_UNSUCCESSFULL, null))
-                    }
+                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_TOTAL_OUTSTANDING_UNSUCCESSFULL, null))
                 }
             } else if (apiResponse.responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                 EventBus.getDefault().post(EventObject(KBAMConstant.Events.INTERNAL_SERVER_ERROR, null))

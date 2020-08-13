@@ -5,56 +5,13 @@ import com.google.gson.annotations.SerializedName
 
 
 class TotalOutstandingModel {
-    @SerializedName("Invoice")
+    @SerializedName("Data")
     @Expose
-    var invoice: Int? = null
-    @SerializedName("Amount")
+    var data: List<Datum>? = null
+    @SerializedName("Open")
     @Expose
-    var amount: Double? = null
-    @SerializedName("Table")
-    @Expose
-    var table: List<Table>? = null
+    var open: Int = 0
 
-    /*fun getInvoice(): Int? {
-        return invoice
-    }
-
-    fun setInvoice(invoice: Int?) {
-        this.invoice = invoice
-    }
-
-    fun getAmount(): Double? {
-        return amount
-    }
-
-    fun setAmount(amount: Double?) {
-        this.amount = amount
-    }
-
-    fun getTable(): List<Table>? {
-        return table
-    }
-
-    fun setTable(table: List<Table>) {
-        this.table = table
-    }*/
-
-    inner class Table {
-
-        @SerializedName("Name")
-        @Expose
-        var name: String? = null
-        @SerializedName("Amount")
-        @Expose
-        var amount: Double? = null
-        @SerializedName("Data")
-        @Expose
-        var data: List<Datum>? = null
-        @SerializedName("Open")
-        @Expose
-        var open: Int = 0
-
-    }
 
     inner class Datum {
 

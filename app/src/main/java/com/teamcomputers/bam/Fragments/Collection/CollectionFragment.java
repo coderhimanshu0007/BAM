@@ -50,10 +50,10 @@ public class CollectionFragment extends BaseFragment {
     String logInTime, logOutTime;
 
     private String[] navLabels = {
-            "OS Ageing",
             "Outstanding",
-            "WIP",
-            "Collection"
+            "Ageing",
+            "Pending",
+            "Insights"
     };
 
     String toolbarTitle = "";
@@ -268,11 +268,11 @@ public class CollectionFragment extends BaseFragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    OSAgeingFragment osAgeingFragment = new OSAgeingFragment();
-                    return osAgeingFragment;
-                case 1:
                     OutstandingFragment outstandingFragment = new OutstandingFragment();
                     return outstandingFragment;
+                case 1:
+                    OSAgeingFragment osAgeingFragment = new OSAgeingFragment();
+                    return osAgeingFragment;
                 case 2:
                     CollectionWIPFragment wipFragment = new CollectionWIPFragment();
                     return wipFragment;

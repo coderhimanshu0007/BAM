@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,17 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.Collection.KCollectionTotalOutstandingAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Models.Collection.TotalOutstandingModel;
+import com.teamcomputers.bam.Models.Collection.OutstandingDataModel;
+import com.teamcomputers.bam.Models.Collection.OutstandingModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionCollectibleOutstandingRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingCurrentMonthRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingCurrentMonthSearchRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingSubsequentMonthRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingSubsequentMonthSearchRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionTotalOutstandingRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionTotalOutstandingSearchRequester;
-import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderJunRequester;
-import com.teamcomputers.bam.Requesters.WSRequesters.KSalesOpenOrderSearchRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -36,18 +32,15 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class TotalOutstandingFragment extends BaseFragment {
     private View rootView;
     public static final String FROM = "FROM";
+    public static final String COLLECTIONDATA = "COLLECTIONDATA";
     private Unbinder unbinder;
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
@@ -74,8 +67,10 @@ public class TotalOutstandingFragment extends BaseFragment {
     TextView tviTOAmount;
 
     private KCollectionTotalOutstandingAdapter mAdapter;
-    TotalOutstandingModel model;
-    List<TotalOutstandingModel.Table> tosDataList = new ArrayList<>();
+    OutstandingDataModel model;
+    OutstandingDataModel.Datum selectedCustomer;
+
+    OutstandingModel.Table collectionData;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,6 +86,9 @@ public class TotalOutstandingFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, rootView);
 
         from = getArguments().getString(FROM);
+
+        collectionData = getArguments().getParcelable(COLLECTIONDATA);
+
         rlSearch.setVisibility(View.GONE);
 
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
@@ -98,7 +96,7 @@ public class TotalOutstandingFragment extends BaseFragment {
 
         fetchData();
 
-        rviData.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        /*rviData.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -119,7 +117,7 @@ public class TotalOutstandingFragment extends BaseFragment {
                     isLoading = false;
                 }
             }
-        });
+        });*/
 
         return rootView;
     }
@@ -128,20 +126,30 @@ public class TotalOutstandingFragment extends BaseFragment {
         showProgress(ProgressDialogTexts.LOADING);
         if (from.equals("TOTALOUTSTANDING")) {
             tviWIPDetailHeading.setText("Total Outstanding");
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "5", 0));
+            tviTOInvoice.setText(collectionData.getTotalOutStandingInvoice().toString());
+            tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getTotalOutStandingAmount()));
+            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester());
         } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
             tviWIPDetailHeading.setText("Collectible Outstanding");
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "5", 0));
+            tviTOInvoice.setText(collectionData.getCollectibleOutStandingInvoice().toString());
+            tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getCollectibleOutStandingAmount()));
+            BackgroundExecutor.getInstance().execute(new KCollectionCollectibleOutstandingRequester());
         } else if (from.equals("COCM")) {
             tviWIPDetailHeading.setText("Collectible Outstanding in Current Month");
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "5", 0));
+            tviTOInvoice.setText(collectionData.getCollectibleOutStandingCurrentMonthInvoice().toString());
+            tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getCollectibleOutStandingCurrentMonthAmount()));
+            //BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester());
+            BackgroundExecutor.getInstance().execute(new KCollectionCollectibleOutstandingRequester());
         } else if (from.equals("COSM")) {
             tviWIPDetailHeading.setText("Collectible Outstanding in Subsequent Month");
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "5", 0));
+            tviTOInvoice.setText(collectionData.getCollectibleOutStandingCurrentMonthInvoice().toString());
+            tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getCollectibleOutStandingCurrentMonthAmount()));
+            //BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester());
+            BackgroundExecutor.getInstance().execute(new KCollectionCollectibleOutstandingRequester());
         }
     }
 
-    private void loadMore() {
+    /*private void loadMore() {
         model.getTable().add(null);
         mAdapter.notifyItemInserted(model.getTable().size() - 1);
         showProgress(ProgressDialogTexts.LOADING);
@@ -157,7 +165,7 @@ public class TotalOutstandingFragment extends BaseFragment {
             BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester(start, end, 1));
         }
         isLoading = true;
-    }
+    }*/
 
     @Override
     public void onResume() {
@@ -186,17 +194,16 @@ public class TotalOutstandingFragment extends BaseFragment {
                     case Events.GET_COLLECTION_TOTAL_OUTSTANDING_SUCCESSFULL:
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceTotalOutstandingDataResponse(eventObject.getObject().toString()));
-                            model = (TotalOutstandingModel) BAMUtil.fromJson(String.valueOf(jsonObject), TotalOutstandingModel.class);
-                            tosDataList = model.getTable();
+                            model = (OutstandingDataModel) BAMUtil.fromJson(String.valueOf(jsonObject), OutstandingDataModel.class);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         dismissProgress();
                         if (model != null) {
-                            tviTOInvoice.setText(model.getInvoice().toString());
-                            tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getAmount()));
+                            //tviTOInvoice.setText(model.getInvoice().toString());
+                            //tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getAmount()));
 
-                            mAdapter = new KCollectionTotalOutstandingAdapter(dashboardActivityContext, tosDataList);
+                            mAdapter = new KCollectionTotalOutstandingAdapter(dashboardActivityContext, model.getData());
                             rviData.setAdapter(mAdapter);
                             //isLoading = true;
                         }
@@ -205,7 +212,7 @@ public class TotalOutstandingFragment extends BaseFragment {
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
-                    case Events.GET_CTOS_LOAD_MORE_SUCCESSFULL:
+                    /*case Events.GET_CTOS_LOAD_MORE_SUCCESSFULL:
                         model.getTable().remove(model.getTable().size() - 1);
                         int scrollPosition = model.getTable().size();
                         mAdapter.notifyItemRemoved(scrollPosition);
@@ -227,6 +234,16 @@ public class TotalOutstandingFragment extends BaseFragment {
                     case Events.GET_CTOS_LOAD_MORE_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
+                        break;*/
+                    case ClickEvents.COLLECTION_CUSTOMER_SELECT:
+                        selectedCustomer = (OutstandingDataModel.Datum) eventObject.getObject();
+                        Bundle customerBundle = new Bundle();
+                        //customerBundle.putString(CollectionCustomerDetailsFragment.USER_ID, userId);
+                        customerBundle.putString(OutstandingCustomerDetailsFragment.FROM, from);
+                        customerBundle.putParcelable(OutstandingCustomerDetailsFragment.CUSTOMER_DATA, selectedCustomer);
+
+                        customerBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        dashboardActivityContext.replaceFragment(Fragments.OUTSTANDING_CUSTOMER_DETAIL_FRAGMENT, customerBundle);
                         break;
                     case Events.OOPS_MESSAGE:
                         dismissProgress();
@@ -258,7 +275,7 @@ public class TotalOutstandingFragment extends BaseFragment {
             isLoading = false;
             KBAMUtils.hideSoftKeyboard(dashboardActivityContext);
             showProgress(ProgressDialogTexts.LOADING);
-            if (from.equals("TOTALOUTSTANDING")) {
+            /*if (from.equals("TOTALOUTSTANDING")) {
                 BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingRequester("0", "10", 0));
             } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
                 BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingSearchRequester(txtSearch.getText().toString()));
@@ -266,7 +283,7 @@ public class TotalOutstandingFragment extends BaseFragment {
                 BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthSearchRequester(txtSearch.getText().toString()));
             } else if (from.equals("COSM")) {
                 BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthSearchRequester(txtSearch.getText().toString()));
-            }
+            }*/
         }
     }
 

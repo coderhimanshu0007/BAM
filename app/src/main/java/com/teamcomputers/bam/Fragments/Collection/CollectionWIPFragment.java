@@ -153,13 +153,33 @@ public class CollectionWIPFragment extends BaseFragment {
     protected PieData generatePieData(List<CollectionWIPModel.ProgressData> progress) {
 
         ArrayList<PieEntry> entries1 = new ArrayList<>();
-
+        ArrayList<Integer> colors = new ArrayList<>();
         for (int i = 0; i < progress.size(); i++) {
             //OutstandingModel.ProgressInfo progress = model.getProgress().getCollectibleOutstanding().get(i);
             //if (!progress.getBu().equals("null")) {
             String val = KBAMUtils.getRoundOffValue(progress.get(i).getAmount());
             float x = Float.parseFloat(val);
             entries1.add(new PieEntry(x, progress.get(i).getBu()));
+            switch (progress.get(i).getBu()) {
+                case "ES":
+                    colors.add(context.getResources().getColor(R.color.graph_color5));
+                    break;
+                case "IMS":
+                    colors.add(context.getResources().getColor(R.color.graph_color7));
+                    break;
+                case "Shared":
+                    colors.add(context.getResources().getColor(R.color.graph_color2));
+                    break;
+                case "TDE":
+                    colors.add(context.getResources().getColor(R.color.graph_color4));
+                    break;
+                case "Work Space":
+                    colors.add(context.getResources().getColor(R.color.graph_color8));
+                    break;
+                default:
+                    colors.add(context.getResources().getColor(R.color.graph_color1));
+                    break;
+            }
             //}
         }
 
@@ -168,8 +188,7 @@ public class CollectionWIPFragment extends BaseFragment {
         ds1.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         ds1.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
-        int[] rainbow = context.getResources().getIntArray(R.array.COLLECTION_COLORS);
-        ds1.setColors(rainbow);
+        ds1.setColors(colors);
         pieChart.animateXY(5000, 5000);
         //ds1.setSliceSpace(2f);
         ds1.setSelectionShift(30);

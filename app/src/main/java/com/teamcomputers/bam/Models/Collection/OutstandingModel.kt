@@ -1,5 +1,8 @@
 package com.teamcomputers.bam.Models.Collection
 
+import android.annotation.SuppressLint
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -29,39 +32,19 @@ class OutstandingModel {
     }
 
     inner class Progress {
+        @SerializedName("TotalOutStanding")
+        @Expose
+        var totalOutStanding: List<ProgressInfo>? = null
         @SerializedName("CurrentMonth")
         @Expose
-        private var currentMonth: List<ProgressInfo>? = null
+        var currentMonth: List<ProgressInfo>? = null
         @SerializedName("SubsequentMonth")
         @Expose
-        private var subsequentMonth: List<ProgressInfo>? = null
+        var subsequentMonth: List<ProgressInfo>? = null
         @SerializedName("CollectibleOutstanding")
         @Expose
-        private var collectibleOutstanding: List<ProgressInfo>? = null
+        var collectibleOutstanding: List<ProgressInfo>? = null
 
-        fun getCurrentMonth(): List<ProgressInfo>? {
-            return currentMonth
-        }
-
-        fun setCurrentMonth(currentMonth: List<ProgressInfo>) {
-            this.currentMonth = currentMonth
-        }
-
-        fun getSubsequentMonth(): List<ProgressInfo>? {
-            return subsequentMonth
-        }
-
-        fun setSubsequentMonth(subsequentMonth: List<ProgressInfo>) {
-            this.subsequentMonth = subsequentMonth
-        }
-
-        fun getCollectibleOutstanding(): List<ProgressInfo>? {
-            return collectibleOutstanding
-        }
-
-        fun setCollectibleOutstanding(collectibleOutstanding: List<ProgressInfo>) {
-            this.collectibleOutstanding = collectibleOutstanding
-        }
     }
 
     inner class ProgressInfo {
@@ -90,7 +73,23 @@ class OutstandingModel {
         }
     }
 
-    inner class Table {
+    @SuppressLint("ParcelCreator")
+    inner class Table : Parcelable {
+        @SuppressLint("NewApi")
+        override fun writeToParcel(dest: Parcel?, flags: Int) {
+            this.totalOutStandingInvoice.let { it?.let { it1 -> dest?.writeInt(it1) } }
+            this.totalOutStandingAmount.let { it?.let { it1 -> dest?.writeDouble(it1) } }
+            this.collectibleOutStandingInvoice.let { it?.let { it1 -> dest?.writeInt(it1) } }
+            this.collectibleOutStandingAmount.let { it?.let { it1 -> dest?.writeDouble(it1) } }
+            this.collectibleOutStandingCurrentMonthInvoice.let { it?.let { it1 -> dest?.writeInt(it1) } }
+            this.collectibleOutStandingCurrentMonthAmount.let { it?.let { it1 -> dest?.writeDouble(it1) } }
+            this.collectibleOutStandingSubsequentMonthInvoice.let { it?.let { it1 -> dest?.writeInt(it1) } }
+            this.collectibleOutStandingSubsequentMonthAmount.let { it?.let { it1 -> dest?.writeDouble(it1) } }
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
 
         @SerializedName("TotalOutStandingInvoice")
         @Expose
