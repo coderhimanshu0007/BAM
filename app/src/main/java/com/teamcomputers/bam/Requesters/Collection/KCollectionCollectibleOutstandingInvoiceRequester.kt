@@ -9,15 +9,23 @@ import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
 import java.util.*
 
-class KCollectionCollectibleOutstandingInvoiceRequester(var customer: String, var start: String, var end: String) : BaseRequester {
+class KCollectionCollectibleOutstandingInvoiceRequester(var customer: String, var start: String, var end: String, var loadMore: String) : BaseRequester {
     override fun run() {
         val apiResponse = KHTTPOperationController().collectionCollectibleOutstandingInvice(customer, start, end)
         if (apiResponse != null) {
             if (apiResponse.responseCode == HttpURLConnection.HTTP_OK) {
                 if (apiResponse.response != null) {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_CUSTOMER_DETAIL_SUCCESSFULL, apiResponse.response))
+                    if (loadMore.equals("0")) {
+                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_TOTAL_OUTSTANDING_INVOICE_SUCCESSFULL, apiResponse.response))
+                    } else if (loadMore.equals("1")) {
+                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_TOTAL_OUTSTANDING_INVOICE_LOAD_MORE_SUCCESSFULL, apiResponse.response))
+                    }
                 } else {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_CUSTOMER_DETAIL_UNSUCCESSFULL, null))
+                    if (loadMore.equals("0")) {
+                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_TOTAL_OUTSTANDING_INVOICE_UNSUCCESSFULL, null))
+                    } else if (loadMore.equals("1")) {
+                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_TOTAL_OUTSTANDING_INVOICE_LOAD_MORE_UNSUCCESSFULL, null))
+                    }
                 }
             } else if (apiResponse.responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                 EventBus.getDefault().post(EventObject(KBAMConstant.Events.INTERNAL_SERVER_ERROR, null))

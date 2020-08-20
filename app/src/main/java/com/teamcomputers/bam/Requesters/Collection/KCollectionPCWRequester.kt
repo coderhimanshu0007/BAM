@@ -15,9 +15,9 @@ class KCollectionPCWRequester : BaseRequester {
         if (apiResponse != null) {
             if (apiResponse.responseCode == HttpURLConnection.HTTP_OK) {
                 if (apiResponse.response != null) {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_COLLECTION_DETAIL_SUCCESSFULL, apiResponse.response))
+                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_COLLECTION_CUSTOMER_SUCCESSFULL, apiResponse.response))
                 } else {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_COLLECTION_DETAIL_UNSUCCESSFULL, null))
+                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_COLLECTION_CUSTOMER_UNSUCCESSFULL, null))
                 }
             } else if (apiResponse.responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                 EventBus.getDefault().post(EventObject(KBAMConstant.Events.INTERNAL_SERVER_ERROR, null))

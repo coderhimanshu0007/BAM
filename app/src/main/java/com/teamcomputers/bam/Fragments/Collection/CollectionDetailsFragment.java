@@ -149,9 +149,9 @@ public class CollectionDetailsFragment extends BaseFragment {
         String start = String.valueOf(nextLimit);
         String end = String.valueOf(nextLimit + 10);
         if (from.equals("WIP0")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionWIP0DetailRequester("0", "10",0));
+            BackgroundExecutor.getInstance().execute(new KWIP015DaysCustomerRequester("0", "10",0));
         } else if (from.equals("WIP16")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionWIP16DetailRequester("0", "10",0));
+            BackgroundExecutor.getInstance().execute(new KWIP015DaysCustomerInvoiceRequester("0", "10",0));
         } else if (from.equals("WIP30")) {
             BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "10",0));
         } else if (from.equals("PDOSL")) {
@@ -186,7 +186,7 @@ public class CollectionDetailsFragment extends BaseFragment {
                     case Events.NO_INTERNET_CONNECTION:
                         dismissProgress();
                         break;
-                    case Events.GET_COLLECTION_COLLECTION_DETAIL_SUCCESSFULL:
+                    case Events.GET_COLLECTION_COLLECTION_CUSTOMER_SUCCESSFULL:
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
                             model = (CollectionCollectionDetailModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionCollectionDetailModel.class);
@@ -203,7 +203,7 @@ public class CollectionDetailsFragment extends BaseFragment {
                             rviData.setAdapter(mAdapter);
                         }
                         break;
-                    case Events.GET_COLLECTION_COLLECTION_DETAIL_UNSUCCESSFULL:
+                    case Events.GET_COLLECTION_COLLECTION_CUSTOMER_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
@@ -217,29 +217,6 @@ public class CollectionDetailsFragment extends BaseFragment {
                         customerBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
                         dashboardActivityContext.replaceFragment(Fragments.COLLECTION_CUSTOMER_DETAIL_FRAGMENT, customerBundle);
                         break;
-                    /*case Events.GET_WIP_DETAIL_LOAD_MORE_SUCCESSFULL:
-                        model.getTable().remove(model.getTable().size() - 1);
-                        int scrollPosition = model.getTable().size();
-                        mAdapter.notifyItemRemoved(scrollPosition);
-                        int currentSize = scrollPosition;
-                        nextLimit = currentSize + 11;
-                        try {
-                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
-                            model = (CollectionWIPDetailModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionWIPDetailModel.class);
-                            if (model != null) {
-                                wipDataList.addAll(model.getTable());
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        mAdapter.notifyDataSetChanged();
-                        isLoading = false;
-                        dismissProgress();
-                        break;
-                    case Events.GET_WIP_DETAIL_LOAD_MORE_UNSUCCESSFULL:
-                        dismissProgress();
-                        showToast(ToastTexts.OOPS_MESSAGE);
-                        break;*/
                     case Events.OOPS_MESSAGE:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);

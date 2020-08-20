@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.Collection.KCollectionTotalOutstandingAdapter;
+import com.teamcomputers.bam.Adapters.Collection.KCollectionOutstandingAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Models.Collection.OutstandingDataModel;
 import com.teamcomputers.bam.Models.Collection.OutstandingModel;
@@ -66,7 +66,7 @@ public class TotalOutstandingFragment extends BaseFragment {
     @BindView(R.id.tviTOAmount)
     TextView tviTOAmount;
 
-    private KCollectionTotalOutstandingAdapter mAdapter;
+    private KCollectionOutstandingAdapter mAdapter;
     OutstandingDataModel model;
     OutstandingDataModel.Datum selectedCustomer;
 
@@ -138,14 +138,12 @@ public class TotalOutstandingFragment extends BaseFragment {
             tviWIPDetailHeading.setText("Collectible Outstanding in Current Month");
             tviTOInvoice.setText(collectionData.getCollectibleOutStandingCurrentMonthInvoice().toString());
             tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getCollectibleOutStandingCurrentMonthAmount()));
-            //BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester());
-            BackgroundExecutor.getInstance().execute(new KCollectionCollectibleOutstandingRequester());
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester());
         } else if (from.equals("COSM")) {
             tviWIPDetailHeading.setText("Collectible Outstanding in Subsequent Month");
             tviTOInvoice.setText(collectionData.getCollectibleOutStandingCurrentMonthInvoice().toString());
             tviTOAmount.setText(KBAMUtils.getRoundOffValue(collectionData.getCollectibleOutStandingCurrentMonthAmount()));
-            //BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester());
-            BackgroundExecutor.getInstance().execute(new KCollectionCollectibleOutstandingRequester());
+            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester());
         }
     }
 
@@ -191,7 +189,7 @@ public class TotalOutstandingFragment extends BaseFragment {
                     case Events.NO_INTERNET_CONNECTION:
                         dismissProgress();
                         break;
-                    case Events.GET_COLLECTION_TOTAL_OUTSTANDING_SUCCESSFULL:
+                    case Events.GET_COLLECTION_OUTSTANDING_CUSTOMER_SUCCESSFULL:
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceTotalOutstandingDataResponse(eventObject.getObject().toString()));
                             model = (OutstandingDataModel) BAMUtil.fromJson(String.valueOf(jsonObject), OutstandingDataModel.class);
@@ -203,12 +201,12 @@ public class TotalOutstandingFragment extends BaseFragment {
                             //tviTOInvoice.setText(model.getInvoice().toString());
                             //tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getAmount()));
 
-                            mAdapter = new KCollectionTotalOutstandingAdapter(dashboardActivityContext, model.getData());
+                            mAdapter = new KCollectionOutstandingAdapter(dashboardActivityContext, model.getData());
                             rviData.setAdapter(mAdapter);
                             //isLoading = true;
                         }
                         break;
-                    case Events.GET_COLLECTION_TOTAL_OUTSTANDING_UNSUCCESSFULL:
+                    case Events.GET_COLLECTION_OUTSTANDING_CUSTOMER_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
@@ -280,9 +278,9 @@ public class TotalOutstandingFragment extends BaseFragment {
             } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
                 BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingSearchRequester(txtSearch.getText().toString()));
             } else if (from.equals("COCM")) {
-                BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthSearchRequester(txtSearch.getText().toString()));
+                BackgroundExecutor.getInstance().execute(new KCollectionCollectibleOutStandingCurrentMonthCustomerInvoiceSearchRequester(txtSearch.getText().toString()));
             } else if (from.equals("COSM")) {
-                BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthSearchRequester(txtSearch.getText().toString()));
+                BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthCustomerInvoiceSearchRequester(txtSearch.getText().toString()));
             }*/
         }
     }

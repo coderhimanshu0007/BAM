@@ -1,5 +1,8 @@
 package com.teamcomputers.bam.Models.Collection
 
+import android.annotation.SuppressLint
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -59,7 +62,26 @@ class CollectionWIPModel {
 
     }
 
-    inner class Table {
+    @SuppressLint("ParcelCreator")
+    inner class Table : Parcelable {
+        @SuppressLint("NewApi")
+        override fun writeToParcel(dest: Parcel?, flags: Int) {
+            this.wiP015DaysInvoice.let { it?.let { it1 -> dest?.writeInt(it1) } }
+            this.wiP015DaysAmount?.let { dest?.writeDouble(it) }
+            this.wiP1630DaysInvoice.let { it?.let { it1 -> dest?.writeInt(it1) } }
+            this.wiP1630aysAmount?.let { dest?.writeDouble(it) }
+            this.wiP30DaysInvoice.let { it?.let { it1 -> dest?.writeInt(it1) } }
+            this.wiP30DaysAmount?.let { dest?.writeDouble(it) }
+            this.wipPendingDocSubmissionLessThan2DaysInvoice.let { it?.let { it1 -> dest?.writeInt(it1) } }
+            this.wipPendingDocSubmissionLessThan2DaysAmount?.let { dest?.writeDouble(it) }
+            this.wipPendingDocSubmissionGreaterThan2DaysInvoice.let { it?.let { it1 -> dest?.writeInt(it1) } }
+            this.wipPendingDocSubmissionGreaterThan2DaysAmount?.let { dest?.writeDouble(it) }
+
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
 
         @SerializedName("WIP015DaysInvoice")
         @Expose

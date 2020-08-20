@@ -5,32 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 
 class CollectionWIPDetailModel {
-    @SerializedName("Invoice")
+    @SerializedName("Data")
     @Expose
-    var invoice: Int? = null
-    @SerializedName("Amount")
-    @Expose
-    var amount: Double? = null
-    @SerializedName("Table")
-    @Expose
-    var table: List<Table>? = null
-
-    inner class Table {
-
-        @SerializedName("Name")
-        @Expose
-        var name: String? = null
-        @SerializedName("Amount")
-        @Expose
-        var amount: Double? = null
-        @SerializedName("Data")
-        @Expose
-        var data: List<Datum>? = null
-        @SerializedName("Open")
-        @Expose
-        var open: Int = 0
-
-    }
+    var data: List<Datum>? = null
 
     inner class Datum {
 
@@ -61,6 +38,9 @@ class CollectionWIPDetailModel {
         @SerializedName("Percentage")
         @Expose
         var percentage: Double? = null
+        @SerializedName("Amount")
+        @Expose
+        var amount: Double? = null
 
     }
 

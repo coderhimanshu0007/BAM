@@ -15,7 +15,7 @@ import com.teamcomputers.bam.Utils.KBAMUtils
 import kotlinx.android.synthetic.main.os_ageing_recyclerview_layout.view.*
 import org.greenrobot.eventbus.EventBus
 
-class KCollectionTotalOutstandingAdapter(val mContext: DashboardActivity, val dataList: List<OutstandingDataModel.Datum>) : RecyclerView.Adapter<KCollectionTotalOutstandingAdapter.ViewHolder>() {
+class KCollectionOutstandingAdapter(val mContext: DashboardActivity, val dataList: List<OutstandingDataModel.Datum>) : RecyclerView.Adapter<KCollectionOutstandingAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var currentDataItem: OutstandingDataModel.Datum? = null

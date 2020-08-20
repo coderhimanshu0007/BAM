@@ -47,6 +47,7 @@ import com.teamcomputers.bam.Fragments.BaseFragment;
 import com.teamcomputers.bam.Fragments.Collection.CollectionCustomerDetailsFragment;
 import com.teamcomputers.bam.Fragments.Collection.CollectionDetailsFragment;
 import com.teamcomputers.bam.Fragments.Collection.CollectionFragment;
+import com.teamcomputers.bam.Fragments.Collection.CollectionWIPInvoiceFragment;
 import com.teamcomputers.bam.Fragments.Collection.OutstandingCustomerDetailsFragment;
 import com.teamcomputers.bam.Fragments.Collection.TotalOutstandingFragment;
 import com.teamcomputers.bam.Fragments.Collection.WIPDetailsFragment;
@@ -691,7 +692,7 @@ public class DashboardActivity extends BaseActivity {
                             currentDate = Calendar.getInstance().getTime();
                             logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
                             level1sessionData.setModule("Order Processing");
-                            level1sessionData.setPage("");
+                            level1sessionData.setPage("Order Processing");
                             level1sessionData.setLogInTimeStamp(logInTime);
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(level1sessionData);
                             fragment = new OrderProcessingFragment();
@@ -761,7 +762,7 @@ public class DashboardActivity extends BaseActivity {
                             currentDate = Calendar.getInstance().getTime();
                             logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
                             level1sessionData.setModule("Logistics");
-                            level1sessionData.setPage("");
+                            level1sessionData.setPage("Logistics");
                             level1sessionData.setLogInTimeStamp(logInTime);
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(level1sessionData);
                             fragment = new LogisticsFragment();
@@ -797,7 +798,7 @@ public class DashboardActivity extends BaseActivity {
                             currentDate = Calendar.getInstance().getTime();
                             logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
                             level1sessionData.setModule("Installation");
-                            level1sessionData.setPage("");
+                            level1sessionData.setPage("Installation");
                             level1sessionData.setLogInTimeStamp(logInTime);
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(level1sessionData);
                             fragment = new InstallationFragment();
@@ -829,8 +830,15 @@ public class DashboardActivity extends BaseActivity {
                         break;
                     case Fragments.COLLECTION_FRAGMENTS:
                         if (activeEmployeeAccessModel.getData().getCollectionModule() == 1) {
+                            levelSharing = 0;
+                            currentDate = Calendar.getInstance().getTime();
+                            logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
+                            level1sessionData.setModule("Collection");
+                            level1sessionData.setPage("Collection");
+                            level1sessionData.setLogInTimeStamp(logInTime);
+                            SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(level1sessionData);
                             fragment = new CollectionFragment();
-                        //    showToast(ToastTexts.WORK_PROGRESS);
+                            //    showToast(ToastTexts.WORK_PROGRESS);
                         }
                         break;
                     case Fragments.COLLECTION_FRAGMENTS1:
@@ -869,8 +877,8 @@ public class DashboardActivity extends BaseActivity {
                             levelSharing = 0;
                             currentDate = Calendar.getInstance().getTime();
                             logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
-                            level1sessionData.setModule("WSDashboard");
-                            level1sessionData.setPage("");
+                            level1sessionData.setModule("Sales/Receivables");
+                            level1sessionData.setPage("WSDashboard");
                             level1sessionData.setLogInTimeStamp(logInTime);
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(level1sessionData);
                             fragment = new NewSalesReceivableFragment();
@@ -927,12 +935,15 @@ public class DashboardActivity extends BaseActivity {
                     case Fragments.COLLECTION_CUSTOMER_DETAIL_FRAGMENT:
                         fragment = new CollectionCustomerDetailsFragment();
                         break;
+                    case Fragments.WIP_CUSTOMER_DETAIL_FRAGMENT:
+                        fragment = new CollectionWIPInvoiceFragment();
+                        break;
                     case Fragments.WS_RSM_FRAGMENT:
                         if (bundle.get("USER_LEVEL").equals("R0") || bundle.get("USER_LEVEL").equals("R1")) {
                             sharing = 0;
                             currentDate = Calendar.getInstance().getTime();
                             logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
-                            sessionDataModel.setModule("WSDashboard");
+                            sessionDataModel.setModule("Sales/Receivables");
                             sessionDataModel.setPage("Sales");
                             sessionDataModel.setLogInTimeStamp(logInTime);
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
@@ -944,7 +955,7 @@ public class DashboardActivity extends BaseActivity {
                             sharing = 0;
                             currentDate = Calendar.getInstance().getTime();
                             logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
-                            sessionDataModel.setModule("WSDashboard");
+                            sessionDataModel.setModule("Sales/Receivables");
                             sessionDataModel.setPage("Sales");
                             sessionDataModel.setLogInTimeStamp(logInTime);
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
@@ -956,7 +967,7 @@ public class DashboardActivity extends BaseActivity {
                             sharing = 0;
                             currentDate = Calendar.getInstance().getTime();
                             logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
-                            sessionDataModel.setModule("WSDashboard");
+                            sessionDataModel.setModule("Sales/Receivables");
                             sessionDataModel.setPage("Sales");
                             sessionDataModel.setLogInTimeStamp(logInTime);
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
@@ -971,8 +982,8 @@ public class DashboardActivity extends BaseActivity {
                             sharing = 0;
                             currentDate = Calendar.getInstance().getTime();
                             logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
-                            sessionDataModel.setModule("WSDashboard");
-                            sessionDataModel.setPage("OSO");
+                            sessionDataModel.setModule("Sales/Receivables");
+                            sessionDataModel.setPage("PSO");
                             sessionDataModel.setLogInTimeStamp(logInTime);
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
                         }
@@ -983,8 +994,8 @@ public class DashboardActivity extends BaseActivity {
                             sharing = 0;
                             currentDate = Calendar.getInstance().getTime();
                             logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
-                            sessionDataModel.setModule("WSDashboard");
-                            sessionDataModel.setPage("OSO");
+                            sessionDataModel.setModule("Sales/Receivables");
+                            sessionDataModel.setPage("PSO");
                             sessionDataModel.setLogInTimeStamp(logInTime);
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
                         }
@@ -995,8 +1006,8 @@ public class DashboardActivity extends BaseActivity {
                             sharing = 0;
                             currentDate = Calendar.getInstance().getTime();
                             logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
-                            sessionDataModel.setModule("WSDashboard");
-                            sessionDataModel.setPage("OSO");
+                            sessionDataModel.setModule("Sales/Receivables");
+                            sessionDataModel.setPage("PSO");
                             sessionDataModel.setLogInTimeStamp(logInTime);
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
                         }
@@ -1013,8 +1024,8 @@ public class DashboardActivity extends BaseActivity {
                             sharing = 0;
                             currentDate = Calendar.getInstance().getTime();
                             logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
-                            sessionDataModel.setModule("WSDashboard");
-                            sessionDataModel.setPage("Net Receivable");
+                            sessionDataModel.setModule("Sales/Receivables");
+                            sessionDataModel.setPage("Outstanding");
                             sessionDataModel.setLogInTimeStamp(logInTime);
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
                         }
@@ -1025,8 +1036,8 @@ public class DashboardActivity extends BaseActivity {
                             sharing = 0;
                             currentDate = Calendar.getInstance().getTime();
                             logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
-                            sessionDataModel.setModule("WSDashboard");
-                            sessionDataModel.setPage("Net Receivable");
+                            sessionDataModel.setModule("Sales/Receivables");
+                            sessionDataModel.setPage("Outstanding");
                             sessionDataModel.setLogInTimeStamp(logInTime);
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
                         }
@@ -1037,8 +1048,8 @@ public class DashboardActivity extends BaseActivity {
                             sharing = 0;
                             currentDate = Calendar.getInstance().getTime();
                             logInTime = KBAMUtils.getFormattedDate(DateFormat.SESSION_DATE_FORMAT, currentDate);
-                            sessionDataModel.setModule("WSDashboard");
-                            sessionDataModel.setPage("Net Receivable");
+                            sessionDataModel.setModule("Sales/Receivables");
+                            sessionDataModel.setPage("Outstanding");
                             sessionDataModel.setLogInTimeStamp(logInTime);
                             SharedPreferencesController.getInstance(dashboardActivityContext).setSessionData(sessionDataModel);
                         }

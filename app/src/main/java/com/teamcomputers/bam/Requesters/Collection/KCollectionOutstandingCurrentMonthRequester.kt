@@ -13,9 +13,9 @@ class KCollectionOutstandingCurrentMonthRequester() : BaseRequester {
         if (apiResponse != null) {
             if (apiResponse.responseCode == HttpURLConnection.HTTP_OK) {
                 if (apiResponse.response != null) {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_TOTAL_OUTSTANDING_SUCCESSFULL, apiResponse.response))
+                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_OUTSTANDING_CUSTOMER_SUCCESSFULL, apiResponse.response))
                 } else {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_TOTAL_OUTSTANDING_UNSUCCESSFULL, null))
+                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_OUTSTANDING_CUSTOMER_UNSUCCESSFULL, null))
                 }
             } else if (apiResponse.responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                 EventBus.getDefault().post(EventObject(KBAMConstant.Events.INTERNAL_SERVER_ERROR, null))

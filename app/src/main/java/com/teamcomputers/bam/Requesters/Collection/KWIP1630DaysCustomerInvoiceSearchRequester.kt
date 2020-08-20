@@ -7,15 +7,15 @@ import com.teamcomputers.bam.controllers.KHTTPOperationController
 import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
 
-class KCollectionWIP0DetailSearchRequester(var customer: String, var invoice: String) : BaseRequester {
+class KWIP1630DaysCustomerInvoiceSearchRequester(var customer: String, var invoice: String) : BaseRequester {
     override fun run() {
-        val apiResponse = KHTTPOperationController().collectionWIP0Search(customer, invoice)
+        val apiResponse = KHTTPOperationController().WIP1630DaysCustomerInvoiceSearch(customer, invoice)
         if (apiResponse != null) {
             if (apiResponse.responseCode == HttpURLConnection.HTTP_OK) {
                 if (apiResponse.response != null) {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_WIP_DETAIL_SEARCH_SUCCESSFULL, apiResponse.response))
+                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_WIP_CUSTOMER_INVOICE_SEARCH_SUCCESSFULL, apiResponse.response))
                 } else {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_WIP_DETAIL_SEARCH_UNSUCCESSFULL, null))
+                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_WIP_CUSTOMER_INVOICE_SEARCH_UNSUCCESSFULL, null))
                 }
             } else if (apiResponse.responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                 EventBus.getDefault().post(EventObject(KBAMConstant.Events.INTERNAL_SERVER_ERROR, null))

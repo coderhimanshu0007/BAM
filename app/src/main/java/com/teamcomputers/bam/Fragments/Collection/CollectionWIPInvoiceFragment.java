@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,21 +14,26 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teamcomputers.bam.Activities.DashboardActivity;
-import com.teamcomputers.bam.Adapters.Collection.KCollectionOutstandingDetailsAdapter;
-import com.teamcomputers.bam.Adapters.Collection.KCollectionTotalOutstandingInvoiceDetailListAdapter;
+import com.teamcomputers.bam.Adapters.Collection.KCollectionWIPDetailListAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Models.Collection.OutstandingDataModel;
-import com.teamcomputers.bam.Models.Collection.TotalOutstandingModel;
+import com.teamcomputers.bam.Models.Collection.CollectionWIPDetailModel;
+import com.teamcomputers.bam.Models.Collection.WIPCustomerModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionCollectibleOutStandingCurrentMonthCustomerInvoiceSearchRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionCollectibleOutStandingCustomerInvoiceSearchRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionCollectibleOutstandingInvoiceRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingCurrentMonthInvoiceRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingSubsequentMonthCustomerInvoiceSearchRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionOutstandingSubsequentMonthInvoiceRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionTotalOutStandingCustomerInvoiceSearchRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionTotalOutstandingInvoiceRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionECMInvoiceSearchRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionECWInvoiceSearchRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionPCMInvoiceSearchRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionPCWInvoiceSearchRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIP015DaysCustomerInvoiceRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIP015DaysCustomerInvoiceSearchRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIP1630DaysCustomerInvoiceRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIP1630DaysCustomerInvoiceSearchRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIP30DaysCustomerInvoiceRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIP30DaysCustomerInvoiceSearchRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIPPendingDocSubGreaterThan2DaysCustomerInvoiceRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIPPendingDocSubGreaterThan2DaysCustomerInvoiceSearchRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIPPendingDocSubLessThan2DaysCustomerInvoiceRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIPPendingDocSubLessThan2DaysCustomerInvoiceSearchRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -39,6 +43,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,7 +51,7 @@ import butterknife.ButterKnife;
 import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
-public class OutstandingCustomerDetailsFragment extends BaseFragment {
+public class CollectionWIPInvoiceFragment extends BaseFragment {
     private View rootView;
     public static final String FROM = "FROM";
     public static final String CUSTOMER_DATA = "CUSTOMER_DATA";
@@ -78,11 +83,10 @@ public class OutstandingCustomerDetailsFragment extends BaseFragment {
     @BindView(R.id.cviHeading)
     CardView cviHeading;
 
-    private KCollectionOutstandingDetailsAdapter mAdapter;
-    private KCollectionTotalOutstandingInvoiceDetailListAdapter mTOAdapter;
-    TotalOutstandingModel model;
-    List<TotalOutstandingModel.Datum> outstandingDataList;
-    OutstandingDataModel.Datum selectedCustomer;
+    private KCollectionWIPDetailListAdapter mAdapter;
+    CollectionWIPDetailModel model;
+    List<CollectionWIPDetailModel.Datum> invoiceDataList = new ArrayList<>();
+    WIPCustomerModel.Datum selectedCustomer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -140,35 +144,35 @@ public class OutstandingCustomerDetailsFragment extends BaseFragment {
 
     private void loadInitialData() {
         showProgress(ProgressDialogTexts.LOADING);
-        if (from.equals("TOTALOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingInvoiceRequester(selectedCustomer.getCustomerName(), "0", "50", "0"));
-        } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionCollectibleOutstandingInvoiceRequester(selectedCustomer.getCustomerName(), "0", "50", "0"));
-        } else if (from.equals("COCM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthInvoiceRequester(selectedCustomer.getCustomerName(), "0", "50", "0"));
-        } else if (from.equals("COSM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthInvoiceRequester(selectedCustomer.getCustomerName(), "0", "50", "0"));
+        if (from.equals("WIP0")) {
+            BackgroundExecutor.getInstance().execute(new KWIP015DaysCustomerInvoiceRequester(selectedCustomer.getCustomerName(), "0", "50", "0"));
+        } else if (from.equals("WIP16")) {
+            BackgroundExecutor.getInstance().execute(new KWIP1630DaysCustomerInvoiceRequester(selectedCustomer.getCustomerName(), "0", "50", "0"));
+        } else if (from.equals("WIP30")) {
+            BackgroundExecutor.getInstance().execute(new KWIP30DaysCustomerInvoiceRequester(selectedCustomer.getCustomerName(), "0", "50", "0"));
+        } else if (from.equals("PDOSL")) {
+            BackgroundExecutor.getInstance().execute(new KWIPPendingDocSubLessThan2DaysCustomerInvoiceRequester(selectedCustomer.getCustomerName(), "0", "50", "0"));
+        } else if (from.equals("PDOSG")) {
+            BackgroundExecutor.getInstance().execute(new KWIPPendingDocSubGreaterThan2DaysCustomerInvoiceRequester(selectedCustomer.getCustomerName(), "0", "50", "0"));
         }
     }
 
     private void loadMore() {
         model.getData().add(null);
-        if (from.equals("TOTALOUTSTANDING")) {
-            mTOAdapter.notifyItemInserted(model.getData().size() - 1);
-        } else {
-            mAdapter.notifyItemInserted(model.getData().size() - 1);
-        }
-        showProgress(ProgressDialogTexts.LOADING);
+        mAdapter.notifyItemInserted(model.getData().size() - 1);
         String start = String.valueOf(nextLimit);
         String end = String.valueOf(nextLimit + 50);
-        if (from.equals("TOTALOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutstandingInvoiceRequester(selectedCustomer.getCustomerName(), start, end, "1"));
-        } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionCollectibleOutstandingInvoiceRequester(selectedCustomer.getCustomerName(), start, end, "1"));
-        } else if (from.equals("COCM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthInvoiceRequester(selectedCustomer.getCustomerName(), start, end, "1"));
-        } else if (from.equals("COSM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthInvoiceRequester(selectedCustomer.getCustomerName(), start, end, "1"));
+        showProgress(ProgressDialogTexts.LOADING);
+        if (from.equals("WIP0")) {
+            BackgroundExecutor.getInstance().execute(new KWIP015DaysCustomerInvoiceRequester(selectedCustomer.getCustomerName(), start, end, "1"));
+        } else if (from.equals("WIP16")) {
+            BackgroundExecutor.getInstance().execute(new KWIP1630DaysCustomerInvoiceRequester(selectedCustomer.getCustomerName(), start, end, "1"));
+        } else if (from.equals("WIP30")) {
+            BackgroundExecutor.getInstance().execute(new KWIP30DaysCustomerInvoiceRequester(selectedCustomer.getCustomerName(), start, end, "1"));
+        } else if (from.equals("PDOSL")) {
+            BackgroundExecutor.getInstance().execute(new KWIPPendingDocSubLessThan2DaysCustomerInvoiceRequester(selectedCustomer.getCustomerName(), start, end, "1"));
+        } else if (from.equals("PDOSG")) {
+            BackgroundExecutor.getInstance().execute(new KWIPPendingDocSubGreaterThan2DaysCustomerInvoiceRequester(selectedCustomer.getCustomerName(), start, end, "1"));
         }
         isLoading = true;
     }
@@ -185,7 +189,7 @@ public class OutstandingCustomerDetailsFragment extends BaseFragment {
 
     @Override
     public String getFragmentName() {
-        return OutstandingCustomerDetailsFragment.class.getSimpleName();
+        return CollectionWIPInvoiceFragment.class.getSimpleName();
     }
 
     @Subscribe
@@ -197,80 +201,65 @@ public class OutstandingCustomerDetailsFragment extends BaseFragment {
                     case Events.NO_INTERNET_CONNECTION:
                         dismissProgress();
                         break;
-                    case Events.GET_TOTAL_OUTSTANDING_INVOICE_SUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_CUSTOMER_INVOICE_SUCCESSFULL:
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
-                            model = (TotalOutstandingModel) BAMUtil.fromJson(String.valueOf(jsonObject), TotalOutstandingModel.class);
+                            model = (CollectionWIPDetailModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionWIPDetailModel.class);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         dismissProgress();
                         if (model != null) {
-                            outstandingDataList = model.getData();
-                            if (from.equals("TOTALOUTSTANDING")) {
-                                mTOAdapter = new KCollectionTotalOutstandingInvoiceDetailListAdapter(dashboardActivityContext, outstandingDataList);
-                                rviData.setAdapter(mTOAdapter);
-                            } else {
-                                mAdapter = new KCollectionOutstandingDetailsAdapter(dashboardActivityContext, from, outstandingDataList);
-                                rviData.setAdapter(mAdapter);
-                            }
+                            invoiceDataList = model.getData();
+                            //tviTOInvoice.setText(model.getInvoice().toString());
+                            //tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getAmount()));
+
+                            mAdapter = new KCollectionWIPDetailListAdapter(dashboardActivityContext, invoiceDataList);
+                            rviData.setAdapter(mAdapter);
                         }
                         break;
-                    case Events.GET_TOTAL_OUTSTANDING_INVOICE_UNSUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_CUSTOMER_INVOICE_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
-                    case Events.GET_TOTAL_OUTSTANDING_INVOICE_LOAD_MORE_SUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_CUSTOMER_INVOICE_LOAD_MORE_SUCCESSFULL:
                         model.getData().remove(model.getData().size() - 1);
                         int scrollPosition = model.getData().size();
-                        if (from.equals("TOTALOUTSTANDING")) {
-                            mTOAdapter.notifyItemRemoved(scrollPosition);
-                        } else {
-                            mAdapter.notifyItemRemoved(scrollPosition);
-                        }
+                        mAdapter.notifyItemRemoved(scrollPosition);
                         int currentSize = scrollPosition;
                         nextLimit = currentSize + 11;
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
-                            model = (TotalOutstandingModel) BAMUtil.fromJson(String.valueOf(jsonObject), TotalOutstandingModel.class);
+                            model = (CollectionWIPDetailModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionWIPDetailModel.class);
                             if (model != null) {
-                                outstandingDataList.addAll(model.getData());
+                                invoiceDataList = model.getData();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        if (from.equals("TOTALOUTSTANDING")) {
-                            mTOAdapter.notifyDataSetChanged();
-                        } else {
-                            mAdapter.notifyDataSetChanged();
-                        }
+                        mAdapter.notifyDataSetChanged();
                         isLoading = false;
                         dismissProgress();
                         break;
-                    case Events.GET_TOTAL_OUTSTANDING_INVOICE_LOAD_MORE_UNSUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_CUSTOMER_INVOICE_LOAD_MORE_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
-                    case Events.GET_TOTAL_OUTSTANDING_INVOICE_SEARCH_SUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_CUSTOMER_INVOICE_SEARCH_SUCCESSFULL:
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
-                            model = (TotalOutstandingModel) BAMUtil.fromJson(String.valueOf(jsonObject), TotalOutstandingModel.class);
+                            model = (CollectionWIPDetailModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionWIPDetailModel.class);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         dismissProgress();
                         if (model != null) {
-                            outstandingDataList = model.getData();
-                            if (from.equals("TOTALOUTSTANDING")) {
-                                mTOAdapter = new KCollectionTotalOutstandingInvoiceDetailListAdapter(dashboardActivityContext, outstandingDataList);
-                                rviData.setAdapter(mTOAdapter);
-                            } else {
-                                mAdapter = new KCollectionOutstandingDetailsAdapter(dashboardActivityContext, from, outstandingDataList);
-                                rviData.setAdapter(mAdapter);
-                            }
+                            invoiceDataList = model.getData();
+                            mAdapter = new KCollectionWIPDetailListAdapter(dashboardActivityContext, invoiceDataList);
+                            rviData.setAdapter(mAdapter);
                         }
                         break;
-                    case Events.GET_TOTAL_OUTSTANDING_INVOICE_SEARCH_UNSUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_CUSTOMER_INVOICE_SEARCH_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
@@ -301,17 +290,18 @@ public class OutstandingCustomerDetailsFragment extends BaseFragment {
 
     private void loadSearchData(String searchText) {
         showProgress(ProgressDialogTexts.LOADING);
-        if (from.equals("TOTALOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionTotalOutStandingCustomerInvoiceSearchRequester(selectedCustomer.getCustomerName(), searchText));
-        } else if (from.equals("COLLECTIBLEOUTSTANDING")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionCollectibleOutStandingCustomerInvoiceSearchRequester(selectedCustomer.getCustomerName(), searchText));
-        } else if (from.equals("COCM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionCollectibleOutStandingCurrentMonthCustomerInvoiceSearchRequester(selectedCustomer.getCustomerName(), searchText));
-        } else if (from.equals("COSM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthCustomerInvoiceSearchRequester(selectedCustomer.getCustomerName(), searchText));
+        if (from.equals("WIP0")) {
+            BackgroundExecutor.getInstance().execute(new KWIP015DaysCustomerInvoiceSearchRequester(selectedCustomer.getCustomerName(), searchText));
+        } else if (from.equals("WIP16")) {
+            BackgroundExecutor.getInstance().execute(new KWIP1630DaysCustomerInvoiceSearchRequester(selectedCustomer.getCustomerName(), searchText));
+        } else if (from.equals("WIP30")) {
+            BackgroundExecutor.getInstance().execute(new KWIP30DaysCustomerInvoiceSearchRequester(selectedCustomer.getCustomerName(), searchText));
+        } else if (from.equals("PDOSL")) {
+            BackgroundExecutor.getInstance().execute(new KWIPPendingDocSubLessThan2DaysCustomerInvoiceSearchRequester(selectedCustomer.getCustomerName(), searchText));
+        } else if (from.equals("PDOSG")) {
+            BackgroundExecutor.getInstance().execute(new KWIPPendingDocSubGreaterThan2DaysCustomerInvoiceSearchRequester(selectedCustomer.getCustomerName(), searchText));
         }
     }
-
 
     @Override
     public void onDestroyView() {

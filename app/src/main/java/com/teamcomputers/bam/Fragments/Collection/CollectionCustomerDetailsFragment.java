@@ -5,9 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,9 +21,13 @@ import com.teamcomputers.bam.Models.Collection.CollectionCustomerDetailsModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionECMInvoiceRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionECMInvoiceSearchRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionECWInvoiceRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionECWInvoiceSearchRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionPCMInvoiceRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionPCMInvoiceSearchRequester;
 import com.teamcomputers.bam.Requesters.Collection.KCollectionPCWInvoiceRequester;
+import com.teamcomputers.bam.Requesters.Collection.KCollectionPCWInvoiceSearchRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -38,6 +42,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class CollectionCustomerDetailsFragment extends BaseFragment {
@@ -52,8 +57,8 @@ public class CollectionCustomerDetailsFragment extends BaseFragment {
     boolean isLoading = false;
     int nextLimit = 0;
 
-    @BindView(R.id.rlSearch)
-    RelativeLayout rlSearch;
+    @BindView(R.id.txtSearch)
+    TextView txtSearch;
 
     @BindView(R.id.rviData)
     RecyclerView rviData;
@@ -94,7 +99,6 @@ public class CollectionCustomerDetailsFragment extends BaseFragment {
 
         selectedCustomer = getArguments().getParcelable(CUSTOMER_DATA);
 
-        rlSearch.setVisibility(View.GONE);
         llInvoice.setVisibility(View.INVISIBLE);
         cviHeading.setVisibility(View.GONE);
 
@@ -104,20 +108,9 @@ public class CollectionCustomerDetailsFragment extends BaseFragment {
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
         rviData.setLayoutManager(layoutManager);
 
-        showProgress(ProgressDialogTexts.LOADING);
-        if (from.equals("ECW")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionECWInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
-        } else if (from.equals("ECM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionECMInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
-        } else if (from.equals("PCW")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionPCWInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
-            //BackgroundExecutor.getInstance().execute(new KCollectionECWInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
-        } else if (from.equals("PCM")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionPCMInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
-            //BackgroundExecutor.getInstance().execute(new KCollectionECMInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
-        }
+        loadInitialData();
 
-        /*rviData.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        rviData.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -130,7 +123,7 @@ public class CollectionCustomerDetailsFragment extends BaseFragment {
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
                 if (!isLoading) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == model.getTable().size() - 1) {
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == model.getData().size() - 1) {
                         //bottom of list!
                         loadMore();
                     }
@@ -138,30 +131,45 @@ public class CollectionCustomerDetailsFragment extends BaseFragment {
                     isLoading = false;
                 }
             }
-        });*/
+        });
 
         return rootView;
     }
 
-    /*private void loadMore() {
-        model.getTable().add(null);
-        mAdapter.notifyItemInserted(model.getTable().size() - 1);
+    private void loadInitialData() {
         showProgress(ProgressDialogTexts.LOADING);
+        if (from.equals("ECW")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionECWInvoiceRequester(selectedCustomer.getCustomerName(), "0", "50", "0"));
+        } else if (from.equals("ECM")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionECMInvoiceRequester(selectedCustomer.getCustomerName(), "0", "50", "0"));
+        } else if (from.equals("PCW")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionPCWInvoiceRequester(selectedCustomer.getCustomerName(), "0", "50", "0"));
+            //BackgroundExecutor.getInstance().execute(new KCollectionECWInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
+        } else if (from.equals("PCM")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionPCMInvoiceRequester(selectedCustomer.getCustomerName(), "0", "50", "0"));
+            //BackgroundExecutor.getInstance().execute(new KCollectionECMInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
+        }
+    }
+
+    private void loadMore() {
+        model.getData().add(null);
+        mAdapter.notifyItemInserted(model.getData().size() - 1);
         String start = String.valueOf(nextLimit);
-        String end = String.valueOf(nextLimit + 10);
-        if (from.equals("WIP0")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionWIP0DetailRequester("0", "10",0));
-        } else if (from.equals("WIP16")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionWIP16DetailRequester("0", "10",0));
-        } else if (from.equals("WIP30")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "10",0));
-        } else if (from.equals("PDOSL")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
-        } else if (from.equals("PDOSG")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
+        String end = String.valueOf(nextLimit + 50);
+        showProgress(ProgressDialogTexts.LOADING);
+        if (from.equals("ECW")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionECWInvoiceRequester(selectedCustomer.getCustomerName(), start, end, "1"));
+        } else if (from.equals("ECM")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionECMInvoiceRequester(selectedCustomer.getCustomerName(), start, end, "1"));
+        } else if (from.equals("PCW")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionPCWInvoiceRequester(selectedCustomer.getCustomerName(), start, end, "1"));
+            //BackgroundExecutor.getInstance().execute(new KCollectionECWInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
+        } else if (from.equals("PCM")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionPCMInvoiceRequester(selectedCustomer.getCustomerName(), start, end, "1"));
+            //BackgroundExecutor.getInstance().execute(new KCollectionECMInvoiceRequester(selectedCustomer.getCustomerName(), "0", "10"));
         }
         isLoading = true;
-    }*/
+    }
 
     @Override
     public void onResume() {
@@ -187,7 +195,7 @@ public class CollectionCustomerDetailsFragment extends BaseFragment {
                     case Events.NO_INTERNET_CONNECTION:
                         dismissProgress();
                         break;
-                    case Events.GET_COLLECTION_CUSTOMER_DETAIL_SUCCESSFULL:
+                    case Events.GET_COLLECTION_COLLECTION_CUSTOMER_INVOICE_SUCCESSFULL:
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
                             model = (CollectionCustomerDetailsModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionCustomerDetailsModel.class);
@@ -204,21 +212,21 @@ public class CollectionCustomerDetailsFragment extends BaseFragment {
                             rviData.setAdapter(mAdapter);
                         }
                         break;
-                    case Events.GET_COLLECTION_CUSTOMER_DETAIL_UNSUCCESSFULL:
+                    case Events.GET_COLLECTION_COLLECTION_CUSTOMER_INVOICE_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
-                    /*case Events.GET_WIP_DETAIL_LOAD_MORE_SUCCESSFULL:
-                        model.getTable().remove(model.getTable().size() - 1);
-                        int scrollPosition = model.getTable().size();
+                    case Events.GET_COLLECTION_COLLECTION_CUSTOMER_INVOICE_LOAD_MORE_SUCCESSFULL:
+                        model.getData().remove(model.getData().size() - 1);
+                        int scrollPosition = model.getData().size();
                         mAdapter.notifyItemRemoved(scrollPosition);
                         int currentSize = scrollPosition;
                         nextLimit = currentSize + 11;
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
-                            model = (CollectionWIPDetailModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionWIPDetailModel.class);
+                            model = (CollectionCustomerDetailsModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionCustomerDetailsModel.class);
                             if (model != null) {
-                                wipDataList.addAll(model.getTable());
+                                invoiceDataList = model.getData();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -227,10 +235,28 @@ public class CollectionCustomerDetailsFragment extends BaseFragment {
                         isLoading = false;
                         dismissProgress();
                         break;
-                    case Events.GET_WIP_DETAIL_LOAD_MORE_UNSUCCESSFULL:
+                    case Events.GET_COLLECTION_COLLECTION_CUSTOMER_INVOICE_LOAD_MORE_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
-                        break;*/
+                        break;
+                    case Events.GET_COLLECTION_COLLECTION_CUSTOMER_INVOICE_SEARCH_SUCCESSFULL:
+                        try {
+                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
+                            model = (CollectionCustomerDetailsModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionCustomerDetailsModel.class);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        dismissProgress();
+                        if (model != null) {
+                            invoiceDataList = model.getData();
+                            mAdapter = new KCollectionCustomerDetailListAdapter(dashboardActivityContext, from, invoiceDataList);
+                            rviData.setAdapter(mAdapter);
+                        }
+                        break;
+                    case Events.GET_COLLECTION_COLLECTION_CUSTOMER_INVOICE_SEARCH_UNSUCCESSFULL:
+                        dismissProgress();
+                        showToast(ToastTexts.OOPS_MESSAGE);
+                        break;
                     case Events.OOPS_MESSAGE:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
@@ -244,6 +270,30 @@ public class CollectionCustomerDetailsFragment extends BaseFragment {
         });
     }
 
+    @OnTextChanged(R.id.txtSearch)
+    public void search() {
+        if (txtSearch.getText().toString().length() > 2) {
+            isLoading = true;
+            loadSearchData(txtSearch.getText().toString());
+        } else if (txtSearch.getText().toString().length() == 0) {
+            isLoading = false;
+            KBAMUtils.hideSoftKeyboard(dashboardActivityContext);
+            loadInitialData();
+        }
+    }
+
+    private void loadSearchData(String searchText) {
+        showProgress(ProgressDialogTexts.LOADING);
+        if (from.equals("ECW")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionECWInvoiceSearchRequester(selectedCustomer.getCustomerName(), searchText));
+        } else if (from.equals("ECM")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionECMInvoiceSearchRequester(selectedCustomer.getCustomerName(), searchText));
+        } else if (from.equals("PCW")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionPCWInvoiceSearchRequester(selectedCustomer.getCustomerName(), searchText));
+        } else if (from.equals("PCM")) {
+            BackgroundExecutor.getInstance().execute(new KCollectionPCMInvoiceSearchRequester(selectedCustomer.getCustomerName(), searchText));
+        }
+    }
 
     @Override
     public void onDestroyView() {

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,11 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.teamcomputers.bam.Activities.DashboardActivity;
 import com.teamcomputers.bam.Adapters.Collection.KCollectionWIPDetailsAdapter;
 import com.teamcomputers.bam.Fragments.BaseFragment;
-import com.teamcomputers.bam.Models.Collection.CollectionWIPDetailModel;
+import com.teamcomputers.bam.Models.Collection.CollectionWIPModel;
+import com.teamcomputers.bam.Models.Collection.WIPCustomerModel;
 import com.teamcomputers.bam.Models.common.EventObject;
 import com.teamcomputers.bam.R;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionWIP0DetailRequester;
-import com.teamcomputers.bam.Requesters.Collection.KCollectionWIP16DetailRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIP015DaysCustomerRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIP1630DaysCustomerRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIP30DaysCustomerRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIPPendingDocSubGreaterThan2DaysCustomerRequester;
+import com.teamcomputers.bam.Requesters.Collection.KWIPPendingDocSubLessThan2DaysCustomerRequester;
 import com.teamcomputers.bam.Utils.BAMUtil;
 import com.teamcomputers.bam.Utils.BackgroundExecutor;
 import com.teamcomputers.bam.Utils.KBAMUtils;
@@ -29,9 +32,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -39,6 +39,7 @@ import butterknife.Unbinder;
 public class WIPDetailsFragment extends BaseFragment {
     private View rootView;
     public static final String FROM = "FROM";
+    public static final String WIPDATA = "WIPDATA";
     private Unbinder unbinder;
     private DashboardActivity dashboardActivityContext;
     private LinearLayoutManager layoutManager;
@@ -62,8 +63,10 @@ public class WIPDetailsFragment extends BaseFragment {
     TextView tviTOAmount;
 
     private KCollectionWIPDetailsAdapter mAdapter;
-    CollectionWIPDetailModel model;
-    List<CollectionWIPDetailModel.Table> wipDataList = new ArrayList<>();
+    WIPCustomerModel model;
+
+    CollectionWIPModel.Table WIPData;
+    WIPCustomerModel.Datum WIPSelectedData;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +82,7 @@ public class WIPDetailsFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, rootView);
 
         from = getArguments().getString(FROM);
+        WIPData = getArguments().getParcelable(WIPDATA);
         rlSearch.setVisibility(View.GONE);
 
         layoutManager = new LinearLayoutManager(dashboardActivityContext);
@@ -87,25 +91,32 @@ public class WIPDetailsFragment extends BaseFragment {
         showProgress(ProgressDialogTexts.LOADING);
         if (from.equals("WIP0")) {
             tviWIPDetailHeading.setText("WIP 0-15 Days");
-            BackgroundExecutor.getInstance().execute(new KCollectionWIP0DetailRequester("0", "10",0));
+            tviTOInvoice.setText(WIPData.getWiP015DaysInvoice().toString());
+            tviTOAmount.setText(KBAMUtils.getRoundOffValue(WIPData.getWiP015DaysAmount()));
+            BackgroundExecutor.getInstance().execute(new KWIP015DaysCustomerRequester());
         } else if (from.equals("WIP16")) {
             tviWIPDetailHeading.setText("WIP 16-30 Days");
-            BackgroundExecutor.getInstance().execute(new KCollectionWIP16DetailRequester("0", "10",0));
+            tviTOInvoice.setText(WIPData.getWiP1630DaysInvoice().toString());
+            tviTOAmount.setText(KBAMUtils.getRoundOffValue(WIPData.getWiP1630aysAmount()));
+            BackgroundExecutor.getInstance().execute(new KWIP1630DaysCustomerRequester());
         } else if (from.equals("WIP30")) {
             tviWIPDetailHeading.setText("WIP >30 Days");
-            //BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "10",0));
-            BackgroundExecutor.getInstance().execute(new KCollectionWIP16DetailRequester("0", "10",0));
+            tviTOInvoice.setText(WIPData.getWiP30DaysInvoice().toString());
+            tviTOAmount.setText(KBAMUtils.getRoundOffValue(WIPData.getWiP30DaysAmount()));
+            BackgroundExecutor.getInstance().execute(new KWIP30DaysCustomerRequester());
         } else if (from.equals("PDOSL")) {
             tviWIPDetailHeading.setText("Pending Doc Submissioin <=2 Days");
-            //BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
-            BackgroundExecutor.getInstance().execute(new KCollectionWIP16DetailRequester("0", "10",0));
+            tviTOInvoice.setText(WIPData.getWipPendingDocSubmissionLessThan2DaysInvoice().toString());
+            tviTOAmount.setText(KBAMUtils.getRoundOffValue(WIPData.getWipPendingDocSubmissionLessThan2DaysAmount()));
+            BackgroundExecutor.getInstance().execute(new KWIPPendingDocSubLessThan2DaysCustomerRequester());
         } else if (from.equals("PDOSG")) {
             tviWIPDetailHeading.setText("Pending Doc Submissioin >2 Days");
-            //BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
-            BackgroundExecutor.getInstance().execute(new KCollectionWIP16DetailRequester("0", "10",0));
+            tviTOInvoice.setText(WIPData.getWipPendingDocSubmissionGreaterThan2DaysInvoice().toString());
+            tviTOAmount.setText(KBAMUtils.getRoundOffValue(WIPData.getWipPendingDocSubmissionGreaterThan2DaysAmount()));
+            BackgroundExecutor.getInstance().execute(new KWIPPendingDocSubGreaterThan2DaysCustomerRequester());
         }
 
-        rviData.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        /*rviData.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -126,30 +137,30 @@ public class WIPDetailsFragment extends BaseFragment {
                     isLoading = false;
                 }
             }
-        });
+        });*/
 
         return rootView;
     }
 
-    private void loadMore() {
+    /*private void loadMore() {
         model.getTable().add(null);
         mAdapter.notifyItemInserted(model.getTable().size() - 1);
         showProgress(ProgressDialogTexts.LOADING);
         String start = String.valueOf(nextLimit);
         String end = String.valueOf(nextLimit + 10);
         if (from.equals("WIP0")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionWIP0DetailRequester("0", "10",0));
+            BackgroundExecutor.getInstance().execute(new KWIP015DaysCustomerRequester());
         } else if (from.equals("WIP16")) {
-            BackgroundExecutor.getInstance().execute(new KCollectionWIP16DetailRequester("0", "10",0));
+            BackgroundExecutor.getInstance().execute(new KWIP1630DaysCustomerRequester());
         } else if (from.equals("WIP30")) {
-            //BackgroundExecutor.getInstance().execute(new KCollectionOutstandingCurrentMonthRequester("0", "10",0));
+            BackgroundExecutor.getInstance().execute(new KWIP30DaysCustomerRequester());
         } else if (from.equals("PDOSL")) {
-            //BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
+            BackgroundExecutor.getInstance().execute(new KWIPPendingDocSubGreaterThan2DaysCustomerRequester());
         } else if (from.equals("PDOSG")) {
-            //BackgroundExecutor.getInstance().execute(new KCollectionOutstandingSubsequentMonthRequester("0", "10",0));
+            BackgroundExecutor.getInstance().execute(new KWIPPendingDocSubLessThan2DaysCustomerRequester());
         }
         isLoading = true;
-    }
+    }*/
 
 
     @Override
@@ -176,49 +187,31 @@ public class WIPDetailsFragment extends BaseFragment {
                     case Events.NO_INTERNET_CONNECTION:
                         dismissProgress();
                         break;
-                    case Events.GET_COLLECTION_WIP_DETAIL_SUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_CUSTOMER_SUCCESSFULL:
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
-                            model = (CollectionWIPDetailModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionWIPDetailModel.class);
+                            model = (WIPCustomerModel) BAMUtil.fromJson(String.valueOf(jsonObject), WIPCustomerModel.class);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         dismissProgress();
                         if (model != null) {
-                            wipDataList = model.getTable();
-                            tviTOInvoice.setText(model.getInvoice().toString());
-                            tviTOAmount.setText(KBAMUtils.getRoundOffValue(model.getAmount()));
-
-                            mAdapter = new KCollectionWIPDetailsAdapter(dashboardActivityContext, wipDataList);
+                            mAdapter = new KCollectionWIPDetailsAdapter(dashboardActivityContext, model.getData());
                             rviData.setAdapter(mAdapter);
                         }
                         break;
-                    case Events.GET_COLLECTION_WIP_DETAIL_UNSUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_CUSTOMER_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
-                    case Events.GET_WIP_DETAIL_LOAD_MORE_SUCCESSFULL:
-                        model.getTable().remove(model.getTable().size() - 1);
-                        int scrollPosition = model.getTable().size();
-                        mAdapter.notifyItemRemoved(scrollPosition);
-                        int currentSize = scrollPosition;
-                        nextLimit = currentSize + 11;
-                        try {
-                            JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
-                            model = (CollectionWIPDetailModel) BAMUtil.fromJson(String.valueOf(jsonObject), CollectionWIPDetailModel.class);
-                            if (model != null) {
-                                wipDataList.addAll(model.getTable());
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        mAdapter.notifyDataSetChanged();
-                        isLoading = false;
-                        dismissProgress();
-                        break;
-                    case Events.GET_WIP_DETAIL_LOAD_MORE_UNSUCCESSFULL:
-                        dismissProgress();
-                        showToast(ToastTexts.OOPS_MESSAGE);
+                    case ClickEvents.WIP_CUSTOMER_SELECT:
+                        WIPSelectedData = (WIPCustomerModel.Datum) eventObject.getObject();
+                        Bundle customerBundle = new Bundle();
+                        customerBundle.putString(CollectionWIPInvoiceFragment.FROM, from);
+                        customerBundle.putParcelable(CollectionWIPInvoiceFragment.CUSTOMER_DATA, WIPSelectedData);
+
+                        customerBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+                        dashboardActivityContext.replaceFragment(Fragments.WIP_CUSTOMER_DETAIL_FRAGMENT, customerBundle);
                         break;
                     case Events.OOPS_MESSAGE:
                         dismissProgress();

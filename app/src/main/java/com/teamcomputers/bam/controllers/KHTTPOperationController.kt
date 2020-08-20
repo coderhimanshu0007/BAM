@@ -144,6 +144,10 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.collectionTotalOutstandingInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
+    fun collectionTotalOutstandingCustomerInvoiceSearch(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionTotalOutstandingCustomerInvoiceSearch(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
     fun collectionCollectibleOutstanding(): ApiResponse<*>? {
         return getApiInterface()?.collectionCollectibleOutstanding()?.let { KConnectionUtils().execute<Any>(it) }
     }
@@ -152,8 +156,8 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.collectionCollectibleOutstandingInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun collectionTotalOutstandingSearch(customer: String): ApiResponse<*>? {
-        return getApiInterface()?.collectionTotalOutstandingSearch(customer)?.let { KConnectionUtils().execute<Any>(it) }
+    fun collectionCollectibleOutStandingCustomerInvoiceSearch(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionCollectibleOutStandingCustomerInvoiceSearch(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
     fun collectionOutstandingCurrentMonth(): ApiResponse<*>? {
@@ -164,8 +168,8 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.collectionOutstandingCurrentMonthInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun collectionOutstandingCurrentMonthSearch(customer: String): ApiResponse<*>? {
-        return getApiInterface()?.collectionOutstandingCurrentMonthSearch(customer)?.let { KConnectionUtils().execute<Any>(it) }
+    fun collectionCollectibleOutStandingCurrentMonthCustomerInvoiceSearch(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionCollectibleOutStandingCurrentMonthCustomerInvoiceSearch(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
     fun collectionOutstandingSubsequentMonth(): ApiResponse<*>? {
@@ -176,8 +180,8 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.collectionOutstandingSubsequentMonthInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun collectionOutstandingSubsequentMonthSearch(customer: String): ApiResponse<*>? {
-        return getApiInterface()?.collectionOutstandingSubsequentMonthSearch(customer)?.let { KConnectionUtils().execute<Any>(it) }
+    fun collectionOutstandingSubsequentMonthCustomerInvoiceSearch(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.collectionCollectibleOutStandingSubsequentMonthCustomerInvoiceSearch(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
     fun collectionCollection(): ApiResponse<*>? {
@@ -240,32 +244,64 @@ class KHTTPOperationController : KBAMConstant {
         return getApiInterface()?.collectionDeliveryInstallation()?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun collectionWIP0(start: String, end: String): ApiResponse<*>? {
-        return getApiInterface()?.collectionWIP0(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    fun WIP015DaysCustomer(): ApiResponse<*>? {
+        return getApiInterface()?.WIP015DaysCustomer()?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun collectionWIP0Search(customer: String, invoice: String): ApiResponse<*>? {
-        return getApiInterface()?.collectionWIP0Search(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
+    fun WIP015DaysCustomerInvoice(customer: String, start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.WIP015DaysCustomerInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun collectionWIP16(start: String, end: String): ApiResponse<*>? {
-        return getApiInterface()?.collectionWIP16(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    fun WIP015DaysCustomerInvoiceSearch(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.WIP015DaysCustomerInvoiceSearch(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun collectionWIP16Search(customer: String, invoice: String): ApiResponse<*>? {
-        return getApiInterface()?.collectionWIP16Search(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
+    fun WIP1630DaysCustomer(): ApiResponse<*>? {
+        return getApiInterface()?.WIP1630DaysCustomer()?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun collectionWIP31(start: String, end: String): ApiResponse<*>? {
-        return getApiInterface()?.collectionWIP31(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    fun WIP1630DaysCustomerInvoice(customer: String, start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.WIP1630DaysCustomerInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun collectionWIPPDOSL(start: String, end: String): ApiResponse<*>? {
-        return getApiInterface()?.collectionWIPPDOSL(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    fun WIP1630DaysCustomerInvoiceSearch(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.WIP1630DaysCustomerInvoiceSearch(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
-    fun collectionWIPPDOSG(start: String, end: String): ApiResponse<*>? {
-        return getApiInterface()?.collectionWIPPDOSG(start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    fun WIP30DaysCustomer(): ApiResponse<*>? {
+        return getApiInterface()?.WIP30DaysCustomer()?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun WIP30DaysCustomerInvoice(customer: String, start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.WIP30DaysCustomerInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun WIP30DaysCustomerInvoiceSearch(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.WIP30DaysCustomerInvoiceSearch(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun WIPPendingDocSubLessThan2DaysCustomer(): ApiResponse<*>? {
+        return getApiInterface()?.WIPPendingDocSubLessThan2DaysCustomer()?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun WIPPendingDocSubLessThan2DaysCustomerInvoice(customer: String, start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.WIPPendingDocSubLessThan2DaysCustomerInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun WIPPendingDocSubLessThan2DaysCustomerInvoiceSearch(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.WIPPendingDocSubLessThan2DaysCustomerInvoiceSearch(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun WIPPendingDocSubGreaterThan2DaysCustomer(): ApiResponse<*>? {
+        return getApiInterface()?.WIPPendingDocSubGreaterThan2DaysCustomer()?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun WIPPendingDocSubGreaterThan2DaysCustomerInvoice(customer: String, start: String, end: String): ApiResponse<*>? {
+        return getApiInterface()?.WIPPendingDocSubGreaterThan2DaysCustomerInvoice(customer, start, end)?.let { KConnectionUtils().execute<Any>(it) }
+    }
+
+    fun WIPPendingDocSubGreaterThan2DaysCustomerInvoiceSearch(customer: String, invoice: String): ApiResponse<*>? {
+        return getApiInterface()?.WIPPendingDocSubGreaterThan2DaysCustomerInvoiceSearch(customer, invoice)?.let { KConnectionUtils().execute<Any>(it) }
     }
 
     fun activeEmployeeAccess(userId: String, userName: String): ApiResponse<*>? {

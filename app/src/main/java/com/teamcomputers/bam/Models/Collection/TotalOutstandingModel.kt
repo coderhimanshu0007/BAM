@@ -18,6 +18,9 @@ class TotalOutstandingModel {
         @SerializedName("Invoice_No_")
         @Expose
         var invoiceNo: String? = null
+        @SerializedName("Document_No_")
+        @Expose
+        var documentNo: String? = null
         @SerializedName("Amount")
         @Expose
         var amount: Double? = null
@@ -60,6 +63,9 @@ class TotalOutstandingModel {
         @SerializedName("Due_Date")
         @Expose
         var dueDate: String? = null
+        @SerializedName("Posting_Date")
+        @Expose
+        var postingDate: String? = null
 
     }
 }

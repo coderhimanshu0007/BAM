@@ -7,22 +7,22 @@ import com.teamcomputers.bam.controllers.KHTTPOperationController
 import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
 
-class KCollectionWIP16DetailRequester(var start: String, var end: String, var more: Int) : BaseRequester {
+class KWIP1630DaysCustomerInvoiceRequester(var customer: String, var start: String, var end: String, var loadMore: String) : BaseRequester {
     override fun run() {
-        val apiResponse = KHTTPOperationController().collectionWIP16(start, end)
+        val apiResponse = KHTTPOperationController().WIP1630DaysCustomerInvoice(customer, start, end)
         if (apiResponse != null) {
             if (apiResponse.responseCode == HttpURLConnection.HTTP_OK) {
                 if (apiResponse.response != null) {
-                    if (more == 0) {
-                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_WIP_DETAIL_SUCCESSFULL, apiResponse.response))
-                    } else if (more == 1) {
-                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_WIP_DETAIL_LOAD_MORE_SUCCESSFULL, apiResponse.response))
+                    if (loadMore.equals("0")) {
+                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_WIP_CUSTOMER_INVOICE_SUCCESSFULL, apiResponse.response))
+                    } else if (loadMore.equals("1")) {
+                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_WIP_CUSTOMER_INVOICE_LOAD_MORE_SUCCESSFULL, apiResponse.response))
                     }
                 } else {
-                    if (more == 0) {
-                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_WIP_DETAIL_UNSUCCESSFULL, null))
-                    } else if (more == 1) {
-                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_WIP_DETAIL_LOAD_MORE_UNSUCCESSFULL, null))
+                    if (loadMore.equals("0")) {
+                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_WIP_CUSTOMER_INVOICE_UNSUCCESSFULL, null))
+                    } else if (loadMore.equals("1")) {
+                        EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_WIP_CUSTOMER_INVOICE_LOAD_MORE_UNSUCCESSFULL, null))
                     }
                 }
             } else if (apiResponse.responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {

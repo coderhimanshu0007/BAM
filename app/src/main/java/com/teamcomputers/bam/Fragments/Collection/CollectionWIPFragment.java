@@ -229,7 +229,7 @@ public class CollectionWIPFragment extends BaseFragment {
                         //showToast(ToastTexts.LOGIN_SUCCESSFULL);
                         //((DashbordActivity) getActivity()).replaceFragment(Fragments.ASSIGN_CALLS_MAP_FRAGMENTS, assignedCallsBundle);
                         break;
-                    case Events.GET_COLLECTION_DELIVERY_INSTALLATION_SUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_SUCCESSFULL:
                         Log.e("WIP", eventObject.getObject().toString());
                         try {
                             JSONObject jsonObject = new JSONObject(KBAMUtils.replaceCollectionWIPDataResponse(eventObject.getObject().toString()));
@@ -258,7 +258,7 @@ public class CollectionWIPFragment extends BaseFragment {
                             pieChart.invalidate();
                         }
                         break;
-                    case Events.GET_COLLECTION_DELIVERY_INSTALLATION_UNSUCCESSFULL:
+                    case Events.GET_COLLECTION_WIP_UNSUCCESSFULL:
                         dismissProgress();
                         showToast(ToastTexts.OOPS_MESSAGE);
                         break;
@@ -355,6 +355,7 @@ public class CollectionWIPFragment extends BaseFragment {
     public void DeliveryInstallationPendingUpto15Days() {
         Bundle WIP0Bundle = new Bundle();
         WIP0Bundle.putString(WIPDetailsFragment.FROM, "WIP0");
+        WIP0Bundle.putParcelable(WIPDetailsFragment.WIPDATA, model.getTable().get(0));
         WIP0Bundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
         dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP0Bundle);
     }
@@ -364,6 +365,7 @@ public class CollectionWIPFragment extends BaseFragment {
         Bundle WIP16Bundle = new Bundle();
         WIP16Bundle.putString(WIPDetailsFragment.FROM, "WIP16");
         WIP16Bundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        WIP16Bundle.putParcelable(WIPDetailsFragment.WIPDATA, model.getTable().get(0));
         dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP16Bundle);
     }
 
@@ -373,6 +375,7 @@ public class CollectionWIPFragment extends BaseFragment {
         Bundle WIP30Bundle = new Bundle();
         WIP30Bundle.putString(WIPDetailsFragment.FROM, "WIP30");
         WIP30Bundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        WIP30Bundle.putParcelable(WIPDetailsFragment.WIPDATA, model.getTable().get(0));
         dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, WIP30Bundle);
     }
 
@@ -382,6 +385,7 @@ public class CollectionWIPFragment extends BaseFragment {
         Bundle PDOSLBundle = new Bundle();
         PDOSLBundle.putString(WIPDetailsFragment.FROM, "PDOSL");
         PDOSLBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        PDOSLBundle.putParcelable(WIPDetailsFragment.WIPDATA, model.getTable().get(0));
         dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, PDOSLBundle);
     }
 
@@ -391,6 +395,7 @@ public class CollectionWIPFragment extends BaseFragment {
         Bundle PDOSGBundle = new Bundle();
         PDOSGBundle.putString(WIPDetailsFragment.FROM, "PDOSG");
         PDOSGBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
+        PDOSGBundle.putParcelable(WIPDetailsFragment.WIPDATA, model.getTable().get(0));
         dashboardActivityContext.replaceFragment(Fragments.WIP_FRAGMENT, PDOSGBundle);
     }
 

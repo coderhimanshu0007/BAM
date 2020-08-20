@@ -127,8 +127,14 @@ interface KApiInterface {
     @FormUrlEncoded
     @POST("CollectionTotalOutStandingCustomerInvoice")
     abstract fun collectionTotalOutstandingInvoice(@Field("Customer") customer: String,
-                                                          @Field("Start") start: String,
-                                                          @Field("End") end: String): Call<Any>
+                                                   @Field("Start") start: String,
+                                                   @Field("End") end: String): Call<Any>
+
+    // Collection Total Outstanding
+    @FormUrlEncoded
+    @POST("CollectionTotalOutStandingCustomerInvoiceSearch")
+    abstract fun collectionTotalOutstandingCustomerInvoiceSearch(@Field("Customer") customer: String,
+                                                                 @Field("Invoice") invoice: String): Call<Any>
 
     // Collection Total Outstanding
     @POST("CollectionCollectibleOutStandingCustomerNew")
@@ -138,13 +144,14 @@ interface KApiInterface {
     @FormUrlEncoded
     @POST("CollectionCollectibleOutStandingCustomerInvoiceNew")
     abstract fun collectionCollectibleOutstandingInvoice(@Field("Customer") customer: String,
-                                                          @Field("Start") start: String,
-                                                          @Field("End") end: String): Call<Any>
+                                                         @Field("Start") start: String,
+                                                         @Field("End") end: String): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
-    @POST("CollectionCollectibleTotalOutStandingCustomerSearch")
-    abstract fun collectionTotalOutstandingSearch(@Field("Customer") customer: String): Call<Any>
+    @POST("CollectionCollectibleOutStandingCustomerInvoiceSearchNew")
+    abstract fun collectionCollectibleOutStandingCustomerInvoiceSearch(@Field("Customer") customer: String,
+                                                                       @Field("Invoice") invoice: String): Call<Any>
 
     // Collection Outstanding Current Month
     @POST("CollectionCollectibleOutStandingCurrentMonthCustomerNew")
@@ -154,13 +161,14 @@ interface KApiInterface {
     @FormUrlEncoded
     @POST("CollectionCollectibleOutStandingCurrentMonthCustomerInvoiceNew")
     abstract fun collectionOutstandingCurrentMonthInvoice(@Field("Customer") customer: String,
-                                                             @Field("Start") start: String,
-                                                             @Field("End") end: String): Call<Any>
+                                                          @Field("Start") start: String,
+                                                          @Field("End") end: String): Call<Any>
 
     // Collection Outstanding Current Month
     @FormUrlEncoded
-    @POST("CollectionCollectibleOutStandingCurrentMonthCustomerSearch")
-    abstract fun collectionOutstandingCurrentMonthSearch(@Field("Customer") customer: String): Call<Any>
+    @POST("CollectionCollectibleOutStandingCurrentMonthCustomerInvoiceSearchNew")
+    abstract fun collectionCollectibleOutStandingCurrentMonthCustomerInvoiceSearch(@Field("Customer") customer: String,
+                                                                                   @Field("Invoice") invoice: String): Call<Any>
 
     // Collection Outstanding
     @POST("CollectionCollectibleOutStandingSubsequentMonthCustomerNew")
@@ -175,50 +183,94 @@ interface KApiInterface {
 
     // Collection Outstanding
     @FormUrlEncoded
-    @POST("CollectionCollectibleOutStandingSubsequentMonthCustomerSearch")
-    abstract fun collectionOutstandingSubsequentMonthSearch(@Field("Customer") customer: String): Call<Any>
+    @POST("CollectionCollectibleOutStandingSubsequentMonthCustomerInvoiceSearchNew")
+    abstract fun collectionCollectibleOutStandingSubsequentMonthCustomerInvoiceSearch(@Field("Customer") customer: String,
+                                                                                      @Field("Invoice") invoice: String): Call<Any>
+
+    // Collection Total Outstanding
+    @POST("WIP015DaysCustomer")
+    abstract fun WIP015DaysCustomer(): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
-    @POST("WIP015Days")
-    abstract fun collectionWIP0(@Field("Start") start: String,
-                                @Field("End") end: String): Call<Any>
+    @POST("WIP015DaysCustomerInvoice")
+    abstract fun WIP015DaysCustomerInvoice(@Field("Customer") customer: String,
+                                           @Field("Start") start: String,
+                                           @Field("End") end: String): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
-    @POST("WIP015DaysSearch")
-    abstract fun collectionWIP0Search(@Field("Customer") customer: String,
-                                      @Field("Invoice") invoice: String): Call<Any>
+    @POST("WIP015DaysCustomerInvoiceSearch")
+    abstract fun WIP015DaysCustomerInvoiceSearch(@Field("Customer") customer: String,
+                                                 @Field("Invoice") invoice: String): Call<Any>
+
+    // Collection Total Outstanding
+    @POST("WIP1630DaysCustomer")
+    abstract fun WIP1630DaysCustomer(): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
-    @POST("WIP1630Days")
-    abstract fun collectionWIP16(@Field("Start") start: String,
-                                 @Field("End") end: String): Call<Any>
+    @POST("WIP1630DaysCustomerInvoice")
+    abstract fun WIP1630DaysCustomerInvoice(@Field("Customer") customer: String,
+                                            @Field("Start") start: String,
+                                            @Field("End") end: String): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
-    @POST("WIP1630DaysSearch")
-    abstract fun collectionWIP16Search(@Field("Customer") customer: String,
-                                       @Field("Invoice") invoice: String): Call<Any>
+    @POST("WIP1630DaysCustomerInvoiceSearch")
+    abstract fun WIP1630DaysCustomerInvoiceSearch(@Field("Customer") customer: String,
+                                                  @Field("Invoice") invoice: String): Call<Any>
+
+    // Collection Total Outstanding
+    @POST("WIP30DaysCustomer")
+    abstract fun WIP30DaysCustomer(): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
-    @POST("WIP015Days")
-    abstract fun collectionWIP31(@Field("Start") start: String,
-                                 @Field("End") end: String): Call<Any>
+    @POST("WIP30DaysCustomerInvoice")
+    abstract fun WIP30DaysCustomerInvoice(@Field("Customer") customer: String,
+                                          @Field("Start") start: String,
+                                          @Field("End") end: String): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
-    @POST("WIP015Days")
-    abstract fun collectionWIPPDOSL(@Field("Start") start: String,
-                                    @Field("End") end: String): Call<Any>
+    @POST("WIP30DaysCustomerInvoiceSearch")
+    abstract fun WIP30DaysCustomerInvoiceSearch(@Field("Customer") customer: String,
+                                                @Field("Invoice") invoice: String): Call<Any>
+
+    // Collection Total Outstanding
+    @POST("WIPPendingDocSubLessThan2DaysCustomer")
+    abstract fun WIPPendingDocSubLessThan2DaysCustomer(): Call<Any>
 
     // Collection Total Outstanding
     @FormUrlEncoded
-    @POST("WIP015Days")
-    abstract fun collectionWIPPDOSG(@Field("Start") start: String,
-                                    @Field("End") end: String): Call<Any>
+    @POST("WIPPendingDocSubLessThan2DaysCustomerInvoice")
+    abstract fun WIPPendingDocSubLessThan2DaysCustomerInvoice(@Field("Customer") customer: String,
+                                                              @Field("Start") start: String,
+                                                              @Field("End") end: String): Call<Any>
+
+    // Collection Total Outstanding
+    @FormUrlEncoded
+    @POST("WIPPendingDocSubLessThan2DaysCustomerInvoiceSearch")
+    abstract fun WIPPendingDocSubLessThan2DaysCustomerInvoiceSearch(@Field("Customer") customer: String,
+                                                                    @Field("Invoice") invoice: String): Call<Any>
+
+    // Collection Total Outstanding
+    @POST("WIPPendingDocSubGreaterThan2DaysCustomer")
+    abstract fun WIPPendingDocSubGreaterThan2DaysCustomer(): Call<Any>
+
+    // Collection Total Outstanding
+    @FormUrlEncoded
+    @POST("WIPPendingDocSubGreaterThan2DaysCustomerInvoice")
+    abstract fun WIPPendingDocSubGreaterThan2DaysCustomerInvoice(@Field("Customer") customer: String,
+                                                                 @Field("Start") start: String,
+                                                                 @Field("End") end: String): Call<Any>
+
+    // Collection Total Outstanding
+    @FormUrlEncoded
+    @POST("WIPPendingDocSubGreaterThan2DaysCustomerInvoiceSearch")
+    abstract fun WIPPendingDocSubGreaterThan2DaysCustomerInvoiceSearch(@Field("Customer") customer: String,
+                                                                       @Field("Invoice") invoice: String): Call<Any>
 
     // Collection Collection
     @POST("CollectionCollection")

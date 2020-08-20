@@ -15,9 +15,9 @@ class KCollectionWIPRequester : BaseRequester {
         if (apiResponse != null) {
             if (apiResponse.responseCode == HttpURLConnection.HTTP_OK) {
                 if (apiResponse.response != null) {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_DELIVERY_INSTALLATION_SUCCESSFULL, apiResponse.response))
+                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_WIP_SUCCESSFULL, apiResponse.response))
                 } else {
-                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_DELIVERY_INSTALLATION_UNSUCCESSFULL, null))
+                    EventBus.getDefault().post(EventObject(KBAMConstant.Events.GET_COLLECTION_WIP_UNSUCCESSFULL, null))
                 }
             } else if (apiResponse.responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                 EventBus.getDefault().post(EventObject(KBAMConstant.Events.INTERNAL_SERVER_ERROR, null))

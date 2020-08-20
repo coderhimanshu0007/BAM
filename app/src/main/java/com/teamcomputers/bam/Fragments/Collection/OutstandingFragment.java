@@ -319,12 +319,12 @@ public class OutstandingFragment extends BaseFragment {
 
     @OnClick(R.id.txtBtnTODetails)
     public void TotalOutstandingDetails() {
-        showToast("Work in progress...");
-        /*Bundle outstandingBundle = new Bundle();
+        //showToast("Work in progress...");
+        Bundle outstandingBundle = new Bundle();
         outstandingBundle.putString(TotalOutstandingFragment.FROM, "TOTALOUTSTANDING");
         outstandingBundle.putParcelable(TotalOutstandingFragment.COLLECTIONDATA, model.getTable().get(0));
         outstandingBundle.putBoolean(DashboardActivity.IS_EXTRA_FRAGMENT_NEEDS_TO_BE_LOADED, true);
-        dashboardActivityContext.replaceFragment(Fragments.TOTAL_OUTSTANDING_FRAGMENT, outstandingBundle);*/
+        dashboardActivityContext.replaceFragment(Fragments.TOTAL_OUTSTANDING_FRAGMENT, outstandingBundle);
     }
 
     @OnClick(R.id.txtBtnCODetails)
